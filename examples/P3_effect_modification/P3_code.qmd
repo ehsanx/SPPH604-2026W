@@ -1,0 +1,145 @@
+---
+title: "P3 — Effect modification (interaction): step-by-step reproducible code"
+subtitle: "SPPH 604 · demonstration paper (Kueh et al., BMJ Open 2026;16:e113719)"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    code-tools: true
+    df-print: kable
+execute:
+  warning: false
+  message: false
+---
+
+> Tests whether the phenotype → mortality association is modified by **sex**.
+> The crude sex-stratified HRs look dramatically different; the targeted adjusted
+> test is centred near 1 but far too imprecise to settle the question. Reporting
+> that imprecision honestly is the lesson of this increment.
+
+```{r setup}
+source("../_shared/paths.R")   # find_repro(), emit_results(), ci(), fmtn(), endash()
+repro <- find_repro()
+suppressPackageStartupMessages({library(dplyr); library(survival)})
+## The cohort is the one P1 locks: the MASLD domain of the fasting subsample.
+## All five increments use these rows so P4 can weight exactly what P2-P3 analysed.
+.a <- readRDS(file.path(repro, "data/derived/masld_analytic.rds"))
+.m <- readRDS(file.path(repro, "data/derived/merged_all.rds"))
+.m$in_analysis <- .m$SEQN %in% .a$SEQN
+d  <- .m[.m$in_analysis & !is.na(.m$WTSAF2YR) & .m$WTSAF2YR > 0, ]
+d$group <- factor(d$group, levels = c("I","II","III","IV"))
+cat("cohort n =", nrow(d), "(P1-locked domain)
+")
+hr <- function(m,g){s<-summary(m); sprintf("%.2f (%.2f-%.2f)",
+        s$conf.int[g,1], s$conf.int[g,"lower .95"], s$conf.int[g,"upper .95"])}
+```
+
+Rationale: sex is entangled with the exposure — Group II is 56% female, Group I only 15% —
+so modification by sex is worth probing.
+
+## Sex-stratified group hazard ratios (all-cause, vs Group I)
+
+```{r stratified}
+strat <- sapply(c(0, 1), function(s) {
+  ms <- coxph(Surv(time_yr,dead) ~ group, data = filter(d, female == s))
+  c(II = hr(ms,"groupII"), III = hr(ms,"groupIII"), IV = hr(ms,"groupIV"))
+})
+colnames(strat) <- c("Men", "Women")
+pt <- function(sex) sub(" .*", "", strat["IV", sex])   # point estimate only
+t(strat)
+```
+
+Men look far higher (IV `r pt("Men")`) than women (IV `r pt("Women")`). But the
+reference group has very few events, and men in this cohort are older and sicker — so
+is this real modification, or confounding / baseline-risk difference?
+
+*Those two figures are inline references to the table above, not typed. An earlier
+draft typed "IV ≈ 28" beside a chunk that printed something else; the fix is to make
+the prose read from the object rather than to correct the digits.*
+
+## Formal interaction test — targeted at the locked contrast
+
+Our locked estimand is **IV vs III**. A `group * sex` term across all four groups is a
+**multi-df test of whether *any* contrast varies by sex** — a broader question. We
+restrict to Groups III and IV so the interaction is **1 df for exactly our contrast**,
+and fit crude and adjusted on the **same** complete-case rows.
+
+```{r interaction}
+COVns <- c("age","dyslip","htn","t2dm","ckd","mi","cancer",
+           "on_htn_med","on_dm_med","on_lipid_med")
+s   <- d %>% filter(group %in% c("III","IV")) %>% mutate(IV = as.integer(group=="IV"))
+scc <- s[complete.cases(s[,c(COVns,"female")]),]
+tst <- function(f){
+  full <- coxph(f, data=scc); red <- coxph(update.formula(f, .~.-IV:female), data=scc)
+  b <- coef(full)[["IV:female"]]; se <- sqrt(vcov(full)["IV:female","IV:female"])
+  data.frame(rHR=sprintf("%.2f (%.2f-%.2f)", exp(b), exp(b-1.96*se), exp(b+1.96*se)),
+             p=sprintf("%.3f", anova(red, full)$`Pr(>|Chi|)`[2]))
+}
+res <- rbind(cbind(Model="crude",   tst(Surv(time_yr,dead) ~ IV*female)),
+             cbind(Model="Model 1", tst(as.formula(paste(
+                   "Surv(time_yr,dead) ~ IV*female +", paste(COVns, collapse=" + "))))))
+cat("rows used:", nrow(scc), " women:", sum(scc$female==1), " men:", sum(scc$female==0), "\n")
+res
+```
+
+Ratio of hazard ratios is women / men for the IV-vs-III contrast.
+
+## Additive scale — six-year standardized risk difference
+
+Stratum-specific hazard ratios do not show the additive picture; it has to be estimated.
+We fit Model 1 within each sex, predict six-year risk for every person in that stratum
+under `IV = 0` and `IV = 1`, and average — g-computation, so the contrast is a
+population-average risk difference over that stratum's covariate distribution.
+
+```{r additive}
+risk6 <- function(dd){
+  fit <- coxph(as.formula(paste("Surv(time_yr,dead) ~ IV +", paste(COVns, collapse=" + "))), data=dd)
+  r <- sapply(c(0,1), function(v){ z <- dd; z$IV <- v
+    mean(1 - summary(survfit(fit, newdata=z), times=6, extend=TRUE)$surv) })
+  c(r3=r[1], r4=r[2], rd=r[2]-r[1])
+}
+set.seed(604)
+add <- do.call(rbind, lapply(c(0,1), function(sx){
+  dd <- scc %>% filter(female==sx); pt <- risk6(dd)
+  bs <- replicate(300, tryCatch(risk6(dd[sample(nrow(dd), replace=TRUE),])[["rd"]],
+                                error=function(e) NA_real_))
+  ci <- quantile(bs, c(.025,.975), na.rm=TRUE)
+  data.frame(Sex=ifelse(sx==1,"women","men"), n=nrow(dd),
+             risk_III=round(pt[["r3"]],3), risk_IV=round(pt[["r4"]],3),
+             RD=sprintf("%+.3f (%.3f to %.3f)", pt[["rd"]], ci[1], ci[2]))
+}))
+add
+```
+
+Some bootstrap replicates in the female stratum trigger Cox convergence warnings — 359
+women with sparse events means some resamples separate — so that interval is wide and
+should be read as order-of-magnitude.
+
+**Conclusion, stated at the precision the data afford.** The adjusted ratio of hazard
+ratios is 1.00 with an interval running from 0.42 to 2.35 — compatible with the effect in
+women being less than half that in men, or more than twice it. Both six-year risk
+differences are under one percentage point. So the data show **no evidence of
+multiplicative interaction at the available precision**; they do not show that sex is
+irrelevant, and they do not identify what generated the crude stratified gap.
+
+**What this file deliberately does not do.** Everything above is **unweighted**, because
+P3 precedes the survey-design increment. P4 shows that design materially changes
+inference for the main estimate, so whether the design-aware interaction agrees is an
+open question — one M1 answers, by applying P4's domain rule to this contrast.
+
+## Results for M1
+
+```{r emit}
+pick <- function(col, model) res[[col]][res$Model == model]
+emit_results("P3", list(
+  rhr_crude      = endash(pick("rHR", "crude")),
+  p_crude        = pick("p", "crude"),
+  rhr_unweighted = endash(pick("rHR", "Model 1")),
+  p_unweighted   = pick("p", "Model 1"),
+  n        = fmtn(nrow(scc)),
+  n_men    = fmtn(sum(scc$female == 0)),
+  n_women  = fmtn(sum(scc$female == 1)),
+  rd_men   = add$RD[add$Sex == "men"],
+  rd_women = add$RD[add$Sex == "women"]
+), list(interaction = res, additive = add))
+```

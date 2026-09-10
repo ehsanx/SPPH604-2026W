@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Week5 interaction effect modification</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Week5 interaction effect modification</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#week-5-lecture-plan-interaction-effect-modification" id="toc-week-5-lecture-plan-interaction-effect-modification">Week 5
+Lecture Plan — Interaction &amp; Effect Modification</a>
+<ul>
+<li><a href="#learning-objectives" id="toc-learning-objectives">Learning
+objectives</a></li>
+<li><a href="#continuity" id="toc-continuity">Continuity</a></li>
+<li><a href="#slide-1-where-we-are-in-the-project-6-min" id="toc-slide-1-where-we-are-in-the-project-6-min">Slide 1 — Where we
+are in the project (6 min)</a></li>
+<li><a href="#slide-2-todays-roadmap-4-min" id="toc-slide-2-todays-roadmap-4-min">Slide 2 — Today’s roadmap (4
+min)</a></li>
+<li><a href="#slide-3-three-things-people-call-interaction-10-min" id="toc-slide-3-three-things-people-call-interaction-10-min">Slide 3 —
+Three things people call “interaction” (10 min)</a></li>
+<li><a href="#slide-4-confounding-vs-effect-modification-10-min" id="toc-slide-4-confounding-vs-effect-modification-10-min">Slide 4 —
+Confounding vs effect modification (10 min)</a></li>
+<li><a href="#slide-5-statistical-interaction-a-product-term-10-min" id="toc-slide-5-statistical-interaction-a-product-term-10-min">Slide 5 —
+Statistical interaction = a product term (10 min)</a></li>
+<li><a href="#slide-6-additive-vs-multiplicative-scales-12-min" id="toc-slide-6-additive-vs-multiplicative-scales-12-min">Slide 6 —
+Additive vs multiplicative scales (12 min)</a></li>
+<li><a href="#slide-7-same-data-two-answers-8-min" id="toc-slide-7-same-data-two-answers-8-min">Slide 7 — Same data, two
+answers (8 min)</a></li>
+<li><a href="#slide-8-break-10-min" id="toc-slide-8-break-10-min">Slide
+8 — BREAK (10 min)</a></li>
+<li><a href="#slide-9-the-masld-sex-question-8-min" id="toc-slide-9-the-masld-sex-question-8-min">Slide 9 — The MASLD sex
+question (8 min)</a></li>
+<li><a href="#slide-10-crude-stratified-hazard-ratios-12-min" id="toc-slide-10-crude-stratified-hazard-ratios-12-min">Slide 10 — Crude
+stratified hazard ratios (12 min)</a></li>
+<li><a href="#slide-11-the-formal-interaction-test-14-min" id="toc-slide-11-the-formal-interaction-test-14-min">Slide 11 — The
+formal interaction test (14 min)</a></li>
+<li><a href="#slide-12-a-crude-stratum-difference-is-not-evidence-of-modification-12-min" id="toc-slide-12-a-crude-stratum-difference-is-not-evidence-of-modification-12-min">Slide
+12 — A crude stratum difference is not evidence of modification (12
+min)</a></li>
+<li><a href="#slide-13-the-right-tool-for-time-to-event-12-min" id="toc-slide-13-the-right-tool-for-time-to-event-12-min">Slide 13 — The
+right tool for time-to-event (12 min)</a></li>
+<li><a href="#slide-14-honest-subgroup-reporting-8-min" id="toc-slide-14-honest-subgroup-reporting-8-min">Slide 14 — Honest
+subgroup reporting (8 min)</a></li>
+<li><a href="#slide-15-preview-the-terms-dominant-threat-6-min" id="toc-slide-15-preview-the-terms-dominant-threat-6-min">Slide 15 —
+Preview: the term’s dominant threat (6 min)</a></li>
+<li><a href="#slide-16-bridge-to-todays-lab-l4-and-p3-8-min" id="toc-slide-16-bridge-to-todays-lab-l4-and-p3-8-min">Slide 16 — Bridge
+to today’s lab (L4) and P3 (8 min)</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="week-5-lecture-plan-interaction-effect-modification">Week 5
+Lecture Plan — Interaction &amp; Effect Modification</h1>
+<p>Duration: 2.5 h = 150 min (Tue, before the Thu lab). The Slide 1–16
+markers below sum to <strong>150</strong> — the whole session, including
+the 10-minute break at Slide 8 — so this plan runs with <strong>zero
+float</strong>: the Learning objectives and Continuity blocks above are
+covered inside Slide 1’s opening, and <strong>Slide 15</strong> (preview
+of the dominant threat, 6 min) is the designated cut if the conceptual
+run of Slides 3–7 goes long.</p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ul>
+<li>Distinguish <strong>confounding</strong>, <strong>effect
+modification</strong>, and <strong>statistical interaction</strong> —
+three ideas students routinely collapse into one.</li>
+<li>Explain why effect modification is <strong>scale-dependent</strong>
+(additive vs multiplicative) and what each scale answers.</li>
+<li>Read the MASLD <strong>sex</strong> example correctly: a dramatic
+crude stratum difference is not an interaction test, and a null
+interaction test is not evidence of homogeneity.</li>
+<li>Choose the <strong>right tool for a time-to-event outcome</strong> —
+a product term in the Cox model plus absolute-risk contrasts — and say
+why a logistic <strong>RERI</strong> is the wrong instrument here.</li>
+<li>Preview the term’s <strong>dominant threat</strong> (FLI
+circularity) that students will name at M1.</li>
+</ul>
+<h2 id="continuity">Continuity</h2>
+<ul>
+<li><strong>Last week (Wk4 / L3):</strong> we adjusted for confounders
+and built Table 1 (P2). Adjustment made the Group IV HR shrink from ~15
+to ~2.9 — confounders <em>distort</em> one effect.</li>
+<li><strong>Today:</strong> a different question — does the effect
+<em>differ across subgroups</em>? We separate that from confounding and
+from bare statistical interaction.</li>
+<li><strong>Sets up Thursday (L4):</strong> product terms and
+stratum-specific estimates, which each student then runs on their own
+paper as <strong>P3</strong>.</li>
+</ul>
+<h2 id="slide-1-where-we-are-in-the-project-6-min">Slide 1 — Where we
+are in the project (6 min)</h2>
+<ul>
+<li>Timeline recap: Replicate → Interrogate → Improve → Defend; we are
+mid-Interrogate.</li>
+<li>P1 eligibility ✓, P2 Table 1 ✓; today feeds <strong>P3 effect
+modification</strong>.</li>
+<li>One-line reminder of the finding: Group IV (non-obese, high central
+adiposity) has the worst all-cause survival.</li>
+<li><strong>MASLD hook:</strong> keep the four phenotypes on screen as
+our running example — n = 391 / 4,585 / 787 / 608 in our reproduction,
+against the paper’s 386 / 4,541 / 769 / 604.</li>
+</ul>
+<h2 id="slide-2-todays-roadmap-4-min">Slide 2 — Today’s roadmap (4
+min)</h2>
+<ul>
+<li>Three concepts → two scales → one worked MASLD example → the right
+time-to-event tool.</li>
+<li>Flag the trap up front: “big crude difference between men and women”
+is <em>not</em> proof of modification.</li>
+<li><strong>MASLD hook:</strong> promise to return to the men-IV-28 vs
+women-IV-4 gap after the break — and to say what the data can and cannot
+tell us about it.</li>
+</ul>
+<h2 id="slide-3-three-things-people-call-interaction-10-min">Slide 3 —
+Three things people call “interaction” (10 min)</h2>
+<ul>
+<li><strong>Confounding:</strong> a nuisance common cause we adjust
+<em>away</em> to get one honest effect.</li>
+<li><strong>Effect modification (EMM):</strong> the effect <em>genuinely
+differs</em> across levels of a third variable — a finding, not a
+nuisance.</li>
+<li><strong>Statistical interaction:</strong> a <em>model</em> term
+(product coefficient) — a mathematical device that may or may not map to
+real EMM.</li>
+<li><strong>MASLD hook:</strong> sex could plausibly be any of the three
+for the Group IV effect — today we test which.</li>
+</ul>
+<h2 id="slide-4-confounding-vs-effect-modification-10-min">Slide 4 —
+Confounding vs effect modification (10 min)</h2>
+<ul>
+<li>Different questions: “is my single estimate biased?” vs “should
+there even <em>be</em> a single estimate?”</li>
+<li>You <em>remove</em> confounding; you <em>report</em> effect
+modification (stratum-specific estimates).</li>
+<li>Diagnostic contrast: adjusting for a confounder moves the pooled
+estimate; a true modifier makes a <em>pooled</em> estimate
+misleading.</li>
+<li><strong>MASLD hook:</strong> the paper adjusts sex as a confounder —
+we ask instead whether sex modifies.</li>
+</ul>
+<h2 id="slide-5-statistical-interaction-a-product-term-10-min">Slide 5 —
+Statistical interaction = a product term (10 min)</h2>
+<ul>
+<li>Model form: outcome ~ exposure + modifier +
+<strong>exposure×modifier</strong>; the product coefficient <em>is</em>
+the interaction on that model’s scale.</li>
+<li>The coefficient’s meaning is inherited from the link (log-hazard,
+log-odds, risk) — so “significant interaction” is always
+scale-specific.</li>
+<li>A null product term does <strong>not</strong> mean equal absolute
+effects.</li>
+<li><strong>MASLD hook:</strong> in Cox, the term is Group×Sex on the
+<strong>log-hazard (multiplicative)</strong> scale.</li>
+</ul>
+<h2 id="slide-6-additive-vs-multiplicative-scales-12-min">Slide 6 —
+Additive vs multiplicative scales (12 min)</h2>
+<ul>
+<li>Multiplicative: do the <em>ratios</em> differ across strata? (ratio
+of HRs / RRs)</li>
+<li>Additive: do the <em>risk differences</em> differ? — the scale that
+governs how many events you prevent.</li>
+<li>Public-health relevance: intervention planning lives on the
+<strong>additive</strong> scale.</li>
+<li><strong>MASLD hook:</strong> men and women can share the same HR yet
+have very different absolute excess deaths because their
+<strong>baseline</strong> mortality differs.</li>
+</ul>
+<h2 id="slide-7-same-data-two-answers-8-min">Slide 7 — Same data, two
+answers (8 min)</h2>
+<ul>
+<li>Toy 2×2×2: show a setting with no multiplicative interaction but
+clear additive interaction (and vice versa).</li>
+<li>Takeaway: “is there effect modification?” is unanswerable without
+naming the scale.</li>
+<li>Reporting rule: state the scale, give stratum-specific estimates,
+don’t hang everything on one p-value.</li>
+<li><strong>MASLD hook:</strong> differing baseline mortality is one
+candidate explanation for the sex “signal” — foreshadow it as a
+hypothesis we will <em>not</em> be able to confirm.</li>
+</ul>
+<h2 id="slide-8-break-10-min">Slide 8 — BREAK (10 min)</h2>
+<ul>
+<li>Stretch; queue the sex example on return.</li>
+</ul>
+<h2 id="slide-9-the-masld-sex-question-8-min">Slide 9 — The MASLD sex
+question (8 min)</h2>
+<ul>
+<li>Motivating claim a reader might make: “the Group IV hazard is far
+worse in men.”</li>
+<li>Set up the formal question: does sex modify the Group IV vs
+reference hazard ratio?</li>
+<li>Note the design: time-to-event, 586 all-cause deaths in our
+reproduction (the paper reports 585), median follow-up ~6.7 y.</li>
+<li><strong>MASLD hook:</strong> we will test sex specifically for the
+<strong>Group IV</strong> contrast, the paper’s headline.</li>
+</ul>
+<h2 id="slide-10-crude-stratified-hazard-ratios-12-min">Slide 10 — Crude
+stratified hazard ratios (12 min)</h2>
+<ul>
+<li>Sex-stratified crude Group IV HRs: <strong>men ≈ 28 vs women ≈
+4</strong> — visually dramatic.</li>
+<li>Warn: crude stratum HRs mix in confounding <em>and</em> differing
+baseline hazards and small male cell counts.</li>
+<li>Ask the room: is this modification, confounding, or noise? (hold the
+vote.)</li>
+<li><strong>MASLD hook:</strong> these are the exact numbers a careless
+subgroup analysis would headline.</li>
+</ul>
+<h2 id="slide-11-the-formal-interaction-test-14-min">Slide 11 — The
+formal interaction test (14 min)</h2>
+<ul>
+<li>Fit Group×Sex product term in the <strong>crude</strong> Cox model,
+then in the <strong>adjusted</strong> model.</li>
+<li>Match the test to the estimand. A <code>group*sex</code> term across
+four groups is a <strong>multi-df</strong> test of whether <em>any</em>
+contrast varies by sex. For the locked IV-vs-III question the 1-df test
+gives a ratio of hazard ratios of <strong>1.00 (0.42–2.35), p =
+0.99</strong> — no evidence of interaction, but an interval wide enough
+to be compatible with substantial heterogeneity. A null p-value does not
+prove homogeneity.</li>
+<li>Lesson: crude stratum contrasts are not an interaction test; the
+test must live in a model, adjusted.</li>
+<li><strong>MASLD hook:</strong> on the locked contrast there is no
+evidence of interaction at the available precision — which is not the
+same as showing the men-28 / women-4 gap was illusory.</li>
+</ul>
+<h2 id="slide-12-a-crude-stratum-difference-is-not-evidence-of-modification-12-min">Slide
+12 — A crude stratum difference is not evidence of modification (12
+min)</h2>
+<ul>
+<li><strong>Do not explain the crude gap.</strong> A p-value that moves
+when covariates enter tells you the <em>estimate</em> changed; it does
+not establish <strong>what generated</strong> the crude difference.</li>
+<li><strong>Withdrawn:</strong> the earlier teaching that this gap was
+confounding by baseline risk rather than true modification, and with it
+the instruction to report a common multiplicative effect across sex.
+Differing baseline mortality is one candidate explanation among several,
+and this study cannot distinguish them.</li>
+<li>Interpretive discipline: a large stratum-specific estimate ≠ effect
+modification. Equally, a null test ≠ homogeneity.</li>
+<li>The honest statement is <strong>1.00 (0.42–2.35)</strong>: no
+evidence of interaction at the available precision, on an interval
+compatible with the effect in women being less than half that in men, or
+more than twice it.</li>
+<li><strong>MASLD hook:</strong> M1 re-runs this test design-aware on
+the same rows and the picture moves. Flag that now so P3’s null is read
+as provisional, not settled.</li>
+</ul>
+<h2 id="slide-13-the-right-tool-for-time-to-event-12-min">Slide 13 — The
+right tool for time-to-event (12 min)</h2>
+<ul>
+<li>Correct instrument: <strong>product term in the Cox model</strong>
+for the multiplicative test, plus <strong>absolute-risk / survival
+contrasts</strong> (predicted risk differences at fixed times) for the
+additive story.</li>
+<li><strong>Do not</strong> dichotomize survival and run a logistic
+<strong>RERI</strong>: it discards follow-up time and censoring and
+answers the wrong question for this design.</li>
+<li>If additive interaction is the target, get it from model-based
+<strong>absolute risks</strong>, not a repurposed odds-ratio RERI.</li>
+<li><strong>MASLD hook:</strong> to serve public-health readers, pair
+the Group IV HR with predicted 6-year risk differences by sex.</li>
+</ul>
+<h2 id="slide-14-honest-subgroup-reporting-8-min">Slide 14 — Honest
+subgroup reporting (8 min)</h2>
+<ul>
+<li>Power: interaction tests are underpowered; a null is weak evidence
+of <em>no</em> modification (small male IV cell).</li>
+<li>Multiplicity: pre-specify the modifier; don’t fish across every
+covariate.</li>
+<li>Report stratum estimates + interaction p + scale, not a single
+“significant subgroup.”</li>
+<li><strong>MASLD hook:</strong> the sex example is a cautionary
+template for what students must resist in P3.</li>
+</ul>
+<h2 id="slide-15-preview-the-terms-dominant-threat-6-min">Slide 15 —
+Preview: the term’s dominant threat (6 min)</h2>
+<ul>
+<li>Seed the idea students will formally name at <strong>M1</strong>:
+<strong>FLI circularity</strong> — the phenotype groups (BMI, waist) and
+the FLI eligibility filter (BMI, waist) share inputs, so exposure and
+cohort selection are entangled.</li>
+<li>Why here: effect-modification claims are only as trustworthy as the
+exposure definition; a circular exposure taints subgroup contrasts
+too.</li>
+<li>Tease the check: a TyG-based sensitivity exposure that removes BMI
+and waist from the <strong>steatosis surrogate</strong> (MASLD’s
+cardiometabolic criteria can still involve them). Note that the paper
+already reports this analysis — the interesting question is what it
+shows on <em>our</em> locked contrast.</li>
+<li><strong>MASLD hook:</strong> flag it now so P3’s subgroup work is
+read against the looming threat, not in isolation.</li>
+</ul>
+<h2 id="slide-16-bridge-to-todays-lab-l4-and-p3-8-min">Slide 16 — Bridge
+to today’s lab (L4) and P3 (8 min)</h2>
+<ul>
+<li><strong>In L4 (Thu, EpiMethods OER):</strong> on the fixed NHANES
+teaching dataset, you will (a) fit a Cox model with an
+<strong>exposure×modifier product term</strong>, (b) extract
+<strong>stratum-specific</strong> hazard ratios, (c) read the
+interaction p-value on the multiplicative scale, and (d) compute
+<strong>absolute-risk contrasts</strong> at a fixed time — deliberately
+<em>not</em> a logistic RERI.</li>
+<li><strong>Deliverable P3:</strong> run <strong>one pre-specified
+effect-modification test on your own paper’s exposure</strong> — report
+the product-term p-value crude vs adjusted, the stratum-specific
+estimates, the scale, and a one-line verdict stated as evidence, not as
+a mechanism: whether the data show evidence of modification at the
+precision you have, and what the interval leaves open.</li>
+<li><strong>P3 is optional and ungraded</strong> — no separate weight,
+no separate deadline, and nothing to submit. It applies L4’s method to
+your own paper; keep it in your group GitHub repo, and remember that
+<strong>M1 is assembled from these five increments</strong> — the only
+place P3 is assessed.</li>
+<li><strong>MASLD hook:</strong> your P3 should read like our sex
+example done honestly — report the interval, and resist headlining a
+crude gap you cannot account for.</li>
+</ul>
+</body>
+</html>

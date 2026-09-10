@@ -1,0 +1,17 @@
+"row_set","step","criterion","n","type","dropped"
+"locked domain",0,"NHANES 2007-2018 records",59842,"-",NA
+"locked domain",1,"Age >= 18",36580,"ELIGIBILITY",23262
+"locked domain",2,"In fasting subsample",14962,"DESIGN",21618
+"locked domain",3,"FLI computable (TG + GGT + BMI + waist)",14170,"MISSINGNESS",792
+"locked domain",4,"Steatosis (FLI >= 60)",6052,"TARGET POPULATION",8118
+"locked domain",5,"MASLD (>= 1 cardiometabolic criterion)",6050,"TARGET POPULATION",2
+"locked domain",6,"Phenotype group assignable",6050,"MISSINGNESS",0
+"locked domain",7,"Mortality-eligible and linked",6048,"OUTCOME ASCERTAINMENT",2
+"full analytic file",0,"All NHANES 2007-2018 records",59842,"-",NA
+"full analytic file",1,"Age >= 18",36580,"ELIGIBILITY",23262
+"full analytic file",2,"FLI computable (TG,GGT,BMI,waist)",14989,"DESIGN + MISSINGNESS (fused)",21591
+"full analytic file",3,"Hepatic steatosis (FLI >= 60)",6376,"TARGET POPULATION",8613
+"full analytic file",4,"MASLD (>= 1 cardiometabolic criterion)",6374,"TARGET POPULATION",2
+"full analytic file",5,"Non-missing BMI + WHtR (group)",6374,"MISSINGNESS",0
+"full analytic file",6,"Mortality-eligible + linked",6371,"OUTCOME ASCERTAINMENT",3
+"full analytic file",7,"Alcohol exclusion applied = FALSE",6371,"SWITCH (records the setting; drops no rows here)",0

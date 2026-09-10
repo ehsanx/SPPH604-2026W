@@ -1,0 +1,55 @@
+{
+  "emitted_by": "P5",
+  "facts": {
+    "n_missing": "109",
+    "pct_uw": "1.80",
+    "pct_w": "1.18",
+    "n_vars_miss": "1",
+    "n_vars": "11",
+    "locked_cc": "1.29 (0.90–1.86)",
+    "locked_no": "1.29 (0.89–1.85)",
+    "locked_yes": "1.29 (0.89–1.85)",
+    "locked_mi": "1.29 (0.89–1.85)",
+    "n_cc": "5,939",
+    "n_full": "6,048"
+  },
+  "locked_estimand": [
+    {
+      "scenario": "complete case (109 dropped)",
+      "HR": "1.29 (0.90-1.86)",
+      "n": 5939
+    },
+    {
+      "scenario": "all 109 assigned NO cancer",
+      "HR": "1.29 (0.89-1.85)",
+      "n": 6048
+    },
+    {
+      "scenario": "all 109 assigned CANCER",
+      "HR": "1.29 (0.89-1.85)",
+      "n": 6048
+    },
+    {
+      "scenario": "MI (m = 10)",
+      "HR": "1.29 (0.89-1.85)",
+      "n": 6048
+    }
+  ],
+  "replication_estimand": [
+    {
+      "scenario": "complete case (109 dropped)",
+      "HR": "2.97 (0.69–12.79)",
+      "n": 5939
+    },
+    {
+      "scenario": "all 109 assigned NO cancer",
+      "HR": "2.98 (0.69–12.86)",
+      "n": 6048
+    },
+    {
+      "scenario": "all 109 assigned CANCER",
+      "HR": "2.99 (0.69–12.87)",
+      "n": 6048
+    }
+  ]
+}

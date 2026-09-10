@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>P3 effect modification</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">P3 effect modification</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#p3-effect-modification-interaction" id="toc-p3-effect-modification-interaction">P3 — Effect modification
+(interaction)</a>
+<ul>
+<li><a href="#the-question-this-week" id="toc-the-question-this-week">The question this week</a></li>
+<li><a href="#what-to-do" id="toc-what-to-do">What to do</a></li>
+<li><a href="#deliverable" id="toc-deliverable">Deliverable</a></li>
+<li><a href="#worked-example-masldnhanes-demonstration" id="toc-worked-example-masldnhanes-demonstration">Worked example —
+MASLD/NHANES demonstration</a></li>
+<li><a href="#what-good-looks-like" id="toc-what-good-looks-like">What
+good looks like</a></li>
+<li><a href="#be-ready-to-defend-m3" id="toc-be-ready-to-defend-m3">Be
+ready to defend (M3)</a></li>
+<li><a href="#ai-co-pilot-note" id="toc-ai-co-pilot-note">AI co-pilot
+note</a></li>
+<li><a href="#lab-project-handoff" id="toc-lab-project-handoff">Lab →
+project handoff</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="p3-effect-modification-interaction">P3 — Effect modification
+(interaction)</h1>
+<p><strong>Week 5 · applies L4 (Interaction) · optional and ungraded —
+no separate deadline, nothing to submit; M1 is assembled from these five
+increments</strong> <strong>Keep in your group GitHub repo:</strong>
+stratum-specific estimates + a formal interaction test + a short
+interpretation.</p>
+<h2 id="the-question-this-week">The question this week</h2>
+<p><em>Does your main exposure–outcome association differ across a
+scientifically meaningful subgroup?</em> This week you take the main
+estimate you built in P2 — your current best estimate, before the
+design-aware re-estimate at P4 — and ask whether one number actually
+hides two, i.e. whether some group carries the effect.</p>
+<h2 id="what-to-do">What to do</h2>
+<ol type="1">
+<li><strong>Choose one effect modifier with a rationale.</strong> Sex,
+age band, income, or a clinical subgroup — and say <em>why</em>
+modification is biologically/socially plausible. One well-argued
+modifier beats a fishing expedition.</li>
+<li><strong>Estimate stratum-specific effects.</strong> Fit the
+association separately within each level of the modifier and report the
+estimates side by side.</li>
+<li><strong>Test interaction formally, on the right scale.</strong>
+<ul>
+<li><em>Multiplicative:</em> an exposure × modifier product term in your
+outcome model.</li>
+<li><em>Additive</em> (often more relevant for public health): compare
+<strong>absolute risks</strong> across strata — for a time-to-event
+outcome, contrast predicted risks at a fixed horizon rather than forcing
+a logistic-model RERI.</li>
+</ul></li>
+<li><strong>Interpret.</strong> Report the stratum-specific estimates
+and the interaction test with their intervals, and state which scale you
+tested and why. A crude stratum difference is not an interaction test,
+and a null test is not evidence of homogeneity — say what the data show
+at the precision you have, and do not claim to have identified what
+produced any crude difference.</li>
+</ol>
+<h2 id="deliverable">Deliverable</h2>
+<ul>
+<li>Stratum-specific estimates + the interaction test → your M1
+<strong>effect-modification slide</strong>.</li>
+<li>2–3 sentences: is there modification, on which scale, and does it
+change the story?</li>
+</ul>
+<h2 id="worked-example-masldnhanes-demonstration">Worked example —
+MASLD/NHANES demonstration</h2>
+<ul>
+<li>The paper reports <strong>one</strong> hazard ratio per phenotype
+and never tests modification. A natural P3 question: <strong>does the
+central-adiposity → mortality association differ by sex?</strong> (Group
+II is 56% female; Group I only 15% — so sex is entangled with the
+exposure and worth probing.)</li>
+<li><strong>Right tool for the outcome:</strong> mortality is
+time-to-event with censoring, so put a <code>group × sex</code> term in
+the <strong>Cox</strong> model (multiplicative), and for additive
+modification compare <strong>predicted 6-year mortality risk</strong> by
+sex within group — <em>not</em> a logistic RERI on an “ever died”
+flag.</li>
+<li>A defensible result is often “no meaningful modification” — reported
+clearly, that is a complete P3.</li>
+</ul>
+<h2 id="what-good-looks-like">What good looks like</h2>
+<ul>
+<li><strong>Exceptional:</strong> a modifier chosen for a stated
+scientific reason; correct stratum-specific estimates; interaction
+tested on the appropriate scale for the outcome type; reports the
+interval, not just the p-value, and does not claim to have identified
+what produced a crude stratum difference.</li>
+<li><strong>Adequate:</strong> a sensible modifier assessed with a
+product term and strata.</li>
+<li><strong>Weak:</strong> a product term with no rationale; or a
+logistic RERI that discards follow-up time and censoring.</li>
+</ul>
+<h2 id="be-ready-to-defend-m3">Be ready to defend (M3)</h2>
+<blockquote>
+<p><em>“You report an interaction by sex. Is that genuine effect
+modification, or just what you’d expect from men and women having
+different baseline mortality? Defend the scale you tested it
+on.”</em></p>
+</blockquote>
+<h2 id="ai-co-pilot-note">AI co-pilot note</h2>
+<p>Because the interaction <em>lab</em> uses a binary-outcome RERI
+example, a co-pilot will often copy that recipe — coding “ever died” and
+fitting logistic regression — which throws away survival time. For a
+time-to-event paper you must move the interaction into the survival
+model. Don’t let the lab’s convenient example dictate your project’s
+method.</p>
+<h2 id="lab-project-handoff">Lab → project handoff</h2>
+<p>You are applying <strong>L4 (Interaction)</strong> — product terms,
+stratum-specific estimates, and additive vs multiplicative modification
+(EpiMethods <code>confoundingE2</code>). Assess it on the scale your
+outcome demands.</p>
+</body>
+</html>

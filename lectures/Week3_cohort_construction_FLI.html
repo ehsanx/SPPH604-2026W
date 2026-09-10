@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Week3 cohort construction FLI</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Week3 cohort construction FLI</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#week-3-lecture-plan-building-the-analytic-cohort-case-definitions-eligibility-and-the-funnel" id="toc-week-3-lecture-plan-building-the-analytic-cohort-case-definitions-eligibility-and-the-funnel">Week
+3 Lecture Plan — Building the Analytic Cohort: Case Definitions,
+Eligibility, and the Funnel</a>
+<ul>
+<li><a href="#learning-objectives" id="toc-learning-objectives">Learning
+objectives</a></li>
+<li><a href="#continuity" id="toc-continuity">Continuity</a></li>
+<li><a href="#slide-1-where-we-are-in-the-project-recap-m0-closing" id="toc-slide-1-where-we-are-in-the-project-recap-m0-closing">Slide 1 —
+Where we are in the project (recap + M0 closing)</a></li>
+<li><a href="#slide-2-todays-roadmap-and-the-one-big-idea" id="toc-slide-2-todays-roadmap-and-the-one-big-idea">Slide 2 — Today’s
+roadmap and the one big idea</a></li>
+<li><a href="#slide-3-target-vs-source-vs-analytic-population" id="toc-slide-3-target-vs-source-vs-analytic-population">Slide 3 —
+Target vs source vs analytic population</a></li>
+<li><a href="#slide-4-the-masld-case-definition-unpacked" id="toc-slide-4-the-masld-case-definition-unpacked">Slide 4 — The MASLD
+case definition, unpacked</a></li>
+<li><a href="#slide-5-ascertaining-steatosis-the-fatty-liver-index" id="toc-slide-5-ascertaining-steatosis-the-fatty-liver-index">Slide 5 —
+Ascertaining steatosis: the Fatty Liver Index</a></li>
+<li><a href="#slide-6-the-fli-formula-worked" id="toc-slide-6-the-fli-formula-worked">Slide 6 — The FLI formula,
+worked</a></li>
+<li><a href="#slide-7-the-cardiometabolic-criteria-the-m-in-masld" id="toc-slide-7-the-cardiometabolic-criteria-the-m-in-masld">Slide 7 —
+The cardiometabolic criteria (the “M” in MASLD)</a></li>
+<li><a href="#slide-8-eligibility-and-exclusions-are-design-not-chores" id="toc-slide-8-eligibility-and-exclusions-are-design-not-chores">Slide
+8 — Eligibility and exclusions are design, not chores</a></li>
+<li><a href="#slide-9-worked-example-the-alcohol-ambiguity-one-sentence-three-cohorts" id="toc-slide-9-worked-example-the-alcohol-ambiguity-one-sentence-three-cohorts">Slide
+9 — Worked example: the alcohol ambiguity (one sentence, three
+cohorts)</a></li>
+<li><a href="#slide-10-break-10-min" id="toc-slide-10-break-10-min">Slide 10 — BREAK (10 min)</a></li>
+<li><a href="#slide-11-the-eligibility-funnel-report-n-at-every-step" id="toc-slide-11-the-eligibility-funnel-report-n-at-every-step">Slide 11
+— The eligibility funnel: report N at every step</a></li>
+<li><a href="#slide-12-why-you-never-tune-the-cohort-to-hit-the-papers-n" id="toc-slide-12-why-you-never-tune-the-cohort-to-hit-the-papers-n">Slide
+12 — Why you never tune the cohort to hit the paper’s N</a></li>
+<li><a href="#slide-13-peer-review-principles-for-eligibility" id="toc-slide-13-peer-review-principles-for-eligibility">Slide 13 —
+Peer-review principles for eligibility</a></li>
+<li><a href="#slide-14-feasibility-can-you-even-measure-the-exposure" id="toc-slide-14-feasibility-can-you-even-measure-the-exposure">Slide 14
+— Feasibility: can you even measure the exposure?</a></li>
+<li><a href="#slide-15-from-paper-to-protocol-recap-m0-closing" id="toc-slide-15-from-paper-to-protocol-recap-m0-closing">Slide 15 —
+From paper to protocol (recap, M0 closing)</a></li>
+<li><a href="#slide-16-bridge-to-todays-lab-l2-p1" id="toc-slide-16-bridge-to-todays-lab-l2-p1">Slide 16 — Bridge to
+today’s lab (L2 / P1)</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="week-3-lecture-plan-building-the-analytic-cohort-case-definitions-eligibility-and-the-funnel">Week
+3 Lecture Plan — Building the Analytic Cohort: Case Definitions,
+Eligibility, and the Funnel</h1>
+<p>Duration: ~2.5 h (Tue, before the Thu lab)</p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ul>
+<li>Distinguish a <strong>target population</strong>, a <strong>source
+population</strong>, and an <strong>analytic cohort</strong>, and locate
+each in a published study.</li>
+<li>Reconstruct the MASLD case definition from its parts: non-invasive
+<strong>steatosis</strong> (Fatty Liver Index ≥ 60) <strong>plus ≥ 1
+cardiometabolic criterion</strong>.</li>
+<li>Turn a prose eligibility paragraph into an explicit, reproducible
+<strong>inclusion/exclusion algorithm</strong>, and see how one
+ambiguous sentence can move N by thousands.</li>
+<li>Build and report an <strong>eligibility funnel</strong> with an N at
+every step, and defend it as a design choice.</li>
+<li>State why you <strong>never tune the cohort to reproduce the paper’s
+N</strong>, and how peer review should interrogate eligibility.</li>
+</ul>
+<h2 id="continuity">Continuity</h2>
+<ul>
+<li><strong>Last week (Wk 2 → L1):</strong> we wrangled raw NHANES files
+— merged cycles, harmonized variable names, handled the messy joins. We
+now have a clean, person-level frame but <em>not yet</em> a study
+cohort.</li>
+<li><strong>This week:</strong> we convert that frame into the
+<em>analytic cohort</em> the MASLD paper analyzed — the step that
+decides who is even in the study. <strong>M0 closes today:</strong> the
+memo is due at 12 PM, and the paper locks at that deadline.</li>
+<li><strong>Sets up:</strong> L2 (build the analytic dataset) and
+<strong>P1</strong> (your own eligibility funnel for your locked
+paper).</li>
+</ul>
+<h2 id="slide-1-where-we-are-in-the-project-recap-m0-closing">Slide 1 —
+Where we are in the project (recap + M0 closing)</h2>
+<ul>
+<li>Term arc: <strong>Replicate → Interrogate → Improve →
+Defend</strong>; we are still in <em>Replicate</em>.</li>
+<li>L1 gave us a clean merged NHANES frame; today we decide <em>who
+counts as a subject</em>.</li>
+<li>Announce the <strong>M0 deadline</strong>: the memo is due at 12 PM
+today, and papers lock at that deadline.</li>
+<li>MASLD hook: the Kueh paper’s whole story rides on 4 phenotype groups
+drawn from <em>one</em> cohort; get the cohort wrong and every
+downstream number is wrong.</li>
+<li>(4 min)</li>
+</ul>
+<h2 id="slide-2-todays-roadmap-and-the-one-big-idea">Slide 2 — Today’s
+roadmap and the one big idea</h2>
+<ul>
+<li>Case definition → eligibility → exclusions → funnel →
+feasibility.</li>
+<li>Big idea: <strong>eligibility decisions are load-bearing</strong> —
+they are analysis choices, not bookkeeping.</li>
+<li>Framing question for the room: “If two teams read the same methods
+paragraph, would they build the same cohort?”</li>
+<li>(3 min)</li>
+</ul>
+<h2 id="slide-3-target-vs-source-vs-analytic-population">Slide 3 —
+Target vs source vs analytic population</h2>
+<ul>
+<li>Target = adults with MASLD (who we want to speak about); source =
+NHANES 2007–2018 respondents; analytic = those who survive all
+inclusion/exclusion filters <em>and</em> have measurable
+exposure/outcome.</li>
+<li>Each narrowing step trades <strong>generalizability</strong> for
+<strong>measurability</strong>.</li>
+<li>Every drop is a potential selection bias, not just a smaller N.</li>
+<li>MASLD hook: NHANES samples the US civilian population, and the
+analytic cohort is the MASLD subset of the <strong>designed fasting
+subsample</strong>. Foreshadow the typed funnel: every step down has a
+<em>kind</em>, and only some kinds are missing data.</li>
+<li>(10 min)</li>
+</ul>
+<h2 id="slide-4-the-masld-case-definition-unpacked">Slide 4 — The MASLD
+case definition, unpacked</h2>
+<ul>
+<li>MASLD (formerly NAFLD) = <strong>hepatic steatosis + metabolic
+dysfunction</strong>, with other causes not dominant.</li>
+<li>Two ingredients we must operationalize in data: (1) steatosis, (2) ≥
+1 cardiometabolic criterion.</li>
+<li>No biopsy, no imaging in NHANES → steatosis must be ascertained
+<strong>non-invasively</strong>.</li>
+<li>MASLD hook: the paper uses the <strong>Fatty Liver Index
+(FLI)</strong> as its steatosis proxy — a modeling choice we will
+scrutinize all term.</li>
+<li>(12 min)</li>
+</ul>
+<h2 id="slide-5-ascertaining-steatosis-the-fatty-liver-index">Slide 5 —
+Ascertaining steatosis: the Fatty Liver Index</h2>
+<ul>
+<li>FLI is a published logistic score predicting fatty liver from
+routine measures.</li>
+<li>Inputs: <strong>triglycerides, BMI, GGT, waist
+circumference</strong> — remember these four; only triglycerides needs a
+fasting lab (GGT is MEC-wide standard biochemistry, BMI and waist are
+anthropometry), and that single fasting input binds the whole
+index.</li>
+<li>Output: 0–100 score; the paper applies the conventional <strong>FLI
+≥ 60</strong> rule-in cut.</li>
+<li>MASLD hook: note <em>now</em> that FLI already contains <strong>BMI
+and waist</strong> — the same anthropometry used later to define the
+phenotype groups. Flag it; we return to it as the “circularity” threat
+at M1.</li>
+<li>(12 min)</li>
+</ul>
+<h2 id="slide-6-the-fli-formula-worked">Slide 6 — The FLI formula,
+worked</h2>
+<ul>
+<li>Show the formula shape: a logistic function of
+<code>0.953·ln(TG) + 0.139·BMI + 0.718·ln(GGT) + 0.053·waist − 15.745</code>,
+mapped to 0–100.</li>
+<li>Walk one hypothetical subject through it live; show that TG and GGT
+enter on the log scale.</li>
+<li>Emphasize: a <em>cut</em> on a continuous score creates a hard
+boundary — small measurement error near 60 flips case status.</li>
+<li>MASLD hook: FLI ≥ 60 is both the <strong>disease gate</strong> and,
+because it needs fasting TG, the <strong>reason the cohort
+shrinks</strong> to the fasting subsample.</li>
+<li>(10 min)</li>
+</ul>
+<h2 id="slide-7-the-cardiometabolic-criteria-the-m-in-masld">Slide 7 —
+The cardiometabolic criteria (the “M” in MASLD)</h2>
+<ul>
+<li>Require <strong>≥ 1</strong> of: elevated BMI/waist,
+hyperglycemia/diabetes, hypertension, dyslipidemia (low HDL / high TG or
+treatment).</li>
+<li>Each is itself an operationalization: which threshold, treated vs
+untreated, which NHANES variable.</li>
+<li>Document each criterion’s variable and cut in a codebook
+<em>before</em> coding.</li>
+<li>MASLD hook: in this cohort ≥ 1 criterion is almost always met, so it
+rarely changes N — but you still must report it, because <em>your</em>
+paper’s population may differ.</li>
+<li>(10 min)</li>
+</ul>
+<h2 id="slide-8-eligibility-and-exclusions-are-design-not-chores">Slide
+8 — Eligibility and exclusions are design, not chores</h2>
+<ul>
+<li>Typical filters: adults (age ≥ 18/20), non-pregnant, valid mortality
+linkage, non-missing key measures, and disease-specific exclusions.</li>
+<li>Each filter answers a scientific question (“who is this study
+about?”), so each needs a stated rationale.</li>
+<li>Rule: write exclusions as <strong>executable logic</strong> with a
+comment citing the paper’s sentence.</li>
+<li>MASLD hook: the paper’s exclusions include competing liver-disease
+causes and — critically — <strong>heavy alcohol use</strong>, our worked
+example next.</li>
+<li>(10 min)</li>
+</ul>
+<h2 id="slide-9-worked-example-the-alcohol-ambiguity-one-sentence-three-cohorts">Slide
+9 — Worked example: the alcohol ambiguity (one sentence, three
+cohorts)</h2>
+<ul>
+<li>The paper states an alcohol exclusion in a <em>single sentence</em>
+that can be read three ways (which drinks question, which threshold,
+missing = drop vs keep).</li>
+<li>Coded three defensible ways, the same sentence yields <strong>N ≈
+4,308 / 5,944 / 6,371</strong> — a swing of ~2,000 people.</li>
+<li>Lesson: prose is lossy; the ambiguity is invisible until you try to
+<em>run</em> it.</li>
+<li>MASLD hook: this is exactly why the reported N never quite pins down
+— and why we must publish our own coding decision explicitly rather than
+guess the authors’ intent.</li>
+<li>(15 min)</li>
+</ul>
+<h2 id="slide-10-break-10-min">Slide 10 — BREAK (10 min)</h2>
+<ul>
+<li>Restart prompt on screen: “Which of the three alcohol codings would
+<em>you</em> defend, and why?”</li>
+</ul>
+<h2 id="slide-11-the-eligibility-funnel-report-n-at-every-step">Slide 11
+— The eligibility funnel: report N at every step</h2>
+<ul>
+<li>Build a top-to-bottom funnel: source N → adults → MASLD (FLI ≥ 60 +
+criterion) → alcohol/other exclusions → mortality linkage →
+<strong>analytic N</strong>.</li>
+<li>Report the count removed <strong>and remaining</strong> at
+<em>each</em> line; a CONSORT-style diagram is the deliverable.</li>
+<li>The funnel is a reproducibility contract: a reader can re-derive
+your N.</li>
+<li>MASLD hook: the paper reports <strong>N ≈ 6,300</strong>, phenotype
+groups <strong>386 / 4,541 / 769 / 604</strong> and <strong>585
+all-cause deaths</strong>; our reproduction’s <strong>full analytic
+file</strong> is <strong>6,371</strong>, with groups <strong>391 / 4,585
+/ 787 / 608</strong> and <strong>586 deaths</strong>, and its
+<strong>locked domain</strong> — the rows carrying a valid fasting
+weight — is <strong>6,048</strong>. Getting 6,371 rather than the
+paper’s number is not a failure: it is the finding. These are numbers
+only interpretable <em>with</em> the funnel that produced them.</li>
+<li>(14 min)</li>
+</ul>
+<h2 id="slide-12-why-you-never-tune-the-cohort-to-hit-the-papers-n">Slide 12
+— Why you never tune the cohort to hit the paper’s N</h2>
+<ul>
+<li>Temptation: quietly flip a threshold until your N matches the
+abstract. This is <strong>fitting the process to the answer</strong> — a
+garden of forking paths.</li>
+<li>Correct stance: pick the <em>most defensible</em> coding a priori,
+report your N, and <em>explain</em> any gap.</li>
+<li>A matched N with hidden tuning is worse than an honest mismatch you
+can account for.</li>
+<li>MASLD hook: because the alcohol sentence alone spans ~2,000 people,
+“matching” the paper’s N proves nothing about correctness — it may just
+mean you guessed their ambiguity.</li>
+<li>(10 min)</li>
+</ul>
+<h2 id="slide-13-peer-review-principles-for-eligibility">Slide 13 —
+Peer-review principles for eligibility</h2>
+<ul>
+<li>Reviewer checklist: Is the case definition operational? Is every
+exclusion executable? Does the funnel’s arithmetic close? Is the
+analytic N stated and reproducible?</li>
+<li>Distinguish an <em>honest, documented</em> choice from an
+<em>undocumented, load-bearing</em> one.</li>
+<li>Charity + rigor: assume competence, but demand the numbers
+reconcile.</li>
+<li>MASLD hook: apply the checklist to the alcohol sentence and the
+<strong>mislabeled BMI header</strong> (Table says “&lt; 25” where the
+cut is actually 30) — small text discrepancies, real consequences for a
+reader rebuilding the cohort.</li>
+<li>(12 min)</li>
+</ul>
+<h2 id="slide-14-feasibility-can-you-even-measure-the-exposure">Slide 14
+— Feasibility: can you even measure the exposure?</h2>
+<ul>
+<li>FLI needs fasting labs, so only the <strong>fasting
+subsample</strong> qualifies. Within that subsample FLI is computable
+for <strong>94.7%</strong> of adults — the 5.3% who lack it are genuine
+item nonresponse.</li>
+<li>The much larger reduction from all adults to the fasting subsample
+is <strong>designed subsampling</strong>, handled by
+<code>WTSAF2YR</code>, not a selection bias to be modelled away.</li>
+<li>Feasibility check <em>before</em> committing: is the exposure
+computable for enough of your target population?</li>
+<li>MASLD hook: make the funnel <strong>typed</strong> — DESIGN /
+ELIGIBILITY / TARGET POPULATION / OUTCOME ASCERTAINMENT / MISSINGNESS.
+The single most common error is calling every downward step
+“attrition”.</li>
+<li>(10 min)</li>
+</ul>
+<h2 id="slide-15-from-paper-to-protocol-recap-m0-closing">Slide 15 —
+From paper to protocol (recap, M0 closing)</h2>
+<ul>
+<li>We converted a prose methods section into an explicit cohort
+algorithm: definition → exclusions → funnel → analytic N.</li>
+<li>Every decision is documented, defensible, and re-runnable — the
+standard your own P1 must meet.</li>
+<li>Once M0 closes at 12 PM today, your paper’s eligibility paragraph is
+<em>your</em> specification to decode.</li>
+<li>(6 min)</li>
+</ul>
+<h2 id="slide-16-bridge-to-todays-lab-l2-p1">Slide 16 — Bridge to
+today’s lab (L2 / P1)</h2>
+<ul>
+<li><strong>In L2 (Thu):</strong> using EpiMethods
+(ehsanx.github.io/EpiMethods), you build the MASLD analytic dataset from
+the L1 frame — code the FLI, apply FLI ≥ 60 and ≥ 1 cardiometabolic
+criterion, implement one defensible alcohol coding, and output a
+<strong>funnel with N at every step</strong>. Do not aim the funnel at a
+number: the paper reports ~6,300, our full analytic file lands on 6,371,
+and what you report is wherever your documented steps take you.</li>
+<li><strong>P1 (your increment):</strong> repeat the funnel for <em>your
+own</em> locked paper — write each inclusion/exclusion as executable
+logic, report N at each step, and flag one ambiguous eligibility
+sentence you had to adjudicate.</li>
+<li>Deliverable stance: a documented N you can defend beats a matched N
+you cannot. P1 is optional and ungraded — no separate deadline and
+nothing to submit; keep the funnel and its one hardest judgment call in
+your group GitHub repo, and be ready to defend that call.</li>
+<li>(6 min)</li>
+</ul>
+</body>
+</html>

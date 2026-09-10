@@ -1,0 +1,269 @@
+---
+title: "Week 1 — Course Introduction, Project Map & Setup"
+subtitle: "SPPH 604 · Application of Advanced Epidemiological Methods"
+author: "Course orientation"
+date: "Thursday, September 10, 2026"
+format:
+  revealjs:
+    theme: default
+    slide-number: c/t
+    progress: true
+    incremental: false
+    embed-resources: true
+    width: 1280
+    height: 720
+    fig-align: center
+    smaller: true
+---
+
+## Welcome to SPPH 604 {.center}
+
+**Application of Advanced Epidemiological Methods**
+
+- An **applied, data-intensive capstone**: epidemiological reasoning through real analysis
+- The goal is to move from theory to **reproducible, defensible practice**
+- We use **just-in-time learning**: methods arrive when your analysis needs them
+- **Today is a one-off orientation:** Thursday, Sept 10 · 10:00–12:00 · Zoom
+
+::: {.notes}
+Welcome and introductions. Emphasize that this is not a lecture-and-exam course: students build one project across the term. Clarify immediately that Week 1 is exceptional: there is no Tuesday class and no in-person lab today. (~4 min)
+:::
+
+## Land acknowledgement
+
+UBC's Point Grey Campus is located on the **traditional, ancestral, and unceded territory of the xʷməθkʷəy̓əm (Musqueam) people**.
+
+This land has long been a place of learning, knowledge sharing, culture, history, and community.
+
+::: {.notes}
+Use the acknowledgement as an opening commitment rather than a procedural statement. Keep it brief and sincere. (~3 min)
+:::
+
+## By the end of today, you should know…
+
+- how the **term-long project** works
+- how **M0–M4, L1–L6, and P1–P5** fit together
+- what counts as an **eligible project paper**
+- the course rules for **reproducibility, collaboration, and AI use**
+- what to set up before the first regular class/lab week
+
+::: {.notes}
+This is an orientation session. The objective is not to teach the substantive methods yet; it is to make the course architecture legible before students begin. (~3 min)
+:::
+
+## The big idea: one paper, all term
+
+You choose **one recent, open-data paper** and work with it throughout the course.
+
+**Replicate → Review → Improve → Defend → Synthesize**
+
+- **Replicate & interrogate** your own paper
+- **Review** another group's replication
+- **Improve** your own analysis in response to the critique you receive
+- **Defend** what you changed — and what you chose not to change
+- **Synthesize** the final argument in a short reanalysis letter
+
+::: {.notes}
+This is the core course map. Explicitly distinguish REVIEW from IMPROVE: M2 is about another group's M1; improvement to your own project happens after you receive review and is defended at M3. (~6 min)
+:::
+
+## The regular weekly rhythm
+
+### Weeks 2–7
+
+- **Tuesday 9:30–12:00 · Zoom** — method + epidemiological reasoning
+- **Thursday 10:00–12:00 · SPPH 143** — fixed-data lab (**L1–L6**)
+- **P1–P5** — apply the same idea to your own project
+
+**P1–P5 are optional, formative, ungraded, and not separately submitted** — no deadline of their own.  
+They are the building blocks of **M1**, and the practice you draw on at **M2** (critiquing another group's M1) and **M3** (defending your own, alone).
+
+### Later in term
+
+From **Weeks 8–12 there is no scheduled Thursday lab**; Tuesday shifts toward presentations, defense, and instructor-supported project work.
+
+::: {.notes}
+Correct the old Tue-lecture/Thu-lab description by stating modality as well as time. Stress that P1–P5 do not have independent deadlines or submissions. Presentation weeks use the expanded Tuesday block specified in the syllabus. (~6 min)
+:::
+
+## The milestone map
+
+| Milestone | What happens | When |
+|---|---|---|
+| **M0** | Paper feasibility gate / lock | **Tue Sept 22 · 12 PM** |
+| **M1** | Replication + interrogation | **Tue Oct 27** · presentations from **9 AM**; deck + code zip due **4 PM** |
+| **M2** | Critique another group's M1 | **Tue Nov 3** · presentations from **9 AM**; **slides only** due **4 PM** |
+| **M3** | Improved analysis + live individual defense | **Tue Nov 17 · from 9 AM** |
+| **M4** | Final reanalysis letter + reproducible repo | **Fri Dec 11 · 4 PM** |
+
+::: {.notes}
+Walk left to right. M2 is not a second analysis submission and does not require a new code archive. M3 is assessed live. Point students to Canvas/syllabus for exact submission instructions. (~8 min)
+:::
+
+## What each milestone asks you to do
+
+- **M0 — Feasibility:** prove that your chosen paper can support the whole course
+- **M1 — Replicate + interrogate:** rebuild the main result and identify the **dominant threat**
+- **M2 — Review:** test and critique **another group's M1** professionally and constructively
+- **Between M2 and M3 — Improve:** decide which reviewer points to act on in **your own** analysis
+- **M3 — Defend:** explain what you changed, what you rejected, and **why**
+- **M4 — Synthesize:** turn the full argument into a concise reanalysis letter + reproducible archive
+
+::: {.notes}
+The key conceptual distinction: students are not obliged to follow reviewer recommendations, but they are obliged to answer them with evidence and reasoning. (~7 min)
+:::
+
+## How you are graded
+
+| Component | Weight | Grading |
+|---|---:|---|
+| **Labs L1–L6** | 10% | Complete / Incomplete |
+| **P1–P5** | 0% | Optional formative work |
+| **M0** | 0% | Pass / revise feasibility gate |
+| **M1** | 30% | Weak / Adequate / Exceptional |
+| **M2** | 15% | Weak / Adequate / Exceptional |
+| **M3** | 15% | Weak / Adequate / Exceptional |
+| **M4** | 30% | Weak / Adequate / Exceptional |
+| **Bonus** | +2% max | Journal-submission pledge |
+
+**The course rewards traceable reasoning, not merely reproducing the paper's exact number.**
+
+::: {.notes}
+Avoid implying that M0 uses the 3-band scale. Explain that detailed milestone rubrics live on Canvas. Mention the safety-net policy only at a high level: designated components may be reweighted with instructor approval; M2 is not routinely shiftable; the Grade Re-weighting Plan deadline is Thu Nov 26 at 4 PM. (~7 min)
+:::
+
+## Choosing your project: the M0 feasibility gate
+
+A paper qualifies only if your group can point to all six:
+
+1. **Reconstructable public microdata**
+2. A clear **primary exposure/predictor and outcome**
+3. Plausible **measured confounders** for a defensible adjustment set
+4. Enough **observations/events** for the main analysis and at least one subgroup/interaction analysis
+5. The **design variables** your analysis has to respect — survey weights/strata/PSU, or follow-up time and censoring
+6. A **genuine incomplete-observation problem** — a variable your locked analysis uses that is missing for records which should have carried it
+
+**Do not add variables simply to manufacture a missing-data problem.**
+
+::: {.notes}
+M0 is a feasibility memo with specific pointers: variable names, files, sample sizes, evidence from the actual paper and data. Criterion 5 is not waivable and is not survey-only: complex-survey weights/strata/PSU is the normal route, a time-to-event structure whose handling can be interrogated is the other, and the group names the feature and the variables that encode it. A paper with neither has nothing to do at P4 — and clustering or repeated measures do not count, because we do not teach the methods that handle them. Criterion 6 is missingness on the analysis variables, not cohort shrinkage — designed subsampling, eligibility, the disease definition and linkage failure are what you must tell it apart from and report at P5, not what clears the gate. It must arise from the locked analysis, and the test is not size: ask whether you could have known in advance that handling it would change nothing. (~8 min)
+:::
+
+## BREAK — 10 min {.center}
+
+Back in 10; then reproducibility, AI, and collaboration.
+
+## Reproducibility is the standard
+
+- Every submitted **number, figure, and table** should be generated by code
+- The pipeline must run **start to finish on a fresh machine** without manual intervention
+- Your group works in a **shared private GitHub repository** during the term
+- **M1 and M4** include a downloaded reproducible repository **zip**
+- **M2 is slides only** — you rerun the assigned group's M1 materials, but submit no new code archive
+
+> Code that only works on one person's laptop is unfinished analysis.
+
+::: {.notes}
+Make the submission rule precise: do not say “zip at every milestone.” Repository visibility should remain private during the term unless the instructor approves otherwise. (~7 min)
+:::
+
+## AI is a co-pilot — accountability stays with you
+
+- AI tools are **permitted; none is required**
+- You may use them for appropriate coding, debugging, drafting, and preparation **within the rules of each assessment**
+- You remain responsible for **auditing the code and defending the epidemiological reasoning**
+- M0, M1, M2 and M4 each carry a **cover note**: contributions, external feedback, AI use
+    - final slide or final page of what you submit — plus `COVER-NOTE.md` in the repo zip at **M1 and M4**
+- **M3 preparation is unrestricted and undisclosed** — rehearse with an AI if you want; there is no M3 submission to disclose it in
+- **Presentation:** use everything you prepared — slides, your own speaker notes, your own code and output
+- **Q&A:** the answer is yours, spoken — no prepared answer read aloud, no help from anyone in any channel, nothing produced during the session (no AI, no live prompting, no messages)
+- Supports approved through your **Academic Accommodation Letter** are the exception, arranged in advance
+
+**“The AI made a mistake” is not a defense for an unaudited result.**
+
+::: {.notes}
+Frame this as accountability-first rather than as a ban. Students who choose not to use AI are not disadvantaged. Direct them to the per-assessment AI table in the syllabus for details. (~8 min)
+:::
+
+## M2 has special confidentiality rules {.scrollable}
+
+When you review another group's unpublished M1:
+
+- **Paste what is yours or public; describe what is theirs**
+- Yours or public: your `sessionInfo()`, your install log, package documentation, an error stripped of their code and numbers
+- Theirs: every line of their code, slides, output, logs, results — not a snippet, not a screenshot, not retyped
+- If you cannot ask without quoting their work, **ask the teaching team**
+- AI must **not generate the substantive critique** for you
+- Reviewed material is **confidential** and may not be circulated outside the review assignment
+- Never copy or adapt their code, text, figures, output or distinctive implementation
+- **Credit does not make it permitted** — their solutions stay theirs
+- A general insight may send you back to *your own* analysis: redo it yourself, disclose it
+- Your review group writes the review **together**; you do not coordinate with other groups
+- Your critique should identify real issues — or explain, with evidence, why the work is sound
+
+::: {.notes}
+The old wording banned uploading their work and permitted "debugging help" in the same breath, and students could not tell where the line was. The line is the input, not the topic: their content never goes in; your machine and public documentation always can. On appropriation the rule is short: nothing of theirs is copied or adapted into your own work, credited or not, and a general insight only sends you back to your own analysis — which you then justify, implement and disclose yourself. Say plainly that reviewers award no marks — the teaching team grades the critique — so there is no score to trade, and "coordinate" never meant their own review group. (~6 min)
+:::
+
+## Logistics: what happens where
+
+- **Today:** Thu Sept 10 · 10:00–12:00 · **Zoom**
+- **Weeks 2–7:** Tue class **Zoom** · Thu lab **in person, SPPH 143**
+- **Weeks 8–12:** no scheduled Thursday lab; Tuesday becomes project/presentation time
+- **Canvas:** Zoom links, weekly modules, rubrics, announcements, and official submission instructions
+- **Learning materials:** two open-access textbooks + free software; nothing to purchase
+- **Communication:** administrative email to the instructor; include **“SPPH 604”** in the subject line
+- Accommodation letters: send to the instructor within the **first two weeks** where applicable
+
+::: {.notes}
+Mention the usual weekday email response expectation (within 48 hours) and encourage students to seek assignment-content help early rather than just before deadlines. Academic-integrity/AI-boundary questions are always welcome. (~6 min)
+:::
+
+## Our demonstration paper *(the only paper slide today)*
+
+- **Kueh et al., BMJ Open 2026 — MASLD & NHANES 2007–2018**
+- Adults with fatty-liver disease classified into **four body-shape groups** using BMI × waist-to-height ratio
+- **Headline:** the non-obese/high-waist group shows the poorest survival
+- Across the term, we will **rebuild the analysis from public data and interrogate the choices behind it**
+
+> Today is the *what* and *why*. The methodological *how* begins next week and unfolds just in time.
+
+::: {.notes}
+Keep this as a hook only. Do not teach FLI, the phenotype definitions, survey weights, or missing-data details today; those are introduced in the weeks that need them. (~5 min)
+:::
+
+## This week: get set up
+
+Before next week's regular class/lab rhythm:
+
+- Install **R + RStudio + Quarto**
+- Install **Git** and create/access a **GitHub** account
+- Render one small Quarto document successfully
+- Make a first Git commit and push to a **private** test/project repository
+- **Form your group**
+- Begin scanning recent open-data papers for M0
+
+**Target for today:** leave with the toolchain working — or know exactly what still needs troubleshooting.
+
+::: {.notes}
+Use the remaining block for setup/troubleshooting rather than more lecture. L0 setup materials are self-study on Canvas. Students can work in pairs/groups while staff circulate. (~15 min)
+:::
+
+## Bridge to Week 2
+
+### Tuesday Sept 15 · Zoom
+
+- survey data sources, especially **NHANES**
+- how to read a paper's **Methods** critically
+- feasibility and peer-review principles
+
+### Thursday Sept 17 · SPPH 143
+
+- **L1: data wrangling** on fixed teaching data
+- begin shortlisting papers toward **M0**
+
+**Come with:** a working toolchain and 1–2 plausible candidate papers.
+
+::: {.notes}
+End by making the transition concrete. Remind students that M0 locks the paper the following Tuesday, Sept 22 at 12 PM, so paper selection starts now. (~4 min)
+:::

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>L0 setup</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">L0 setup</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#l0-setup-do-this-before-the-first-class" id="toc-l0-setup-do-this-before-the-first-class">L0: Setup — do this
+before the first class</a>
+<ul>
+<li><a href="#the-checklist" id="toc-the-checklist">The
+checklist</a></li>
+<li><a href="#install-r" id="toc-install-r">1. Install R</a></li>
+<li><a href="#install-rstudio" id="toc-install-rstudio">2. Install
+RStudio</a></li>
+<li><a href="#install-the-pdf-toolchain" id="toc-install-the-pdf-toolchain">3. Install the PDF toolchain</a></li>
+<li><a href="#install-the-course-packages" id="toc-install-the-course-packages">4. Install the course
+packages</a></li>
+<li><a href="#create-a-github-account" id="toc-create-a-github-account">5. Create a GitHub account</a></li>
+<li><a href="#test-that-it-works" id="toc-test-that-it-works">6. Test
+that it works</a></li>
+<li><a href="#what-to-bring-to-the-first-session" id="toc-what-to-bring-to-the-first-session">What to bring to the first
+session</a></li>
+<li><a href="#if-you-dont-have-a-suitable-laptop" id="toc-if-you-dont-have-a-suitable-laptop">If you don’t have a suitable
+laptop</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="l0-setup-do-this-before-the-first-class">L0: Setup — do this
+before the first class</h1>
+<p><strong>Self-study. Not graded. Takes about 30 minutes</strong>, most
+of it waiting for downloads.</p>
+<p>The first session covers the course, the project, and your R + GitHub
+setup. You will get much more out of it if the software is already
+installed. Everything afterwards assumes it works.</p>
+<p>If something fails, <strong>stop and bring it to the first
+session</strong> — that is what it is for. Do not spend two hours
+fighting an install alone.</p>
+<hr />
+<h2 id="the-checklist">The checklist</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>R installed</label></li>
+<li><label><input type="checkbox"></input>RStudio installed</label></li>
+<li><label><input type="checkbox"></input>The PDF toolchain installed
+(TinyTeX)</label></li>
+<li><label><input type="checkbox"></input>Course packages
+installed</label></li>
+<li><label><input type="checkbox"></input>A free GitHub account</label></li>
+<li><label><input type="checkbox"></input>The test document below knits
+successfully</label></li>
+</ul>
+<hr />
+<h2 id="install-r">1. Install R</h2>
+<p><a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a> — choose your operating
+system and take the latest release. The course is developed on <strong>R
+4.5.1</strong>; anything from 4.3 upward is fine.</p>
+<p>Install R <strong>before</strong> RStudio. RStudio is an editor; it
+needs R underneath and will not find it if the order is reversed.</p>
+<h2 id="install-rstudio">2. Install RStudio</h2>
+<p><a href="https://posit.co/download/rstudio-desktop/" class="uri">https://posit.co/download/rstudio-desktop/</a> — the free
+Desktop edition.</p>
+<p>Open it once and confirm you see a console with an <code>&gt;</code>
+prompt.</p>
+<h2 id="install-the-pdf-toolchain">3. Install the PDF toolchain</h2>
+<p>This is the step that most often goes wrong, and the one worth doing
+beforehand rather than during a lab. In the RStudio console:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tinytex&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>tinytex<span class="sc">::</span><span class="fu">install_tinytex</span>()</span></code></pre></div>
+<p>The second line downloads a small LaTeX distribution and takes a few
+minutes. You do <strong>not</strong> need MiKTeX or MacTeX; TinyTeX is
+enough and much smaller.</p>
+<p><em>Already have MiKTeX or MacTeX?</em> Leave it — skip this
+step.</p>
+<h2 id="install-the-course-packages">4. Install the course packages</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;rmarkdown&quot;</span>, <span class="st">&quot;knitr&quot;</span>, <span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;haven&quot;</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;survival&quot;</span>, <span class="st">&quot;survminer&quot;</span>, <span class="st">&quot;rms&quot;</span>, <span class="st">&quot;survey&quot;</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;mice&quot;</span>, <span class="st">&quot;tableone&quot;</span>, <span class="st">&quot;nhanesA&quot;</span>, <span class="st">&quot;kableExtra&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<p>Two more are needed for Lab 4 only, and you can leave them until
+then:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;interactionR&quot;</span>, <span class="st">&quot;Publish&quot;</span>))   <span class="co"># note the capital P</span></span></code></pre></div>
+<p>If a package fails to install, note <strong>which one</strong> and
+the error message. Bring both.</p>
+<h2 id="create-a-github-account">5. Create a GitHub account</h2>
+<p><a href="https://github.com/signup" class="uri">https://github.com/signup</a> — free. You will keep your
+group’s code in a repository and submit a downloaded zip of it with M1
+and M4 — the only two milestones that ask for one. <strong>We do not
+need access to your repository</strong>, so a free personal account is
+all you need.</p>
+<p>Use an email address you will still have after you graduate.</p>
+<h2 id="test-that-it-works">6. Test that it works</h2>
+<p>Create a new file in RStudio (<strong>File → New File → R
+Markdown</strong>), replace everything in it with the text below, save
+it as <code>setup_test.Rmd</code>, and click <strong>Knit</strong>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Setup test&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;Your name&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="an">output:</span><span class="co"> pdf_document</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="in">sessionInfo()</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="in">library(ggplot2)</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(mtcars, aes(wt, mpg)) +</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point() +</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="in">  labs(title = &quot;If you can see this plot in a PDF, your setup works&quot;)</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div>
+<p><strong>You are done when a PDF appears</strong> containing your
+session information and a scatter plot.</p>
+<p>If PDF fails but HTML works, the problem is step 3 — TinyTeX. That is
+a common and fixable problem; bring it to the first session.</p>
+<hr />
+<h2 id="what-to-bring-to-the-first-session">What to bring to the first
+session</h2>
+<ul>
+<li>Your laptop, with the above done as far as you got</li>
+<li>The exact error message if anything failed — a screenshot is
+fine</li>
+</ul>
+<p><strong>Once the in-person labs begin</strong>, you will need your
+laptop with R installed at every one. The syllabus gives the lab day,
+time and room.</p>
+<h2 id="if-you-dont-have-a-suitable-laptop">If you don’t have a suitable
+laptop</h2>
+<p>Contact the instructor. UBC Library lends laptops, and the <a href="https://students.ubc.ca/finances/awards-scholarships-bursaries/ubc-vancouver-technology-bursary/">UBC
+Vancouver Technology Bursary</a> may be able to help. Required software
+for this course costs <strong>$0</strong> — R, RStudio, TinyTeX, GitHub
+and both textbooks are all free.</p>
+</body>
+</html>

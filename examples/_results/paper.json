@@ -1,0 +1,149 @@
+{
+  "emitted_by": "paper",
+  "facts": {
+    "n_approx": "~6,300",
+    "groups": "386 / 4,541 / 769 / 604",
+    "deaths": "585",
+    "iv_i_unadj": "15.13",
+    "iv_i_model2": "2.893",
+    "t2_m1_iii": "3.175",
+    "t2_m1_iv": "3.155",
+    "t2_m2_iii": "3.029",
+    "t2_m2_iv": "2.893",
+    "tyg_iii": "3.1 (1.3–7.7)",
+    "tyg_iv": "3.1 (1.2–7.6)",
+    "died_iv": "19.5%",
+    "died_iii": "9.6%",
+    "cv_deaths": "158",
+    "conclusion": "Non-obesity MASLD with high central adiposity confers the poorest survival and cardiometabolic burden.",
+    "km_claim": "least favourable survival",
+    "independent": "independent of total body weight"
+  },
+  "verification": [
+    {
+      "fact": "n_approx",
+      "tier": "derived",
+      "value": "~6,300",
+      "rebuilt_from_pdf": "~6,300",
+      "checked_for": "6300 adults",
+      "found": true
+    },
+    {
+      "fact": "groups",
+      "tier": "presence",
+      "value": "386 / 4,541 / 769 / 604",
+      "checked_for": "386 5 (1.3) + 4541 388 (8.5) + 769 + 604",
+      "found": true
+    },
+    {
+      "fact": "deaths",
+      "tier": "derived",
+      "value": "585",
+      "rebuilt_from_pdf": "585",
+      "checked_for": "5 (1.3) + 388 (8.5) + 74 (9.6) + 118 (19.5)",
+      "found": true
+    },
+    {
+      "fact": "iv_i_unadj",
+      "tier": "exact",
+      "value": "15.13",
+      "checked_for": "15.13",
+      "found": true
+    },
+    {
+      "fact": "iv_i_model2",
+      "tier": "exact",
+      "value": "2.893",
+      "checked_for": "2.893",
+      "found": true
+    },
+    {
+      "fact": "t2_m1_iii",
+      "tier": "exact",
+      "value": "3.175",
+      "checked_for": "3.175",
+      "found": true
+    },
+    {
+      "fact": "t2_m1_iv",
+      "tier": "exact",
+      "value": "3.155",
+      "checked_for": "3.155",
+      "found": true
+    },
+    {
+      "fact": "t2_m2_iii",
+      "tier": "exact",
+      "value": "3.029",
+      "checked_for": "3.029",
+      "found": true
+    },
+    {
+      "fact": "t2_m2_iv",
+      "tier": "exact",
+      "value": "2.893",
+      "checked_for": "2.893",
+      "found": true
+    },
+    {
+      "fact": "tyg_iii",
+      "tier": "derived",
+      "value": "3.1 (1.3–7.7)",
+      "rebuilt_from_pdf": "3.1 (1.3–7.7)",
+      "checked_for": "aHR: 3.1, 95%CI 1.3 to 7.7",
+      "found": true
+    },
+    {
+      "fact": "tyg_iv",
+      "tier": "derived",
+      "value": "3.1 (1.2–7.6)",
+      "rebuilt_from_pdf": "3.1 (1.2–7.6)",
+      "checked_for": "3.1, 95%CI 1.2 to 7.6",
+      "found": true
+    },
+    {
+      "fact": "died_iv",
+      "tier": "presence",
+      "value": "19.5%",
+      "checked_for": "118 (19.5)",
+      "found": true
+    },
+    {
+      "fact": "died_iii",
+      "tier": "derived",
+      "value": "9.6%",
+      "rebuilt_from_pdf": "9.6%",
+      "checked_for": "74 (9.6)",
+      "found": true
+    },
+    {
+      "fact": "cv_deaths",
+      "tier": "derived",
+      "value": "158",
+      "rebuilt_from_pdf": "158",
+      "checked_for": "1 (0.3) + 112 (2.5) + 19 (2.5) + 26 (4.3)",
+      "found": true
+    },
+    {
+      "fact": "conclusion",
+      "tier": "presence",
+      "value": "Non-obesity MASLD with high central adiposity confers the poorest survival and cardiometabolic burden.",
+      "checked_for": "confers the poorest survival",
+      "found": true
+    },
+    {
+      "fact": "km_claim",
+      "tier": "exact",
+      "value": "least favourable survival",
+      "checked_for": "least favourable survival",
+      "found": true
+    },
+    {
+      "fact": "independent",
+      "tier": "exact",
+      "value": "independent of total body weight",
+      "checked_for": "independent of total body weight",
+      "found": true
+    }
+  ]
+}

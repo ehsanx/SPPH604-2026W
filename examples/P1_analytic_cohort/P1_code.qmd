@@ -1,0 +1,201 @@
+---
+title: "P1 — Analytic cohort: step-by-step reproducible code"
+subtitle: "SPPH 604 · demonstration paper (Kueh et al., BMJ Open 2026;16:e113719)"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    code-tools: true
+    df-print: kable
+execute:
+  warning: false
+  message: false
+---
+
+> **What this file does.** It re-derives the eligibility funnel and the four
+> phenotype groups from the merged NHANES data and shows that we reach
+> **N = 6,371** and groups **391 / 4585 / 787 / 608**. The full multi-cycle
+> download + merge is in `../../reproduction/R/01_download.R` and
+> `02_build_analytic.R`; here we read that merged frame and expose the
+> eligibility logic itself, because *deciding who is in the sample* is the P1 skill.
+
+```{r setup}
+source("../_shared/paths.R")   # find_repro(), emit_results(), ci(), fmtn(), endash()
+repro <- find_repro()
+suppressPackageStartupMessages({library(dplyr)})
+# Merged, all-participant frame produced by 02_build_analytic.R (raw + derived cols)
+d <- readRDS(file.path(repro, "data/derived/merged_all.rds"))
+yn <- function(x) as.integer(x == 1)
+nrow(d)   # all NHANES 2007-2018 records
+```
+
+## Step 1 — Fatty Liver Index and steatosis
+
+FLI (Bedogni 2006) needs fasting triglycerides, GGT, BMI and waist. Steatosis = FLI ≥ 60.
+
+```{r fli}
+d <- d %>% mutate(
+  fli = { L <- 0.953*log(LBXTR) + 0.139*BMXBMI + 0.718*log(LBXSGTSI) +
+               0.053*BMXWAIST - 15.745; exp(L)/(1+exp(L))*100 },
+  steatosis = as.integer(fli >= 60))
+```
+
+## Step 2 — MASLD cardiometabolic criteria (≥ 1 required)
+
+```{r masld}
+d <- d %>% mutate(
+  crit_adip = as.integer(bmi >= 25 | (female==0 & waist > 94) | (female==1 & waist > 80)),
+  crit_glu  = as.integer(LBXGLU >= 100 | LBXGH >= 5.7 | yn(DIQ010)==1 |
+                         yn(DIQ070)==1 | yn(DIQ050)==1),
+  crit_bp   = as.integer(sbp >= 130 | dbp >= 85 | yn(BPQ050A)==1),
+  crit_tg   = as.integer(LBXTR >= 150 | yn(BPQ100D)==1),
+  crit_hdl  = as.integer((female==0 & LBDHDD <= 40) | (female==1 & LBDHDD < 50)),
+  n_crit    = rowSums(cbind(crit_adip,crit_glu,crit_bp,crit_tg,crit_hdl), na.rm = TRUE),
+  masld     = as.integer(steatosis == 1 & n_crit >= 1))
+```
+
+## Step 3 — Phenotype groups (obesity BMI ≥ 30; central WHtR ≥ 0.6)
+
+The Table headers say "BMI < 25", but that is a **mislabel** — the non-obese
+groups have BMI medians of 27.6 / 28.8. The Methods-text cut (30) is what
+reproduces the group sizes.
+
+```{r groups}
+d <- d %>% mutate(
+  obese   = as.integer(bmi >= 30 | (asian == 1 & bmi >= 25)),
+  central = as.integer(whtr >= 0.6),
+  group = factor(case_when(obese==1 & central==0 ~ "I",
+                           obese==1 & central==1 ~ "II",
+                           obese==0 & central==0 ~ "III",
+                           obese==0 & central==1 ~ "IV"),
+                 levels = c("I","II","III","IV")))
+```
+
+## Step 4 — The eligibility funnel
+
+**Every step carries a type label.** A funnel shows N falling; it does not show *why*,
+and the reasons are not interchangeable. Sorting them is the point of this step.
+
+```{r funnel}
+f <- function(cond) sum(cond, na.rm = TRUE)
+inFast <- !is.na(d$WTSAF2YR) & d$WTSAF2YR > 0
+funnel <- tibble::tribble(
+  ~Step, ~Criterion, ~N, ~Type,
+  0, "NHANES 2007-2018 records",           nrow(d),                        "-",
+  1, "Age >= 18",                          f(d$age>=18),                   "ELIGIBILITY",
+  2, "In fasting subsample",               f(d$age>=18 & inFast),          "DESIGN",
+  3, "FLI computable (TG+GGT+BMI+waist)",  f(d$age>=18 & inFast & !is.na(d$fli)),
+                                                                           "MISSINGNESS",
+  4, "Steatosis (FLI >= 60)",              f(d$age>=18 & inFast & d$steatosis==1),
+                                                                           "TARGET POPULATION",
+  5, "MASLD (>= 1 criterion)",             f(d$age>=18 & inFast & d$masld==1),
+                                                                           "TARGET POPULATION",
+  6, "Phenotype group assignable",         f(d$age>=18 & inFast & d$masld==1 & !is.na(d$group)),
+                                                                           "MISSINGNESS",
+  7, "Mortality-eligible and linked",      f(d$age>=18 & inFast & d$masld==1 & !is.na(d$group) &
+                                             d$eligstat==1 & !is.na(d$mortstat) & !is.na(d$time_yr)),
+                                                                           "OUTCOME ASCERTAINMENT")
+funnel$Dropped <- c(NA, -diff(funnel$N))
+funnel
+```
+
+### Why the labels matter
+
+The five categories are not five flavours of the same thing. They have different
+inferential consequences, and a funnel that hides the difference invites the wrong fix.
+
+- **ELIGIBILITY** is definitional. Restricting to adults does not bias anything; it
+  states who the study is about.
+- **DESIGN** is the fasting subsample. This is *not* missing data. NHANES selected it
+  deliberately and supplies `WTSAF2YR` to account for the extra selection stage and its
+  nonresponse. The correct response is the right weight and a domain analysis, not
+  imputation. Inference stays conditional on the weighting assumptions.
+- **MISSINGNESS** is item nonresponse among people who *were* selected: they should have
+  a value and do not. This is the only kind of step that a missing-data method can
+  address.
+- **TARGET POPULATION** is disease definition. People without steatosis are not missing —
+  they are not who the paper is about. Counting them as attrition inflates the apparent
+  missing-data problem, which is exactly the error to avoid here: the drop from step 3 to
+  step 5 is the largest in the funnel and **none of it is missingness**.
+- **OUTCOME ASCERTAINMENT** is failure to link to mortality follow-up. It looks like
+  missingness but attaches to the outcome rather than a covariate, so it threatens the
+  analysis differently and is worth separating.
+
+The single most common error on a cohort funnel is to call every downward step
+"attrition" and then reach for imputation. Three of these five categories cannot be
+imputed, and one of them should not be.
+
+## Step 5 — Reproduced group sizes and deaths (vs paper)
+
+```{r groups-check}
+coh <- d %>% filter(age>=18, masld==1, !is.na(group), eligstat==1,
+                    !is.na(mortstat), !is.na(time_yr))
+data.frame(
+  Group  = c("I","II","III","IV"),
+  Ours_N = as.integer(table(coh$group)),
+  Paper_N= c(386,4541,769,604),
+  Ours_deaths = as.integer(tapply(coh$dead, coh$group, sum, na.rm=TRUE)),
+  Paper_deaths= c(5,388,74,118))
+cat("Total N:", nrow(coh), "(paper 6300)   Total deaths:",
+    sum(coh$dead,na.rm=TRUE), "(paper 585)\n")
+```
+
+## Step 6 — The alcohol operationalization (documented ambiguity)
+
+One sentence in the Methods, coded three defensible ways, spans > 2,000 people.
+We do **not** tune to hit N; we keep the no-exclusion cohort (which matches the
+paper) and flag the discrepancy.
+
+```{r alcohol}
+base <- coh
+## NHANES codes "refused" as 777 and "don't know" as 999. Left raw, a rule like
+## `ALQ130 > 2` silently reclassifies every refusal as a heavy drinker: here that
+## is 9 people, which moves the excluded count from 2,063 to 2,072. Reserved
+## codes are not measurements, and every increment must strip them before use.
+base$alq <- ifelse(base$ALQ130 %in% c(777, 999), NA, base$ALQ130)
+crude <- with(base, (female==0 & alq>2) | (female==1 & alq>1))            # ALQ130 alone
+avg   <- with(base, (female==0 & avg_drinks_day>2) | (female==1 & avg_drinks_day>1))
+data.frame(
+  coding = c("Crude ALQ130 rule", "Frequency-weighted average", "No effective exclusion"),
+  excluded = c(sum(crude,na.rm=TRUE), sum(avg,na.rm=TRUE), 0),
+  N_remaining = c(nrow(base)-sum(crude,na.rm=TRUE), nrow(base)-sum(avg,na.rm=TRUE), nrow(base)))
+```
+
+## Step 7 — Residual N gap (honest accounting)
+
+```{r ngap}
+cc <- coh %>% filter(!is.na(cancer), !is.na(stroke), !is.na(hf), !is.na(LBXSCR))
+cat("Full cohort:", nrow(coh), " | complete-case on covariates:", nrow(cc),
+    " | missing serum creatinine:", sum(is.na(coh$LBXSCR)), "\n")
+```
+
+## Results for M1
+
+M1 cites these by name; it does not re-run this file. Every number is formatted
+once, here, so the deck cannot reformat or mistype it.
+
+```{r emit}
+fn <- funnel$N; names(fn) <- paste0("s", funnel$Step)
+emit_results("P1", list(
+  full_n   = fmtn(nrow(coh)),
+  groups   = paste(fmtn(as.integer(table(coh$group))), collapse = " / "),
+  deaths   = fmtn(sum(coh$dead, na.rm = TRUE)),
+  locked_n = fmtn(sum(!is.na(coh$WTSAF2YR) & coh$WTSAF2YR > 0)),
+  funnel_records   = fmtn(fn[["s0"]]),
+  funnel_adults    = fmtn(fn[["s1"]]),
+  funnel_fasting   = fmtn(fn[["s2"]]),
+  funnel_fli       = fmtn(fn[["s3"]]),
+  funnel_steatosis = fmtn(fn[["s4"]]),
+  funnel_masld     = fmtn(fn[["s5"]]),
+  funnel_linked    = fmtn(fn[["s7"]]),
+  item_nonresponse = fmtn(funnel$Dropped[funnel$Step == 3]),
+  outcome_loss     = fmtn(funnel$Dropped[funnel$Step == 7]),
+  # what "read every downward step as attrition" would actually total
+  all_downward_steps = fmtn(fn[["s1"]] - fn[["s7"]]),
+  alq_excluded = fmtn(sum(crude, na.rm = TRUE)),
+  alq_n        = fmtn(nrow(base) - sum(crude, na.rm = TRUE)),
+  avg_excluded = fmtn(sum(avg, na.rm = TRUE)),
+  avg_n        = fmtn(nrow(base) - sum(avg, na.rm = TRUE)),
+  alq_reserved = fmtn(sum(base$ALQ130 %in% c(777, 999)))
+), list(funnel = as.data.frame(funnel)))
+```

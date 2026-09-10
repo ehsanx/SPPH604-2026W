@@ -1,0 +1,305 @@
+---
+title: "M1 — Assembly notebook: every figure on the deck, and where it came from"
+subtitle: "SPPH 604 · demonstration paper (Kueh et al., BMJ Open 2026;16:e113719)"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    code-tools: true
+    df-print: kable
+execute:
+  warning: false
+  message: false
+---
+
+> **This file assembles; it does not re-implement.**
+>
+> Each increment ends by writing a result object to `../_results/`, containing a
+> flat set of **facts**: named, already-formatted values. `M1_code.qmd` reads
+> those, adds the facts from its own two analyses, and writes `M1.json` and
+> `paper.json`.
+>
+> **The deck contains no typed numbers.** `M1_replication_deck.md` cites facts by
+> name — `{{ P4.facts.w_m1_iii }}` — and the deck generator substitutes them at
+> build time. A misspelled or stale reference does not resolve, and an unresolved
+> reference fails the build. This replaces the earlier self-test, which only asked
+> whether a numeric string occurred *somewhere* in both the result object and the
+> deck; that test could not tell a real citation from a coincidental match.
+>
+> **What this does and does not guarantee.** It guarantees that every number
+> printed on a slide was produced by the named field of a named result object, and
+> that no number was retyped. It does **not** guarantee that the prose around a
+> number describes it correctly. Numeric drift is now structurally prevented;
+> interpretive drift is still a matter of reading the slides.
+>
+> **M1 runs exactly two analyses of its own:**
+>
+> 1. **The replication table** — the paper's Table 2 on the full analytic file.
+>    Replication is M1's task; no increment does it.
+> 2. **The design-aware interaction.** P3 states that it is unweighted and that
+>    "whether the design-aware interaction gives the same qualitative answer is an
+>    open question, and one M1 should check rather than assume." This file checks
+>    it, applying P4's domain rule to P3's contrast.
+
+```{r setup}
+source("../_shared/paths.R")   # find_repro(), find_paper(), emit_results(), ci(), fmtn()
+repro <- find_repro()
+suppressPackageStartupMessages({
+  library(dplyr); library(survival); library(survey)})
+options(survey.lonely.psu = "adjust")
+
+R <- setNames(lapply(sprintf("P%d", 1:5), read_results), sprintf("P%d", 1:5))
+cat("assembled from:\n")
+for (n in names(R)) cat(sprintf("  %-4s %2d facts\n", n, length(R[[n]]$facts)))
+```
+
+## Figures quoted from the article, checked against the article
+
+Slides 2, 4, 7 and 8 cite the paper. Those numbers are not ours to reproduce, so
+each is transcribed once here **with the string that must be found in the PDF**.
+If a check fails, the render fails: we do not want a quoted figure that the source
+does not contain.
+
+**Three tiers, and the table below names the tier for every fact.** This matters,
+because a check that only asks "does this string occur?" can never fail on the value
+we actually display:
+
+- **exact** — the displayed value *is* the string sought in the PDF, so presence and
+  correctness are the same test.
+- **derived** — the displayed value is *reconstructed* from the PDF and compared to
+  what we transcribed. A typo in our display fails the build even though the
+  supporting strings are all present. Aggregates and reformatted intervals are here.
+- **presence** — only the supporting strings are confirmed. Prose quotations, and
+  table cells whose row the article's two-column layout does not keep intact, fall
+  here. The count is printed so the limit is visible rather than implied.
+
+```{r paper}
+## helpers for the derived tier -------------------------------------------------
+nums <- function(p, x) {
+  m <- regmatches(x, gregexpr(p, x))[[1]]
+  as.numeric(sub("^[^0-9]*([0-9.]+).*", "\\1", m))
+}
+sumall <- function(pats, x) sum(unlist(lapply(pats, nums, x = x)))
+## the TyG sentence reports III then IV; pull both triples out of it by position,
+## so the displayed interval is rebuilt from the article rather than trusted
+tyg <- function(x, which) {
+  i <- regexpr("to define steatosis showed consistent results", x, fixed = TRUE)
+  if (i < 0) return(NA_character_)
+  seg <- substr(x, i, i + 400)
+  m <- regmatches(seg, gregexpr("[0-9.]+, 95%CI [0-9.]+ to [0-9.]+", seg))[[1]]
+  if (length(m) < which) return(NA_character_)
+  v <- as.numeric(regmatches(m[which], gregexpr("[0-9.]+", m[which]))[[1]])
+  sprintf("%.1f (%.1f–%.1f)", v[1], v[3], v[4])   # v[2] is the 95 of "95%CI"
+}
+
+PAPER <- list(
+  n_approx    = list(d = "~6,300", v = "6300 adults",
+                     mk = function(x) paste0("~", fmtn(nums("[0-9]{4} adults with MASLD", x)[1]))),
+  groups      = list(d = "386 / 4,541 / 769 / 604",
+                     v = c("386 5 (1.3)", "4541 388 (8.5)", "769", "604")),
+  deaths      = list(d = "585",                       v = c("5 (1.3)","388 (8.5)",
+                                                            "74 (9.6)","118 (19.5)"),
+                     mk = function(x) fmtn(sumall(c("[0-9]+ \\(1\\.3\\)", "[0-9]+ \\(8\\.5\\)",
+                                                    "[0-9]+ \\(9\\.6\\)", "[0-9]+ \\(19\\.5\\)"), x))),
+  iv_i_unadj  = list(d = "15.13",                     v = "15.13"),
+  iv_i_model2 = list(d = "2.893",                     v = "2.893"),
+  t2_m1_iii   = list(d = "3.175",                     v = "3.175"),
+  t2_m1_iv    = list(d = "3.155",                     v = "3.155"),
+  t2_m2_iii   = list(d = "3.029",                     v = "3.029"),
+  t2_m2_iv    = list(d = "2.893",                     v = "2.893"),
+  tyg_iii     = list(d = "3.1 (1.3–7.7)", v = "aHR: 3.1, 95%CI 1.3 to 7.7",
+                     mk = function(x) tyg(x, 1)),
+  tyg_iv      = list(d = "3.1 (1.2–7.6)", v = "3.1, 95%CI 1.2 to 7.6",
+                     mk = function(x) tyg(x, 2)),
+  died_iv     = list(d = "19.5%",                     v = "118 (19.5)"),
+  died_iii    = list(d = "9.6%",                      v = "74 (9.6)",
+                     mk = function(x) paste0(nums("group III \\([0-9.]+%\\)", x)[1], "%")),
+  cv_deaths   = list(d = "158",                       v = c("1 (0.3)","112 (2.5)",
+                                                            "19 (2.5)","26 (4.3)"),
+                     mk = function(x) fmtn(sumall(c("[0-9]+ \\(0\\.3\\)", "[0-9]+ \\(2\\.5\\)",
+                                                    "[0-9]+ \\(4\\.3\\)"), x))),
+  conclusion  = list(d = paste("Non-obesity MASLD with high central adiposity confers",
+                               "the poorest survival and cardiometabolic burden."),
+                     v = "confers the poorest survival"),
+  km_claim    = list(d = "least favourable survival", v = "least favourable survival"),
+  independent = list(d = "independent of total body weight",
+                     v = "independent of total body weight"))
+
+pdfp <- find_paper()
+have <- !is.na(pdfp) && nzchar(Sys.which("pdftotext"))
+if (have) {
+  ptxt <- paste(system2("pdftotext", c("-layout", shQuote(pdfp), "-"), stdout = TRUE),
+                collapse = " ")
+  ptxt <- gsub("\\s+", " ", gsub("[^ -~]", " ", ptxt, useBytes = TRUE), useBytes = TRUE)
+}
+chk <- do.call(rbind, lapply(names(PAPER), function(k) {
+  e  <- PAPER[[k]]
+  tr <- if (!is.null(e$mk)) "derived" else if (e$d %in% e$v) "exact" else "presence"
+  found <- if (have) all(vapply(e$v, grepl, logical(1), x = ptxt, fixed = TRUE)) else NA
+  der <- NA_character_
+  if (isTRUE(found) && tr == "derived") {
+    der <- tryCatch(e$mk(ptxt), error = function(z) NA_character_)
+    if (is.na(der) || !identical(der, e$d)) found <- FALSE   # our display is wrong
+  }
+  data.frame(fact = k, tier = tr, value = e$d, rebuilt_from_pdf = der,
+             checked_for = paste(e$v, collapse = " + "), found = found)
+}))
+if (have && any(!chk$found)) {
+  print(chk[!chk$found, ])
+  stop("a figure attributed to the paper is not supported by the paper")
+}
+if (have) {
+  n <- table(factor(chk$tier, levels = c("exact","derived","presence")))
+  cat(sprintf("%d quoted figures checked against %s: %d exact, %d rebuilt from the PDF, %d presence-only\n",
+              nrow(chk), basename(pdfp), n[["exact"]], n[["derived"]], n[["presence"]]))
+  cat(sprintf("The %d presence-only facts are confirmed to occur but their displayed form is not re-derived: %s\n",
+              n[["presence"]], paste(chk$fact[chk$tier == "presence"], collapse = ", ")))
+} else cat("paper PDF unavailable here - quoted figures NOT verified in this render\n")
+
+emit_results("paper", setNames(lapply(PAPER, `[[`, "d"), names(PAPER)),
+             list(verification = chk))
+chk[, c("fact", "tier", "value", "rebuilt_from_pdf", "found")]
+```
+
+## M1's own analysis 1 — the replication
+
+The paper's own parameterization, on the **full analytic file**. Kept separate from
+the locked domain used for the diagnostics: mixing row sets in one column is how a
+replication table stops being a replication table.
+
+```{r replication}
+d <- readRDS(file.path(repro, "data/derived/masld_analytic.rds"))
+d$smk <- ifelse(d$SMQ020 == 1 & d$SMQ040 %in% c(1, 2), 1L, ifelse(is.na(d$SMQ020), NA, 0L))
+cov1 <- c("age","female","dyslip","htn","t2dm","ckd","mi","cancer",
+          "on_htn_med","on_dm_med","on_lipid_med")
+fit <- function(covs = NULL)
+  coxph(as.formula(paste("Surv(time_yr,dead) ~", paste(c("group", covs), collapse = "+"))), d)
+m0 <- fit(); m1 <- fit(cov1); m2 <- fit(c(cov1, "smk", "sedentary_min"))
+pt <- function(f, dp) sprintf(paste0("%.", dp, "f"), summary(f)$conf.int["groupIV", 1])
+
+rbind(Unadjusted = sapply(c("groupII","groupIII","groupIV"), function(g) ci_of(m0, g)),
+      `Model 1`  = sapply(c("groupII","groupIII","groupIV"), function(g) ci_of(m1, g)),
+      `Model 2`  = sapply(c("groupII","groupIII","groupIV"), function(g) ci_of(m2, g)))
+```
+
+**Cause-of-death coding.** The paper's cardiovascular analysis counts diseases of
+the heart only; our `cv_death` indicator also includes cerebrovascular deaths. Both
+are reported so the discrepancy is a documented choice, not a silent one.
+
+```{r cvdeath}
+heart  <- sum(d$ucod_leading == 1, na.rm = TRUE)
+cerebr <- sum(d$ucod_leading == 5, na.rm = TRUE)
+data.frame(definition = c("diseases of heart only", "heart + cerebrovascular"),
+           n = c(heart, heart + cerebr),
+           note = c("matches the paper's CV total", "our pipeline's cv_death"))
+```
+
+## M1's own analysis 2 — the design-aware interaction
+
+P3's deferred question, answered with P4's rule: build the design on the whole
+fasting frame, then reach the Groups III–IV rows with `subset()`.
+
+```{r interaction}
+frame <- readRDS(file.path(repro, "data/derived/merged_all.rds"))
+frame$in_analysis <- frame$SEQN %in% d$SEQN
+frame$group <- factor(frame$group, levels = c("I","II","III","IV"))
+fast <- frame %>% filter(!is.na(WTSAF2YR), WTSAF2YR > 0) %>% mutate(wt = WTSAF2YR / 6)
+COVns <- c("age","dyslip","htn","t2dm","ckd","mi","cancer",
+           "on_htn_med","on_dm_med","on_lipid_med")
+fast$IV   <- as.integer(fast$group == "IV")
+fast$keep <- fast$in_analysis & fast$group %in% c("III","IV") &
+             complete.cases(fast[, c(COVns, "female")])
+
+fw <- svycoxph(as.formula(paste("Surv(time_yr,dead) ~ IV*female +",
+                                paste(COVns, collapse = " + "))),
+               design = subset(svydesign(ids = ~SDMVPSU, strata = ~SDMVSTRA,
+                                         weights = ~wt, data = fast, nest = TRUE), keep))
+b  <- coef(fw)[["IV:female"]]
+se <- sqrt(vcov(fw)["IV:female", "IV:female"])
+data.frame(Model = c("unweighted, Model 1 (P3)", "design-aware, Model 1 (M1)"),
+           rHR   = c(R$P3$facts[["rhr_unweighted"]], ci(exp(b), exp(b - 1.96*se), exp(b + 1.96*se))),
+           p     = c(R$P3$facts[["p_unweighted"]],   sprintf("%.3f", 2 * pnorm(-abs(b / se)))),
+           rows  = c(R$P3$facts[["n"]], fmtn(sum(fast$keep))))
+```
+
+The row count must match P3's, or the two rows are not comparable:
+`r sprintf("M1 used %s rows; P3 used %s.", fmtn(sum(fast$keep)), R$P3$facts[["n"]])`
+
+## What M1 contributes, emitted as facts
+
+```{r emit}
+ratio <- function(a, b) sprintf("%.2f", as.numeric(a) / as.numeric(b))
+## point estimate out of a formatted "est (lo-hi)" fact, so the TyG ratio is derived
+## from the same verified strings as the Table-2 ratios rather than asserted
+est <- function(s) as.numeric(sub("^\\s*([0-9.]+).*", "\\1", s))
+pf <- lapply(PAPER, `[[`, "d")
+emit_results("M1", list(
+  iv_i_unadj      = pt(m0, 2),
+  iv_i_unadj_ci   = ci_of(m0),
+  iv_i_model2     = pt(m2, 3),
+  iv_i_model2_ci  = ci_of(m2),
+  cv_heart        = fmtn(heart),
+  cv_heart_cerebr = fmtn(heart + cerebr),
+  rhr_design      = ci(exp(b), exp(b - 1.96*se), exp(b + 1.96*se)),
+  p_design        = sprintf("%.3f", 2 * pnorm(-abs(b / se))),
+  n_design        = fmtn(sum(fast$keep)),
+  # the IV-vs-III contrast implied by the paper's own published point estimates
+  paper_iv_iii_m1 = ratio(pf$t2_m1_iv, pf$t2_m1_iii),
+  paper_iv_iii_m2 = ratio(pf$t2_m2_iv, pf$t2_m2_iii),
+  # the TyG estimates are reported to one decimal; carry that precision through
+  paper_iv_iii_tyg = sprintf("%.1f", est(pf$tyg_iv) / est(pf$tyg_iii))
+))
+```
+
+`paper_iv_iii_tyg` is **computed from the two TyG point estimates**, which are
+themselves rebuilt from the article's own sentence and compared against what we
+transcribed. It was previously the literal string "1.0" — a small hole in the
+architecture, since a change in either verified estimate would not have moved it. It
+comes out at 1.0 because the article reports Group III and Group IV at the same rounded
+aHR against Group I. It is a point-estimate observation, and the uncertainty around it
+cannot be recovered from two separately reported intervals.
+
+## The assembled tables
+
+Everything below is read from the increments. No model is fitted here.
+
+```{r assembled-funnel}
+R$P1$funnel
+```
+
+```{r assembled-matrix}
+R$P4$matrix
+```
+
+```{r assembled-p2}
+R$P2$estimands
+```
+
+```{r assembled-p3}
+R$P3$additive
+```
+
+```{r assembled-p5}
+R$P5$locked_estimand
+```
+
+## The fact index
+
+Every value the deck may cite, with the exact reference that resolves to it. This
+is the provenance table: a slide showing `1.29` shows it because
+`{{ P4.facts.w_m1_iii }}` resolved to it here.
+
+```{r index}
+idx <- do.call(rbind, lapply(sprintf("P%d", 1:5), function(n) {
+  f <- read_results(n)$facts
+  data.frame(reference = sprintf("{{ %s.facts.%s }}", n, names(f)),
+             value = unlist(f, use.names = FALSE))
+}))
+idx <- rbind(idx, do.call(rbind, lapply(c("M1", "paper"), function(n) {
+  f <- read_results(n)$facts
+  data.frame(reference = sprintf("{{ %s.facts.%s }}", n, names(f)),
+             value = substr(unlist(f, use.names = FALSE), 1, 70))
+})))
+cat(nrow(idx), "citable facts\n")
+idx
+```

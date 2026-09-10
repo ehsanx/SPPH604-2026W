@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>P4 design aware estimate</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">P4 design aware estimate</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#p4-design-aware-main-estimate" id="toc-p4-design-aware-main-estimate">P4 — Design-aware main
+estimate</a>
+<ul>
+<li><a href="#the-question-this-week" id="toc-the-question-this-week">The question this week</a></li>
+<li><a href="#what-to-do" id="toc-what-to-do">What to do</a></li>
+<li><a href="#deliverable" id="toc-deliverable">Deliverable</a></li>
+<li><a href="#worked-example-masldnhanes-demonstration" id="toc-worked-example-masldnhanes-demonstration">Worked example —
+MASLD/NHANES demonstration</a></li>
+<li><a href="#what-good-looks-like" id="toc-what-good-looks-like">What
+good looks like</a></li>
+<li><a href="#be-ready-to-defend-m3" id="toc-be-ready-to-defend-m3">Be
+ready to defend (M3)</a></li>
+<li><a href="#ai-co-pilot-note" id="toc-ai-co-pilot-note">AI co-pilot
+note</a></li>
+<li><a href="#lab-project-handoff" id="toc-lab-project-handoff">Lab →
+project handoff</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="p4-design-aware-main-estimate">P4 — Design-aware main
+estimate</h1>
+<p><strong>Week 6 · applies L5 (Survey analysis) · optional and ungraded
+— no separate deadline, nothing to submit; M1 is assembled from these
+five increments</strong> <strong>Keep in your group GitHub
+repo:</strong> the reproduced main estimate + a design-aware re-estimate
++ a comparison.</p>
+<h2 id="the-question-this-week">The question this week</h2>
+<p><em>What is your best estimate of the main association once you
+respect how the data were actually generated?</em> First reproduce the
+paper’s headline number; then re-estimate it the way the study
+<strong>design</strong> demands, and explain any difference.</p>
+<h2 id="what-to-do">What to do</h2>
+<ol type="1">
+<li><strong>Define the estimand</strong> in one sentence (which
+contrast, which outcome, what time horizon).</li>
+<li><strong>Replicate the paper’s main model</strong> exactly as they
+fit it.</li>
+<li><strong>Respect the feature you named at M0 criterion 5.</strong>
+For a complex survey, use the weights, strata and clusters — and
+<strong>subset the design object</strong>, never treat the analytic
+sample as a simple random sample; that gives you a design-aware
+re-estimate. For a time-to-event outcome, keep follow-up time and
+censoring in a survival model, don’t collapse to “ever died” — then
+interrogate the <em>specific</em> structural choice you named at M0
+(time scale, censoring rule, index date, competing events) by refitting
+under a defensible alternative to it.</li>
+<li><strong>Compare and interpret — but only what is
+comparable.</strong> For a survey paper: point estimate, uncertainty and
+interpretation, naïve/published vs design-aware. That is a like-for-like
+contrast because the two fits are the same estimand on the same scale
+and differ only in the design. For a time-to-event paper with no weights
+there is no such pair: report the reproduced survival estimand, then
+what the alternative structural choice does to it, and say in one
+sentence what the paper’s choice assumed. Never set a survival model
+beside a binary “ever died” model and call the gap a design correction —
+those are different estimands on different scales, and the gap measures
+the collapse, not the design.</li>
+</ol>
+<h2 id="deliverable">Deliverable</h2>
+<ul>
+<li>The replicated main estimate (matches the paper) → your M1
+<strong>Table 2 / KM slide</strong>.</li>
+<li>The design-aware re-estimate + a side-by-side comparison table.</li>
+<li>2–3 sentences on what changed and why — this feeds your
+<strong>M1</strong> synthesis, and it is the kind of design choice you
+will be asked to evaluate when you review another group’s M1 at M2.</li>
+</ul>
+<p>If your paper is not a complex survey, the feature you respect is the
+one you named at M0 criterion 5 — follow-up time and censoring — and the
+deliverable is a different shape. You have no weight to switch on and
+off, so there is no naive-vs-correct pair to table. What you keep in the
+repo is: the paper’s survival estimand, reproduced with follow-up time
+and censoring intact; a refit under a defensible alternative to the one
+structural choice you named at M0; and 2–3 sentences on what that choice
+was doing to the paper’s conclusion. That is a structural interrogation
+rather than a numeric correction — a different deliverable, not a lesser
+one.</p>
+<h2 id="worked-example-masldnhanes-demonstration">Worked example —
+MASLD/NHANES demonstration</h2>
+<ul>
+<li><strong>Replicate first — the paper is <em>unweighted</em>.</strong>
+An ordinary Cox model reproduces the headline: Group IV all-cause HR ≈
+<strong>15.1 unadjusted → ~2.9 fully adjusted</strong> (the reproduction
+matches to 2–3 significant figures). Reproducing the <em>unweighted</em>
+result is the replicate step.</li>
+<li><strong>The improvement is the design the paper does not
+apply.</strong> The cohort is the NHANES <strong>fasting
+subsample</strong> (FLI needs fasting triglycerides), so a design-aware
+estimate needs the <strong>fasting-subsample weights
+(<code>WTSAF</code>)</strong> pooled across six cycles, even though FLI
+also draws on non-fasting (GGT) labs.</li>
+<li><strong>Which weight is a rule, not a judgment call.</strong> CDC’s
+least-common-denominator rule: when an analysis draws on variables from
+different components, use the weight of the <strong>smallest</strong>
+applicable subsample. If your exposure needs a fasting analyte, the
+fasting weight governs — a larger-sample weight would weight to a
+population in which your exposure cannot be constructed. The exercise is
+to <em>name the straddle and apply the rule</em>, not to argue the
+choice open. Then report a <code>WTMEC</code>-weighted run beside it,
+<strong>labelled as a sensitivity analysis</strong> — it is not a
+defensible primary, but it shows how much the rule changed the
+answer.</li>
+<li><strong>Ask the comparison the paper didn’t.</strong> Estimate Group
+IV vs <strong>II</strong> and IV vs <strong>III</strong> directly, not
+only each vs Group I.</li>
+</ul>
+<h2 id="what-good-looks-like">What good looks like</h2>
+<ul>
+<li><strong>Exceptional, survey route:</strong> replicates the paper’s
+model, then a correct design-aware re-estimate; names the
+weight/strata/cluster used and <em>why</em>; interprets the change.</li>
+<li><strong>Exceptional, time-to-event route:</strong> reproduces the
+paper’s survival estimand with follow-up time and censoring intact;
+names the structural choice identified at M0 and <em>why</em> it is
+contestable; refits under a defensible alternative and interprets what
+the paper’s choice was doing. Offering a binary “ever died” model as the
+corrected estimate is not this band — it is the Weak band below.</li>
+<li><strong>Adequate:</strong> main estimate reproduced; and either a
+reasonable design adjustment attempted (survey route), or the M0
+structural choice named and probed even if the refit is incomplete
+(time-to-event route).</li>
+<li><strong>Weak:</strong> refits with <code>svyglm</code> on “ever
+died,” discarding follow-up time and censoring; or ignores the design
+entirely.</li>
+</ul>
+<h2 id="be-ready-to-defend-m3">Be ready to defend (M3)</h2>
+<blockquote>
+<p><em>“Which design feature did you respect, and why that one — and
+what turns on it?”</em></p>
+</blockquote>
+<p>For a survey paper the answer is a number: your headline estimate
+with the weight versus without it. For a time-to-event paper it is not a
+number: it is what the paper’s structural choice assumed — the time
+scale, the censoring rule, the index date, how competing events were
+treated — and what a defensible alternative does to the conclusion. A
+binary “ever died” model is not an answer to this question.</p>
+<h2 id="ai-co-pilot-note">AI co-pilot note</h2>
+<p>A co-pilot often reaches for the <em>simplest</em> model that “works”
+— e.g. logistic regression on a binary “died” flag — because it avoids
+the survival/design machinery. That silently throws away follow-up time,
+censoring, and the sampling design. Insist on the model the data
+structure requires.</p>
+<h2 id="lab-project-handoff">Lab → project handoff</h2>
+<p>You are applying <strong>L5 (Survey analysis)</strong> — contrasting
+ordinary sample summaries with survey-design estimates, and subsetting
+the <em>design</em> rather than the data (EpiMethods
+<code>surveydataE</code>).</p>
+</body>
+</html>

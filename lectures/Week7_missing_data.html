@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Week7 missing data</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Week7 missing data</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#week-7-lecture-plan-missing-data-what-multiple-imputation-can-and-cannot-fix" id="toc-week-7-lecture-plan-missing-data-what-multiple-imputation-can-and-cannot-fix">Week
+7 Lecture Plan — Missing Data: What Multiple Imputation Can and Cannot
+Fix</a>
+<ul>
+<li><a href="#learning-objectives" id="toc-learning-objectives">Learning
+objectives</a></li>
+<li><a href="#continuity" id="toc-continuity">Continuity</a></li>
+<li><a href="#slide-1-where-we-are-in-the-project" id="toc-slide-1-where-we-are-in-the-project">Slide 1 — Where we are in
+the project</a></li>
+<li><a href="#slide-2-why-missingness-is-a-bias-problem-not-a-bookkeeping-problem" id="toc-slide-2-why-missingness-is-a-bias-problem-not-a-bookkeeping-problem">Slide
+2 — Why missingness is a bias problem, not a bookkeeping
+problem</a></li>
+<li><a href="#slide-3-the-taxonomy-mcar-mar-mnar" id="toc-slide-3-the-taxonomy-mcar-mar-mnar">Slide 3 — The taxonomy: MCAR
+/ MAR / MNAR</a></li>
+<li><a href="#slide-4-a-picture-of-the-taxonomy" id="toc-slide-4-a-picture-of-the-taxonomy">Slide 4 — A picture of the
+taxonomy</a></li>
+<li><a href="#slide-5-classify-first-which-reductions-are-actually-missing-data" id="toc-slide-5-classify-first-which-reductions-are-actually-missing-data">Slide
+5 — Classify first: which reductions are actually missing data?</a></li>
+<li><a href="#slide-6-why-designed-subsampling-is-not-mnar" id="toc-slide-6-why-designed-subsampling-is-not-mnar">Slide 6 — Why
+designed subsampling is not MNAR</a></li>
+<li><a href="#slide-7-break" id="toc-slide-7-break">Slide 7 —
+Break</a></li>
+<li><a href="#slide-8-item-nonresponse-inside-the-cohort" id="toc-slide-8-item-nonresponse-inside-the-cohort">Slide 8 — Item
+nonresponse <em>inside</em> the cohort</a></li>
+<li><a href="#slide-9-complete-case-analysis-the-hidden-default" id="toc-slide-9-complete-case-analysis-the-hidden-default">Slide 9 —
+Complete-case analysis: the hidden default</a></li>
+<li><a href="#slide-10-multiple-imputation-the-idea-in-three-steps" id="toc-slide-10-multiple-imputation-the-idea-in-three-steps">Slide 10 —
+Multiple imputation: the idea in three steps</a></li>
+<li><a href="#slide-11-reading-a-sensitivity-analysis-that-changes-nothing" id="toc-slide-11-reading-a-sensitivity-analysis-that-changes-nothing">Slide
+11 — Reading a sensitivity analysis that changes nothing</a></li>
+<li><a href="#slide-12-building-a-defensible-imputation-model" id="toc-slide-12-building-a-defensible-imputation-model">Slide 12 —
+Building a defensible imputation model</a></li>
+<li><a href="#slide-13-how-many-imputations-and-how-to-report" id="toc-slide-13-how-many-imputations-and-how-to-report">Slide 13 — How
+many imputations, and how to report</a></li>
+<li><a href="#slide-14-what-mi-fixes-vs.-what-it-cannot" id="toc-slide-14-what-mi-fixes-vs.-what-it-cannot">Slide 14 — What MI
+fixes vs. what it cannot</a></li>
+<li><a href="#slide-15-putting-the-interrogation-together" id="toc-slide-15-putting-the-interrogation-together">Slide 15 — Putting
+the interrogation together</a></li>
+<li><a href="#slide-16-bridge-to-todays-lab-l6-and-p5" id="toc-slide-16-bridge-to-todays-lab-l6-and-p5">Slide 16 — Bridge to
+today’s lab (L6) and P5</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="week-7-lecture-plan-missing-data-what-multiple-imputation-can-and-cannot-fix">Week
+7 Lecture Plan — Missing Data: What Multiple Imputation Can and Cannot
+Fix</h1>
+<p>Duration: ~2.5 h (Tue, before the Thu lab)</p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ul>
+<li>Classify missingness using the MCAR / MAR / MNAR taxonomy and state
+why the mechanism, not the amount, governs bias.</li>
+<li>Separate the kinds of loss before naming any of it missing data,
+using all five types — <strong>design</strong>,
+<strong>eligibility</strong>, <strong>target population</strong>,
+<strong>outcome ascertainment</strong>, <strong>missingness</strong> —
+and apply MCAR / MAR / MNAR to the missingness only, because it is the
+only loss P5 addresses with the methods this course teaches.</li>
+<li>Contrast complete-case, a model-free extreme-value stress test, and
+multiple imputation on the MASLD cohort, and read the result honestly on
+the <strong>replication contrast (IV vs I), design-aware Model
+1</strong>: <strong>2.97 → 2.98</strong>, a hazard ratio moving in the
+third significant figure. On the <strong>locked scientific contrast (IV
+vs III)</strong> the same sensitivity analysis never leaves
+<strong>1.29</strong>.</li>
+<li>Specify a defensible imputation model: which variables enter, how
+many imputations, and Rubin’s rules for pooling.</li>
+<li>Judge what MI can repair (MAR item-missingness) and what it cannot
+(structurally unobserved exposure) — and how to report each
+honestly.</li>
+</ul>
+<h2 id="continuity">Continuity</h2>
+<ul>
+<li>Last week (Wk6, L5) we made the estimate design-aware: NHANES
+weights + strata + PSU, which attenuated Group IV from the naive ~15
+toward ~12.4. Weighting fixed <em>representation</em>; it did not fill
+in <em>missing values</em>.</li>
+<li>Today we confront the values that are simply absent, and separate a
+problem MI can help with from one it cannot. This is the last
+interrogation method before we shift from “find the flaws” to critique
+(M2, Wk9) and improvement (defended at M3, Wk11).</li>
+<li>Today sets up L6 (missingness pattern -&gt; MI -&gt; design-adjusted
+refit) and P5, each student’s own missing-data sensitivity analysis on
+their locked paper.</li>
+</ul>
+<h2 id="slide-1-where-we-are-in-the-project">Slide 1 — Where we are in
+the project</h2>
+<ul>
+<li>Recap the arc: Replicate + Interrogate (survey design last week,
+missing data this week) -&gt; M1 compiles all five, presented next Tue
+(Oct 27) -&gt; Critique another group’s M1 (M2, Wk9) -&gt; Improve and
+defend (M3, Wk11).</li>
+<li>Position missing data as the fifth and final threat lens before M1
+compiles all five.</li>
+<li>Flag that today’s method interacts with everything prior: you
+impute, THEN weight, THEN refit.</li>
+<li>MASLD hook: the paper reports approximately 6,300; the
+reproduction’s <strong>full analytic file</strong> is 6,371 and its
+<strong>locked domain</strong> is 6,048. Hold those two numbers — where
+did the other adults go?</li>
+<li>(~6 min)</li>
+</ul>
+<h2 id="slide-2-why-missingness-is-a-bias-problem-not-a-bookkeeping-problem">Slide
+2 — Why missingness is a bias problem, not a bookkeeping problem</h2>
+<ul>
+<li>Dropping incomplete rows silently changes <em>who</em> is in your
+analysis; the estimand can shift even if nothing is mis-measured.</li>
+<li>The amount missing bounds power; the <em>mechanism</em> determines
+bias. 5% MNAR can mislead more than 30% MCAR.</li>
+<li>Preview the punchline: the same paper has one loss MI handles well —
+item nonresponse inside the cohort — and one it cannot touch, because
+that one is <strong>design</strong>, not missing data at all.</li>
+<li>MASLD hook: the paper counts 585 all-cause deaths and our
+reproduction 586, and those deaths drive the survival estimates — if the
+missing are systematically higher- or lower-risk, every HR moves.</li>
+<li>(~9 min)</li>
+</ul>
+<h2 id="slide-3-the-taxonomy-mcar-mar-mnar">Slide 3 — The taxonomy: MCAR
+/ MAR / MNAR</h2>
+<ul>
+<li>MCAR: missingness independent of everything — complete cases are a
+random subsample, unbiased but wasteful.</li>
+<li>MAR: missingness explained by <em>observed</em> data — recoverable
+by conditioning/imputing on those observables.</li>
+<li>MNAR: missingness depends on the <em>unobserved value itself</em> —
+not fixable from the data alone; needs assumptions or external
+information.</li>
+<li>Stress these are untestable from the data: you argue the mechanism
+substantively, then do sensitivity analysis.</li>
+<li>MASLD hook: which label fits the <strong>792 adults inside the
+fasting subsample who still have no computable FLI</strong>? That is the
+genuine missing-data question. Those never sampled into the subsample
+are a different question entirely.</li>
+<li>(~12 min)</li>
+</ul>
+<h2 id="slide-4-a-picture-of-the-taxonomy">Slide 4 — A picture of the
+taxonomy</h2>
+<ul>
+<li>Simple 3-panel schematic: missingness arrow pointing from (nothing)
+/ (observed X) / (the value itself) to the “missing” indicator.</li>
+<li>Give the one diagnostic you CAN do: compare observed characteristics
+of complete vs. incomplete cases (rules MCAR less plausible, cannot
+confirm MAR vs MNAR).</li>
+<li>Note complete-case analysis is unbiased only under MCAR (or, for
+some estimands, MAR in covariates but not outcome-dependent).</li>
+<li>MASLD hook: complete-case vs. imputed contrast (Slide 10) is exactly
+this diagnostic run live.</li>
+<li>(~9 min)</li>
+</ul>
+<h2 id="slide-5-classify-first-which-reductions-are-actually-missing-data">Slide
+5 — Classify first: which reductions are actually missing data?</h2>
+<ul>
+<li>FLI needs triglycerides + GGT + BMI + waist; only triglycerides
+comes from the NHANES <em>fasting</em> subsample (GGT is MEC-wide
+standard biochemistry, BMI and waist are anthropometry) — that single
+fasting input binds the whole index.</li>
+<li>In the MASLD funnel, <strong>after eligibility</strong>, the two
+largest reductions are <strong>designed subsampling</strong> and
+<strong>disease definition</strong>. Neither is missing data. Genuine
+missingness across the whole funnel is <strong>792 item-nonresponse
+losses</strong>; a further <strong>2 records fail outcome
+ascertainment</strong>, which is a separate category, not missingness,
+and is not added to them. Within the locked domain, Model-1 missingness
+is <strong>1.8%</strong>, all of it cancer status.</li>
+<li>This is selection <em>into observability of the exposure</em>,
+upstream of any confounder adjustment.</li>
+<li>MASLD hook: this is why N collapses from all NHANES adults to the
+<strong>full analytic file</strong> (6,371) and the <strong>locked
+domain</strong> (6,048); the phenotype simply cannot be assigned to most
+people.</li>
+<li>(~11 min)</li>
+</ul>
+<h2 id="slide-6-why-designed-subsampling-is-not-mnar">Slide 6 — Why
+designed subsampling is not MNAR</h2>
+<ul>
+<li>Fasting status is not random: it tracks appointment time, diabetes,
+medication, age — variables tied to metabolic risk, the very thing MASLD
+is about.</li>
+<li>NHANES <em>designed</em> the fasting subsample and supplies
+<code>WTSAF2YR</code> to account for that selection stage and its
+nonresponse. Absence there is <strong>not, by itself</strong>, evidence
+of MNAR. Inference stays conditional on the weighting assumptions —
+which is a much narrower claim than “unfixable selection bias”.</li>
+<li>Key teaching move: MI cannot invent a measurement that was never
+taken — but that is an argument for using the <strong>right
+weight</strong>, not for declaring the study irreparable.</li>
+<li>The honest fix is scope language (“among adults with ascertainable
+MASLD”) plus a selection/sensitivity argument — not imputation.</li>
+<li>MASLD hook: connect back to M1’s circularity finding — the fasting
+filter and the phenotype share BMI+waist inputs, so selection and
+exposure definition are entangled.</li>
+<li>(~12 min)</li>
+</ul>
+<h2 id="slide-7-break">Slide 7 — Break</h2>
+<ul>
+<li>10-minute break. On return we move from the loss MI cannot repair —
+design, which the weight answers — to the one it can.</li>
+<li>(~10 min)</li>
+</ul>
+<h2 id="slide-8-item-nonresponse-inside-the-cohort">Slide 8 — Item
+nonresponse <em>inside</em> the cohort</h2>
+<ul>
+<li>Within the <strong>locked domain</strong> — the 6,048 rows P5
+analyses — confounders are only partly complete: income ~9% missing,
+blood pressure ~3% — but neither is in the paper’s Model 1. Inside Model
+1, exactly one covariate is incomplete: cancer status, 109 rows,
+1.8%.</li>
+<li>These are classic item-missing covariates — the setting MI was
+designed for, and plausibly MAR given the rich NHANES covariate
+set.</li>
+<li>Contrast with the design and disease steps: here the <em>rows exist
+and the outcome/exposure are observed</em>; only some predictors are
+blank.</li>
+<li>MASLD hook: on the paper’s Model 1, complete-case analysis quietly
+drops 1.8% of the cohort — 109 people, for a blank cancer-status field,
+not anything about liver fat. (Adding income and BP would make it
+~12.8%, but that changes the adjustment set.)</li>
+<li>(~9 min)</li>
+</ul>
+<h2 id="slide-9-complete-case-analysis-the-hidden-default">Slide 9 —
+Complete-case analysis: the hidden default</h2>
+<ul>
+<li>Most regression software listwise-deletes; the analyst rarely
+chooses it consciously.</li>
+<li>Costs: lost precision, and bias whenever missingness in a covariate
+is associated with the outcome.</li>
+<li>It is defensible only under MCAR — or MAR in covariates, not
+outcome-dependent — assumptions you usually cannot justify.</li>
+<li>MASLD hook: the paper’s adjusted Group IV HR reflects whoever
+survived listwise deletion — an unstated subsample.</li>
+<li>(~8 min)</li>
+</ul>
+<h2 id="slide-10-multiple-imputation-the-idea-in-three-steps">Slide 10 —
+Multiple imputation: the idea in three steps</h2>
+<ul>
+<li>Impute: draw M plausible completed datasets from a model predicting
+each missing value from the observed ones (incl. the outcome).</li>
+<li>Analyze: fit the SAME substantive model in each dataset.</li>
+<li>Pool: combine estimates with Rubin’s rules — within- +
+between-imputation variance carries the uncertainty of not knowing the
+true value.</li>
+<li>MASLD hook: run the <strong>replication contrast (IV vs I),
+design-aware Model 1</strong> — complete-case <strong>2.97</strong>,
+both extreme assignments of the missing cancer status <strong>2.98 /
+2.99</strong>, MI <strong>2.98</strong>. Everything lands inside a 0.02
+band.</li>
+<li>(~13 min)</li>
+</ul>
+<h2 id="slide-11-reading-a-sensitivity-analysis-that-changes-nothing">Slide
+11 — Reading a sensitivity analysis that changes nothing</h2>
+<ul>
+<li>Interpret: complete cases were a slightly higher-risk slice;
+restoring the dropped 1.8% removes that selection if MAR holds — there
+is no observed truth here to check it against.</li>
+<li>Emphasize what MI actually did: 2.97 -&gt; 2.98, with an interval
+that came back marginally <em>wider</em>, not narrower. The imputed
+values have almost no leverage (between-imputation variance
+~7.6e-12).</li>
+<li>Caution: MI changes the estimate only as much as the missing
+predictors matter; a null move is also a finding.</li>
+<li><strong>The wording that matters:</strong> <em>this</em>
+missing-data problem mattered little <strong>after we measured
+it</strong>. The method was necessary because we did not know that in
+advance. “Missing data don’t matter” is the wrong lesson.</li>
+<li>(~9 min)</li>
+</ul>
+<h2 id="slide-12-building-a-defensible-imputation-model">Slide 12 —
+Building a defensible imputation model</h2>
+<ul>
+<li>Include the outcome (here: the Nelson-Aalen cumulative hazard +
+event indicator for survival data) — omitting it biases associations
+toward null.</li>
+<li>Be inclusive: put all analysis-model covariates plus useful
+auxiliary predictors of missingness into the imputation model
+(congeniality).</li>
+<li>Match variable types (logistic/PMM for skewed or bounded vars);
+respect the survey design where feasible.</li>
+<li>MASLD hook: income and BP should be imputed from age, sex, BMI,
+waist, comorbidity AND the mortality outcome — not from a stripped-down
+model.</li>
+<li>(~11 min)</li>
+</ul>
+<h2 id="slide-13-how-many-imputations-and-how-to-report">Slide 13 — How
+many imputations, and how to report</h2>
+<ul>
+<li>Rule of thumb: M at least equal to the percentage of incomplete
+cases (so ~10-20 here); more is cheap insurance, few is false
+precision.</li>
+<li>Report: mechanism assumed, variables imputed, M, software/method,
+and the pooled estimate with Rubin SEs.</li>
+<li>Always show complete-case vs. MI side by side — divergence is a
+sensitivity signal, agreement is reassurance.</li>
+<li>MASLD hook: a small table on the <strong>replication contrast (IV vs
+I), design-aware Model 1</strong> (complete-case 2.97 / stress test
+2.98–2.99 / MI 2.98) is the P5 deliverable in miniature — and note that
+the <strong>survey design</strong> moved the same estimate far more than
+the missingness did.</li>
+<li>(~9 min)</li>
+</ul>
+<h2 id="slide-14-what-mi-fixes-vs.-what-it-cannot">Slide 14 — What MI
+fixes vs. what it cannot</h2>
+<ul>
+<li>What a missing-data method can address: item-missing confounders
+inside the cohort</li>
+<li>Not a missing-data problem at all: the people NHANES never sampled
+into the fasting subsample. That is scope, addressed by the correct
+weight and an honest statement of the target population.</li>
+<li>Corollary: MNAR item-missingness also needs sensitivity analysis
+(e.g., delta-adjustment), not naive MI.</li>
+<li>Link back to the gate: the categories MI cannot reach are the
+categories M0 criterion 6 does not accept on their own.</li>
+<li>MASLD hook: the external-validity ceiling is a
+<strong>scope</strong> statement about the fasting subsample, fixed by
+the correct weight and an honest target-population sentence — not
+something imputation was ever going to reach.</li>
+<li>(~10 min)</li>
+</ul>
+<h2 id="slide-15-putting-the-interrogation-together">Slide 15 — Putting
+the interrogation together</h2>
+<ul>
+<li>Sequence for a design-aware, missingness-aware refit: impute the
+item-missing covariates -&gt; apply the Wk6 weights, strata and PSU
+-&gt; fit the substantive model in each imputed dataset -&gt; pool with
+Rubin’s rules.</li>
+<li>Each threat we studied moves the Group IV estimate a defensible
+direction; report the <em>stack</em>, not one number.</li>
+<li>Transition line: next week (M1) students compile all five lenses
+into their replication deck and name the dominant threat — today gives
+them the missing-data piece.</li>
+<li>MASLD hook: put the four headline numbers side by side — 15.1 naive,
+~2.9 adjusted, ~12.4 weighted-crude, 2.98 imputed — and show they are
+<em>not</em> a sequence (different models, different row sets). Then use
+P4’s 2x2 on the fixed 5,939 rows to separate adjustment from design;
+there, adjustment moves it most and imputation least.</li>
+<li>(~9 min)</li>
+</ul>
+<h2 id="slide-16-bridge-to-todays-lab-l6-and-p5">Slide 16 — Bridge to
+today’s lab (L6) and P5</h2>
+<ul>
+<li>In L6 (EpiMethods missing-data module) students will: (1) tabulate
+the missingness pattern for the fixed dataset and name the likely
+mechanism per variable; (2) run MI with a properly specified model and a
+justified M; (3) refit the survival model with Rubin pooling, then
+re-apply the Wk6 survey design, and report complete-case vs. MI
+vs. design-adjusted side by side.</li>
+<li>They will practice telling design apart from missingness explicitly:
+which gaps MI addresses, and which are scope limits to be written up,
+not imputed. ~8 min. P5 is optional and folds into the M1 package. The
+deliverable is the typed funnel, a small complete-case / stress-test /
+MI table, and one sentence naming the population the conclusion is
+about.</li>
+<li>MASLD hook: the demonstration paper reports one HR from an unstated
+subsample; P5 asks students to show their paper’s number under
+missingness stress and to name its true validity ceiling.</li>
+<li>(~8 min)</li>
+</ul>
+</body>
+</html>

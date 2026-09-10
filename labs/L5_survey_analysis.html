@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>L5 survey analysis</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">L5 survey analysis</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#lab-5-survey-data-analysis" id="toc-lab-5-survey-data-analysis">Lab 5: Survey Data Analysis</a>
+<ul>
+<li><a href="#overview" id="toc-overview">Overview</a></li>
+<li><a href="#materials" id="toc-materials">Materials</a></li>
+<li><a href="#your-task" id="toc-your-task">Your task</a></li>
+<li><a href="#deliverable" id="toc-deliverable">Deliverable</a></li>
+<li><a href="#grading-complete-incomplete" id="toc-grading-complete-incomplete">Grading: Complete /
+Incomplete</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="lab-5-survey-data-analysis">Lab 5: Survey Data Analysis</h1>
+<h2 id="overview">Overview</h2>
+<p>This lab introduces the essential principles of <strong>survey data
+analysis</strong>. Public health data often comes from complex surveys
+like NHANES, which don’t sample people randomly — they use a strategic
+design with <strong>weights, strata, and clusters</strong> so the sample
+represents the entire U.S. population. Ignoring these features can badly
+bias your results.</p>
+<p>Using data from Flegal et al. (2016), you will work through the
+difference between a naive analysis and a methodologically sound survey
+analysis: creating a survey design object, generating weighted
+descriptive statistics, and fitting survey-weighted regression models to
+replicate published findings. Your TA will walk through the worked
+solution during the session.</p>
+<p>This is the workflow you will reuse in <strong>P4</strong> on your
+own locked paper.</p>
+<h2 id="materials">Materials</h2>
+<ul>
+<li><strong>Exercise instructions:</strong> <a href="https://ehsanx.github.io/EpiMethods/surveydataE.html">Survey Data
+Analysis</a></li>
+<li><strong>Worked solution:</strong> <a href="https://ehsanx.github.io/EpiMethods/surveydataEsolution.html">The
+R codes</a></li>
+</ul>
+<p><strong>Before you come to lab</strong>, install the package this
+exercise needs:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;survey&quot;</span>)</span></code></pre></div>
+<h2 id="your-task">Your task</h2>
+<ol type="1">
+<li><p>Follow along as the TA explains the worked solution.</p></li>
+<li><p>Run the R Markdown file yourself, as a group, on your own
+laptop.</p></li>
+<li><p>Put your <strong>group name and the first names of everyone
+present</strong> in the <code>author:</code> field at the top of the
+file.</p></li>
+<li><p>Add <code>sessionInfo()</code> in a final code chunk.</p></li>
+<li><p>Knit to <strong>PDF or HTML</strong> and submit that one file
+before the lab ends.</p></li>
+</ol>
+<p>No written explanations are required. If you get stuck, ask the TA in
+the room — that is what the session is for.</p>
+<h2 id="deliverable">Deliverable</h2>
+<ul>
+<li><strong>One file per group:</strong> the knitted PDF or HTML.</li>
+<li><strong>Due:</strong> end of the lab session (Thu Oct 15).</li>
+</ul>
+<h2 id="grading-complete-incomplete">Grading: Complete / Incomplete</h2>
+<p>You receive <strong>Complete</strong> if the document knitted without
+errors, your group name and members are in it, and it was submitted
+before the lab ended. Only members present in the room receive
+credit.</p>
+</body>
+</html>

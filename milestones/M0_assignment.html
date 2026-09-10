@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>M0 assignment</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">M0 assignment</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#m0-feasibility-gate" id="toc-m0-feasibility-gate">M0 —
+Feasibility Gate</a>
+<ul>
+<li><a href="#what-m0-is" id="toc-what-m0-is">What M0 is</a></li>
+<li><a href="#what-you-submit" id="toc-what-you-submit">What you
+submit</a></li>
+<li><a href="#the-six-criteria" id="toc-the-six-criteria">The six
+criteria</a></li>
+<li><a href="#if-your-paper-does-not-qualify" id="toc-if-your-paper-does-not-qualify">If your paper does not
+qualify</a></li>
+<li><a href="#weight-deadline-and-policy" id="toc-weight-deadline-and-policy">Weight, deadline and policy</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="m0-feasibility-gate">M0 — Feasibility Gate</h1>
+<p><strong>Group · Feasibility memo · Weight and deadline: see the
+syllabus</strong></p>
+<hr />
+<h2 id="what-m0-is">What M0 is</h2>
+<p>Your entire project is built on a <strong>single recent, open-data
+paper</strong> that your group selects and <strong>locks</strong> at M0.
+<strong>Recent</strong> means published in the current calendar year or
+the five preceding ones — for 2026W, a publication year of 2021 or
+later. Because the weekly increments deliberately exercise specific
+methods — cohort reconstruction, confounding, interaction, design-aware
+estimation and missing data — not every paper can support the full
+sequence.</p>
+<p>M0 is the gate that checks yours can. It is a gate, not a grade, but
+a paper that cannot clear it <strong>cannot be carried into
+P1–P5</strong>.</p>
+<h2 id="what-you-submit">What you submit</h2>
+<p>A <strong>short feasibility memo</strong> confirming all six criteria
+below, each with a <strong>specific pointer</strong> — variable names,
+file names, sample sizes. Not “NHANES has weights”, but which weight
+variable, in which file.</p>
+<p>Your memo must end with a <strong>Cover note</strong> section
+containing a one-line contribution note per member, any
+external-feedback disclosure, and an AI Use Statement. M0 submits no
+repository, so the memo is the only place it goes.</p>
+<h2 id="the-six-criteria">The six criteria</h2>
+<p>Your paper is eligible <strong>only if you can identify all
+six</strong>.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>Criterion</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Reconstructable data</strong></td>
+<td>Accessible raw or near-raw microdata (NHANES, NHIS, or a comparable
+fully public source) from which you can rebuild the analytic cohort. A
+paper whose numbers can only be read from a summary table, with no
+underlying data you can re-run, does <strong>not</strong> qualify.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>A clear exposure and outcome</strong></td>
+<td>A single primary association you can state in one sentence.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Plausible confounders</strong></td>
+<td>Measured covariates that support a defensible, causally-reasoned
+adjustment set.</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Adequate size and events</strong></td>
+<td>Enough observations — and, for time-to-event outcomes, enough events
+— for the main analysis <em>and</em> at least one subgroup or
+interaction analysis to be stable.</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Design variables</strong></td>
+<td>Your paper must carry a design or outcome-structure feature this
+course teaches you to handle, and you must name it and point to the
+variables that encode it. Normally that is complex-survey sampling — the
+weights, strata and PSU identifiers that make a design-aware re-estimate
+possible. The other qualifying case is a time-to-event outcome —
+follow-up time and a censoring indicator — and on that route you must
+also name here the one structural choice you will interrogate at P4: the
+time scale, the censoring rule, the index date, or the handling of
+competing events. The two routes do not lead to the same deliverable.
+The survey route gives P4 a naive-versus-weighted contrast on one
+estimand; the time-to-event route gives P4 a reproduction of the paper’s
+survival estimand plus a structural interrogation of the choice you
+named, and no such contrast. Complex-survey data is the default case and
+the one the demonstration paper uses. A paper carrying neither feature
+does not qualify: there would be nothing for P4 to respect.</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>A genuine incomplete-observation problem</strong></td>
+<td>Point to at least one variable your locked analysis actually uses —
+the exposure, the outcome, or a covariate in the main model — that is
+absent for records which should have carried it. That is the problem P5
+analyses, and it is what this criterion asks for. Designed subsampling,
+eligibility restrictions, the disease definition, and failure to link or
+follow up the outcome also shrink a cohort; you must tell them apart
+from missingness and you report them at P5, but none of them satisfies
+this criterion on its own, because P5 does not address them with the
+methods this course teaches. What fails is a paper whose analysis
+variables are complete by construction, leaving nothing to measure.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Criterion 5 is not waivable.</strong> Complex-survey data is
+the default route through it, not the only one; a paper whose data carry
+no design feature to respect cannot support P4.</p>
+<p><strong>Three things that catch people out on criterion
+6:</strong></p>
+<ul>
+<li><strong>Designed subsampling does not satisfy it.</strong> If the
+study deliberately measured something in a subsample and supplies a
+weight for it, absence outside that subsample is a design feature with a
+documented fix — the right weight, plus an honest sentence naming who
+your estimate is about. That is a scope question, not a missing-data
+problem.</li>
+<li><strong>The test is not size.</strong> Do not argue from magnitude.
+The demonstration paper’s main model is incomplete for one covariate in
+under 2% of its cohort and that clears the gate. Ask instead whether you
+could have known in advance that handling it would change nothing; if
+you could not, it is worth analysing, and P5 measures whether it
+mattered. “It did not” is a result.</li>
+<li><strong>The problem must arise from your locked analysis.</strong>
+Introducing extra variables solely to manufacture one is not a
+missing-data analysis; it is a change of adjustment set wearing a
+disguise.</li>
+</ul>
+<h2 id="if-your-paper-does-not-qualify">If your paper does not
+qualify</h2>
+<p>Bring it early. If your first choice fails the gate, the teaching
+team will help you identify an eligible replacement
+<strong>before</strong> the M0 lock. That is much cheaper than
+discovering the problem at P4.</p>
+<p>The lock means there are no elective changes of paper after the M0
+deadline: you carry the paper you named through P1–P5, M1, M2, M3 and
+M4. It does not tie you to a paper the memo itself shows cannot work. If
+your memo makes clear that your paper cannot clear all six criteria, the
+teaching team may require you to replace it; the paper you then move to
+becomes your locked paper. That is the teaching team’s decision to make,
+not a swap you can elect.</p>
+<p>The demonstration paper used throughout the course — a MASLD / NHANES
+all-cause mortality analysis — passes all six, and is used to illustrate
+what each increment should look like.</p>
+<h2 id="weight-deadline-and-policy">Weight, deadline and policy</h2>
+<p>See the syllabus. It governs what this milestone is worth, when it is
+due, whether the weight can be shifted, and any late penalty. This page
+describes the task only.</p>
+</body>
+</html>

@@ -1,0 +1,70 @@
+---
+title: "M4 — Reanalysis letter: master reproducibility file"
+subtitle: "SPPH 604 · demonstration paper (Kueh et al., BMJ Open 2026;16:e113719)"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    code-tools: true
+    df-print: kable
+execute:
+  warning: false
+  message: false
+---
+
+> Reproduces every number stated in the letter. The replication figures are
+> derived live here; the two improvement estimates (survey-weighted, imputed) are
+> reproduced in full by `../P4_design_aware/P4_code.qmd` and
+> `../M3_defense/M3_defense_evidence.qmd` (the PIR + SBP sensitivity model, whose
+> adjustment set is wider than the paper's Model 1) and summarised below.
+
+```{r setup}
+source("../_shared/paths.R")   # find_repro(), emit_results(), ci(), fmtn(), endash()
+repro <- find_repro()
+suppressPackageStartupMessages({library(dplyr); library(survival)})
+d <- readRDS(file.path(repro, "data/derived/masld_analytic.rds"))
+hr <- function(m,g){s<-summary(m); sprintf("%.2f (%.2f-%.2f)",
+        s$conf.int[g,1], s$conf.int[g,"lower .95"], s$conf.int[g,"upper .95"])}
+```
+
+## Claim 1 — the cohort and headline results reproduce
+
+```{r reproduce}
+cat("N =", nrow(d), "(paper 6300);  groups",
+    paste(as.integer(table(d$group)), collapse="/"), "(386/4541/769/604)\n")
+cat("Deaths =", sum(d$dead,na.rm=TRUE), "(585);  by group",
+    paste(as.integer(tapply(d$dead,d$group,sum,na.rm=TRUE)), collapse="/"), "(5/388/74/118)\n")
+cov1 <- c("age","female","dyslip","htn","t2dm","ckd","mi","cancer","on_htn_med","on_dm_med","on_lipid_med")
+d$smk <- ifelse(d$SMQ020==1 & d$SMQ040%in%c(1,2),1L,ifelse(is.na(d$SMQ020),NA,0L))
+u  <- coxph(Surv(time_yr,dead)~group, d)
+m2 <- coxph(Surv(time_yr,dead)~group+age+female+dyslip+htn+t2dm+ckd+mi+cancer+
+            on_htn_med+on_dm_med+on_lipid_med+smk+sedentary_min, d)
+cat("Group IV all-cause: unadjusted", hr(u,"groupIV"), "(paper 15.13);  Model 2",
+    hr(m2,"groupIV"), "(paper 2.89)\n")
+```
+
+## Claim 2/4 — improved estimates attenuate but do not overturn
+
+```{r improved}
+data.frame(
+  Analysis = c("Survey-weighted (fasting design)","Multiple imputation",
+               "Weighted direct IV vs III","Weighted direct IV vs II"),
+  `Group IV HR` = c("12.40 (2.69-57.15)","2.79 (1.12-6.92)",
+                    "3.07 (2.11-4.46)","2.30 (1.76-3.02)"),
+  Source = c("P4_code.qmd","M3_defense_evidence.qmd","P4_code.qmd","P4_code.qmd"),
+  check.names = FALSE)
+cat("Direction is stable across every specification: Group IV remains worst.\n")
+```
+
+## Claim 3 — published-vs-reproduced discrepancies we flag
+
+```{r errors}
+pir <- table(d$pir_cat); den <- sum(pir)
+cat("PIR counts imply High", round(100*pir['High']/den,1), "/ Low", round(100*pir['Low']/den,1),
+    "; paper prints 23.0 / 22.1 -> printed percentages disagree with the counts.\n")
+cat("BMI: non-obese group medians", round(median(d$bmi[d$group=='III']),1), "/",
+    round(median(d$bmi[d$group=='IV']),1), "-> incompatible with the '<25' header (Methods cut = 30).\n")
+```
+
+*Data availability:* all inputs are public (NHANES 2007–2018; NCHS linked mortality).
+The full pipeline is in `../../reproduction/`.

@@ -1,0 +1,696 @@
+---
+# Syllabus version 9 (authoritative, 2026W). The version lived only in the
+# old filename SPPH604syllabus2026v9.Rmd; the published name is deliberately
+# version-free so the link students hold stays valid across revisions.
+# Bump this comment, not the filename. Git history carries the rest.
+title: "SPPH 604: Application of Advanced Epidemiological Methods"
+output:
+  pdf_document:
+    toc: no
+    latex_engine: xelatex
+    number_sections: true
+    keep_tex: true
+header-includes: |
+  % Font setup
+  \usepackage{fontspec}
+  % TeX Gyre Termes: a Times-compatible serif under the GUST Font License,
+  % freely redistributable. The public repository must not embed subsets of a
+  % proprietary font in artifacts it distributes.
+  \setmainfont{TeX Gyre Termes}
+
+  % Page geometry and line spacing
+  \usepackage[margin=1in]{geometry}
+  \linespread{1.2}
+
+  % Color and section formatting
+  \usepackage{xcolor}
+  \definecolor{sectioncolor}{RGB}{140,45,15} % dark reddish-brown
+
+  % Colored links setup
+  \usepackage{hyperref}
+  \hypersetup{
+    colorlinks=true,
+    linkcolor=sectioncolor,
+    urlcolor=blue,
+    citecolor=sectioncolor
+  }
+
+  % Section formatting
+  \usepackage{titlesec}
+  \titleformat{\section}
+    {\color{sectioncolor}\normalfont\Large\bfseries\sffamily\MakeUppercase}
+    {}{0pt}{}
+  \titlespacing{\section}{0pt}{*4}{*1}
+  \usepackage{etoolbox}
+  \preto{\section}{\vspace{1em}\textcolor{sectioncolor}{\hrule}\vspace{0.5em}}
+
+  \titleformat{\subsection}
+    {\color{sectioncolor}\normalfont\large\bfseries\sffamily\MakeUppercase}
+    {}{0pt}{}
+  \titlespacing{\subsection}{0pt}{*3}{*1}
+
+  \titleformat{\subsubsection}
+    {\color{sectioncolor}\normalfont\normalsize\itshape\sffamily}
+    {}{0pt}{}
+
+  \usepackage{fancyhdr}
+  \pagestyle{fancy}
+  \fancyhf{} % Clear all header and footer fields
+
+  % Header
+  \lhead{SPPH 604: Application of Advanced Epidemiological Methods}
+  \rhead{SPPH 604}
+
+  % Footer
+  \renewcommand{\footrulewidth}{0.4pt} % Horizontal line above footer
+  \fancyfoot[L]{University of British Columbia}
+  \fancyfoot[R]{\thepage}
+---
+
+
+
+
+```{r setup, include=FALSE}
+# Load required libraries for the document
+library(kableExtra)
+
+# Revision date, rendered into the footer at the foot of this document.
+# Deliberately a typed constant, NOT Sys.Date(): the date must record when the
+# syllabus was actually revised, so an unrelated rebuild cannot silently claim a
+# new revision. Change this line, and only this line, when you publish a revision.
+syllabus_date <- as.Date("2026-09-10")
+```
+
+# Acknowledgement
+
+UBC’s Point Grey Campus is located on the traditional, ancestral, and unceded territory of the xwməθkwəy̓əm (Musqueam) people. The land it is situated on has always been a place of learning for the Musqueam people, who for millennia have passed on their culture, history, and traditions from one generation to the next on this site.
+
+# Course Information
+
+```{r course-info-table, echo=FALSE}
+course_info_data <- data.frame(
+  Title = "Application of Advanced Epidemiological Methods",
+  Schedule = paste(
+    "Class: SPPH 604 001 (Tue 9:30 am - 12 pm unless otherwise specified): Zoom",
+    "Lab: SPPH 604 T01 (Thu 10 am - 12 pm): Room SPPH 143 \\textcolor{red}{Class starting from Sept 10th and lab from Sept 17th, 2026}",
+    "Lab is in-person and class is Zoom sessions, unless specified otherwise.",
+    sep = " \\newline "
+  ),
+  Credit = "3"
+)
+
+course_info_data |>
+  kbl(format = "latex", booktabs = TRUE, escape = FALSE, align = "l",
+      col.names = c("Course Title", "Course Code \\& Schedule", "Credit Value")) |>
+  kable_styling(latex_options = c("striped","H"), full_width = FALSE) |>
+  column_spec(1, width = "3cm") |>
+  column_spec(2, width = "9cm") |>
+  column_spec(3, width = "2cm")
+```
+
+## Course Description
+
+*As published in the UBC Academic Calendar:* Statistical approaches for confounding, missingness, and complex surveys, the development of analysis plans, the analysis and interpretation of real-world epidemiologic data, and the communication of findings.
+
+This course is not eligible for Credit/D/Fail grading.
+
+## Course Modality
+
+This course is delivered in mixed mode. The Tuesday class (SPPH 604 001) is **online**, held synchronously by Zoom; the Thursday lab (SPPH 604 T01) is **in person** in SPPH 143, where the hands-on work and peer collaboration take place. Week 1 has no Tuesday session: the course opens on **Thursday, September 10, 10 am--12 pm, by Zoom**, and the in-person labs (L1--L6) begin **Thursday, September 17**. Zoom links are posted on Canvas. Scheduled contact time is **4.5 hours per week in Weeks 2--7** (usually a 2.5-hour Tuesday class plus a 2-hour Thursday lab). In Weeks 8--12 the Tuesday class runs alone, as formal instruction gives way to instructor-supported project time; the M1, M2 and M3 presentation sessions use the full 9 am--12 pm block. There is no scheduled session in Week 10 (Midterm Break, Nov 9--11). See the schedule table for the week-by-week breakdown.
+
+## Course Instructor Biographical Statement
+
+> I am an Associate Professor in Health Data Science at the UBC School of Population and Public Health ([SPPH](https://spph.ubc.ca/person/ehsan-karim/)), a Scientist at the Centre for Advancing Health Outcomes, and an associate member of the Department of [Statistics](https://www.stat.ubc.ca/) at UBC. I was previously a Michael Smith Health Research BC Scholar. I received my PhD in Statistics from the University of British Columbia and completed my postgraduate training in the Department of Epidemiology, Biostatistics, and Occupational Health at [McGill University](https://www.mcgill.ca/epi-biostat-occh/). My current research focuses on causal inference, real-world observational data analyses, and the application of machine learning approaches in epidemiologic studies. This work is supported by grants from NSERC, CIHR, and MS Canada.
+
+## Instructor Teaching Philosophy
+
+> I teach the application of epidemiological methods with a focus on bridging theory and practice. My approach is student-centered, grounded in active engagement, reproducibility, and real-world application. I emphasize hands-on learning using real data, supporting students to critically evaluate evidence and design rigorous and reproducible analyses. Through open-access resources and detailed feedback, I aim to foster technical mastery, independence, and scholarly confidence. I am committed to accessibility so all learners can succeed and contribute meaningfully to public health research. My goal is to cultivate critical thinkers who question assumptions, assess bias, and apply epidemiological principles with clarity and rigor. I strive to make epidemiological thinking accessible and relevant across disciplines, preparing students to collaborate effectively in diverse research and policy settings.
+
+## Course Philosophy: The Capstone Approach
+
+**Scope & The "Need-to-Know" Approach**: This course is designed as a capstone experience, meaning its primary goal is to integrate and apply your existing skills to a complete research project. It is not intended to be an exhaustive theoretical survey of every aspect of confounding, missing data, or complex survey analysis. Instead, we focus on the application of these methods to real-world data.
+
+**The "Replicate -> Interrogate -> Improve -> Defend" Spine**: The core structure of this course is built around a single, term-long, reproducible reanalysis project based on a recent open-data paper (*recent* is defined under **Choosing Your Project (M0 Feasibility Gate)**, below). You will replicate the authors' findings, interrogate their methodological choices, propose and execute an improvement plan, and defend your reasoning live.
+
+We recognize that students enter this course with diverse backgrounds; some may have gaps in computing (R), while others may have gaps in epidemiological theory. This is expected. Our approach is "just-in-time" learning: rather than trying to master every nuance of a topic in the abstract, we will address specific knowledge gaps as they arise. We focus strictly on the tools and concepts you need to successfully execute your final project and to competently peer-review the work of others. The goal is not theoretical perfection, but practical, reproducible competence in both your own analysis and your critical evaluation of your colleagues' research.
+
+# Prerequisites
+
+All of:
+
+* SPPH 500 Analytical Methods in Epidemiological Research
+* SPPH 502 Epidemiological Methods I
+* SPPH 503 Epidemiological Methods II
+
+and one of:
+
+* SPPH 400 Statistics for Health Research, **or**
+* SPPH 521 Statistics for Health Research
+
+There are no co-requisites. Where this list and the UBC Academic Calendar differ, the Calendar governs.
+
+This is an applied, data-intensive course designed to bridge the gap between epidemiological theory and real-world practice. Unlike introductory courses, we prioritize "just-in-time" learning, addressing specific computing or theoretical gaps as they arise during your analysis. While we strongly encourage prior familiarity with R, we adopt a "Zero to AI Co-Pilot" pedagogy. You are permitted to use AI-augmented workflows to assist with data wrangling and programming. AI should be a supplementary resource for learning; students remain fully responsible for the integrity, auditability, and accuracy of all code and statistical outputs.
+
+# Contacts
+
+```{r, echo=FALSE}
+contacts_data <- data.frame(
+  Instructor = "\\href{http://www.ehsank.com/}{Dr. M. Ehsan Karim}",
+  Details = paste(
+    "ehsan dot karim at ubc dot ca",
+    "The typical response time is within 48 hours on weekdays.",
+    sep = " \\newline "
+  ),
+  Hours = "By appointments, or as posted on canvas."
+)
+
+contacts_data |>
+  kbl(format = "latex", booktabs = TRUE, escape = FALSE, align = "l",
+      col.names = c("Course Instructor(s)", "Contact Details", "Office Hours")) |>
+  kable_styling(latex_options = c("striped","H"), full_width = FALSE) |>
+  column_spec(1, width = "4cm") |>
+  column_spec(2, width = "5cm") |>
+  column_spec(3, width = "5cm")
+```
+
+# Other Instructional Staff
+
+The teaching team includes GTAs: (TBA). To communicate with the computing TA, come to weekly mandatory labs and specified office hours (as announced in Canvas). Office hours are a time to ask for clarification, discuss ideas, or receive guidance on assignments. If you need further support, contact with the course instructor, and additional office hours will be assigned accordingly. Do not email the TAs directly. For any issues communicate with the instructor directly.
+
+# Course Structure
+
+## Course Purpose
+The purpose of this course is to provide students with learning opportunities to implement fundamental epidemiological concepts through the application of methods using population and public health datasets. Students will also be exposed to emerging epidemiological methodologies that are frequently being applied to population and public health-related research questions.
+
+## Workload & Time Management
+This 3-credit graduate-level course provides **40.5 hours of scheduled contact time** over the term -- see the schedule table for the week-by-week breakdown -- exceeding the 39 hours conventionally associated with a 3-credit Winter Session course. The syllabus itself follows [UBC Senate Policy V-130.1](https://scs-senate-2021.sites.olt.ubc.ca/files/20260218_V-130_Approved-1.pdf) (*Content and Distribution of Course Syllabi*, effective 01 September 2026). To prevent end-of-term workload cliffs, the project work is spread across the term as five weekly increments (P1–P5), each building on that week's lab rather than waiting for the end of the course. The schedule is structured to evolve: as you progress through the term, formal instruction gives way to dedicated, instructor-supported project time.
+
+* **Baseline for Success:** We anticipate that the scheduled class and lab time is sufficient for students to successfully meet learning objectives and achieve a strong standing.
+* **Prerequisites:** This estimate assumes mastery of the prerequisite materials. Students who are using this time to learn data analysis or review epidemiological theory from scratch should anticipate needing additional time to bridge those gaps.
+* **Exceptional Performance:** As per the course grading policy, an A+ is reserved for work that *significantly exceeds* expectations. This is distinguished by depth of insight, creativity, and rigor, not merely by the number of hours logged. While some students may choose to invest extra time to refine their work to this level, the standard workload is designed to ensure you can produce high-quality, reproducible research without exceeding university time guidelines.
+* **Workflow:** Some weeks may require additional time depending on project milestones. Most major work is group-based -- M3 is assessed individually, within your group's improved-analysis presentation -- so students are expected to coordinate proactively to plan and divide tasks effectively.
+
+## Choosing Your Project (M0 Feasibility Gate)
+
+Your entire project is built on a single **recent, open-data paper** that your group selects and "locks" at **M0 (Week 3)**. **Recent** means published in the current calendar year or the five preceding ones — for 2026W, a publication year of **2021 or later**; the demonstration paper, published in 2026, sits well inside that window. Because the weekly increments deliberately exercise specific methods — cohort reconstruction, confounding, interaction, design-aware estimation, and missing data — not every paper can support the full sequence. A paper is **eligible only if you can identify all six** of the following; the M0 deliverable is a short feasibility memo confirming each with a specific pointer (variable names, file names, sample sizes):
+
+1. **Reconstructable data.** Accessible raw or near-raw microdata (e.g., NHANES, NHIS, or a comparable fully public source) from which you can rebuild the analytic cohort. A paper whose numbers can only be read from a summary table — with no underlying data you can re-run — does **not** qualify.
+2. **A clear exposure and outcome.** A single primary association you can state in one sentence.
+3. **Plausible confounders.** Measured covariates that support a defensible, causally-reasoned adjustment set.
+4. **Adequate size and events.** Enough observations — and, for time-to-event outcomes, enough events — for the main analysis *and* at least one subgroup/interaction analysis to be stable.
+5. **Design variables.** The paper must contain a meaningful design or outcome-structure feature that this course teaches you to handle, and your memo must name it and point to the variables that encode it. Normally that is complex-survey sampling — the weights, strata, and PSU identifiers that make a design-aware estimate possible. The other qualifying case is a time-to-event outcome, where the feature is the follow-up time and the censoring indicator and the paper's handling of them leaves something you can genuinely interrogate. Complex-survey data is the default case and the one the demonstration paper uses, but it is not the only one that qualifies. A paper whose data carry neither does not qualify, because P4 asks you to re-estimate the headline result the way the design demands and there would be nothing to re-estimate.
+6. **A genuine incomplete-observation problem.** Point to at least one variable your locked analysis actually uses — the exposure, the outcome, or a covariate in the main model — that is absent for records which should have carried it. That is the problem P5 analyses, and it is what this criterion asks for. Your cohort will also shrink through designed subsampling, eligibility restrictions, the disease definition, and failure to link or follow up the outcome. You must be able to tell those apart from missingness, and at P5 you report them and scope your conclusion around them — but none of them satisfies this criterion on its own, because P5 does not address them with the methods this course teaches. Do not argue from magnitude: a single covariate missing for a small share of the cohort clears this gate. The test is whether you could have known in advance that handling it would change nothing; if you could not, it is worth analysing. What fails is a paper whose analysis variables are complete by construction, leaving nothing to measure.
+
+**Criterion 5 is not waivable:** complex-survey sampling is the normal route through it, a time-to-event structure whose handling you can genuinely interrogate is the other, and a paper carrying neither has nothing for P4 to re-estimate. Design features this course does not teach you to handle — clustering outside a survey design, repeated measures — do not clear it.
+
+**Designed subsampling does not satisfy criterion 6.** Where a study deliberately measured something in a subsample and supplies a weight for it, that is a design feature with a documented fix — the right weight, plus an honest sentence naming who your estimate is about. It is a scope question, not a missing-data problem, and it does not clear this criterion.
+
+Relatedly, the increment you build on criterion 6 must analyse a missingness problem that **arises from your locked scientific analysis** — the absent value on a variable your locked model uses that criterion 6 required you to point at. Introducing extra variables solely to manufacture one is not a missing-data analysis; it is a change of adjustment set wearing a disguise. Selection, eligibility and outcome-linkage losses, designed subsampling included, are reported at P5 and scoped around; they are not what this increment analyses.
+
+The demonstration paper used throughout the course (a MASLD / NHANES all-cause mortality analysis) passes all six and is used to illustrate what each increment should look like. If your first choice fails the gate, the teaching team will help you identify an eligible replacement **before** the M0 lock; a paper that cannot clear all six criteria cannot be carried into P1–P5.
+
+**What the lock means.** Your paper locks at the M0 deadline shown in the schedule table below: after that deadline there are no elective changes of paper, and you carry the paper you named through P1–P5, M1, M2, M3, and M4. The lock is not a commitment to an unworkable paper. If the memo itself shows that the paper cannot clear all six criteria, the teaching team may require you to replace it; the paper you then move to becomes your locked paper. That is the teaching team's decision to make, not a swap you can elect.
+
+# Schedule of Topics
+
+Weekly materials will be posted in the Canvas “Modules” section by 9 AM each Monday, if any. Lab assignments are usually due by the end of the lab. If you encounter technical issues during lab, please talk to the TA immediately. Extensions will be considered on a case-by-case basis.
+
+```{r schedule-table, echo=FALSE, warning=FALSE, message=FALSE}
+schedule_data <- data.frame(
+  `Week` = c(
+    "\\# 1 (Sept 10)",
+    "\\# 2 (Sept 15 / 17)",
+    "\\# 3 (Sept 22 / 24)",
+    "\\# 4 (Sept 29 / Oct 1)",
+    "\\# 5 (Oct 6 / 8)", 
+    "\\# 6 (Oct 13 / 15)",
+    "\\# 7 (Oct 20 / 22)",
+    "\\# 8 (Oct 27 / 29)",
+    "\\# 9 (Nov 3 / 5)",
+    "\\# 10 (Nov 10 / 12)",
+    "\\# 11 (Nov 17 / 19)",
+    "\\# 12 (Nov 24 / 26)",
+    "Final deadline (Fri Dec 11)"
+  ),
+  `Cum_Hrs` = c(
+    "2.0", "6.5", "11.0", "15.5", "20.0", "24.5", "29.0", "32.0", "35.0", "35.0", "38.0", "40.5", "-"
+  ),
+  `Methods_In_Class` = c(
+    "Course + project overview; R+GitHub setup", 
+    "Survey data sources; reading Methods critically",
+    "Analytic cohort: case definitions, eligibility \\& the funnel; feasibility \\& peer-review principles", 
+    "Variable roles; confounding \\& DAGs",
+    "Interaction \\& effect modification", 
+    "Complex survey analysis", 
+    "Missing-data analysis",
+    "\\textbf{M1 Replication presentation (Starts 9am)}",
+    "\\textbf{M2 Critique Session (Starts 9am)}: reviewer groups present, Q/A",
+    "(Midterm Break: Nov 9 - 11)",
+    "\\textbf{M3 Improved-analysis presentation + individual oral defense (Starts 9am)}",
+    "Open discussion",
+    ""
+  ),
+  `Lab_Increments` = c(
+    "-",
+    "\\textbf{L1} Data wrangling $\\rightarrow$ \\emph{shortlist papers}",
+    "\\textbf{L2} Analytic data $\\rightarrow$ \\emph{P1: eligibility}",
+    "\\textbf{L3} Confounding $\\rightarrow$ \\emph{P2: Table 1}",
+    "\\textbf{L4} Interaction $\\rightarrow$ \\emph{P3: effect modification}",
+    "\\textbf{L5} Survey analysis $\\rightarrow$ \\emph{P4: main estimate}",
+    "\\textbf{L6} Missing data $\\rightarrow$ \\emph{P5: missingness}",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-"
+  ),
+  `Deadlines` = c(
+    "",
+    "\\textbf{L1} due end of lab, Thu Sept 17",
+    "\\textbf{M0}: Paper locked, due by end of Tue class, Sept 22 (12 PM) \\newline \\textbf{L2} due end of lab, Thu Sept 24",
+    "\\textbf{L3} due end of lab, Thu Oct 1",
+    "\\textbf{L4} due end of lab, Thu Oct 8",
+    "\\textbf{L5} due end of lab, Thu Oct 15",
+    "\\textbf{L6} due end of lab, Thu Oct 22",
+    "\\textbf{M1}: Replication presented in class \\newline slides + code zip due Tue Oct 27, 4 PM",
+    "\\textbf{M2}: critique presented in class \\newline slides due Tue Nov 3, 4 PM",
+    "",
+    "\\textbf{M3}: Live Defense, Tue Nov 17 (from 9 AM)",
+    "\\textbf{Grade Re-weighting Plan} due Thu Nov 26, 4 PM",
+    "\\textbf{M4}: Final letter + code zip due Fri Dec 11, 4 PM \\newline \\textcolor{red}{\\textbf{Bonus}}: journal-submission pledge, same deadline"
+  )
+)
+
+schedule_data |>
+  kbl(format = "latex", booktabs = TRUE, escape = FALSE, longtable = TRUE,
+      col.names = c("Week \\& Dates", "Contact hrs (cum.)", "Methods / In-class", "Lab (fixed data) $\\rightarrow$ Increment", "Deadlines (date \\& time)")) |>
+  kable_styling(latex_options = c("striped", "scale_down"), font_size = 8) |>
+  column_spec(1, width = "1.5cm") |>
+  column_spec(2, width = "1cm") |>
+  column_spec(3, width = "4cm") |>
+  column_spec(4, width = "4.5cm") |>
+  column_spec(5, width = "4cm")
+```
+
+*Note: This is a **proposed** schedule of topics; topic order may be adjusted, but the deadlines above are fixed. Week 1 has no Tuesday session -- the course opens Thursday, September 10, 10 am--12 pm, by Zoom. The in-person Thursday lab runs in Weeks 2--7 (L1--L6), beginning September 17; the L0 setup materials are self-study and are posted on Canvas. In Weeks 8--12 there is no scheduled Thursday session; the Tuesday class absorbs the presentation milestones and the remaining project work is instructor-supported time arranged with the teaching team. The "Contact hrs (cum.)" column is the running total of scheduled contact hours to the end of that week.*
+
+
+
+
+# Learning Outcomes
+
+By the end of this course, students will be able to:
+
+## Study Design and Protocol Development
+
+* Critically appraise and refine epidemiologic research questions to ensure specificity and feasibility.
+* Develop structured study protocols aligned with public health objectives, incorporating principles of transparency and reproducibility.
+* Identify and justify appropriate study designs for varied research contexts.
+
+## Data Analysis and Interpretation
+
+* Translate epidemiologic questions into a reproducible statistical analysis plan.
+* Generate, interpret, and critique key statistical outputs, including model coefficients, confidence intervals, and diagnostics.
+* Evaluate the robustness of findings through sensitivity analyses and appropriate methodological critique.
+
+## Communication and Scientific Reasoning
+
+* Communicate scientific reasoning and findings in clear, structured written formats suitable for academic and applied audiences.
+* Provide and integrate constructive peer feedback to improve clarity and scientific quality in collaborative work.
+* Synthesize technical and contextual elements of epidemiologic research in a capstone deliverable.
+
+## How these outcomes are met
+
+The section that follows maps the activities to these outcome clusters; three of the outcomes deserve a more precise note. *Structured study protocols*: the M0 feasibility memo is where you must name in advance, with specific pointers, the question, the exposure and outcome definitions, the confounders, the design features and the missingness your analysis will have to handle; the reproducible repository, together with the M3 requirement that any later change to those decisions be identified and justified, is what supplies the transparency and reproducibility; no separate study-protocol document is written or graded. *Identifying and justifying study designs*: every project reanalyses public microdata from a study someone else designed, so you reconstruct and defend a design -- eligibility rules, comparison groups, and the design features the data carry -- rather than choose one for a new question; beyond your own locked paper, the contexts you meet are the fixed teaching datasets of L1--L6, a national survey and a clinical cohort, together with the second paper you appraise at M2. *Translating a question into a reproducible analysis plan*: the plan is not a separately submitted document; the M0 memo states it in outline, and your repository is its executable form, which is why your code must run start to finish on a fresh machine and produce every number you report.
+
+# Learning Activities
+
+The activities below are the means by which you achieve and demonstrate the learning outcomes listed above. In broad terms: **M0 and L1--L6 with P1--P5** build *Study Design and Protocol Development* and *Data Analysis and Interpretation*; **M1 and M3** assess *Data Analysis and Interpretation*, including robustness and methodological critique; **M2 and M4** build and assess *Communication and Scientific Reasoning*, with M2 targeting the outcome on giving and integrating constructive peer feedback and M4 serving as the capstone deliverable. Sustained, critical reading of your locked paper, its supplementary material, and the relevant chapters of the two open-access textbooks is assumed throughout and is what makes M0 and M2 possible; specific chapters are signposted week by week in Canvas.
+
+* **Weekly lab data analysis activities (L1-L6, P1-P5)**: Students will complete in-lab data analysis exercises (L1-L6) applying concepts on fixed datasets; the matching project increments (P1-P5) apply those same concepts to their own chosen paper. The project increments **P1–P5 are optional and ungraded**: they carry no independent weight, no separate deadline, and nothing is submitted for them. They are the weekly building blocks of your replication and are assessed only once they are compiled and submitted as **M1** — and the practice they give you is what you draw on to critique another group's M1 at M2 and to defend your own analysis at M3.
+* **M1 & M2 (Slide Decks; code zip with M1 only)**: To combat AI-generated essay bloat, M1 and M2 are submitted strictly as presentation slide decks. **M1** is additionally accompanied by a **zip archive of your reproducible repository, downloaded from GitHub** (you are not required to grant us repository access); **M2 is slides only**, because you do not write code for the other group's paper. Traditional written reports are not accepted for these milestones. **M1** is your five project increments compiled into one replication-and-interrogation deck, closing with your group's judgment of the **single threat that most endangers the paper's conclusion**; it is presented and submitted on **Tuesday, October 27, due 4 PM**, and the deck and code zip are released to its assigned reviewers as soon as they are in.
+* **M2 (Critique of another group's M1)**: In the Tuesday Week 9 class your group presents a critique of the M1 you were assigned, and submits the slides by **4 PM the same day**. Every member presents a section and answers questions on it. Pairings are announced when M1 is submitted, and run in a cycle so that no group reviews the group reviewing it. The scope is fixed at three things, in about six slides: **(1) did their code run**, and if not, how far you got and where it stopped; **(2) two or three substantive points about the epidemiology** — the exposure and outcome definitions, the adjustment set and how it was justified, selection into the cohort, whether the stated interpretation follows from the estimate they actually report, and how far the finding would generalize; and **(3) whether you agree with their choice of dominant threat** — and if not, which threat you think dominates and why. You are not expected to have arrived knowing the clinical literature of a paper you did not choose, but you are expected to go and read enough of it to make the point you are making — the paper's citations and the code in front of you are within reach. Put a point as a question only after you have looked and the answer is genuinely unsettled, and then say what you checked: "the paper cites no source for this threshold" is a finding; "we are not clinicians" is not. A critique that finds little wrong is entirely acceptable when it is evidenced: a reviewer who recommends acceptance with reasons is doing the job. You are graded on the **quality of the critique** — whether you identify real methodological weaknesses, express them professionally, and suggest a practical way forward — never on how many faults you produce. You do **not** write code for the other group's paper and you do **not** implement anything on it; your recommendations are input that they must answer at M3.
+* **M3 (Live Oral Defense)**: M3 is where you **improve and defend your analysis**: address the most important points raised at M2, identify any further changes your group made independently, and justify the final analytic decisions. Your M1 analysis is the starting point, and M2 is an input to it — not its only source of insight. You are **not** obliged to implement your reviewers' recommendations; you are obliged to answer them, and you are free to change things they never raised. Any change to the analytic population, estimand, adjustment set, study design, variable definitions, missing-data strategy or model specification must be **identified and justified**, whether a reviewer prompted it or you did. The presentation shows *what* you did; the defense is about **whether it was justified**, and whether the change alters (or fails to alter) the interpretation in a way you can explain and stand behind. Grading rewards sound epidemiological reasoning under questioning, not whether your code merely runs.
+* **M4 (Final Reanalysis Letter + code zip)**: Your final project will be a short, densely written reanalysis letter/commentary (~1,000–1,500 words) accompanied by a **zip archive of your fully reproducible repository, downloaded from GitHub**.
+* **Reproducibility**: In health data science, code that only runs on your machine is considered unfinished. We grade strictly on auditability. Your code must run from start to finish on a fresh machine without manual intervention.
+
+# Learning Materials
+
+**Estimated cost of required learning materials and activities: \$0.** Both required textbooks are open access, the required `svyTable1` package is free, R / RStudio / R Markdown are free of charge, and a GitHub account is free. There are no lab fees, field-trip costs, course packs, or paid online assessment tools. Students supply their own laptop (see *Learning Resources*); if access to a suitable computer is a barrier for you, contact the instructor.
+
+We have 2 open access textbooks.
+
+* Karim M. E., Epi-OER team (2024). Advanced Epidemiological Methods.  [https://ehsanx.github.io/EpiMethods/](https://ehsanx.github.io/EpiMethods/).
+* Karim ME, Jeong D, Yusuf F (2021) Scientific Writing for Health Research.  [https://ehsanx.github.io/Scientific-Writing-for-Health-Research/](https://ehsanx.github.io/Scientific-Writing-for-Health-Research/).
+
+Open software packages:
+
+* Karim E (2025). svyTable1: Create Survey-Weighted Descriptive Statistics and Diagnostic Tables. R package version 0.14.1, [https://ehsanx.github.io/svyTable1](https://ehsanx.github.io/svyTable1).
+
+The following textbooks are suggested for further reading and additional learning (also available via UBC library; *no need to buy*):
+
+* Heard, S. B. (2016). The scientist's guide to writing: How to write more easily and effectively throughout your scientific career. Princeton University Press.
+* Heeringa, S.G., West, B.T., Berglund, P.A (2010) Applied Survey Data Analysis, Taylor and Francis, Florida.
+
+# Assessments of Learning
+
+The course will involve lectures and course assignments focused on the application of epidemiological methods. Although students will gain some expertise in statistical computation and programming, this course is focused on the application of epidemiologic analytic methods. Students will be evaluated based on the following elements: 
+
+(a) apply key epidemiologic concepts, 
+(b) understanding of analytic approaches to reduce study biases, 
+(c) the application of epidemiological methods to population and public health research questions, and 
+(d) the appropriate interpretation of analytic estimates from analytic output.
+
+**Students must submit a "Grade Re-weighting Plan" via Canvas inbox message to the Instructor by Thu Nov 26, 4 PM (Week 12), confirming which assignments are being shifted to the Final Project (M4) or to M1, and stating a brief reason or attaching an approved accommodation. That is the single deadline for all weight-shifting requests.** Any Bonus points earned will be added to this total, up to a maximum final grade of 100%.
+
+```{r assessments-table-v4, echo=FALSE}
+library(kableExtra)
+
+assessments_data_v4 <- data.frame(
+  Assessment = c(
+    "Labs L1–L6, Complete/Incomplete (Shiftable to M1)",
+    "P1–P5 increments (optional, ungraded; compiled into M1)",
+    "M0 feasibility gate",
+    "M1 replication + interrogation: P1–P5 compiled + dominant-threat judgment (Shiftable to M4)",
+    "M2 Critique of another group's M1 (not shiftable)",
+    "M3 defense: improved analysis + response to review (Shiftable to M4)",
+    "M4 reanalysis letter + reproducible repo",
+    "\\textcolor{red}{Bonus} [Journal-submission pledge]"
+  ),
+  `Weight` = c(
+    "10\\%",
+    "0\\%",
+    "0\\%",
+    "30\\%",
+    "15\\%",
+    "15\\%",
+    "30\\%",
+    "\\textcolor{red}{+2\\%}"
+  )
+)
+
+assessments_data_v4 |>
+  kbl(
+    col.names = c("Assessment", "Weight"),
+    format = "latex", 
+    booktabs = TRUE, 
+    escape = FALSE, 
+    align = "lc" 
+  ) |>
+  kable_styling(latex_options = c("striped", "H"), full_width = FALSE) |>
+  column_spec(1, width = "10cm") |> 
+  column_spec(2, width = "2cm")
+```
+*Note: Shifting components to M4 requires a valid reason or formal accommodation request.*
+*Note: The weekly project increments (P1–P5) are **optional and ungraded** — they carry no independent weight, no separate deadline, and are not separately submitted. They are the building blocks of M1, into which they are compiled. M0 is a pass/fail feasibility gate (0\%).*
+
+Peer-review quality at M2 will be judged by whether the reviewer can identify potential weaknesses in the work they are reviewing, express them professionally, and suggest a practical way forward (if possible). A review that finds little to correct is judged on the evidence it gives for that conclusion, not penalized for the absence of faults. Assessments are designed to build incrementally toward the final project. Peer reviews provide structured feedback loops to refine your analysis and writing. The bonus is earned by submitting, alongside M4, a signed pledge committing to submit the work to a peer-reviewed journal by January 31, 2027. This pledge is due with M4 (Dec 11, 4 PM) and the deadline is non-negotiable.
+
+## Assignment Code Table
+
+```{r assignment-table, echo=FALSE}
+assignment_data <- data.frame(
+  `Assignment Code` = c("M0", "L1-L6", "P1-P5", "M1", "\\textcolor{blue}{M2}", "M3", "\\textcolor{blue}{M4}"),
+  Description = c("Paper locked", "Lab data analysis", "Project increments", "P1-P5 compiled + threat judgment", "Critique of another group's M1", "Live defense", "Final letter + repo")
+)
+
+assignment_data |>
+  kbl(format = "latex", booktabs = TRUE, escape = FALSE, linesep = "") |>
+  kable_styling(latex_options = c("striped", "H"), full_width = FALSE)
+```
+
+*Note: Permitted generative-AI use is specified per assessment in the **Generative AI (GenAI) in Student-Submitted Work** section. M0, M1, M2 and M4 each require a cover note containing a per-member contribution note, any external-feedback disclosure, and an AI Use Statement; it goes in the submitted document, and at M1 and M4 also as `COVER-NOTE.md` in the root of the repository zip.*
+
+## Grading
+
+The weekly labs (L1–L6) are graded **Complete / Incomplete**. A lab is Complete when your knitted document ran without errors, carries your group name and the first names of the members present, and was submitted before the lab session ended. There is no band scale and no rubric grid for labs: the point of a lab is that you leave the room able to run the workflow.
+
+The lab component is worth 10% of the final grade and is computed from your **best five of the six labs**. Each Complete among those best five is worth **2 percentage points**, and there is no partial credit within a lab. Six Completes and five Completes therefore both earn the full 10%; four Completes earn 8%; three earn 6%; two earn 4%; one earns 2%; and none earns 0%. Lab credit is individual rather than group-level: a lab is Complete for the members present in the room and named on the submission (see **Late Assignments**, below), so the best five are counted student by student.
+
+Dropping your weakest lab is built into the scale, not something you apply for. **One Incomplete costs you nothing**, whatever the reason, and needs no request, no documentation and no **Grade Re-weighting Plan**. The buffer covers exactly one lab and no more. If you miss a second or subsequent lab, the labs carry the *(Shiftable to M1)* tag in the assessment table above, so you may ask to move the weight of those further labs to M1 under the **Flexible Weighting Policy** below, on the single **Grade Re-weighting Plan** deadline of **Thu Nov 26, 4 PM** and subject to the approval that policy requires. Accommodations arranged through the Centre for Accessibility and academic concessions under the Academic Calendar are unaffected by the buffer and remain available to you.
+
+Milestones M1–M4 are graded on a coarse **3-band scale (Weak / Adequate / Exceptional)** designed to prioritize objective computational reproduction and live epidemiological reasoning over generic essay polish. Detailed grading rubric grids will be provided via Canvas for each of those milestones. **M0** is a pass/fail feasibility gate, marked against its own checklist rather than on this scale, and the P1–P5 increments are ungraded.
+
+* **Exceptional (90% to 100%):** Demonstrates deep insight, accurately traces discrepancies to their root cause, or engages masterfully with counter-arguments. 
+* **Adequate (75% to 89%):** Correctly executes the mechanics of the task and demonstrates sound epidemiological understanding.
+* **Weak (0% to 74%):** Generic or superficial; not specific enough to your data, your paper and your estimand; asserted without support from output you actually produced; technically incorrect; or disconnected from the estimand and the assumptions it rests on. Any one of these is enough on its own.
+
+## Grade Appeal Policy
+
+If you believe a grade is inaccurate or an administrative error occurred, you may submit a written appeal. Appeals must adhere to the following strict guidelines:
+
+- Eligibility: Each assignment may be appealed only once.
+- Format: Maximum 2 pages, Times New Roman 11 pt, standard margins, submitted as a .docx file.
+- Content: clearly state the claim, cite specific rubric items/page numbers, and provide evidence/calculations supporting the request.
+- Process: The instructor and TAs will review the claim together. Peer reviewers will not be consulted. The teaching team may assign a single joint grade to the group if necessary.
+- Deadline: Appeals must be submitted within one week of the grade release.
+
+## Formative Assessment & Feedback Policy
+
+The interim milestones (M1, M2) are designed to help you build your Final Project incrementally.
+
+**M1 (Week 8)**: Your M1 replication is presented in class on **Tuesday, October 27**, and the slide deck and code zip are due the same day at **4 PM**. Marking is completed that week, so you have your M1 feedback in hand before you build M2, which is presented the following Tuesday.
+
+**M2 (Week 9)** follows the same present-and-submit pattern: your critique slides are presented in the Tuesday (Week 9) class and **submitted by 4 PM that day**. There is no separate written round afterwards — the slides you present are the deliverable.
+
+### Peer Review
+Peer review (M2) is an integral part of this course. The ability to critically evaluate others’ work is an essential skill for PhD students. Reviews are evaluated based on clarity, constructiveness, and the ability to spot methodological gaps. The M2 critique is graded by the teaching team, not by your peers, and the critique you receive carries no score: it is feedback, and your answer to it is what M3 assesses.  
+
+
+### Late Assignments
+
+Group assignments (L1-L6 and the M1/M2 presentation decks) and the final letter + repository (M4) must be submitted via Canvas. M3 is assessed live and has no separate submission. Late milestone work is handled **per milestone**, because the five milestones differ in kind:
+
+* **M0** carries no percentage weight and is marked pass/fail, so lateness attracts no percentage penalty: a memo arriving after the deadline in the schedule table is still read and still marked. What the deadline fixes is the paper. After it there are no elective changes -- you may not decide to move to a different paper -- and if the memo shows that the paper you proposed is not feasible, the teaching team may require a replacement; the replacement we direct then becomes your locked paper. A late memo is still costly, because everything after M0 -- the optional P1-P5 increments, and then M1 -- assumes a settled paper, so tell the instructor as soon as you know your memo will be late.
+* **M1** and **M2** are presented live and submitted the same day at 4 PM, so missing the presentation and submitting the deck late are two different failures and either can happen without the other. *Not presenting* is an absence from a scheduled session, and is handled under the Flexible Weighting Policy below -- for M2, under that policy's M2 exception, because a missed critique leaves another group without feedback it is owed before M3. *Presenting on time but submitting the deck after 4 PM* is a submission problem: the deck is accepted up to 24 hours after the deadline with a deduction of 10% of the possible grade, and is not accepted after that, absent academic concession or an approved accommodation. The cost is not only yours -- a late M1 reaches its assigned reviewers late, and late M2 slides delay feedback the reviewed group needs before M3.
+* **M3** has no submission and therefore cannot be late. It can only be missed, which is an absence from a scheduled session and is handled under the Flexible Weighting Policy below.
+* **M4** is the one milestone with a sliding late penalty, and it is set out in the M4 late-penalty paragraph below.
+
+Nothing in this section limits academic concession or an approved accommodation.
+
+If you encounter technical issues during lab (for submitting L1-L6), notify the TA immediately; extensions may be considered on a case-by-case basis. Grades for lab exercises (L1-L6) are awarded to students present in the room for the Thursday lab. Grades for the presentation components (M1, M2, M3) are awarded to students who take part in the scheduled Tuesday session. If your connection fails during a presentation or defense, notify the instructor immediately; the missed portion is completed at an alternative time and is not treated as an absence. We recognize that graduate students may occasionally face unavoidable scheduling conflicts. The Flexible Weighting Policy exists to ensure you are not penalized for such absences.
+
+The final letter + repository (M4) submitted after the due date and time will be penalized 10% of the possible grade, with an additional 5% deduction for each calendar day it is late. Extensions may be granted in extenuating circumstances with the instructor’s approval and appropriate documentation (e.g., a medical certificate for the affected group member).
+
+### Flexible Weighting ("Safety Net") Policy
+
+We recognize that graduate students manage complex professional and personal schedules. To accommodate this, students may apply to transfer the weight of missed interim assignments to the Final Project (M4) or M1, as designated in the assessment table. To keep the course on a fixed timeline, the in-term option available from the instructor is reallocation of the weight of a missed component (as described below) rather than resubmissions, retakes, or make-up sessions. This is the instructor's in-term mechanism only. Accommodations arranged through the Centre for Accessibility (see *Academic Accommodation Letter*, below) and academic concessions that lie beyond the instructor's authority -- for example deferred standing or late withdrawal, which are granted by your graduate program or the Dean under the Academic Calendar's [academic concession](https://vancouver.calendar.ubc.ca/campus-wide-policies-and-regulations/academic-concession) regulations -- are unaffected by this policy and remain available to you.
+
+- **Mechanism**: If you are unable to contribute to a specific assignment, you may omit your name from the submission. You will not receive a zero; instead, the percentage weight of that assignment will be reallocated.
+- **Eligibility**: This applies to group assignments and presentations with a "(Shiftable)" tag. The M2 critique is excluded from routine weight-shifting, because a missed critique deprives another group of feedback they are entitled to before M3. Where academic concession or an approved accommodation applies to M2, the instructor will either assign an alternative review task or reallocate the M2 weight, at the instructor's discretion -- contact the instructor as soon as you know.
+- **Conditions**: Weight shifting requires instructor approval via a formal accommodation request or valid reason. **Transferred weight may be transferred again.** Weight moved from the labs to M1 may subsequently travel with M1 to M4; it does not become fixed to M1 on arrival. The ceiling therefore follows from M2 alone, which never moves: at most **85%** of the grade can rest on the final letter -- M4's own 30%, plus M1's 30%, M3's 15%, and the labs' 10% by way of M1. Pushing the full 85% onto M4 is allowed, but it is an extremely high-risk gamble.
+
+For group assignments, individuals who do not participate will not receive the group grade; instead, the assessment may be folded into their Final Paper grade. There is a single standard and a single deadline for this: submit a **Grade Re-weighting Plan** by **Thu Nov 26, 4 PM (Week 12)**, listing the assignment(s) affected and a brief reason, and obtain the instructor's approval. Non-participation will be determined based on self-identification, peer evaluations, and/or the discretion of the teaching team (instructor/TA). Where you become aware of the need only after that deadline, contact the instructor immediately; nothing in this policy limits your rights under the Academic Calendar's academic concession regulations.
+
+# University Policies
+
+UBC provides resources to support student learning and to maintain healthy lifestyles but recognizes that sometimes crises arise and so there are additional resources to access including those for survivors of sexual violence. UBC values respect for the person and ideas of all members of the academic community. Harassment and discrimination are not tolerated nor is suppression of academic freedom. UBC provides appropriate accommodation for students with disabilities and for religious and cultural observances. UBC values academic honesty and students are expected to acknowledge the ideas generated by others and to uphold the highest academic standards in all of their actions. Details of the policies and how to access support are available on the [UBC Senate](https://senate.ubc.ca/policies-resources-support-student-success) website.
+
+# Other Course Policies
+
+## Communication
+
+Email communication with the instructor should be reserved for administrative matters. Email responses can be expected within 48 hours on weekdays. Please include 'SPPH 604' in the subject line. It's strongly discouraged to email for assistance with the *content* of an assignment within 48 hours of its deadline; instead, seek help as early as possible. This does **not** apply to questions about academic integrity, attribution, collaboration boundaries, or what generative-AI use is permitted -- ask those at any time.
+
+## Academic Accommodation Letter
+
+If you have an Academic Accommodation Letter from UBC's [Centre for Accessibility](https://students.ubc.ca/about-student-services/centre-for-accessibility), please send it to the instructor within the first 2 weeks of the class start. If you are not yet registered with the Centre for Accessibility, you can begin that process at the same link. If there is a delay in obtaining your letter, please simply notify the instructor before the two-week mark so we can anticipate your needs.
+
+This course is committed to inclusive and respectful learning. Please speak with the instructor directly if you encounter barriers to participation or have suggestions for improving accessibility. The instructor welcomes constructive informal feedback on course accessibility, pace, or delivery style. If there are ways the instructor can make the course more inclusive or supportive of your learning, feel free to reach out.
+
+## Academic Integrity
+
+### Why this matters in this course
+
+SPPH 604 exists because published epidemiological findings are supposed to be independently reproducible — and often are not. For a whole term you will hold someone else's published work to that standard: rebuilding their cohort, re-running their analysis, and reporting honestly whether the numbers come out the same. That exercise only means something if your own work can survive the same scrutiny. An audit you fabricated, a replication you did not actually run, or a result you cannot account for is not a small procedural lapse in this course; it is the exact failure the course was designed to teach you to detect. Academic integrity here is therefore not separate from the methods content — it *is* the methods content.
+
+### What is expected of you
+
+* Every number, figure, and table you submit was produced by code in your repository, and that code runs start to finish on a fresh machine (see **Reproducibility**, above).
+* Everything in your submission that you did not write yourself — code, text, figures, an analytic idea — is attributed to its source, whether that source is a person, a published paper, a package, a textbook, or a generative AI tool.
+* Your name on a group submission is a claim that you contributed to it (see **Authorship and contribution**, below).
+* When you are unsure whether something is allowed, you ask **before** you submit. Asking is never penalized. See **Where to get help**, below.
+
+### Collaboration: what is and is not permitted
+
+This course is almost entirely group-based, your code lives in a shared GitHub repository, you review another group's unpublished work at M2, and you defend your own work individually at M3. Each of those creates a specific boundary. Anything not listed below, ask about.
+
+**Within your own group — unrestricted.** Write code together, edit each other's text, pair-program, divide and re-divide the work however you like. Group members are co-authors of M1, M2 and M4.
+
+**Between groups — ideas yes, content no.** You may discuss methods, argue about a DAG at the whiteboard, point another group toward a package or a vignette, and tell them how you solved a problem. You may **not** send, receive, copy, or paste another group's code, slides, text, output, or repository contents, and you may not submit work another group produced. If a conversation with another group materially shaped your analytic decision, say so in your cover note. That is a strength, not a confession.
+
+**The paper you are replicating — reuse it, but cite it.** Many open-data papers post replication code on GitHub, OSF, or as supplementary material. **You may read, run, and adapt it** — locating and understanding the authors' code is legitimate replication work, and pretending you found the cohort definition yourself when you lifted it from their script is not. The condition is attribution: cite the source in your repository `README` and identify, in your cover note, which scripts or functions are derived from the original authors' code and what you changed. Submitting the authors' pipeline unchanged as your own replication, without saying so, is misconduct.
+
+**Course, package, and public code — reuse it, and cite it.** Code from *Advanced Epidemiological Methods*, *Scientific Writing for Health Research*, the `svyTable1` package and its vignettes, CRAN documentation, Stack Overflow, or any public repository may be reused freely. Attribute it with a URL in a code comment or in your `README`. Routine idiom (a `ggplot` call, a `dplyr` pipeline) needs no citation; a borrowed function, algorithm, or non-obvious block does.
+
+**Prior cohorts — not permitted.** Using a previous year's SPPH 604 repository, slide deck, lab solution, or reanalysis letter as a source for your own work is an unauthorized aid, whether or not it is publicly posted. What you may republish is a separate question, settled in **Copyright**: the handouts and other materials in the public course repository are CC BY 4.0 and you may repost them with attribution, while Canvas-only material, the exercise datasets, session recordings and other students' work are not yours to publish.
+
+**Repository visibility.** Keep your project repository **private for the duration of the term**. Once final grades are posted you are welcome — and encouraged — to make it public; ask if you want to release it earlier, for example alongside a preprint.
+
+**People outside your group.** Governed by the External Feedback Policy below.
+
+**Generative AI.** Governed by *Generative AI (GenAI) in Student-Submitted Work*, below.
+
+### Peer review (M2): confidentiality and non-appropriation
+
+At M2 you receive another group's unpublished M1 replication and its code repository, several weeks before your own M3 and M4 are due. That is a deliberate design choice and it carries three obligations:
+
+* **No:** another group's unpublished slides, code, output or review materials, in whole or in part, pasted, uploaded, screenshotted or retyped (see *Peer review (M2): confidentiality and non-appropriation*, above, and the **M2** row of the table); and any personal, confidential, or restricted data, should you ever encounter it in adjacent work.
+* **Not yours to use.** You may not copy or adapt a reviewed group's code, text, figures, output, or distinctive implementation into your own M2, M3, or M4 — crediting them does not make it permitted. A general methodological insight is different: if reviewing their work shows you something you should reconsider in your own analysis, you may act on it, provided you justify and implement the change yourself, on your own paper, and disclose the influence in your cover note.
+* **Yours to write.** Your review group writes it together — M2 is a group submission, and dividing the sections among you is expected. What you may not do is reach outside that group: do not delegate any part of the review to someone who is not in it, and do not agree with another reviewing group on what to find or how hard to press. Reviewers award no marks — the teaching team grades your critique, and the critique you receive carries no score — so there is nothing to trade. Write the review you actually believe.
+
+### Authorship and contribution
+
+Attaching your name to a group submission is a claim that you contributed to it, and that claim is consequential: participation determines whether you receive the group grade (see **Flexible Weighting**). Leaving your name on work you did not contribute to misrepresents your contribution and is an integrity matter, not merely a workload one — the Flexible Weighting Policy exists precisely so that you never have to make that choice.
+
+Accordingly, each group submission (M0, M1, M2, M4) includes a **one-line contribution note per member** in the cover note — for example, *"AB: cohort reconstruction, survey weighting code. CD: DAG, confounder set, Table 1. EF: slides, missing-data sensitivity analysis."* This takes two minutes, gives the M3 individual defense a documented basis, and is exactly the contributorship statement you will be asked for if you act on the M4 journal-submission pledge. Peer evaluations of participation are also to be given honestly; they inform, but do not solely determine, participation decisions.
+
+### What counts as misconduct in this course
+
+Most of you have been trained on essay-plagiarism norms, which map poorly onto a computational replication course. Concretely, in SPPH 604 each of the following is academic misconduct:
+
+* Reporting a replication result you did not actually produce, or submitting a repository that does not generate the numbers in your slides or letter.
+* Using the original authors' code, a public repository, a prior cohort's work, or course/OER code without citing it, and presenting the output as your own replication.
+* Copying another group's code, text, slides, or output — or giving them yours to copy.
+* Copying or adapting a reviewed group's code, text, figures, output, or distinctive implementation into your own project; using what reviewing their work showed you without disclosing it; or disclosing their material outside the review.
+* Leaving your name on a submission you did not contribute to; or having someone outside your group write, edit, or run any part of your submission (see External Feedback Policy).
+* Undisclosed generative-AI use, or AI use outside what a given assessment permits (see the GenAI section below).
+* During the live M3 oral defense: reading from a prepared answer in individual Q&A, taking help from anyone in any channel, or using any AI assistance or live prompting. Your slides, your own speaker notes and your own code are yours to use throughout — see the GenAI section. Nothing in this bullet applies to a support authorized by your Academic Accommodation Letter — a note-taker, live captioning, a scribe, or permitted assistive software — which is arranged with the instructor in advance (see *Academic Accommodation Letter*, above).
+
+By contrast, all of the following are **fine**: running the original authors' code and saying so; copying a `svyTable1` example from the documentation with a comment naming the source; asking another group how they handled a `survey` package error; having an AI write a data-wrangling function that you then audit, test, and disclose; and asking the instructor whether any of the above is allowed.
+
+### If something goes wrong
+
+Suspected academic misconduct is handled under the UBC Academic Calendar's provisions on [Academic Misconduct](https://vancouver.calendar.ubc.ca/campus-wide-policies-and-regulations/student-conduct-and-discipline/discipline-academic-misconduct). That process normally begins with an opportunity to discuss the matter with the instructor, in which any extenuating circumstances can be raised. Where the instructor concludes that misconduct has occurred, the instructor is required to report it to the Dean in accordance with the applicable Faculty procedures; for graduate students this is normally the Dean of the Faculty of Graduate and Postdoctoral Studies or their designate. Penalties are determined through that University process, not by the teaching team. Students are expected to review the Student Discipline section of the [UBC Calendar](https://vancouver.calendar.ubc.ca/campus-wide-policies-and-regulations/student-conduct-and-discipline/discipline-academic-misconduct) and to know what constitutes plagiarism and academic misconduct.
+
+### Where to get help
+
+* **Ask us — at any time.** The 48-hour guidance in the *Communication* section applies to requests for help *with the content of an assignment*. It does **not** apply to questions about academic integrity, attribution, collaboration boundaries, or what AI use is permitted. Those questions are always welcome, at any hour, by email, in lab, or in office hours. It is always cheaper to ask than to guess.
+* **UBC Academic Integrity Hub** — [https://academicintegrity.ubc.ca/](https://academicintegrity.ubc.ca/), including its student guidance on what integrity means and how to avoid unintentional misconduct.
+* **UBC Learning Commons** — [https://learningcommons.ubc.ca/](https://learningcommons.ubc.ca/) for guides on citation, paraphrasing, and avoiding plagiarism.
+* **Academic support and wellbeing resources** — see *University Policies*, above.
+
+### External Feedback Policy
+
+You may seek feedback from individuals outside your group (e.g., a supervisor, postdoctoral researcher, or subject-area expert), provided strict adherence to the following:
+
+- Approval: You must email the instructor for approval before sharing materials, listing the contributor's name and affiliation.
+- Scope: External contributors may provide comments and suggestions only. They must not edit text, write new material, alter code, run analyses, or contribute figures/tables.
+- Conflict of Interest: External contributors cannot be members of your assigned peer-review groups.
+- Transparency: You must note that you received external feedback in your submission cover note.
+
+## Generative AI (GenAI) in Student-Submitted Work
+
+Generative AI tools (e.g., ChatGPT, Claude, GitHub Copilot) are **permitted and encouraged** in SPPH 604 as "coding co-pilots" for data wrangling and debugging. This course adopts a "Zero to AI Co-Pilot" pedagogy: learning to direct, audit, and take responsibility for AI-assisted analysis is itself a skill this course teaches. No tool is required, none costs you anything to skip, and choosing not to use AI will never disadvantage you.
+
+What the course does require is that you remain the author of your reasoning and the auditor of your output. The rules below exist to make that workable, not to discourage you.
+
+### The accountability-first framework
+
+- Auditing Requirement: Students are responsible for rigorously auditing all AI-generated code for "hallucinations," security vulnerabilities, and systemic health biases.
+- The "No-Excuse" Clause: Because this is a PhD-level capstone, "The AI made a mistake" is not a valid justification for errors in your final analysis or manuscript.
+- Attribution: All AI use must be disclosed in the cover note of the submission it went into, specifically citing which sections of code were AI-generated versus human-audited. Preparing for M3 is the exception — it has no submission and nothing to disclose it in — but AI that touched the code or slides you present at M3 is disclosed with M1 or M4.
+- Ultimate Verification: The live oral defense (M3) and the fully reproducible code archive (M4) serve as our primary AI-accountability mechanisms. An AI can write code, but you must be able to defend the epidemiological reasoning behind it live.
+
+### Permissions by assessment
+
+Three levels are used throughout:
+
+* \textcolor{blue}{\textbf{P}} — **Permitted**, no disclosure required.
+* \textcolor{blue}{\textbf{PD}} — **Permitted with disclosure**: allowed, and you record it in the AI Use Statement (format below).
+* \textcolor{red}{\textbf{N}} — **Not permitted**.
+
+| Assessment | Level | What this means here |
+|:----------|:-----|:---------------------------------|
+| **M0** feasibility gate | **PD** | Use AI to navigate codebooks, survey documentation, and data dictionaries. The six eligibility criteria must be verified by you against the actual paper and the actual data files, with real variable and file names — an AI's guess about what NHANES contains is not a feasibility check. |
+| **L1--L6** lab exercises | **PD** | Full co-pilot use for writing and debugging R. Flag AI-generated chunks with a one-line comment in the script itself (`# AI-assisted: <tool>`); no separate statement is needed for labs. Labs are in-person and graded on presence and work done in the room, so the point is that *you* leave the lab able to do the thing. |
+| **P1--P5** project increments | **PD** | Same as labs. Disclosure is rolled up into the M1 AI Use Statement, since P1--P5 are compiled into M1. |
+| **M1** replication + diagnostics | **PD** | Full co-pilot use for code. The *interpretation* of any discrepancy between your numbers and the published numbers must be your own — tracing a discrepancy to its root cause is the graded skill. |
+| **M2** critique of another group's M1 | **PD**† | Use AI to tighten language you wrote, and to fix problems on **your own machine** while running their code — a package that will not install, an R version, a path their script assumes, what a generic R error means. The rule for what you type into the tool is: **paste what is yours or public; describe what is theirs.** Yours or public: your own `sessionInfo()`, your own installation log, package documentation, and an error message you have stripped of their code, file names, variable names and numbers. Theirs: every line of their code, and their slides, output, logs, `README`, file listing and results — none of it goes into any AI tool, in whole or in part, pasted, uploaded, screenshotted or retyped. If you cannot ask the question without quoting their work, ask the teaching team instead; that is what we are for. You may **not** have AI generate the substantive critique — another group is graded on the feedback they receive, so machine-generated criticism harms real people. Asking a model "what is wrong with this kind of study?" and presenting the generic answer is not a critique of the work in front of you, and grades accordingly. Disclose any AI use in the cover note. |
+| **M3** live oral defense | \textcolor{red}{\textbf{N}} live; \textcolor{blue}{\textbf{P}} prep | Prepare however you like, including rehearsing questions with an AI. Preparation is **not disclosed**: M3 has no submission and no cover note to disclose it in. AI that touched the code or slides you present is disclosed with M1 or M4, where that work is submitted. **During your group's presentation**, use everything you prepared — your slides, your own speaker notes, your own code and output. **During individual Q\&A, the answer must be yours, spoken.** Look at your own slides and your own code and output as much as you need; do not read from a prepared answer, do not take help from anyone in any channel, and do not consult anything produced during the session — no AI, no live prompting, no messages, no transcription or notetaking tool. **Approved accommodations are the exception.** Supports authorized by your Academic Accommodation Letter — a note-taker, live captioning, a scribe, or permitted assistive software — apply at M3 as they do everywhere else in the course; you arrange them with the instructor in advance (see *Academic Accommodation Letter*, above) and nothing has to be raised or explained during the defense itself. M3 is the point at which the course verifies that the reasoning is yours. |
+| **M4** reanalysis letter + repo | **PD** | Full co-pilot use for code and for drafting, editing, and polishing prose. The AI Use Statement is a required component of the M4 submission. Note that the Weak grade band captures work that is generic, insufficiently specific to your data and your paper, unsupported by the output you produced, technically incorrect, or disconnected from the estimand and its assumptions — unedited AI prose tends to land there on its own merits, quite apart from disclosure. |
+
+† *Two hard limits at M2: you may not have AI generate the substantive critique, and no part of the reviewed group's work goes into any AI tool — paste what is yours or public, describe what is theirs.*
+
+### What you may and may not put *into* a GenAI tool
+
+* **Yes:** your own code, your own text, your own error messages, and the public de-identified study data your project uses (NHANES, NHIS, or comparable fully public sources). An error message that quotes another group's code is theirs, not yours — strip it or describe the problem instead. All project data in this course is public and de-identified by design, so there is no personal-information risk in the analysis itself.
+* **No:** another group's unpublished slides, code, output or review materials, in whole or in part, pasted, uploaded, screenshotted or retyped (see *Peer review: confidentiality and non-appropriation*, above, and the **M2** row of the table); and any personal, confidential, or restricted data, should you ever encounter it in adjacent work.
+* **Course materials** (lecture slides, lab instructions, provided datasets): pasting these into an AI tool for your own learning is permitted and is not treated as redistribution under the *Copyright* section. Posting them publicly is governed by **Copyright**: the materials in the public course repository are CC BY 4.0 and may be posted with attribution; Canvas-only material, the exercise datasets and session recordings may not.
+* **The paper you are replicating:** uploading a published article to an AI tool for your own reading is permitted, subject to the article's own licence. Prefer open-access papers, which your M0 eligibility criteria already require.
+
+### The cover note (and your AI Use Statement)
+
+Every submission that is not an in-lab exercise — **M0, M1, M2, and M4** — is accompanied by a short **cover note**. This is the same cover note referred to in the External Feedback Policy. It carries three things: your per-member contribution note, any external feedback received, and your AI Use Statement. M3 has no submission and no cover note.
+
+**Where it goes.** The cover note is always part of the document you submit. Where you also submit a repository, the same text is a plain-text or markdown file named `COVER-NOTE.md` in its root.
+
+| Milestone | In the submitted document | In the repository |
+|:----------|:--------------------------|:------------------|
+| **M0** | a *Cover note* section at the end of the memo | — no repository is submitted |
+| **M1** | the final slide of the deck | `COVER-NOTE.md` in the root of the zip |
+| **M2** | the final slide of the deck | — M2 is slides only |
+| **M3** | — nothing is submitted | — |
+| **M4** | the final page of the letter | `COVER-NOTE.md` in the root of the zip |
+
+**The AI Use Statement.** One part of the cover note, and it carries four fields, a few lines each:
+
+1. **Tool and version** — e.g. "ChatGPT (GPT-5), GitHub Copilot in RStudio."
+2. **Where used** — which tasks, and which files, scripts, or sections. Be specific enough that a reader could go look: "`02-cohort.R`, lines 40--95 (survey design object); prose editing of Discussion paragraphs 2--3."
+3. **What you did with the output** — how you audited it, what you tested, what you had to fix. This is the field the teaching team actually reads.
+4. **Representative prompts** *(optional but encouraged)* — two or three prompts that shaped a substantive decision.
+
+If you used no AI at all for a submission, write one line saying so — that is a complete and perfectly good statement. A worked example will be posted on Canvas alongside the M1 rubric.
+
+### Consequences
+
+Disclosed AI use is never penalized in this course. **Undisclosed AI use, or AI use outside what the table above permits for a given assessment, is academic misconduct** and is handled under the process described in the *Academic Integrity* section and in the UBC Academic Calendar's [Academic Misconduct](https://vancouver.calendar.ubc.ca/campus-wide-policies-and-regulations/student-conduct-and-discipline/discipline-academic-misconduct) provisions. Separately, and independently of any integrity finding, unaudited AI output tends to grade in the Weak band on its own merits.
+
+If you are unsure whether a particular use is permitted, ask — including the night before a deadline. See *Where to get help* in the Academic Integrity section.
+
+## Attendance
+
+Tue 9:30-12 (by Zoom; 9-12 on the presentation Tuesdays in Weeks 8, 9 and 11) and Thu 10-12 (in person, SPPH 143) should be protected time for SPPH 604, as per your registration calendar. Email the instructor in case you can't make it to the class or lab session partially or fully for the record. See `Late Assignments` section for further details.
+
+## Session Recordings
+
+Tuesday sessions are held by Zoom and can be recorded, so that students who miss a session can catch up (need early notice if you miss so that instructor is aware when to record).
+
+* **What is recorded, and who sees it.** Recordings are not posted to Canvas by default. When a recording is made, it is shared on request with students registered in this section this term, and is stored on UBC-supported services (Zoom cloud / Kaltura) reached through Canvas. A recording in which no student appears, is audible, or is otherwise identifiable — an instructor-only walkthrough or demo, for example — may be reused for teaching, including publicly. Any recording that includes student participation stays within this section this term: it is not posted publicly or shared outside the course without the written permission of the students concerned.
+* **Assessed sessions.** During your group's M1 or M2 presentation, and throughout your individual M3 defense, your camera must be on unless you have arranged an alternative with the instructor beforehand — seeing you is necessary both to evaluate the presentation and to confirm identity. If the camera requirement is a barrier for you — bandwidth, a shared or non-private space, privacy, or an accommodation — contact the instructor beforehand and an alternative arrangement will be made.
+* **Recording by students.** Students may not record, screen-capture, or transcribe class or lab sessions, or point an AI notetaker or automated transcription tool at them, without the instructor's written permission. Students whose Academic Accommodation Letter includes recording are exempt, for their own study use.
+* No automated proctoring or invigilation software is used in this course.
+
+## Learning Analytics
+
+Learning analytics includes the collection and analysis of data about learners to improve teaching and learning. This course will be using Canvas that capture data about student’s activity and provide information that can be used to improve the quality of teaching and learning. In this course, the instructor plans to use analytics data to:
+
+* View overall class progress
+* Track students’ progress in order to provide them with personalized feedback
+* Review statistics on course content being accessed to support improvements in the course
+* Assess the student’s participation in the course.
+
+The instructor will invite anonymous mid-course feedback to adapt the course in real time and ensure it meets students’ learning needs and expectations.
+
+## Learning Resources
+
+* **Course materials live in the public course repository** — this syllabus, the lecture plans and slides, the lab handouts (L1-L6), the practice handouts (P1-P5), the worked model submissions, and the reproduction pipeline code. The repository is the authoritative source for all of these, and the link to it is posted on Canvas.
+* **Canvas carries submissions and grading**, together with the material this syllabus points there for: the rubric grids for M1-M4, the worked AI Use Statement example, Zoom links, the week-by-week chapter signposts, and the weekly Modules. Each week's Module is posted by 9 AM Monday and signposts that week's work, including which lab handout is in play; the handouts themselves sit in the repository and are available ahead of time, so you can read the lab before the lab.
+* The two required textbooks are open access and free to read online; they are listed under *Learning Materials*, above.
+* Access to a computer with R software (R, RStudio, R markdown, free of charge) is necessary for all course work. Bring your own laptop with R installed to the Thursday lab in SPPH 143. Course instruction will be provided strictly in R.
+* Tuesday sessions run on Zoom. You will need a device that can run Zoom with a working microphone and camera, and a connection stable enough to present from. If any of that is a barrier, contact the instructor: UBC Library lends laptops, and the [UBC Vancouver Technology Bursary](https://students.ubc.ca/finances/awards-scholarships-bursaries/ubc-vancouver-technology-bursary/) may have additional support.
+* SPPH supports for graduate students — advising, program forms and checklists, funding and awards, and the SPPH Graduate Student site on Canvas — are collected on the School's [Current Learners](https://spph.ubc.ca/current-learners/) page.
+* Teams is used to circulate each M1 deck and code zip to its assigned M2 reviewers. Graded work is submitted through Canvas.
+* You will keep your code in a GitHub repository, but for **M1 and M4** you **submit a downloaded zip archive of that repository** (via Canvas) — we do not require repository access.
+
+
+
+## Copyright
+
+All materials of this course are the intellectual property of the Course Instructor or licensed to be used in this course by the copyright owner. Redistribution of these materials by any means without the permission of the copyright holder(s) constitutes a breach of copyright and may lead to academic discipline. **Where a file came from decides whether you may republish it.** The instructor-authored materials published in the public course repository — this syllabus, the lecture plans and slides, the lab and practice handouts, the model submissions, and the reproduction pipeline code — are released under CC BY 4.0, as stated in that repository's `LICENSE.md`. You may share and adapt them, publicly and including commercially, provided you give credit, link to the licence, and indicate what you changed. Five things sit outside that grant and must not be redistributed: material distributed only through Canvas and not published in the repository — the rubric grids, the worked AI-use example, Zoom links, and anything posted in the weekly Modules; material licensed to the course by a third party; the exercise datasets, which belong to their original sources and are linked rather than copied; session recordings; and other students' work. The test is simple: **if it is not in the public repository, do not post it.** Session recording is covered in the *Session Recordings* section above. Posted recordings are course materials for the purposes of this section: they are for your own academic use in this course this term and must not be redistributed.
+
+
+---
+
+**Syllabus updated: `r format(syllabus_date, "%B %e, %Y")`.**

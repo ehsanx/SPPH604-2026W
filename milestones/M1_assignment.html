@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>M1 assignment</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">M1 assignment</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#m1-replication-and-interrogation" id="toc-m1-replication-and-interrogation">M1 — Replication and
+Interrogation</a>
+<ul>
+<li><a href="#what-m1-is" id="toc-what-m1-is">What M1 is</a></li>
+<li><a href="#what-you-submit" id="toc-what-you-submit">What you
+submit</a></li>
+<li><a href="#the-closing-judgment" id="toc-the-closing-judgment">The
+closing judgment</a></li>
+<li><a href="#reproducibility" id="toc-reproducibility">Reproducibility</a></li>
+<li><a href="#how-it-is-graded" id="toc-how-it-is-graded">How it is
+graded</a></li>
+<li><a href="#what-happens-after-you-submit" id="toc-what-happens-after-you-submit">What happens after you
+submit</a></li>
+<li><a href="#weight-deadline-and-policy" id="toc-weight-deadline-and-policy">Weight, deadline and policy</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="m1-replication-and-interrogation">M1 — Replication and
+Interrogation</h1>
+<p><strong>Group · Presented in class; deck and code zip due the same
+day · Weight and deadline: see the syllabus</strong></p>
+<hr />
+<h2 id="what-m1-is">What M1 is</h2>
+<p>Your five weekly project increments, compiled into <strong>one
+replication-and-interrogation deck</strong>, closing with your group’s
+judgment of the <strong>single threat that most endangers the paper’s
+conclusion</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Increment</th>
+<th>Feeds M1 as</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>Analytic cohort and eligibility</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Confounding, adjustment set, Table 1</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>Effect modification</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>Design-aware estimate</td>
+</tr>
+<tr>
+<td>P5</td>
+<td>Missing-data sensitivity</td>
+</tr>
+</tbody>
+</table>
+<p>P1–P5 are ungraded on their own. M1 is where they are assessed.</p>
+<h2 id="what-you-submit">What you submit</h2>
+<p>Two files, by the deadline in the syllabus:</p>
+<ol type="1">
+<li><strong>A slide deck (PDF).</strong> M1 is submitted strictly as a
+presentation deck. <em>Traditional written reports are not accepted for
+this milestone.</em></li>
+<li><strong>A zip archive of your reproducible repository, downloaded
+from GitHub.</strong> You are <strong>not</strong> required to grant us
+access to the repository itself.</li>
+</ol>
+<p>Your deck must include a <strong>cover note</strong> on the final
+slide, and the same text as <code>COVER-NOTE.md</code> in the root of
+your repository zip. It contains:</p>
+<ul>
+<li>an <strong>AI Use Statement</strong> (tool and version, where used,
+what you did with the output, and optionally representative
+prompts);</li>
+<li>a <strong>one-line contribution note per member</strong> —
+e.g. <em>“AB: cohort reconstruction, survey weighting code. CD: DAG,
+confounder set, Table 1. EF: slides, missing-data
+sensitivity.”</em>;</li>
+<li>any <strong>external-feedback disclosure</strong> — if a
+conversation with another group materially shaped an analytic decision,
+say so. That is a strength, not a confession.</li>
+</ul>
+<h2 id="the-closing-judgment">The closing judgment</h2>
+<p>This is the part that distinguishes M1 from a summary of your
+increments.</p>
+<p>Do not simply list the threats you found. <strong>Rank one above the
+others</strong>, and state the principle by which you ranked it —
+applied to the rival threats <strong>by name</strong>. A deck that lists
+threats without ranking them, or names a dominant threat without saying
+why it outranks the others, has not done this part of the task.</p>
+<p>“The rest” means the threats <strong>you</strong> raised. You are not
+penalised for a threat you never mentioned under this heading — that
+shows up elsewhere.</p>
+<h2 id="reproducibility">Reproducibility</h2>
+<p>Every number, figure and table in your deck must have been produced
+by code in your repository, and that code must run start to finish on a
+fresh machine.</p>
+<p>If you adapted the original authors’ published code — which is
+legitimate replication work — <strong>cite it in your repository
+README</strong>, and identify in your cover note which scripts or
+functions are derived from it and what you changed.</p>
+<h2 id="how-it-is-graded">How it is graded</h2>
+<p>M1 is graded on the coarse three-band scale used for M1–M4:</p>
+<ul>
+<li><strong>Exceptional</strong> — deep insight, discrepancies traced to
+their root cause, or masterful engagement with counter-arguments.</li>
+<li><strong>Adequate</strong> — the mechanics executed correctly, with
+sound epidemiological understanding.</li>
+<li><strong>Weak</strong> — generic, superficial, or incorrect.</li>
+</ul>
+<p>Hitting the paper’s exact N is <strong>not</strong> the goal. A
+traced and explained discrepancy scores higher than an unexplained exact
+match.</p>
+<h2 id="what-happens-after-you-submit">What happens after you
+submit</h2>
+<p>Your deck and code zip are <strong>released to your assigned
+reviewers</strong>. Reviewer pairings are announced when M1 is
+submitted, and run in a cycle so that no group reviews the group
+reviewing it.</p>
+<p>At <strong>M2</strong>, in the following class, <strong>another group
+presents its critique of your M1 — not you</strong>. You present your
+critique of the M1 <em>you</em> were assigned. Every group therefore
+does both: reviewed once, reviewer once.</p>
+<h2 id="weight-deadline-and-policy">Weight, deadline and policy</h2>
+<p>See the syllabus. It governs what this milestone is worth, when it is
+due, whether the weight can be shifted, and any late penalty. This page
+describes the task only.</p>
+</body>
+</html>

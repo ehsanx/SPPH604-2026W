@@ -1,0 +1,180 @@
+---
+title: "M3 — Defense evidence pack: reproducible numbers behind the Q&A"
+subtitle: "SPPH 604 · demonstration paper (Kueh et al., BMJ Open 2026;16:e113719)"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    code-tools: true
+    df-print: kable
+execute:
+  warning: false
+  message: false
+---
+
+> The individual defense is not a slide-reading exercise — every number you may be
+> asked to justify is re-derived here so you can answer from evidence, live.
+
+```{r setup}
+source("../_shared/paths.R")   # find_repro(), emit_results(), ci(), fmtn(), endash()
+repro <- find_repro()
+suppressPackageStartupMessages({library(dplyr); library(survival); library(survey); library(mice)})
+options(survey.lonely.psu = "adjust")
+d <- readRDS(file.path(repro, "data/derived/masld_analytic.rds"))
+hr <- function(m,g){s<-summary(m); sprintf("%.2f (%.2f-%.2f)",
+        s$conf.int[g,1], s$conf.int[g,"lower .95"], s$conf.int[g,"upper .95"])}
+```
+
+## Q (P1): the cohort/N discrepancy
+
+```{r q1}
+cat("Our N =", nrow(d), "vs paper 6300; complete-case =",
+    nrow(filter(d,!is.na(cancer),!is.na(stroke),!is.na(hf),!is.na(LBXSCR))),
+    "; missing creatinine =", sum(is.na(d$LBXSCR)), "\n")
+```
+
+## Q (P3): is the sex "interaction" real, or baseline risk?
+
+```{r q3}
+cov <- "age + dyslip + htn + t2dm + ckd + mi + cancer + on_htn_med + on_dm_med + on_lipid_med"
+adj_p <- anova(coxph(as.formula(paste("Surv(time_yr,dead)~group+female+",cov)),d),
+               coxph(as.formula(paste("Surv(time_yr,dead)~group*female+",cov)),d))[2,"Pr(>|Chi|)"]
+cat("Adjusted group x sex interaction p =", round(adj_p,3),
+    "-> no evidence of MULTIPLICATIVE interaction on this multi-df test.\n")
+cat("   Not evidence of homogeneity: the test is underpowered, and it is not the locked\n")
+cat("   1-df IV-vs-III contrast (see ../P3_effect_modification/P3_code.qmd).",
+    "Additive scale untested.\n")
+```
+
+## Q (P4): which weight, and what does it do?
+
+```{r q4}
+# Week 6 cardinal rule: build the design on the FULL fasting frame, then subset the design
+# object. Filtering rows first and re-declaring svydesign() on the survivors throws away
+# the strata/PSU information the non-selected units contribute to the variance.
+fr <- readRDS(file.path(repro,"data/derived/merged_all.rds")) %>%
+  filter(!is.na(WTSAF2YR) & WTSAF2YR>0) %>% mutate(wt=WTSAF2YR/6)
+fr$group       <- factor(fr$group, levels=c("I","II","III","IV"))
+fr$in_analysis <- fr$SEQN %in% d$SEQN
+des_full <- svydesign(ids=~SDMVPSU, strata=~SDMVSTRA, weights=~wt, data=fr, nest=TRUE)
+des <- subset(des_full, in_analysis)      # domain analysis, not a re-declared design
+dd  <- fr[fr$in_analysis, ]
+cat("Group IV: unweighted", hr(coxph(Surv(time_yr,dead)~group,dd),"groupIV"),
+    "-> fasting-weighted", hr(svycoxph(Surv(time_yr,dead)~group,design=des),"groupIV"), "\n")
+```
+
+## Q (self-initiated): could incomplete cancer status explain the locked result?
+
+> **No reviewer asked for this.** We ran it because cancer status is the only Model-1
+> covariate with any missingness, and a result that rests on dropping people is worth
+> testing before we defend it. The adjustment set is the paper's Model 1 exactly — we did
+> **not** widen it to manufacture a comparison. The contrast is our locked one, IV vs III,
+> design-aware, so the sensitivity analysis interrogates the estimate we actually defend.
+
+```{r q5}
+m <- readRDS(file.path(repro, "data/derived/merged_all.rds"))
+m$in_analysis <- m$SEQN %in% d$SEQN
+m$group <- factor(m$group, levels = c("I", "II", "III", "IV"))
+fast <- m %>% filter(!is.na(WTSAF2YR), WTSAF2YR > 0) %>% mutate(wt = WTSAF2YR / 6)
+
+COV <- c("age","female","dyslip","htn","t2dm","ckd","mi","cancer",
+         "on_htn_med","on_dm_med","on_lipid_med")            # the paper's Model 1. Nothing else.
+f1  <- as.formula(paste("Surv(time_yr,dead) ~ group +", paste(COV, collapse = " + ")))
+
+# locked contrast: Group III is the reference, so groupIV is IV-vs-III
+rl3  <- function(x) { x$group <- relevel(x$group, "III"); x }
+desL <- function(fk) subset(svydesign(ids = ~SDMVPSU, strata = ~SDMVSTRA, weights = ~wt,
+                                      data = rl3(fk), nest = TRUE), in_analysis)
+gv   <- function(f) { s <- summary(f); c(s$conf.int["groupIV", 1],
+                                         s$conf.int["groupIV", 3], s$conf.int["groupIV", 4]) }
+
+fitL <- function(val, lbl) {
+  fk <- fast
+  if (!is.na(val)) fk$cancer[fk$in_analysis & is.na(fk$cancer)] <- val
+  g <- gv(svycoxph(f1, design = desL(fk)))
+  data.frame(scenario = lbl, HR = round(g[1], 2), lo = round(g[2], 2), hi = round(g[3], 2))
+}
+rbind(fitL(NA, "complete case"),
+      fitL(0,  "all missing assigned NO cancer"),
+      fitL(1,  "all missing assigned CANCER"))
+```
+
+```{r q5mi}
+# MI with the outcome in the imputation model (Week 7 / White & Royston): keep the event
+# indicator and a Nelson-Aalen cumulative hazard, exclude only raw follow-up time.
+dom  <- fast %>% filter(in_analysis)
+idat <- dom[, c(COV, "group", "dead", "time_yr", "wt", "SDMVSTRA")]
+idat$na_cumhaz <- mice::nelsonaalen(idat, time_yr, dead)
+ini <- mice(idat, maxit = 0, printFlag = FALSE); pr <- ini$predictorMatrix
+pr[, "time_yr"] <- 0
+pr[c("time_yr","dead","na_cumhaz","wt","SDMVSTRA"), ] <- 0
+imp <- mice(idat, m = 10, predictorMatrix = pr, printFlag = FALSE, seed = 604)
+
+fits <- lapply(1:10, function(i) {
+  fk <- fast; fk[fk$in_analysis, COV] <- complete(imp, i)[, COV]
+  svycoxph(f1, design = desL(fk))
+})
+po <- summary(mitools::MIcombine(fits))["groupIV", ]
+cat(sprintf("MI (m=10), locked contrast: IV vs III = %.2f (%.2f-%.2f)\n",
+            exp(po[["results"]]), exp(po[["(lower"]]), exp(po[["upper)"]])))
+cat("Complete case, both extreme assignments and MI agree to the displayed precision.\n")
+cat("That is the finding. It is evidence that incomplete cancer status does not explain\n")
+cat("the locked estimate -- it says nothing about who the estimate generalises to.\n")
+```
+
+## Q (reviewer-prompted): what exactly is the selection, and what does it bound?
+
+> Our M2 reviewers named selection into the cohort as the dominant threat. Their slide
+> treats it as one mechanism. It is **two**, and they bound different things, so we
+> separate them before answering.
+
+```{r q6}
+adults <- m %>% filter(age >= 18)
+fast_a <- adults %>% filter(!is.na(WTSAF2YR), WTSAF2YR > 0)
+fli_ok <- fast_a %>% filter(!is.na(fli))
+cat(sprintf("adults 18+                                  %6d\n", nrow(adults)))
+cat(sprintf("  (1) sampled into the fasting subsample    %6d\n", nrow(fast_a)))
+cat(sprintf("  (2) of those, FLI computable              %6d\n", nrow(fli_ok)))
+cat(sprintf("      lost at step (2)                      %6d\n", nrow(fast_a) - nrow(fli_ok)))
+```
+
+- **(1) is selection by design.** NHANES chose who was asked to fast. It is known,
+  planned, and it is what `WTSAF2YR` exists to account for — which is why we weight by it
+  and subset the design rather than the rows. Under the survey design this step is
+  *handled*, not merely acknowledged.
+- **(2) is item-level availability.** Among people who were sampled to fast, FLI still
+  needs triglycerides, GGT, BMI and waist all present. Nothing in the design weights
+  accounts for that, and whether it is ignorable depends on why those measurements are
+  absent — which we cannot verify from the public files.
+
+**What each one bounds.** (1) bounds the *target population*: our estimate speaks to
+fasting-sampled US adults, and the weights carry it there. (2) is a potential selection
+bias *within* that population, and it is the one that could distort the contrast itself.
+
+**Our answer to the reviewers.** We accept the distinction matters and have adopted it.
+We do not accept that stability of the estimate answers it: the missing-data work above
+concerns incomplete **cancer status among people already in the cohort**, and tells us
+nothing about the adults who never reach the cohort at all -- the two steps counted above. Those are different questions and we
+now report them separately.
+
+## Results manifest — the chain's single source of truth
+
+> M2, M3 and M4 are plain markdown and are **not** run through the deck generator, so any
+> number typed into them could drift from the code. This chunk emits the canonical values;
+> the build fails if any of those artifacts states a locked-contrast hazard
+> ratio that is not the one recorded here.
+
+```{r emit}
+cc <- fitL(NA, "cc")
+mi_hr <- exp(po[["results"]]); mi_lo <- exp(po[["(lower"]]); mi_hi <- exp(po[["upper)"]])
+emit_results("chain", list(
+  locked_hr      = sprintf("%.2f", cc$HR),
+  locked_ci      = sprintf("%.2f–%.2f", cc$lo, cc$hi),
+  locked_full    = sprintf("%.2f (%.2f–%.2f)", cc$HR, cc$lo, cc$hi),
+  locked_mi_full = sprintf("%.2f (%.2f–%.2f)", mi_hr, mi_lo, mi_hi),
+  n_adults       = format(nrow(adults), big.mark = ","),
+  n_fasting      = format(nrow(fast_a), big.mark = ","),
+  n_fli          = format(nrow(fli_ok), big.mark = ","),
+  n_lost_step2   = format(nrow(fast_a) - nrow(fli_ok), big.mark = ",")
+))
+```

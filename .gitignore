@@ -1,0 +1,22 @@
+# What a working copy of this repository generates locally, and should not commit.
+
+# NHANES microdata and the NCHS linked mortality files. These are US government
+# public-domain data, not redistributed here: reproduction/R/01_download.R fetches
+# them from CDC on first run. They are large and they are not ours to ship.
+reproduction/data/
+*.rds
+*.xpt
+*.XPT
+
+# LaTeX and R build litter
+*.log
+*.aux
+*.out
+*.toc
+.Rhistory
+.Rproj.user/
+_files/
+
+# Python bytecode
+__pycache__/
+*.pyc

@@ -1,0 +1,227 @@
+---
+title: "P4 — Design-aware main estimate: step-by-step reproducible code"
+subtitle: "SPPH 604 · demonstration paper (Kueh et al., BMJ Open 2026;16:e113719)"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    code-tools: true
+    df-print: kable
+execute:
+  warning: false
+  message: false
+---
+
+> Replicates the paper's **unweighted** Cox model, then re-estimates it with the
+> NHANES **fasting-subsample survey design** (weights + strata + clusters).
+>
+> **The rule this file exists to demonstrate:** build the survey design on the
+> *whole sampled frame*, then reach your analysis population with
+> `subset(design, ...)`. Never filter the data frame and then call `svydesign()`
+> on the remains.
+
+```{r setup}
+source("../_shared/paths.R")   # find_repro(), emit_results(), ci(), fmtn(), endash()
+repro <- find_repro()
+suppressPackageStartupMessages({library(dplyr); library(survival); library(survey)})
+options(survey.lonely.psu = "adjust")
+
+frame <- readRDS(file.path(repro, "data/derived/merged_all.rds"))   # 59,842 records
+d     <- readRDS(file.path(repro, "data/derived/masld_analytic.rds"))
+frame$in_analysis <- frame$SEQN %in% d$SEQN
+frame$group <- factor(frame$group, levels = c("I","II","III","IV"))
+
+hr <- function(m,g){s<-summary(m); sprintf("%.2f (%.2f-%.2f)",
+        s$conf.int[g,1], s$conf.int[g,"lower .95"], s$conf.int[g,"upper .95"])}
+psu <- function(df) length(unique(paste(df$SDMVSTRA, df$SDMVPSU)))
+```
+
+## Step 1 — Replicate the paper (unweighted Cox)
+
+Two row sets, labelled, because they are not interchangeable. The **full analytic
+file** (n = 6,371) is what reproduces the paper. The **locked domain** (n = 6,048, those
+with a valid fasting weight) is what P1 locks and what P2, P3 and P5 analyse — and the
+only set on which a design-aware estimate is possible.
+
+```{r replicate}
+dom0 <- d[!is.na(d$WTSAF2YR) & d$WTSAF2YR > 0, ]
+mu_full <- coxph(Surv(time_yr,dead) ~ group, data=d)
+mu_dom  <- coxph(Surv(time_yr,dead) ~ group, data=dom0)
+cat("Unweighted, full analytic file  n =", nrow(d),
+    ": IV", hr(mu_full,"groupIV"), " <- reproduces the paper
+")
+cat("Unweighted, locked domain       n =", nrow(dom0),
+    ": IV", hr(mu_dom,"groupIV"),  " <- the rows P2/P3/P5 use
+")
+```
+
+The difference between them is the records without a valid fasting weight, not a
+modelling choice. Everything below uses the locked domain.
+
+## Step 2 — Improve: the survey design, built *before* restricting
+
+FLI needs *fasting* triglycerides, so the binding constraint is the fasting
+subsample and the weight is the pooled fasting weight `WTSAF2YR / 6` (6 cycles).
+
+The design is constructed on **everyone with a valid fasting weight** — not on the
+MASLD cohort — and the analysis population is then reached with `subset()`. This is
+a **domain (subpopulation) analysis**: `subset.survey.design` retains the original
+strata and PSU structure so the variance is estimated against the design that
+actually produced the sample.
+
+```{r design}
+fast <- frame %>% filter(!is.na(WTSAF2YR) & WTSAF2YR > 0) %>% mutate(wt = WTSAF2YR/6)
+des_full <- svydesign(ids=~SDMVPSU, strata=~SDMVSTRA, weights=~wt, data=fast, nest=TRUE)
+
+des <- subset(des_full, in_analysis)      # <- the domain. NOT a new svydesign().
+
+dom <- fast %>% filter(in_analysis)
+cat("design frame: n =", nrow(fast), " PSUs =", psu(fast),
+    " strata =", length(unique(fast$SDMVSTRA)), "\n")
+cat("analysis domain: n =", nrow(dom),
+    " weighted population =", format(round(sum(dom$wt)), big.mark=","), "\n")
+```
+
+```{r weighted}
+mu <- coxph(Surv(time_yr,dead) ~ group, data=dom)          # unweighted, same rows
+mw <- svycoxph(Surv(time_yr,dead) ~ group, design=des)
+cat("Unweighted (domain): IV", hr(mu,"groupIV"), "\n")
+cat("Weighted:  II", hr(mw,"groupII"), " III", hr(mw,"groupIII"),
+    " IV", hr(mw,"groupIV"), "\n")
+```
+
+## Step 3 — Direct contrasts the paper did not report (weighted)
+
+Change the reference level **inside the existing design** with `update()`. Do not
+rebuild `svydesign()` — that would discard the frame a second time.
+
+```{r contrasts}
+des3 <- update(des, group = relevel(group, "III"))
+des2 <- update(des, group = relevel(group, "II"))
+mw3 <- svycoxph(Surv(time_yr,dead) ~ group, design=des3)
+mw2 <- svycoxph(Surv(time_yr,dead) ~ group, design=des2)
+cat("Weighted IV vs III:", hr(mw3,"groupIV"), "   IV vs II:", hr(mw2,"groupIV"), "\n")
+```
+
+## Step 3b — Separating adjustment from design on one row set
+
+The ledger 15.1 -> 2.9 -> 12.4 mixes crude and adjusted models on different rows, so it
+is not a sequence of successive corrections. Hold the rows fixed and the two effects
+separate cleanly.
+
+```{r matrix}
+COV <- c("age","female","dyslip","htn","t2dm","ckd","mi","cancer",
+         "on_htn_med","on_dm_med","on_lipid_med")
+fast$cc <- fast$in_analysis & complete.cases(fast[,COV])
+dcc <- fast[fast$cc, ]
+f0 <- Surv(time_yr,dead) ~ group
+f1 <- as.formula(paste("Surv(time_yr,dead) ~ group +", paste(COV, collapse=" + ")))
+gg <- function(f){s<-summary(f); sprintf('%.2f (%.2f-%.2f)',
+        s$conf.int['groupIV',1], s$conf.int['groupIV',3], s$conf.int['groupIV',4])}
+rl <- function(x,r){x$group <- relevel(x$group, r); x}
+dR <- function(r) subset(svydesign(ids=~SDMVPSU, strata=~SDMVSTRA, weights=~wt,
+                    data=rl(fast,r), nest=TRUE), cc)
+mat <- data.frame(
+  cell = c('unweighted crude','unweighted Model 1','weighted crude','weighted Model 1'),
+  IV_vs_I = c(gg(coxph(f0,data=dcc)), gg(coxph(f1,data=dcc)),
+              gg(svycoxph(f0,design=dR('I'))), gg(svycoxph(f1,design=dR('I')))),
+  IV_vs_III = c(gg(coxph(f0,data=rl(dcc,'III'))), gg(coxph(f1,data=rl(dcc,'III'))),
+                gg(svycoxph(f0,design=dR('III'))), gg(svycoxph(f1,design=dR('III')))))
+mat
+```
+
+Read **down** a column for adjustment, **across** a row for design. On the locked
+IV-vs-III estimand adjustment dominates and design changes no conclusion; on the
+replication IV-vs-I estimand design changes whether the adjusted interval excludes 1.
+
+## Step 4 — Why the rule matters (and exactly when it bites)
+
+For *this* main estimate both approaches give the same answer, because the MASLD
+domain happens to contain every PSU and stratum in the fasting frame. Pre-filtering
+loses nothing here. That is luck, not method.
+
+```{r why}
+show <- function(lbl, df) cat(sprintf("%-32s n=%5d  PSUs=%4d  strata=%3d
+", lbl, nrow(df), psu(df), length(unique(df$SDMVSTRA))))
+show("full fasting frame", fast)
+show("MASLD analysis domain", dom)
+show("  Group I only", dom %>% filter(group=="I"))
+show("  Group I, women only", dom %>% filter(group=="I", female==1))
+```
+
+The domain keeps all 184 PSUs. A subgroup does not: Group I women sit in ~51 PSUs
+spread over 44 strata, which leaves **strata containing a single cluster**. That is
+where pre-filtering stops being harmless.
+
+```{r lonely}
+d2 <- dom %>% filter(group=="I", female==1)
+for (opt in c("fail","adjust")) {
+  options(survey.lonely.psu = opt)
+  dfull <- svydesign(ids=~SDMVPSU, strata=~SDMVSTRA, weights=~wt, data=fast, nest=TRUE)
+  pre <- tryCatch(sprintf("%.4f", SE(svymean(~age, svydesign(ids=~SDMVPSU,
+           strata=~SDMVSTRA, weights=~wt, data=d2, nest=TRUE)))),
+         error=function(e) paste0("ERROR: ", conditionMessage(e)))
+  sub <- sprintf("%.4f", SE(svymean(~age,
+           subset(dfull, in_analysis & group=="I" & female==1))))
+  cat(sprintf("lonely.psu=%-7s  pre-filtered: %-45s  subset(): %s
+", opt, pre, sub))
+}
+options(survey.lonely.psu = "adjust")
+```
+
+Read that table carefully, because the lesson is subtler than "pre-filtering gives
+the wrong number":
+
+- Under R's **default** (`lonely.psu = "fail"`), pre-filtering does not give a wrong
+  answer — it gives **no answer**. The design you handed `svydesign()` has strata
+  with one cluster and no variance is estimable.
+- Setting `lonely.psu = "adjust"` makes it run, and here it returns the same SE. But
+  you have silenced a symptom of having thrown the design away, and you are now
+  relying on an approximation instead of the stratum structure you actually had.
+- `subset()` needs no rescue. It works under either setting, because the strata and
+  PSUs were never discarded.
+
+So the rule is not "pre-filtering biases your estimate." It is: **pre-filtering can
+create lonely-PSU strata that would not arise under proper domain analysis, making the
+variance estimate depend on the chosen lonely-PSU fallback.** Restricting the
+6,048-person MASLD cohort did nothing at all, because it retained every PSU and
+stratum. The failure appears once restriction starts dropping them. Sometimes the
+fallback agrees; you will not know which time you are in.
+
+Note what this separates: **a correct procedure is not the same as a procedure that
+changes today's answer.** The wrong implementation returns an identical HR and CI in
+the main analysis and is still wrong, because it is not guaranteed to preserve the
+variance structure for narrower domains.
+
+**Your own paper's subgroups will be sparser than this one.** Build the design once,
+then subset.
+
+**Interpretation.** Weighting attenuates the Group IV estimate (≈ 17 → ≈ 12) and
+widens the CI — that is the design effect. Group IV stays worst even against the
+other high-risk groups (IV vs III ≈ 3.1; IV vs II ≈ 2.3).
+
+**On which weight.** CDC's rule is the *least common denominator*: when an analysis
+draws on variables measured in different components, use the weight belonging to
+the **smallest** applicable subsample. FLI requires fasting triglycerides, so the
+fasting weight governs, even though GGT is measured on the larger MEC sample. This
+is a rule, not a judgment call — the MEC weight would weight to a population in
+which the exposure cannot be constructed.
+
+## Results for M1
+
+```{r emit}
+cell <- function(row, col) endash(mat[[col]][mat$cell == row])
+emit_results("P4", list(
+  uw_crude_i    = cell("unweighted crude",   "IV_vs_I"),
+  uw_crude_iii  = cell("unweighted crude",   "IV_vs_III"),
+  uw_m1_i       = cell("unweighted Model 1", "IV_vs_I"),
+  uw_m1_iii     = cell("unweighted Model 1", "IV_vs_III"),
+  w_crude_i     = cell("weighted crude",     "IV_vs_I"),
+  w_crude_iii   = cell("weighted crude",     "IV_vs_III"),
+  w_m1_i        = cell("weighted Model 1",   "IV_vs_I"),
+  w_m1_iii      = cell("weighted Model 1",   "IV_vs_III"),
+  n_matched     = fmtn(nrow(dcc)),
+  psu_full      = fmtn(psu(fast)),
+  psu_domain    = fmtn(psu(dom))
+), list(matrix = mat))
+```

@@ -1,0 +1,46 @@
+{
+  "emitted_by": "P2",
+  "facts": {
+    "n_domain": "6,048",
+    "n_complete": "5,939",
+    "n_dropped": "109"
+  },
+  "estimands": [
+    {
+      "Estimand": "replication  IV vs I",
+      "Model": "crude",
+      "rows": 6048,
+      "HR": "16.96 (6.24-46.05)"
+    },
+    {
+      "Estimand": "replication  IV vs I",
+      "Model": "crude",
+      "rows": 5939,
+      "HR": "16.05 (5.91-43.58)"
+    },
+    {
+      "Estimand": "replication  IV vs I",
+      "Model": "Model 1",
+      "rows": 5939,
+      "HR": "3.79 (1.38-10.39)"
+    },
+    {
+      "Estimand": "locked       IV vs III",
+      "Model": "crude",
+      "rows": 6048,
+      "HR": "2.33 (1.71-3.17)"
+    },
+    {
+      "Estimand": "locked       IV vs III",
+      "Model": "crude",
+      "rows": 5939,
+      "HR": "2.34 (1.72-3.18)"
+    },
+    {
+      "Estimand": "locked       IV vs III",
+      "Model": "Model 1",
+      "rows": 5939,
+      "HR": "1.06 (0.77-1.45)"
+    }
+  ]
+}

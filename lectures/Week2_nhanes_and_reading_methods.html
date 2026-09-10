@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Week2 nhanes and reading methods</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Week2 nhanes and reading methods</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#week-2-lecture-plan-survey-data-sources-reading-a-methods-section-critically" id="toc-week-2-lecture-plan-survey-data-sources-reading-a-methods-section-critically">Week
+2 Lecture Plan — Survey Data Sources &amp; Reading a Methods Section
+Critically</a>
+<ul>
+<li><a href="#learning-objectives" id="toc-learning-objectives">Learning
+objectives</a></li>
+<li><a href="#continuity" id="toc-continuity">Continuity</a></li>
+<li><a href="#slide-1-where-we-are-in-the-project-3-min" id="toc-slide-1-where-we-are-in-the-project-3-min">Slide 1 — Where we
+are in the project (3 min)</a></li>
+<li><a href="#slide-2-why-start-with-the-data-source-4-min" id="toc-slide-2-why-start-with-the-data-source-4-min">Slide 2 — Why
+start with the data source (4 min)</a></li>
+<li><a href="#slide-3-nhanes-in-one-picture-8-min" id="toc-slide-3-nhanes-in-one-picture-8-min">Slide 3 — NHANES in one
+picture (8 min)</a></li>
+<li><a href="#slide-4-the-three-data-collection-settings-7-min" id="toc-slide-4-the-three-data-collection-settings-7-min">Slide 4 — The
+three data-collection settings (7 min)</a></li>
+<li><a href="#slide-5-seqn-the-key-that-holds-it-together-7-min" id="toc-slide-5-seqn-the-key-that-holds-it-together-7-min">Slide 5 —
+SEQN: the key that holds it together (7 min)</a></li>
+<li><a href="#slide-6-the-fasting-subsample-and-why-it-will-haunt-us-7-min" id="toc-slide-6-the-fasting-subsample-and-why-it-will-haunt-us-7-min">Slide
+6 — The fasting subsample (and why it will haunt us) (7 min)</a></li>
+<li><a href="#slide-7-what-masld-actually-is-6-min" id="toc-slide-7-what-masld-actually-is-6-min">Slide 7 — What “MASLD”
+actually is (6 min)</a></li>
+<li><a href="#slide-8-surrogate-defined-outcomes-the-fatty-liver-index-8-min" id="toc-slide-8-surrogate-defined-outcomes-the-fatty-liver-index-8-min">Slide
+8 — Surrogate-defined outcomes: the Fatty Liver Index (8 min)</a></li>
+<li><a href="#slide-9-break-10-min" id="toc-slide-9-break-10-min">Slide
+9 — BREAK (10 min)</a></li>
+<li><a href="#slide-10-from-data-source-to-a-reproducible-study-the-four-primitives-6-min" id="toc-slide-10-from-data-source-to-a-reproducible-study-the-four-primitives-6-min">Slide
+10 — From data source to a reproducible study: the four primitives (6
+min)</a></li>
+<li><a href="#slide-11-extract-the-exposure-5-min" id="toc-slide-11-extract-the-exposure-5-min">Slide 11 — Extract the
+EXPOSURE (5 min)</a></li>
+<li><a href="#slide-12-extract-the-outcome-and-follow-up-5-min" id="toc-slide-12-extract-the-outcome-and-follow-up-5-min">Slide 12 —
+Extract the OUTCOME and follow-up (5 min)</a></li>
+<li><a href="#slide-13-extract-eligibility-and-read-it-adversarially-8-min" id="toc-slide-13-extract-eligibility-and-read-it-adversarially-8-min">Slide
+13 — Extract ELIGIBILITY — and read it adversarially (8 min)</a></li>
+<li><a href="#slide-14-extract-the-variables-confounders-covariates-5-min" id="toc-slide-14-extract-the-variables-confounders-covariates-5-min">Slide
+14 — Extract the VARIABLES (confounders &amp; covariates) (5
+min)</a></li>
+<li><a href="#slide-15-m0-feasibility-reconstructable-is-necessary-not-sufficient-7-min" id="toc-slide-15-m0-feasibility-reconstructable-is-necessary-not-sufficient-7-min">Slide
+15 — M0 feasibility: reconstructable is necessary, not sufficient (7
+min)</a></li>
+<li><a href="#slide-16-common-traps-when-reading-methods-4-min" id="toc-slide-16-common-traps-when-reading-methods-4-min">Slide 16 —
+Common traps when reading Methods (4 min)</a></li>
+<li><a href="#slide-17-bridge-to-todays-lab-l1-and-your-project-increment-5-min" id="toc-slide-17-bridge-to-todays-lab-l1-and-your-project-increment-5-min">Slide
+17 — Bridge to today’s lab (L1) and your project increment (5
+min)</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="week-2-lecture-plan-survey-data-sources-reading-a-methods-section-critically">Week
+2 Lecture Plan — Survey Data Sources &amp; Reading a Methods Section
+Critically</h1>
+<p>Duration: ~2.5 h (Tue, before the Thu lab)</p>
+<p>Timing: the per-slide markers below sum to ~105 min, including the
+10-min break. The remaining ~45 min of the session is live work and
+discussion on the material already here, not extra content:</p>
+<ul>
+<li>~15 min at <strong>Slide 13</strong> — code the alcohol-exclusion
+sentence three ways on screen and show the three N’s it produces. The
+slide names the discrepancy; this is the time to demonstrate it rather
+than assert it.</li>
+<li>~8 min at <strong>Slide 15</strong> — stating all six M0 criteria,
+rather than the four-box screen alone, does not fit that slide’s 7-min
+marker.</li>
+<li>~7 min for the two prompts the deck already carries: the imputation
+question in the Slide 6 notes, and reading the Kaplan-Meier panel on the
+Slide 11 exposure slide.</li>
+<li>~15 min of Q&amp;A and buffer, distributed across the session and
+weighted to the second half, where students meet the four-primitive
+template for the first time.</li>
+</ul>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ul>
+<li>Describe NHANES structure: 2-year cycles, the interview/MEC/lab
+components, the SEQN merge key, and the fasting subsample.</li>
+<li>Explain why MASLD is a <em>surrogate-defined</em> outcome here
+(Fatty Liver Index), and what non-invasive scores buy and cost.</li>
+<li>Read a Methods section to extract the four reproducibility
+primitives: exposure, outcome, eligibility, variables.</li>
+<li>State the six M0 feasibility criteria, and place the four
+reproducibility primitives correctly inside them: reconstructability is
+the pre-screen, not the whole gate.</li>
+<li>Anticipate the L1 workflow: download multiple NHANES cycles and
+merge them on SEQN.</li>
+</ul>
+<h2 id="continuity">Continuity</h2>
+<ul>
+<li>Recap Wk1: the term is a term-long NHANES project — Replicate -&gt;
+Interrogate -&gt; Improve -&gt; Defend — anchored to one demonstration
+paper (Kueh 2026, MASLD phenotypes and mortality).</li>
+<li>Last week we met the paper and the arc; today we open the <em>data
+engine</em> underneath it (NHANES) and learn to read a Methods section
+the way a replicator does.</li>
+<li>Sets up Thu L1 (multi-cycle download + merge on SEQN) and M0 (each
+student shortlists candidate papers to replicate).</li>
+</ul>
+<h2 id="slide-1-where-we-are-in-the-project-3-min">Slide 1 — Where we
+are in the project (3 min)</h2>
+<ul>
+<li>One-line map of the term: Replicate (Wk2-8) -&gt; Interrogate -&gt;
+Improve -&gt; Defend; milestones M0 (Wk3) through M4 (Dec).</li>
+<li>Today’s job: understand the data source and learn to <em>strip a
+Methods section for parts</em>.</li>
+<li>Flag the two deliverables this week feeds: L1 (Thu) and M0
+shortlisting (due Wk3).</li>
+</ul>
+<h2 id="slide-2-why-start-with-the-data-source-4-min">Slide 2 — Why
+start with the data source (4 min)</h2>
+<ul>
+<li>You cannot judge or reproduce a study you don’t understand at the
+data level; the Methods section is a <em>promise</em> about data you
+must be able to keep.</li>
+<li>NHANES is public, documented, and versioned — ideal for a
+replication course.</li>
+<li>MASLD hook: Kueh 2026 uses NHANES 2007-2018 (six cycles) — every
+number we will reproduce traces back to public files.</li>
+</ul>
+<h2 id="slide-3-nhanes-in-one-picture-8-min">Slide 3 — NHANES in one
+picture (8 min)</h2>
+<ul>
+<li>Continuous NHANES released in <strong>2-year cycles</strong>
+(2007-08, 2009-10, … 2017-18); ~5,000 examined persons per cycle after
+screening.</li>
+<li>Nationally representative of the civilian non-institutionalized US
+population via a complex multistage design (we USE weights in Wk6; today
+just note they exist).</li>
+<li>Data arrive as many small files by topic, not one table.</li>
+<li>MASLD hook: “2007-2018” = six cycles stacked; combining cycles is
+why the analytic N runs to several thousand — the paper reports ~6,300
+and our reproduction’s full analytic file lands on 6,371.</li>
+</ul>
+<h2 id="slide-4-the-three-data-collection-settings-7-min">Slide 4 — The
+three data-collection settings (7 min)</h2>
+<ul>
+<li><strong>Interview (questionnaire)</strong> at home: demographics,
+income, alcohol, medical history.</li>
+<li><strong>MEC exam</strong> (Mobile Examination Center): physical
+measures — BMI, waist circumference, blood pressure.</li>
+<li><strong>Laboratory</strong>: blood draws — triglycerides, GGT,
+glucose; some assays only in the <strong>fasting
+subsample</strong>.</li>
+<li>MASLD hook: FLI needs triglycerides + GGT (lab) + BMI + waist (MEC)
+— the exposure spans <em>two</em> settings, so a person missing either
+is missing the exposure.</li>
+</ul>
+<h2 id="slide-5-seqn-the-key-that-holds-it-together-7-min">Slide 5 —
+SEQN: the key that holds it together (7 min)</h2>
+<ul>
+<li>Every respondent has one <strong>SEQN</strong> (respondent sequence
+number), unique within a cycle.</li>
+<li>Analysis = pick the topic files you need, then <strong>merge them on
+SEQN</strong> into one row-per-person table.</li>
+<li>Gotcha: SEQN is unique <em>within</em> a cycle, not across cycles —
+you add a cycle indicator before stacking.</li>
+<li>MASLD hook: reproducing Table 1 means merging DEMO + BMX + BIOPRO +
+TRIGLY + ALQ + mortality, all keyed on SEQN across six cycles.</li>
+</ul>
+<h2 id="slide-6-the-fasting-subsample-and-why-it-will-haunt-us-7-min">Slide
+6 — The fasting subsample (and why it will haunt us) (7 min)</h2>
+<ul>
+<li>Some labs (fasting glucose, triglycerides for the calculation path)
+are collected only in the morning fasting subsample -&gt; smaller N with
+its own weight (WTSAF).</li>
+<li>Being in the fasting subsample is <em>not random</em> with respect
+to health — a preview of selection bias.</li>
+<li>MASLD hook: FLI needs fasting labs, so it is computable only in
+NHANES’ <strong>designed fasting subsample</strong>. That absence is a
+<em>design</em> feature with its own weight (<code>WTSAF2YR</code>),
+<strong>not</strong> ordinary missingness. Park the distinction — it is
+the spine of Weeks 3, 6 and 7.</li>
+</ul>
+<h2 id="slide-7-what-masld-actually-is-6-min">Slide 7 — What “MASLD”
+actually is (6 min)</h2>
+<ul>
+<li>MASLD = metabolic dysfunction-associated steatotic liver disease
+(the 2023 rename of NAFLD): hepatic steatosis <strong>+</strong> &gt;= 1
+cardiometabolic criterion.</li>
+<li>Gold-standard steatosis = biopsy or imaging — neither exists in
+NHANES for this window.</li>
+<li>So the paper needs a <em>surrogate</em> for “fatty liver.”</li>
+<li>MASLD hook: the disease definition itself forces a non-invasive
+workaround — this is a feature of the data, not a shortcut by the
+authors.</li>
+</ul>
+<h2 id="slide-8-surrogate-defined-outcomes-the-fatty-liver-index-8-min">Slide
+8 — Surrogate-defined outcomes: the Fatty Liver Index (8 min)</h2>
+<ul>
+<li>FLI is a published score from <strong>triglycerides, BMI, GGT, waist
+circumference</strong>; Kueh uses <strong>FLI &gt;= 60</strong> to call
+steatosis.</li>
+<li>Non-invasive scores make population studies possible but embed their
+inputs into the case definition.</li>
+<li>MASLD hook — plant the seed for M1: the phenotype groups are built
+from <strong>BMI x waist (WHtR)</strong>, and FLI eligibility
+<em>also</em> uses BMI + waist. Exposure and cohort selection share
+inputs -&gt; <strong>circularity</strong>. We only name it today; we
+dissect it at M1.</li>
+</ul>
+<h2 id="slide-9-break-10-min">Slide 9 — BREAK (10 min)</h2>
+<h2 id="slide-10-from-data-source-to-a-reproducible-study-the-four-primitives-6-min">Slide
+10 — From data source to a reproducible study: the four primitives (6
+min)</h2>
+<ul>
+<li>To reproduce any paper you must extract four things from the
+Methods: <strong>Exposure, Outcome, Eligibility, Variables
+(confounders/covariates)</strong>.</li>
+<li>If any one is under-specified, the study is not reconstructable — no
+matter how clean the results look.</li>
+<li>Frame the rest of the lecture as filling this 4-box template for
+Kueh 2026.</li>
+<li>MASLD hook: we will find that three of the four boxes are clear and
+one (eligibility) is <em>internally contradictory</em>.</li>
+</ul>
+<h2 id="slide-11-extract-the-exposure-5-min">Slide 11 — Extract the
+EXPOSURE (5 min)</h2>
+<ul>
+<li>Exposure = four phenotypes from obesity (BMI &gt;= 30) x central
+adiposity (WHtR &gt;= 0.6): I obese/low-central, II obese/high-central,
+III non-obese/low-central, IV non-obese/high-central.</li>
+<li>Ask: are the cut-points, variables, and coding fully stated? Mostly
+yes.</li>
+<li>MASLD hook: the paper’s group sizes are 386 / 4,541 / 769 / 604; our
+reproduction gives 391 / 4,585 / 787 / 608. Either way Group IV
+(non-obese, high-central) has the <strong>worst</strong> survival — the
+paper’s headline.</li>
+</ul>
+<h2 id="slide-12-extract-the-outcome-and-follow-up-5-min">Slide 12 —
+Extract the OUTCOME and follow-up (5 min)</h2>
+<ul>
+<li>Outcome = all-cause mortality via NHANES linked mortality files;
+time-to-event with median follow-up ~6.7 y.</li>
+<li>Ask: mortality source, censoring date, and time origin all stated?
+Yes — linked NDI is standard and documented.</li>
+<li>MASLD hook: the paper counts 585 all-cause deaths and our
+reproduction 586; Group IV unadjusted HR ~15.1 collapses to ~2.9 after
+adjustment — a first lesson that confounding is enormous here (Wk4
+preview).</li>
+</ul>
+<h2 id="slide-13-extract-eligibility-and-read-it-adversarially-8-min">Slide
+13 — Extract ELIGIBILITY — and read it adversarially (8 min)</h2>
+<ul>
+<li>Eligibility = adults with MASLD (FLI &gt;= 60 + &gt;= 1
+cardiometabolic criterion), with stated alcohol and missingness
+exclusions.</li>
+<li>Reading critically means checking that the prose <em>arithmetic</em>
+actually lands on the reported N.</li>
+<li>MASLD hook — two real discrepancies to show on screen:
+<ul>
+<li>The alcohol-exclusion sentence, coded three plausible ways, yields
+<strong>N = 4,308 / 5,944 / 6,371</strong> — the text does not pin down
+the cohort.</li>
+<li>Table headers mislabel the BMI cut as “&lt;25” when the analysis
+actually uses <strong>30</strong>. Same idea, opposite lesson: never
+trust a label you haven’t recomputed.</li>
+</ul></li>
+</ul>
+<h2 id="slide-14-extract-the-variables-confounders-covariates-5-min">Slide
+14 — Extract the VARIABLES (confounders &amp; covariates) (5 min)</h2>
+<ul>
+<li>Variables = age, sex, race/ethnicity, income, smoking, comorbidities
+— each must map to a specific NHANES file/field.</li>
+<li>Ask: is every adjustment variable named precisely enough to pull it?
+Mostly, but income has ~9% missing (a Wk7 thread).</li>
+<li>MASLD hook: reproduced Table 1 matches closely (mean age ~51, BMI
+~33.2) — evidence the variable definitions are recoverable even where
+the eligibility prose is not.</li>
+</ul>
+<h2 id="slide-15-m0-feasibility-reconstructable-is-necessary-not-sufficient-7-min">Slide
+15 — M0 feasibility: reconstructable is necessary, not sufficient (7
+min)</h2>
+<ul>
+<li>The four-box template is a <strong>reconstructability
+pre-screen</strong>. If a replicator cannot fill all four from public
+data + the Methods alone, the paper is not reconstructable and nothing
+else about it matters:
+<ul>
+<li>Public, obtainable data source (ideally NHANES) with a stated
+version/cycles.</li>
+<li>Exposure &amp; outcome defined with explicit variables and
+cut-points.</li>
+<li>Eligibility that resolves to a countable N (flag contradictions
+early — they are <em>interrogation fuel</em>, not disqualifiers).</li>
+<li>Named confounders that map to real fields.</li>
+</ul></li>
+<li><strong>Passing the screen is necessary but not sufficient.</strong>
+M0 has six criteria and the four boxes reach only the first three — (1)
+reconstructable data, (2) a clear exposure and outcome, (3) plausible
+confounders. Three more must also hold, and a beautifully written paper
+can fail every one of them:
+<ul>
+<li><strong>(4) Adequate size and events</strong> — enough observations,
+and for time-to-event outcomes enough events, for the main analysis
+<em>and</em> at least one subgroup or interaction analysis to be
+stable.</li>
+<li><strong>(5) Design variables</strong> — name the design feature the
+analysis has to respect and the variables that encode it: survey
+weights/strata/PSU, a cluster or repeated-measure identifier, or
+follow-up time and censoring. Not waivable; a paper with no design
+feature to respect has nothing to re-estimate at P4.</li>
+<li><strong>(6) A genuine incomplete-observation problem</strong> — a
+variable the locked analysis actually uses that is absent for records
+which should have carried it. Cohort shrinkage from designed
+subsampling, eligibility or the disease definition is not this, and does
+not satisfy the criterion on its own.</li>
+</ul></li>
+<li>A little ambiguity is fine — it is exactly what M1 interrogates;
+<em>total</em> under-specification is not.</li>
+<li>Each criterion is confirmed in the memo with a specific pointer — a
+variable name, a file name, a number — not an assertion; the M0 brief
+carries the full wording.</li>
+<li>MASLD hook: Kueh 2026 clears all six — the four boxes <em>and</em>
+size, design and missingness — which is why it can carry P1-P5. It also
+hands us a rich interrogation agenda: the model of a good replication
+target.</li>
+</ul>
+<h2 id="slide-16-common-traps-when-reading-methods-4-min">Slide 16 —
+Common traps when reading Methods (4 min)</h2>
+<ul>
+<li>Labels vs. computations (the “&lt;25 = 30” trap); prose arithmetic
+that never sums to the reported N.</li>
+<li>Silent design choices: unweighted analysis of a survey; a
+fasting-only exposure treated as if universal.</li>
+<li>“Defined by” scores whose inputs overlap the exposure (circularity)
+— a smell to log now, test at M1.</li>
+<li>MASLD hook: every trap on this slide is one the demonstration paper
+actually contains.</li>
+</ul>
+<h2 id="slide-17-bridge-to-todays-lab-l1-and-your-project-increment-5-min">Slide
+17 — Bridge to today’s lab (L1) and your project increment (5 min)</h2>
+<ul>
+<li><strong>In L1 (Thu, EpiMethods wrangling module):</strong> you will
+download several NHANES cycles (2007-2018), read the raw topic files
+(DEMO, BMX, lab files), and <strong>merge them on SEQN</strong> into one
+analytic-ready, one-row-per-person table — adding a cycle indicator
+before stacking. Output: a merged multi-cycle dataset you can count and
+describe.</li>
+<li><strong>How it becomes your increment:</strong> L1’s merge is the
+substrate for the whole term — every later lab (Table 1, confounding,
+interaction, survey weights, missing data) runs on the table you build
+Thursday.</li>
+<li><strong>M0 shortlisting (toward Wk3 lock):</strong> using today’s
+four-primitive template + the M0 feasibility criteria, shortlist 2-3
+candidate NHANES papers of your own. For each, be ready to say whether
+exposure/outcome/eligibility/variables are extractable — that is the
+pre-screen — <em>and</em> whether the paper has enough observations and
+events, a design feature its analysis must respect, and a missing
+variable the analysis actually uses. All six criteria, each with a
+pointer. You lock one paper at M0 (Wk3).</li>
+<li>Takeaway: reading a Methods section <em>is</em> the first act of
+reproduction — you did it to Kueh today; do it to your candidates before
+Wk3.</li>
+</ul>
+</body>
+</html>

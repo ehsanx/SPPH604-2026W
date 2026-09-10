@@ -1,0 +1,17 @@
+{
+  "emitted_by": "M1",
+  "facts": {
+    "iv_i_unadj": "15.14",
+    "iv_i_unadj_ci": "15.14 (6.19–37.04)",
+    "iv_i_model2": "2.908",
+    "iv_i_model2_ci": "2.91 (1.18–7.20)",
+    "cv_heart": "158",
+    "cv_heart_cerebr": "185",
+    "rhr_design": "2.53 (0.92–6.98)",
+    "p_design": "0.073",
+    "n_design": "1,296",
+    "paper_iv_iii_m1": "0.99",
+    "paper_iv_iii_m2": "0.96",
+    "paper_iv_iii_tyg": "1.0"
+  }
+}

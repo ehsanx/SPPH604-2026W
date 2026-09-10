@@ -1,0 +1,81 @@
+{
+  "emitted_by": "P1",
+  "facts": {
+    "full_n": "6,371",
+    "groups": "391 / 4,585 / 787 / 608",
+    "deaths": "586",
+    "locked_n": "6,048",
+    "funnel_records": "59,842",
+    "funnel_adults": "36,580",
+    "funnel_fasting": "14,962",
+    "funnel_fli": "14,170",
+    "funnel_steatosis": "6,052",
+    "funnel_masld": "6,050",
+    "funnel_linked": "6,048",
+    "item_nonresponse": "792",
+    "outcome_loss": "2",
+    "all_downward_steps": "30,532",
+    "alq_excluded": "2,063",
+    "alq_n": "4,308",
+    "avg_excluded": "427",
+    "avg_n": "5,944",
+    "alq_reserved": "9"
+  },
+  "funnel": [
+    {
+      "Step": 0,
+      "Criterion": "NHANES 2007-2018 records",
+      "N": 59842,
+      "Type": "-"
+    },
+    {
+      "Step": 1,
+      "Criterion": "Age >= 18",
+      "N": 36580,
+      "Type": "ELIGIBILITY",
+      "Dropped": 23262
+    },
+    {
+      "Step": 2,
+      "Criterion": "In fasting subsample",
+      "N": 14962,
+      "Type": "DESIGN",
+      "Dropped": 21618
+    },
+    {
+      "Step": 3,
+      "Criterion": "FLI computable (TG+GGT+BMI+waist)",
+      "N": 14170,
+      "Type": "MISSINGNESS",
+      "Dropped": 792
+    },
+    {
+      "Step": 4,
+      "Criterion": "Steatosis (FLI >= 60)",
+      "N": 6052,
+      "Type": "TARGET POPULATION",
+      "Dropped": 8118
+    },
+    {
+      "Step": 5,
+      "Criterion": "MASLD (>= 1 criterion)",
+      "N": 6050,
+      "Type": "TARGET POPULATION",
+      "Dropped": 2
+    },
+    {
+      "Step": 6,
+      "Criterion": "Phenotype group assignable",
+      "N": 6050,
+      "Type": "MISSINGNESS",
+      "Dropped": 0
+    },
+    {
+      "Step": 7,
+      "Criterion": "Mortality-eligible and linked",
+      "N": 6048,
+      "Type": "OUTCOME ASCERTAINMENT",
+      "Dropped": 2
+    }
+  ]
+}

@@ -1,0 +1,252 @@
+---
+title: "Week 4 — Variable roles: confounding & DAGs"
+subtitle: "SPPH 604 · Application of Advanced Epidemiological Methods"
+author: "Running example: Kueh et al. (2026), MASLD / NHANES"
+format:
+  revealjs:
+    theme: default
+    slide-number: c/t
+    progress: true
+    incremental: false
+    embed-resources: true
+    width: 1280
+    height: 720
+    fig-align: center
+    smaller: true
+---
+
+## Today's objectives
+
+- Name the **four roles** a covariate can play — confounder, mediator, collider, risk marker — and the adjustment rule for each
+- Draw a **minimal DAG** for the MASLD question and read a backdoor path off it
+- Explain why **age** is the dominant confounder, using the ~40 vs ~62-year group age gap
+- Use **Table 1** for what it can do — **describe** the groups, expose **sparse cells**, **positivity** problems and **coding errors** — not to **identify confounders**; and read it critically enough to catch a mislabelled cut point
+- Interpret the **crude → adjusted collapse** of the Group IV hazard ratio **without claiming which mechanism produced it**, and read the "obesity paradox" as a **structural question**, not a settled artefact
+
+::: {.notes}
+Frame the whole 150-minute block: this is the conceptual scaffolding week. No new data steps today — we are building the reasoning that Thursday's L3 turns into estimates. Preview that the single fact we will explain by the end is HR ≈ 15 → ≈ 3.
+:::
+
+## Where we've been, where we're going
+
+- **Last week (Wk3 → L2 / P1):** we locked the analytic cohort — eligibility, the **FLI ≥ 60** exposure filter, the frozen **N**. Milestone **M0 is closed**; your paper is locked.
+- **This week:** with the cohort fixed, we ask what *distorts* the exposure–mortality contrast — variable roles, the DAG, and Table 1 as a description of the groups that raises questions the causal argument has to answer.
+- **Sets up:** Thursday's **L3** takes Table 1 → crude → adjusted; **P2** is your own Table 1 plus your adjustment rationale.
+
+**MASLD:** the cohort is settled — now we ask whether Group IV's mortality gap is *real or confounded*.
+
+::: {.notes}
+Reinforce the course arc: Replicate → Interrogate → Improve → Defend. We are stepping from Replicate into Interrogate. Remind them M0 is frozen so nothing about N or group membership changes today.
+:::
+
+## Slide 1 — Where we are in the project
+
+- The arc: **Replicate → Interrogate → Improve → Defend** — we are entering **Interrogate**
+- **M0 locked** last week: the cohort and the four phenotype groups are now fixed inputs — the paper reports **N ≈ 6,300**, our **full analytic file** is **6,371**
+- Today is purely **conceptual scaffolding** for adjustment — no new data steps
+- Groups are settled — paper: **I 386 / II 4,541 / III 769 / IV 604**; ours: **I 391 / II 4,585 / III 787 / IV 608**
+
+**MASLD:** the four groups are fixed — today asks whether their mortality contrast is real or confounded.
+
+::: {.notes}
+~8 min. Orient students on the map before diving in. Emphasize the discipline of *not* touching the cohort — the temptation all term will be to re-open settled decisions. Everything today is about interpretation, not new code.
+:::
+
+## Slide 2 — The motivating puzzle
+
+- Group IV (**non-obese, high central adiposity**) has the **worst survival** — but the number moves enormously with adjustment
+- Unadjusted all-cause **HR ≈ 15.1**; adjusted **≈ 2.9–3.3** — same data, one covariate set apart
+- Ask the room: *what could make a hazard ratio shrink five-fold?* Park the answers — we return at Slide 13
+
+![](../img/figure1_km.png)
+
+**MASLD:** this single collapse (**≈15 → ≈3**) is the spine of the whole lecture.
+
+::: {.notes}
+~8 min. Let the KM curve do the emotional work — Group IV is visibly the worst (p < 0.0001). Then hit them with the collapse and refuse to explain it yet. Write "≈15 → ≈3" on the board and leave it. Collect 3–4 guesses and park them; do not evaluate. The payoff is Slide 13.
+:::
+
+## Slide 3 — Four roles a variable can play
+
+- A covariate is **not "a control" by default** — its role depends on the causal structure, not on the regression
+- **Confounder** — common cause of exposure and outcome
+- **Mediator** — sits *on* the causal path
+- **Collider** — a common *effect*
+- **Risk marker** — predicts the outcome, no exposure link
+- The role dictates the action: **adjust confounders**; *don't* adjust mediators or colliders
+
+**MASLD:** age, the cardiometabolic criteria, and the FLI filter each play *different* roles — naming them is the task.
+
+::: {.notes}
+~12 min. The core misconception to break: "more controls = better." Stress that the regression syntax is identical for all four — `+ covariate` — but the causal meaning is opposite. Preview that we will place each MASLD variable into one of these four boxes over the next slides.
+:::
+
+## Slide 4 — Confounding: a common cause
+
+- **Definition:** a variable that causes *both* exposure and outcome — opening a **backdoor path**
+- **Signature:** it **causes both** the exposure and the outcome. Imbalance + prognosis tell you **where to look**, not what the variable **is**
+- "Adjusting it changes the estimate" is **not** a test — mediators and colliders move it too, and so do **non-collapsibility** and a **changed sample**
+- This is the **one** role where adjustment *removes* bias
+- Rule: **close** the backdoor by conditioning on the common cause
+
+**MASLD:** **age** raises central adiposity / phenotype membership *and* raises mortality — the textbook confounder here.
+
+::: {.notes}
+~10 min. Give the two-arrow picture: C → exposure, C → outcome. Kill the change-in-estimate heuristic here rather than on Thursday: a moved estimate is equally compatible with confounding removed, a mediator conditioned on, a collider opened, a non-collapsible hazard ratio, or simply a different set of rows. Keep age as the running instance so Slide 8 lands hard.
+:::
+
+## Slide 5 — Mediation: on the causal path
+
+- **Definition:** exposure → **mediator** → outcome; the mediator *transmits* the effect
+- Adjusting a mediator removes part of the **very effect you want** — "**over-adjustment**"
+- Same regression syntax as confounding — **opposite** consequence
+- Diagnostic question: is this variable *downstream* of the exposure?
+
+**MASLD:** if central adiposity drives mortality *through* incident diabetes / CVD, controlling those downstream conditions would **erase real effect** — a mediation trap to flag.
+
+::: {.notes}
+~10 min. This is where students most often go wrong on P2. Emphasize temporality: a mediator happens *after* the exposure. Diabetes and CVD are prime candidates to leave OUT of the adjustment set, precisely because they may be on the path. Contrast directly with age (a cause, hence a confounder).
+:::
+
+## Slide 6 — Collider bias: conditioning on a common effect
+
+- **Definition:** exposure → **C** ← outcome (or their causes); **C** is a collider on that path
+- Conditioning on a collider — by **adjustment** *or* by **selection** — *opens* a spurious path
+- **Selection into the sample is a form of conditioning** — who gets measured matters
+- Lesson: don't reflexively "adjust for everything"
+
+**MASLD:** the paper adjusts for T2DM, hypertension, CKD and prior MI — ask which the class can **justify** as confounders rather than merely observe to be prognostic. Several could be **descendants or intermediates** under plausible causal structures, and the data do not settle their causal roles or temporal ordering.
+
+::: {.notes}
+~10 min. The counterintuitive one. Stress that selection = conditioning even when no variable appears in the model. Flag the FLI filter now so the idea is seeded, but promise the full treatment in Wk7 (missing-FLI selection). The takeaway pairs with Slide 3: adjusting the wrong thing adds bias.
+:::
+
+## Slide 7 — A minimal DAG for the MASLD question
+
+- Draw live: **Phenotype** (exposure) → **Mortality** (outcome)
+- **Age → Phenotype** and **Age → Mortality** — a **backdoor path**
+- **Cardiometabolic factors** as shared causes on the same footing as age
+- Trace the open backdoor age creates; show that **adjusting Age blocks it**
+- Add a mediator arrow — **Phenotype → diabetes → Mortality** — to mark what *not* to block
+
+**MASLD:** one small hand-drawn DAG makes visible *why age is adjusted* and *why downstream disease is not*.
+
+::: {.notes}
+~12 min. Draw it on the board, don't show a finished graphic — the act of drawing is the lesson. Start with the exposure→outcome arrow, add age's two arrows, trace the backdoor with a finger, then "block" it. Only then add the mediator arrow in a different colour. Leave the DAG up through the break (Slide 11).
+:::
+
+## Slide 8 — Age: the dominant confounder
+
+- Group mean ages differ **sharply** — roughly **~40** in the younger obese groups vs **~62** in the leaner high-central group
+- Non-obese high-central adults are, on average, **older** — and age alone predicts death
+- So a chunk of Group IV's raw excess mortality is **"being older,"** not the phenotype
+- This is the confounder signature from Slide 4, made concrete
+
+**MASLD:** the **~40 vs ~62** gap is the single largest driver of the crude **HR ≈ 15**.
+
+::: {.notes}
+~10 min. This is the emotional core of the confounding story. Make the age gap vivid: two adults, one 40 and one 62 — of course the 62-year-old is more likely to die, phenotype aside. This is exactly why the crude HR is absurdly large and why age is the first thing we adjust on Thursday.
+:::
+
+## Slide 9 — The phenotype definition (exposure construction)
+
+- Two axes: **obesity (BMI ≥ 30)** × **central adiposity (WHtR ≥ 0.6)** → four groups (I–IV)
+- **Group IV = non-obese (BMI < 30) but high central adiposity** — the "**hidden risk**" cell
+- The **cut points are analyst choices** — they determine who lands in the worst-survival group
+- Change the cut, change the group — the exposure is *constructed*, not given
+
+**MASLD:** Group IV's definition is exactly why "non-obese" can still be high-risk — the paper's headline.
+
+::: {.notes}
+~10 min. Reinforce that exposure here is a derived variable, not measured directly. Two continuous measures (BMI, WHtR) dichotomised and crossed. The analyst's cut points carry the whole result — a good setup for the next slide's mislabelled-cut cautionary tale.
+:::
+
+## Slide 10 — Reading tables critically: the mislabelled cut
+
+- The published Table headers print the BMI cut as "**< 25**" when the actual analytic cut is **30**
+- A reader trusting the header would **misread the entire exposure** — the *code*, not the label, is truth
+- **Lesson:** reconcile every table label against the methods and the derivation
+- Replication catches what careful reading alone cannot
+
+**MASLD:** this is a **real, reproducible label–Methods mismatch in Kueh 2026** — a live example of why replication beats reading.
+
+::: {.notes}
+~8 min. This is a genuine discrepancy in the published paper, not a hypothetical. Use it to motivate the whole reproduce-don't-trust ethos of the course. When they build their own Table 1 on Thursday, they will hit this and have to decide which cut is authoritative — the answer is: whatever the code actually does.
+:::
+
+## Slide 11 — BREAK (10 min)
+
+- Stretch and reset
+- **Leave the DAG on the board** for the second half
+
+::: {.notes}
+10 min. Keep the hand-drawn DAG visible — we build directly on it after the break. Second half moves from concepts to what Table 1 can and cannot tell you, and finally explains the ≈15 → ≈3 collapse parked at Slide 2.
+:::
+
+## Slide 12 — What Table 1 can and cannot tell you
+
+- Reframe Table 1: **not decoration**, but the **description** of how the groups actually differ — a **data** diagnostic, not a **confounder detector**
+- Read **across** the phenotype columns — age, sex, cardiometabolic markers — looking for **sparse cells**, **positivity** problems (a covariate level with almost nobody in one group), **impossible or miscoded values**, and contrasts *worth investigating*
+- **Imbalance decides nothing** — the adjustment set comes from **causal and temporal reasoning**; a badly imbalanced variable can still be a **mediator** or a **collider**, and the set is justified from **science, not a stepwise algorithm**
+- Table 1 reproduces closely: mean **age ~51**, **BMI ~33.2**
+
+**MASLD:** the **age row** (**~40 vs ~62**) is the *question* Table 1 hands you — whether age **confounds** this contrast is a claim about **causal structure**, argued on the **Slide 7 DAG**, not read off the row.
+
+::: {.notes}
+~14 min. The pivot of the lecture, and the place to break a habit rather than install one: Table 1 does not find the confounders. Describing the sample IS the job — a good Table 1 earns its place by showing which cells are too thin to model, where a covariate level has almost nobody in one group, and where a value is impossible or miscoded (Slide 10's cut is the live example). Walk them through reading a row: what does it describe, is any cell too small to support an estimate, does anything look miscoded, and what question does the contrast raise? Then say out loud where the answer comes from — the causal and temporal argument, not the row. This is literally the P2 deliverable: a Table 1 plus the reasoning for the adjustment set, and the reasoning is the part that is graded.
+:::
+
+## Slide 13 — Crude vs adjusted: the collapse explained
+
+- Return to Slide 2: Group IV all-cause **HR ≈ 15 crude → ≈ 3.3 after adjustment**
+- Mechanism: adjustment can **remove confounding**, **remove real effect** through mediators, or **add bias** through colliders
+- The hazard ratio is also **non-collapsible** — it moves on adjustment even under a null — and crude and adjusted must be fitted on the **same rows**
+- **Attenuation is diagnostic evidence about what the covariates are doing — not evidence that the adjusted estimate is correct**
+- The residual **≈3** is the **remaining conditional association under this adjustment set** — not the phenotype's own signal
+
+![](../img/figure1_km.png)
+
+**MASLD:** the **≈15 → ≈3** move is what the paper's **inherited adjustment set** produces — which explanation generated it is what this analysis cannot settle.
+
+::: {.notes}
+~12 min. Payoff for the puzzle parked at Slide 2. Revisit the DAG: under that structure the crude HR travels both the direct path and the age backdoor, and adjustment is meant to close it. Say plainly that the arithmetic does not verify the structure. Correct the natural misreading in both directions: adjustment did not necessarily destroy a real effect, and it did not necessarily purify one. Which mechanism operated is what P2 says it cannot settle.
+:::
+
+## Slide 14 — The "obesity paradox" as a structural question
+
+- The paradox: obese patients sometimes look **protected** in crude comparisons
+- The candidate explanations are **structural, not biological** — confounding by age / severity, selection into a sick-but-surviving sample — but **naming a candidate is not demonstrating one**
+- **Descriptively**, "leaner is safer" fails and the paper reports that accurately: Group IV has the **poorest observed survival** — **19.5%** died, against **9.6%** in Group III
+- **Comparatively**, it does not follow: on the locked **IV-vs-III** contrast the adjusted HR is **1.06 (0.77–1.45)** unweighted, and the paper's own Model 1 puts Groups III and IV almost on top of each other — implied ratio about **0.99**
+- A DAG **frames** the paradox; it does not **settle** it
+
+**MASLD:** the headline is **not** the paradox resolved — it is the paradox **posed** on the cell that holds body-mass category fixed. Wk6 re-runs that contrast design-aware: **1.29 (0.90–1.86)**, interval still including 1.
+
+::: {.notes}
+~10 min. Tie the week together, but do not tie a bow on it. The "obesity paradox" is one of epidemiology's most famous structural puzzles, and the temptation is to announce that this paper solves it. Say plainly that it does not. Split the claim in two and keep the halves apart: the descriptive ranking reproduces and the authors report it accurately — concede that half out loud — while the comparative claim it is used to carry does not survive the adjusted models, including the authors' own, where Groups III and IV sit almost on top of each other. And which mechanism produced the attenuation — confounding removed, a mediator conditioned on, a collider opened — is exactly what Slide 13 has just said this analysis cannot settle, so Slide 14 cannot turn round and claim it. That is the discipline M4 ends on: the descriptive finding is accurate, the comparative one is the revision we ask for. Get the roles wrong and you "discover" a resolution that was only ever a crude ranking.
+:::
+
+## Slide 15 — What adjustment can and cannot fix
+
+- Adjustment closes **measured** backdoor paths only — **residual / unmeasured** confounding remains
+- Over-adjustment (mediators) and collider / selection bias can *add* bias — **more covariates is not always better**
+- Preview: **survey design (Wk6)** and **missing-FLI selection (Wk7)** are biases adjustment alone won't fix
+- The adjusted **≈3 is provisional** — later weeks stress-test it
+
+**MASLD:** even the adjusted ≈3 is not the last word — the survey weights and the FLI selection are still ahead.
+
+::: {.notes}
+~8 min. End on humility and a roadmap. Adjustment is powerful but bounded. Name the two upcoming threats explicitly — survey weighting (Wk6) and the FLI selection node (Wk7, the collider from Slide 6). This keeps the course arc alive: Interrogate is not finished at "we adjusted for age."
+:::
+
+## Slide 16 — Bridge to today's lab
+
+- **L3 (Thursday):** in the **EpiMethods OER** environment, move from the frozen cohort to estimates — build **Table 1** across the four phenotype groups, then fit **crude and age-adjusted** models to watch the Group IV **HR fall from ≈15 toward ≈3**
+- **Workflow:** use Table 1 to **see the groups** and catch **sparse cells, positivity and coding problems**; decide the adjustment set from **causal and temporal reasoning** (today's DAG logic); **record what you deliberately leave out** (mediators, colliders)
+- **P2 (your paper):** produce **your own Table 1** plus a written **adjustment rationale** — which variables you adjust, which you don't, and why — carrying forward into your **M1** replication
+
+**MASLD:** you will reproduce, with your own hands, the **crude → adjusted collapse** we drew today.
+
+::: {.notes}
+~6 min. Make the handoff concrete. L3 = Table 1 + crude + age-adjusted models; they should literally see the HR drop. P2 = their own Table 1 with a defended adjustment set, feeding M1. Remind them the "what I left out and why" is graded as heavily as "what I put in" — mediators and colliders are the trap. Send them to lab.
+:::

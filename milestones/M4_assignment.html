@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>M4 assignment</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">M4 assignment</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#m4-reanalysis-letter-and-reproducible-repository" id="toc-m4-reanalysis-letter-and-reproducible-repository">M4 —
+Reanalysis Letter and Reproducible Repository</a>
+<ul>
+<li><a href="#what-m4-is" id="toc-what-m4-is">What M4 is</a></li>
+<li><a href="#what-you-submit" id="toc-what-you-submit">What you
+submit</a></li>
+<li><a href="#what-the-letter-has-to-do" id="toc-what-the-letter-has-to-do">What the letter has to do</a></li>
+<li><a href="#writing-it-as-a-letter" id="toc-writing-it-as-a-letter">Writing it as a letter</a></li>
+<li><a href="#reproducibility" id="toc-reproducibility">Reproducibility</a></li>
+<li><a href="#how-it-is-graded" id="toc-how-it-is-graded">How it is
+graded</a></li>
+<li><a href="#bonus-journal-submission-pledge" id="toc-bonus-journal-submission-pledge">Bonus — journal-submission
+pledge</a></li>
+<li><a href="#weight-deadline-and-policy" id="toc-weight-deadline-and-policy">Weight, deadline and policy</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="m4-reanalysis-letter-and-reproducible-repository">M4 —
+Reanalysis Letter and Reproducible Repository</h1>
+<p><strong>Group · Reanalysis letter + code zip · Weight and deadline:
+see the syllabus</strong></p>
+<hr />
+<h2 id="what-m4-is">What M4 is</h2>
+<p>A short, densely written <strong>reanalysis letter or commentary
+(~1,000–1,500 words)</strong>, accompanied by your fully reproducible
+repository.</p>
+<p>M1 asked what the paper’s analysis <em>does</em>. <strong>M4 asks
+what it should have done, and what difference that makes.</strong> The
+distinction matters: a letter that only restates your replication is an
+M1 deck in prose. A reanalysis says what you changed, why the change was
+warranted, and what the result does when you make it — including when
+the answer is “nothing much.”</p>
+<p>It is the capstone of the whole sequence: the paper locked at M0,
+replicated at M1, critiqued by another group at M2, defended at M3,
+resolved here into a single statement of what stands.</p>
+<h2 id="what-you-submit">What you submit</h2>
+<p>Two files, by the deadline in the syllabus:</p>
+<ol type="1">
+<li><strong>The reanalysis letter (PDF)</strong>, ~1,000–1,500
+words.</li>
+<li><strong>A zip archive of your fully reproducible repository,
+downloaded from GitHub.</strong></li>
+</ol>
+<p>Your letter must include a <strong>cover note</strong> on the final
+page, and the same text as <code>COVER-NOTE.md</code> in the root of
+your repository zip. It contains a one-line contribution note per
+member, any external-feedback disclosure — including any group whose
+conversation or M1 review influenced a change you made — and an AI Use
+Statement.</p>
+<h2 id="what-the-letter-has-to-do">What the letter has to do</h2>
+<p>Four things, in whatever order the argument needs:</p>
+<p><strong>1. Name the analytic decision you are contesting.</strong>
+Not a list of everything imperfect about the paper — the one or two
+choices your work actually bears on. State the paper’s choice, state
+yours, and say why yours is defensible.</p>
+<p><strong>2. Show what the change does.</strong> Re-estimate under your
+specification and report it against theirs. Be specific about what you
+altered: the adjustment set, the estimand and whether the contrast
+answers the question the paper asks, whether the estimate respects the
+design and outcome structure the data actually have, how the missingness
+was handled, whether an interaction was assessed on the scale the claim
+needs. A change that moves the estimate and a change that leaves it
+intact are both results — report whichever you got.</p>
+<p><strong>3. Separate three kinds of finding.</strong> A letter this
+short cannot say everything, so what it does say has to be calibrated to
+the evidence:</p>
+<ul>
+<li>what is <strong>corrected</strong> — the original is wrong and you
+can show it;</li>
+<li>what is <strong>re-priced</strong> — the finding survives, but the
+uncertainty around it does not match what was claimed;</li>
+<li>what <strong>stands</strong> — you looked, and the original holds
+up.</li>
+</ul>
+<p><strong>4. Carry forward the analysis you defended at M3</strong>,
+and document anything that has changed since. The letter inherits the
+best-defended version of your work, not a fresh one: if the estimate,
+model or population differs from what you defended, say so and say why.
+Account for the M2 critique too — what you accepted, what you rejected
+and on what grounds — and for any change you made on your own
+initiative. A letter that never mentions the critique has left out part
+of the work; rejecting a point with a stated reason is a complete
+answer, ignoring it is not.</p>
+<p>Avoid a bottom line stronger than the evidence supports. That is the
+most common way a technically sound reanalysis loses marks.</p>
+<h2 id="writing-it-as-a-letter">Writing it as a letter</h2>
+<p>This is a journal genre, not an essay. Letters to the editor and
+commentaries are read by people deciding quickly whether the objection
+is substantial, so:</p>
+<ul>
+<li>lead with the claim, not the background;</li>
+<li>every paragraph earns its place — at this length there is no room
+for a literature review or a methods tutorial;</li>
+<li>cite the paper’s own table and figure numbers when you contest them,
+so a reader can check you without hunting;</li>
+<li>write so the original authors could reply. Precise disagreement
+invites a response; vague criticism does not.</li>
+</ul>
+<h2 id="reproducibility">Reproducibility</h2>
+<p>In health data science, code that only runs on your machine is
+considered unfinished. We grade strictly on
+<strong>auditability</strong>: your code must run from start to finish
+<strong>on a fresh machine without manual intervention</strong>.</p>
+<p>Every number, figure and table in the letter must have been produced
+by code in that repository — including the numbers you quote from the
+original paper for comparison, which should be traceable to where you
+took them from. If you adapted the original authors’ published code,
+cite it in your repository README and identify in your cover note which
+scripts or functions are derived from it and what you changed.</p>
+<p>Your repository is part of the submission, not an attachment to it. A
+reader who disagrees with your conclusion should be able to run it and
+see where you and the authors part company.</p>
+<h2 id="how-it-is-graded">How it is graded</h2>
+<p>The usual three-band scale applies:</p>
+<ul>
+<li><strong>Exceptional</strong> — deep insight, discrepancies traced to
+their root cause, or masterful engagement with counter-arguments.</li>
+<li><strong>Adequate</strong> — the mechanics executed correctly, with
+sound epidemiological understanding.</li>
+<li><strong>Weak</strong> — generic, superficial, or incorrect.</li>
+</ul>
+<h2 id="bonus-journal-submission-pledge">Bonus — journal-submission
+pledge</h2>
+<p>Submit, <strong>alongside M4</strong>, a signed pledge committing to
+submit the work to a peer-reviewed journal by the date the syllabus
+names.</p>
+<p>If you act on the pledge, the per-member contribution notes you have
+been writing since M0 are exactly the contributorship statement a
+journal will ask you for.</p>
+<h2 id="weight-deadline-and-policy">Weight, deadline and policy</h2>
+<p>See the syllabus. It governs what this milestone is worth, when it is
+due, whether the weight can be shifted, and any late penalty. This page
+describes the task only.</p>
+</body>
+</html>

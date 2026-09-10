@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>P5 missing data</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">P5 missing data</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#p5-missing-data-sensitivity" id="toc-p5-missing-data-sensitivity">P5 — Missing-data sensitivity</a>
+<ul>
+<li><a href="#the-question-this-week" id="toc-the-question-this-week">The question this week</a></li>
+<li><a href="#step-1-classify-every-reduction-before-naming-any-of-it-missing" id="toc-step-1-classify-every-reduction-before-naming-any-of-it-missing">Step
+1 — Classify every reduction before naming any of it “missing”</a></li>
+<li><a href="#step-2-name-the-problem-you-will-analyse-and-scope-the-rest" id="toc-step-2-name-the-problem-you-will-analyse-and-scope-the-rest">Step
+2 — Name the problem you will analyse, and scope the rest</a></li>
+<li><a href="#what-to-do" id="toc-what-to-do">What to do</a></li>
+<li><a href="#deliverable" id="toc-deliverable">Deliverable</a></li>
+<li><a href="#worked-example-masldnhanes-demonstration" id="toc-worked-example-masldnhanes-demonstration">Worked example —
+MASLD/NHANES demonstration</a></li>
+<li><a href="#what-good-looks-like" id="toc-what-good-looks-like">What
+good looks like</a></li>
+<li><a href="#be-ready-to-defend-m3" id="toc-be-ready-to-defend-m3">Be
+ready to defend (M3)</a></li>
+<li><a href="#ai-co-pilot-note" id="toc-ai-co-pilot-note">AI co-pilot
+note</a></li>
+<li><a href="#lab-project-handoff" id="toc-lab-project-handoff">Lab →
+project handoff</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="p5-missing-data-sensitivity">P5 — Missing-data sensitivity</h1>
+<p><strong>Week 7 · applies L6 (Missing data) · optional and ungraded —
+no separate deadline, nothing to submit; M1 is assembled from these five
+increments</strong> <strong>Keep in your group GitHub repo:</strong> a
+missingness audit + one justified missing-data analysis compared with
+complete-case.</p>
+<h2 id="the-question-this-week">The question this week</h2>
+<p><em>Which reductions in your sample are actually missing data, how
+much genuine missingness is there, and does handling it change your main
+estimate?</em></p>
+<p>The trap this increment exists to defuse: <strong>a shrinking N is
+not evidence of a missing-data problem.</strong> Cohorts shrink for
+several reasons and only one of them is missingness.</p>
+<h2 id="step-1-classify-every-reduction-before-naming-any-of-it-missing">Step
+1 — Classify every reduction before naming any of it “missing”</h2>
+<p>Go back to your P1 funnel and give every downward step a type. Do
+this <strong>first</strong>, before you quantify anything.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Type</th>
+<th>What it is</th>
+<th>Can a missing-data method fix it?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DESIGN</strong></td>
+<td>The study deliberately measured this variable in a subsample, and
+supplies a weight for it</td>
+<td>No — and it does not need fixing. Use the right weight (P4).</td>
+</tr>
+<tr>
+<td><strong>ELIGIBILITY</strong></td>
+<td>A definitional restriction: age, calendar window, geography</td>
+<td>No — it states who the study is about</td>
+</tr>
+<tr>
+<td><strong>TARGET POPULATION</strong></td>
+<td>A disease or exposure definition: people who do not have the
+condition</td>
+<td>No — they are not who the paper is about</td>
+</tr>
+<tr>
+<td><strong>OUTCOME ASCERTAINMENT</strong></td>
+<td>Failure to link or follow up for the outcome — the record was never
+in a position to carry a value</td>
+<td>No — count it, report it separately, and do not impute it</td>
+</tr>
+<tr>
+<td><strong>MISSINGNESS</strong></td>
+<td>Someone who <em>should</em> have a value and does not</td>
+<td><strong>Yes — this is the only row a missing-data method
+addresses</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Designed subsampling is not missing data.</strong> If your
+survey supplies a subsample weight, absence outside that subsample is a
+design feature with a documented fix, not an uncorrectable selection
+bias. Inference remains conditional on the weighting assumptions — say
+so — but do not call it MNAR.</p>
+<h2 id="step-2-name-the-problem-you-will-analyse-and-scope-the-rest">Step 2
+— Name the problem you will analyse, and scope the rest</h2>
+<p>Your sensitivity analysis runs on the MISSINGNESS rows only: records
+that should have carried a value on a variable your locked model uses
+and do not. That is exactly what M0 criterion 6 required you to point
+at, and it is the only loss P5 addresses with the methods this course
+teaches. It must arise from your locked scientific analysis — the
+variables your main model already uses, not variables added until a
+problem appears.</p>
+<p>The other rows stay in your write-up. DESIGN is answered by the
+weight you chose at P4; inference stays conditional on the weighting
+assumptions — say so, and do not call it MNAR. ELIGIBILITY and TARGET
+POPULATION state who the paper is about; report them so nobody reads
+them as attrition. OUTCOME ASCERTAINMENT is failure to link or follow up
+— the record was never in a position to carry an outcome value, so count
+it, report it separately, and do not impute it. A record that was
+followed and still has no outcome value is missingness, and belongs here
+in Step 2. Where any of these limits who your estimate applies to, write
+the one sentence that states the population your conclusion is
+about.</p>
+<p>None of this says every loss above is unanalysable. Design is already
+answered, by the P4 weight; eligibility and target population state who
+the study is about, so there is nothing there to analyse. Selection
+beyond the design weight, and failure to link or follow up, do have
+methods — selection models and censoring weights among them — but they
+are not the methods this course teaches, so at P5 you classify, report
+and scope those losses rather than analyse them.</p>
+<blockquote>
+<p>Adding covariates to manufacture missingness changes your adjustment
+set and answers a different question. That is not a missing-data
+analysis.</p>
+</blockquote>
+<h2 id="what-to-do">What to do</h2>
+<ol type="1">
+<li><strong>Classify</strong> every funnel step by type (Step 1). One
+table, five categories.</li>
+<li><strong>Identify</strong> the genuine missingness arising from your
+locked model (Step 2).</li>
+<li><strong>Quantify</strong> it: which variables, how many observations
+each, overlap between them, and the loss both unweighted and
+weighted.</li>
+<li><strong>State your estimand</strong> before comparing anything —
+complete-case and any alternative can silently target different
+populations.</li>
+<li><strong>Choose a method</strong> and state the assumptions that
+would make it informative.</li>
+<li><strong>Measure whether it matters.</strong> Compare against your P4
+design-aware estimate and say whether the difference is
+<em>practically</em> meaningful, not merely whether one is
+“significant”.</li>
+</ol>
+<h2 id="deliverable">Deliverable</h2>
+<ul>
+<li>The <strong>typed funnel table</strong> — this becomes your M1
+missingness-audit slide.</li>
+<li>A quantification of the genuine missingness in your locked model’s
+variables.</li>
+<li>Your complete-case estimate against one justified alternative, with
+the estimand and assumptions stated, and two or three sentences on
+whether it changed anything.</li>
+<li>One sentence naming the population your conclusion is about, given
+every restriction in the funnel. Not a caveat added if there is room —
+part of the deliverable.</li>
+</ul>
+<h2 id="worked-example-masldnhanes-demonstration">Worked example —
+MASLD/NHANES demonstration</h2>
+<ul>
+<li><strong>Classified:</strong> after eligibility, the two largest
+reductions are DESIGN (the fasting subsample, handled by
+<code>WTSAF2YR</code>) and TARGET POPULATION (people without steatosis).
+Neither is missing data. Genuine missingness across the whole funnel is
+<strong>792 item-nonresponse losses</strong> and, separately, <strong>2
+outcome-ascertainment losses</strong> — different problems, not added
+together.</li>
+<li><strong>Identified:</strong> within the locked domain — the 6,048
+rows P5 analyses — exactly <strong>one</strong> Model-1 covariate
+carries any missingness: cancer status, <strong>109 observations, 1.8%
+unweighted, 1.18% weighted</strong>.</li>
+<li><strong>Measured:</strong> complete-case <strong>2.97</strong>, both
+extreme assignments of the missing values <strong>2.98 / 2.99</strong>,
+multiple imputation <strong>2.98</strong>. Everything inside a 0.02
+band.</li>
+<li><strong>Concluded:</strong> this missing-data problem mattered
+little <strong>after we measured it</strong>. The analysis was necessary
+because we did not know that in advance.</li>
+</ul>
+<h2 id="what-good-looks-like">What good looks like</h2>
+<ul>
+<li><strong>Exceptional:</strong> classifies every funnel step by type
+before quantifying anything; identifies missingness arising from the
+locked model rather than manufactured; states the estimand and the
+assumptions; measures the effect and reports it honestly — including
+when the honest answer is “no material change” — and states in one
+sentence the population the conclusion is about.</li>
+<li><strong>Adequate:</strong> quantifies the missingness in the model’s
+variables, runs complete-case against one alternative, interprets
+sensibly.</li>
+<li><strong>Weak:</strong> treats total cohort shrinkage as the
+missing-data problem; calls designed subsampling MNAR; adds variables
+until a missing-data problem appears; reports “&lt;10% missing,
+complete-case is fine” with no analysis; builds the increment on a loss
+P5 does not address with the methods this course teaches — designed
+subsampling, eligibility, the disease definition, or a linkage
+failure.</li>
+</ul>
+<h2 id="be-ready-to-defend-m3">Be ready to defend (M3)</h2>
+<blockquote>
+<p><em>“Point at one step in your funnel and tell me whether it is
+design, eligibility, target population, outcome ascertainment, or
+missingness — and how you know.”</em></p>
+</blockquote>
+<h2 id="ai-co-pilot-note">AI co-pilot note</h2>
+<p>A co-pilot will typically report the small per-variable missingness,
+run a quick <code>mice()</code> with default settings, and declare
+victory — never noticing the large <em>selection</em> into the analytic
+sample. Justify the imputation model and follow the selection upstream
+yourself.</p>
+<h2 id="lab-project-handoff">Lab → project handoff</h2>
+<p>You are applying <strong>L6 (Missing data)</strong> — examining the
+missingness pattern and using multiple imputation with design-adjusted
+regression (EpiMethods <code>missingdataE</code>). Choose the imputation
+model and the number of imputations to fit <em>your</em> problem, not
+the lab’s fast defaults.</p>
+</body>
+</html>

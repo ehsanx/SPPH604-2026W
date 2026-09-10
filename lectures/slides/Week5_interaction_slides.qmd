@@ -1,0 +1,273 @@
+---
+title: "Week 5 — Interaction & Effect Modification"
+subtitle: "SPPH 604 · Application of Advanced Epidemiological Methods"
+author: "Running example: Kueh et al. (2026), MASLD / NHANES"
+format:
+  revealjs:
+    theme: default
+    slide-number: c/t
+    progress: true
+    incremental: false
+    embed-resources: true
+    width: 1280
+    height: 720
+    fig-align: center
+    smaller: true
+---
+
+## Interaction & Effect Modification {.center}
+
+**Week 5 · Tuesday lecture** — the concept lecture before Thursday's **L4** lab
+
+Three ideas students collapse into one:
+
+- **Confounding** — a nuisance to remove
+- **Effect modification** — a finding to report
+- **Statistical interaction** — a model term on a scale
+
+> **MASLD:** does the Group IV survival penalty *differ by sex* — or does it just *look* different?
+
+::: {.notes}
+Set the tone: today is conceptual discipline, not new machinery. The single most common error in applied epi is treating a big crude subgroup gap as proof of effect modification. By the end of today students should be able to say what the MASLD sex signal is *not* — not a tested interaction, and not a demonstrated absence of one. Frame the whole session around the men-28 / women-4 gap we return to after the break, and be clear that we return to it without resolving it.
+:::
+
+## Learning objectives
+
+- Distinguish **confounding**, **effect modification (EMM)**, and **statistical interaction**
+- Explain why EMM is **scale-dependent** — additive vs multiplicative answer different questions
+- Read the MASLD **sex** example correctly: a crude gap is **not an interaction test**, and a null test is **not homogeneity**
+- Pick the **right tool for time-to-event** — a Cox product term + absolute-risk contrasts
+- Reject the logistic **RERI** for a survival outcome, and say why
+- Name the term's dominant threat you will formalize at **M1**: **FLI circularity**
+
+::: {.notes}
+These six objectives map one-to-one onto today's arc. Emphasize objective 3 — the whole point of the sex example is that "dramatic" and "real" are not the same thing. Objective 4/5 is the methods payoff that feeds L4. Objective 6 plants the seed we return to in Slide 15. Keep this slide brief; it is a contract, not content.
+:::
+
+## Continuity — where this sits
+
+- **Last week (Wk4 / L3):** we adjusted confounders and built **Table 1** (P2) — the Group IV HR shrank from **≈15 → ≈2.9**
+- Confounders **distort** one honest effect; we removed them
+- **Today:** a *different* question — does the effect **differ across subgroups**?
+- **Thursday (L4):** product terms + stratum-specific estimates, which each of you runs as **P3**
+
+> **MASLD:** last week adjustment *shrank* the IV effect; today we ask whether that effect is the *same* for men and women.
+
+::: {.notes}
+Draw the contrast explicitly on the board if needed: confounding is about whether a *single* estimate is honest; effect modification is about whether a single estimate should *exist at all*. Students routinely conflate "the HR changed after adjustment" (confounding) with "the HR differs across strata" (modification). Today untangles exactly that. Remind them that P3 applies L4's method rather than preceding it: L4 is the guided rehearsal on the teaching dataset, and P3 transfers the same steps to their own paper. P3 is optional and ungraded — no separate deadline and nothing to submit — so nobody owes a P3 draft.
+:::
+
+## Where we are in the project
+
+- Course arc: **Replicate → Interrogate → Improve → Defend** — we are mid-**Interrogate**
+- **P1** eligibility ✓ · **P2** Table 1 ✓ · today feeds **P3 effect modification**
+- The finding to keep in view: **Group IV** (non-obese, high central adiposity) has the **worst all-cause survival**
+- Four phenotypes stay on screen all day as our running example
+
+> **MASLD:** keep the four BMI × WHtR groups as our test bed — ours are **I 391, II 4,585, III 787, IV 608**; the paper's are **386 / 4,541 / 769 / 604**.
+
+::: {.notes}
+(6 min.) Orient students on the map before diving in. The four-group structure is the exposure we interrogate today; write the group sizes on a corner of the board and leave them there — and write both columns, because these are two different objects: the paper's 386 / 4,541 / 769 / 604 with N ≈ 6,300 and 585 deaths, against our full analytic file's 391 / 4,585 / 787 / 608 with N = 6,371 and 586 deaths. The counter-intuitive headline — the *non-obese* group does worst — is exactly why subgroup claims here are tempting and dangerous. This slide is pure orientation; do not teach method yet.
+:::
+
+## Today's roadmap
+
+- **Three concepts** → **two scales** → **one worked MASLD example** → **the right time-to-event tool**
+- Flag the trap up front: a big crude men-vs-women gap is **not** proof of modification
+- We will vote on the sex example, then dismantle it together
+- Ends with honest subgroup reporting + a preview of the term's dominant threat
+
+> **MASLD:** by the slide after the break we test the **men-IV ≈ 28 vs women-IV ≈ 4** gap properly — and find that the data cannot say what produced it.
+
+::: {.notes}
+(4 min.) Give students the shape of the session so they can track where they are. Promise the payoff explicitly — the 28-vs-4 gap is the hook that keeps attention through the conceptual first half — but promise a *test*, not a resolution. Tell them the break lands right before the sex example, so the concepts (scales, confounding vs EMM) are tools they will immediately apply.
+:::
+
+## Three things people call "interaction"
+
+- **Confounding** — a nuisance *common cause*; we adjust it **away** to recover one honest effect
+- **Effect modification (EMM)** — the effect **genuinely differs** across a third variable; a *finding*, not a nuisance
+- **Statistical interaction** — a **model term** (product coefficient); a device that *may or may not* map to real EMM
+- Same word, three jobs — conflating them is the root error
+
+> **MASLD:** for the Group IV effect, sex could plausibly be any of the three — today we test which.
+
+::: {.notes}
+(10 min.) This is the conceptual spine. Confounding lives in the *causal structure* (a common cause). EMM lives in *reality* (the effect really is different in men vs women). Statistical interaction lives in the *model* (a product coefficient on some scale). The trap: a significant product term is neither necessary nor sufficient for meaningful EMM, and a crude stratum gap can be pure confounding. Have students place "sex" into each bucket and argue for it before you reveal the answer later.
+:::
+
+## Confounding vs effect modification
+
+- Two different questions: *"is my single estimate biased?"* vs *"should there even **be** a single estimate?"*
+- You **remove** confounding; you **report** effect modification (stratum-specific estimates)
+- Diagnostic contrast: adjusting a confounder **moves the pooled estimate**; a true modifier makes a **pooled estimate misleading**
+- A confounder is a problem to fix; a modifier is a result to describe
+
+> **MASLD:** the paper adjusts sex **as a confounder** — we ask instead whether sex **modifies** the Group IV effect.
+
+::: {.notes}
+(10 min.) Hammer the operational difference: confounding → collapse to one adjusted number; modification → refuse to collapse, present strata. The same variable can be neither, one, or both. Where sex sits for this contrast is a question the data do not settle — keep it genuinely open, and do not pre-announce a verdict you will not be able to deliver. Ask: "if sex modified the effect, what would you be obligated to report?" Answer: separate HRs for men and women, not a pooled one.
+:::
+
+## Statistical interaction = a product term
+
+- Model form: `outcome ~ exposure + modifier + exposure:modifier`
+- The **product coefficient** *is* the interaction — but only **on that model's scale**
+- Meaning is inherited from the **link**: log-hazard, log-odds, or risk
+- A **null product term does not mean equal absolute effects**
+
+> **MASLD:** in Cox, the term is `Group:Sex` on the **log-hazard (multiplicative)** scale.
+
+::: {.notes}
+(10 min.) Demystify "interaction" as nothing more mystical than a product term whose coefficient you can read off. The critical subtlety: "significant interaction" is always a claim *about a scale*. A Cox `Group:Sex` term tests whether the *hazard ratios* differ — multiplicative. It says nothing directly about whether the *absolute* excess deaths differ. Foreshadow Slide 6/7: the same data can show interaction on one scale and none on the other.
+:::
+
+## Additive vs multiplicative scales
+
+- **Multiplicative:** do the **ratios** differ across strata? (ratio of HRs / RRs)
+- **Additive:** do the **risk differences** differ? — governs *how many events you prevent*
+- Public-health / intervention planning lives on the **additive** scale
+- Two men and women can share an HR yet differ hugely in **absolute** excess deaths
+
+> **MASLD:** same HR + different **baseline** mortality → very different absolute excess deaths by sex.
+
+::: {.notes}
+(12 min.) This is the conceptual crux students most often miss. The multiplicative scale asks "is the *fold-change* the same?"; the additive scale asks "is the *number of extra events* the same?". Because men have higher baseline all-cause mortality, an identical HR would produce more absolute excess deaths in men — that is arithmetic, and it is a *candidate* explanation for the crude sex picture, not a demonstration of one. Stress that neither scale is "correct" — they answer different questions, and you must name which.
+:::
+
+## Same data, two answers
+
+- Toy **2×2×2**: a setting with **no multiplicative** interaction but **clear additive** interaction (and vice versa)
+- Takeaway: *"is there effect modification?"* is **unanswerable without naming the scale**
+- Reporting rule: state the scale, give stratum-specific estimates, don't hang it all on one p-value
+- The scale you pick is a *choice*, and it changes the verdict
+
+::: {.incremental}
+- Multiplicative-null ≠ additive-null
+- So a single "no interaction" claim is incomplete
+:::
+
+> **MASLD:** differing **baseline rates** are one candidate explanation for the sex "signal" — hold that thought, and note we will not be able to confirm it.
+
+::: {.notes}
+(8 min.) Walk one concrete toy table on the board: baseline risks 10% and 40%, common RR = 2. Multiplicatively identical (RR 2 in both strata → no interaction); additively very different (risk difference 10% vs 40%). Say in one line that the reverse pattern also exists rather than building it out. The lesson: the question is ill-posed until you name a scale. This primes the sex example, where the crude picture and the tested contrast come apart.
+:::
+
+## BREAK (10 min)
+
+- Stretch — back in **10 minutes**
+- On return: the **MASLD sex example** — men-IV ≈ 28 vs women-IV ≈ 4
+- Come back ready to **vote**: modification, confounding, or noise?
+
+::: {.notes}
+(10 min.) Keep it to 10. Queue the sex example on the screen as students return so the visual gap (28 vs 4) is the first thing they re-engage with. This is the pivot from concepts to the worked case.
+:::
+
+## The MASLD sex question
+
+- A reader's claim: *"the Group IV hazard is far worse in **men**."*
+- Formal question: does **sex modify** the Group IV-vs-reference **hazard ratio**?
+- Design: **time-to-event**, **586** all-cause deaths in our reproduction (paper: **585**), median follow-up ≈ **6.7 y**
+- We test sex specifically for the **Group IV** contrast — the paper's headline
+
+![](../img/figure1_km.png)
+
+> **MASLD:** Group IV has the worst all-cause survival (**p < 0.0001**) — but is that penalty *sex-specific*?
+
+::: {.notes}
+(8 min.) The KM curves show Group IV separating downward — the headline finding. The seductive next move is to split by sex and headline the men's HR. Reframe it as a precise, testable question: is the *Group IV vs reference HR* different in men vs women? Note the design constraints — this is survival data with censoring, 586 events in our reproduction (the paper reports 585), so subgroup cells (especially male Group IV) are small. Small cells foreshadow the instability we see next.
+:::
+
+## Crude stratified hazard ratios
+
+- Sex-stratified **crude** Group IV HRs: **men ≈ 28** vs **women ≈ 4** — visually dramatic
+- But crude stratum HRs mix in **confounding** *and* **differing baseline hazards** *and* **small male cell counts**
+- Ask the room — is this **modification, confounding, or noise**? *(hold the vote)*
+- Resist the headline reflex
+
+> **MASLD:** these are the exact numbers a careless subgroup analysis would put in the abstract.
+
+::: {.notes}
+(12 min.) Run the vote and record the tally — it makes the next slide land harder. Emphasize the three contaminants baked into a crude stratum HR: residual confounding, different baseline hazards by sex, and a tiny male Group IV cell (wide CI, unstable point estimate). Do not resolve it yet; let students commit to a position. The pedagogical value is that the vote has no winner: the tested contrast is null and imprecise, so none of the three options gets confirmed.
+:::
+
+## The formal interaction test
+
+- Fit the `Group:Sex` product term in the **crude** Cox model, then the **adjusted** model
+- Match the test to the estimand. A `group*sex` term across four groups is a **multi-df** test of whether *any* contrast varies by sex. For the locked IV-vs-III question the 1-df test gives a ratio of hazard ratios of **1.00 (0.42–2.35), p = 0.99** — no evidence of interaction, but an interval wide enough to be compatible with substantial heterogeneity. A null p-value does not prove homogeneity.
+- Lesson: crude stratum contrasts are **not** an interaction test; the test must live **in a model, adjusted**
+- A borderline crude p was never evidence of modification
+
+> **MASLD:** on the locked contrast there is **no evidence of interaction at the available precision** — which is not a finding that the men-28 / women-4 gap was illusory.
+
+::: {.notes}
+(14 min.) The payoff. Match the test to the estimand: a `group*sex` term across four groups is a multi-df test of whether *any* contrast varies by sex. For the locked IV-vs-III question the 1-df test gives a ratio of HRs of **1.00 (0.42–2.35), p = 0.99**. Say the two halves out loud: no evidence of interaction *at the available precision*, and an interval too wide to establish homogeneity. Do not offer a mechanism for the crude gap — the next slide is about why you cannot.
+:::
+
+## A crude stratum difference is not evidence of modification
+
+- **Do not explain the crude gap.** A p-value that moves when covariates enter tells you the **estimate** changed — not **what generated** the difference
+- **Withdrawn:** the earlier teaching that this was baseline-risk confounding rather than true modification, and the instruction to report a **common multiplicative effect** across sex
+- Differing baseline mortality is **one candidate** explanation among several — this study cannot distinguish them
+- The honest statement: **1.00 (0.42–2.35)** — no evidence of interaction **at the available precision**, on an interval compatible with **less than half** the effect in women, or **more than twice** it
+
+> **MASLD:** a null with its uncertainty attached, not a demonstration that sex is irrelevant. M1 re-runs it design-aware on the same rows and the picture moves.
+
+::: {.notes}
+(12 min.) Close the loop opened on Slide 6, and resist the tidy resolution. The room will want a mechanism; the data do not supply one. The transferable lesson is "dramatic is not the same as established" — not "dramatic was really baseline risk". Tie the vote back honestly: whichever way the room voted, the tested contrast neither confirms nor refutes it. Say explicitly that an earlier version of this lecture told you the gap was baseline-risk confounding; that claim is withdrawn.
+:::
+
+## The right tool for time-to-event
+
+- **Multiplicative test:** a **product term in the Cox model** (`Group:Sex`)
+- **Additive story:** **absolute-risk / survival contrasts** — predicted risk differences at fixed times
+- **Do not** dichotomize survival and run a logistic **RERI** — it discards follow-up time and censoring
+- If additive interaction is the target, get it from model-based **absolute risks**, not a repurposed odds ratio
+
+> **MASLD:** pair the Group IV **HR** with predicted **6-year risk differences by sex** to serve public-health readers.
+
+::: {.notes}
+(12 min.) Give the concrete toolkit for P3 and L4. RERI (relative excess risk due to interaction) is a fine additive-interaction measure for *binary* outcomes — but this is time-to-event with censoring, so collapsing to ever/never-died throws away follow-up and biases toward whoever was observed longer. The right additive answer comes from model-predicted absolute risks at a fixed horizon (e.g., 6 years), differenced across strata. Multiplicative from the product term; additive from predicted risks. Two scales, two instruments.
+:::
+
+## Honest subgroup reporting
+
+- **Power:** interaction tests are underpowered — a null is **weak** evidence of *no* modification (tiny male IV cell)
+- **Multiplicity:** **pre-specify** the modifier; don't fish across every covariate
+- **Report:** stratum estimates **+** interaction p **+** the scale — not a single "significant subgroup"
+- One honest pre-specified test beats twenty exploratory ones
+
+> **MASLD:** the sex example is the cautionary template for what you must resist in **P3**.
+
+::: {.notes}
+(8 min.) Three guardrails. (1) Absence of evidence is not evidence of absence — an interval from 0.42 to 2.35 is compatible with the effect in women being less than half that in men, or more than twice it. The study is underpowered, not conclusive. (2) Pre-specify the modifier. (3) Report the interval and the scale, never the p-value alone.
+:::
+
+## Preview: the term's dominant threat
+
+- Seeds the idea you will formally name at **M1**: **FLI circularity**
+- The phenotype groups use **BMI + waist**; the FLI eligibility filter *also* uses **BMI + waist** — exposure and cohort selection are **entangled**
+- Why it matters here: an EMM claim is only as trustworthy as the **exposure definition**
+- Tease the check: a **TyG-based** sensitivity exposure that removes **BMI and waist** from the steatosis surrogate — MASLD's cardiometabolic criteria can still involve them
+
+> **MASLD:** flag it now so your **P3** subgroup work is read against the looming threat, not in isolation.
+
+::: {.notes}
+(6 min.) Plant the seed, don't harvest it. FLI circularity is **one candidate** threat among several — alongside adjustment-set ambiguity, estimand choice, survey design and residual missingness. **Do not tell them which wins**; M1 asks each group to rank them from their own evidence.
+:::
+
+## Bridge to today's lab (L4) & P3
+
+- **In L4 (Thu, EpiMethods OER)**, on the fixed NHANES teaching dataset you will:
+  - (a) fit a Cox model with an **exposure × modifier product term**
+  - (b) extract **stratum-specific** hazard ratios
+  - (c) read the **interaction p-value** on the multiplicative scale
+  - (d) compute **absolute-risk contrasts** at a fixed time — deliberately **not** a logistic RERI
+- **Deliverable P3:** one **pre-specified** effect-modification test on **your own paper's exposure** — product-term p (crude vs adjusted), stratum estimates, the scale, and a one-line verdict stated as **evidence, not mechanism**: whether the data show evidence of modification at the precision you have, and what the interval leaves open
+- **P3 is optional and ungraded** — no separate weight, no separate deadline, nothing to submit; it applies L4's method to your own paper, and **M1 is assembled from these five increments**, the only place it is assessed
+
+> **MASLD:** your P3 should read like our sex example done honestly — report the interval, and resist headlining a crude gap you cannot account for.
+
+::: {.notes}
+(8 min.) Make the L4 → P3 handoff concrete. L4 is the guided rehearsal on the teaching dataset; P3 is the same four steps transferred to their own paper. The deliverable is deliberately small — one pre-specified test — so the intellectual work is interpretation, not coding. Remind them the verdict line is the point, and that it is a statement about evidence: what does the interval rule out, and what does it leave open? P3 is optional and ungraded, with no separate deadline and nothing to submit, so do not close by asking for it.
+:::

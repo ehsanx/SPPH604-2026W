@@ -1,0 +1,123 @@
+---
+title: "P2 — Confounding diagnostic (Table 1): step-by-step reproducible code"
+subtitle: "SPPH 604 · demonstration paper (Kueh et al., BMJ Open 2026;16:e113719)"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    code-tools: true
+    df-print: kable
+execute:
+  warning: false
+  message: false
+---
+
+> Reproduces the Table 1 rows we cite, the **PIR income-% swap**, and the
+> crude → Model 1 attenuation of the Group IV hazard ratio.
+
+```{r setup}
+source("../_shared/paths.R")   # find_repro(), emit_results(), ci(), fmtn(), endash()
+repro <- find_repro()
+suppressPackageStartupMessages({library(dplyr); library(survival)})
+## The cohort is the one P1 locks: the MASLD domain of the fasting subsample.
+## All five increments use these rows so P4 can weight exactly what P2-P3 analysed.
+.a <- readRDS(file.path(repro, "data/derived/masld_analytic.rds"))
+.m <- readRDS(file.path(repro, "data/derived/merged_all.rds"))
+.m$in_analysis <- .m$SEQN %in% .a$SEQN
+d  <- .m[.m$in_analysis & !is.na(.m$WTSAF2YR) & .m$WTSAF2YR > 0, ]
+d$group <- factor(d$group, levels = c("I","II","III","IV"))
+cat("cohort n =", nrow(d), "(P1-locked domain)
+")
+```
+
+## Table 1 — key rows, reproduced vs published
+
+```{r table1}
+med_iqr <- function(x) sprintf("%.1f (%.1f-%.1f)", median(x,na.rm=T),
+                               quantile(x,.25,na.rm=T), quantile(x,.75,na.rm=T))
+mean_sd <- function(x) sprintf("%.1f (%.1f)", mean(x,na.rm=T), sd(x,na.rm=T))
+npct    <- function(x){x<-x[!is.na(x)]; sprintf("%d (%.1f)", sum(x==1), 100*mean(x==1))}
+data.frame(
+  Characteristic = c("Age (mean SD)","Female n(%)","Waist median(IQR)","BMI median(IQR)",
+                     "SBP","DBP","Hypertension","T2DM","Dyslipidaemia","CKD","MI",
+                     "Heart failure","Cancer"),
+  Reproduced = c(mean_sd(d$age), npct(d$female), med_iqr(d$waist), med_iqr(d$bmi),
+                 med_iqr(d$sbp), med_iqr(d$dbp), npct(d$htn), npct(d$t2dm),
+                 npct(d$dyslip), npct(d$ckd), npct(d$mi), npct(d$hf), npct(d$cancer)),
+  Published  = c("51.0 (16.6)","2973 (47.2)","111.0 (104.0-120.0)","33.2 (30.2-37.4)",
+                 "124.0 (114.0-135.0)","72.0 (64.7-79.3)","3238 (52.6)","1645 (26.1)",
+                 "3612 (57.7)","1142 (18.1)","518 (8.4)","283 (4.6)","624 (10.1)"))
+```
+
+Composite definitions used (calibrated to the paper): HTN = self-report **or** BP ≥ 140/90;
+T2DM = self-report **or** HbA1c ≥ 6.5; dyslipidaemia = self-report **or** lipid meds **or** LDL ≥ 130;
+MI = heart attack **or** CHD; CKD = eGFR < 60 (CKD-EPI 2021) **or** ACR ≥ 30.
+
+## The PIR income-percentage swap (published vs reconstructed)
+
+```{r pir}
+pir <- table(d$pir_cat); den <- sum(pir)
+data.frame(
+  category = c("High","Middle","Low"),
+  count = as.integer(pir[c("High","Middle","Low")]),
+  count_pct = round(100*as.integer(pir[c("High","Middle","Low")])/den,1),
+  paper_printed = c(23.0,54.9,22.1))
+```
+
+The counts imply High **22.1** / Low **23.0**, but the paper prints 23.0 / 22.1 —
+the high and low percentages are transposed.
+
+## Two estimands, and why the rows must match
+
+The paper references contrasts to **Group I** (obese, low central). Our locked term
+question references **Group III** (non-obese, low central), isolating central adiposity
+with body-mass category held fixed. Both come from the *same* fitted model; re-levelling
+is reparameterization, not reanalysis.
+
+Model 1 loses 109 observations to missing cancer status, so a crude estimate on all rows
+and an adjusted estimate on complete cases differ for **two** reasons at once. We fit
+both on the same complete-case set and show the all-rows crude separately.
+
+```{r cox}
+COV <- c("age","female","dyslip","htn","t2dm","ckd","mi","cancer",
+         "on_htn_med","on_dm_med","on_lipid_med")
+f0 <- Surv(time_yr,dead) ~ group
+f1 <- as.formula(paste("Surv(time_yr,dead) ~ group +", paste(COV, collapse=" + ")))
+hr <- function(m,g){s<-summary(m); sprintf("%.2f (%.2f-%.2f)",
+        s$conf.int[g,1], s$conf.int[g,"lower .95"], s$conf.int[g,"upper .95"])}
+cc  <- complete.cases(d[,COV]); dcc <- d[cc,]
+rel <- function(x,ref){x$group <- relevel(x$group, ref); x}
+
+out <- rbind(
+  data.frame(Estimand="replication  IV vs I",  Model="crude",   rows=nrow(d),
+             HR=hr(coxph(f0, data=d),   "groupIV")),
+  data.frame(Estimand="replication  IV vs I",  Model="crude",   rows=nrow(dcc),
+             HR=hr(coxph(f0, data=dcc), "groupIV")),
+  data.frame(Estimand="replication  IV vs I",  Model="Model 1", rows=nrow(dcc),
+             HR=hr(coxph(f1, data=dcc), "groupIV")),
+  data.frame(Estimand="locked       IV vs III", Model="crude",   rows=nrow(d),
+             HR=hr(coxph(f0, data=rel(d,"III")),   "groupIV")),
+  data.frame(Estimand="locked       IV vs III", Model="crude",   rows=nrow(dcc),
+             HR=hr(coxph(f0, data=rel(dcc,"III")), "groupIV")),
+  data.frame(Estimand="locked       IV vs III", Model="Model 1", rows=nrow(dcc),
+             HR=hr(coxph(f1, data=rel(dcc,"III")), "groupIV")))
+out
+```
+
+The two crude rows within each estimand differ only by the 109 dropped observations, and
+they barely move. **The row restriction accounts for essentially none of the change**, so
+what remains is attributable to adjustment — which is the only reason we are entitled to
+say so.
+
+On the locked contrast the crude excess does not survive adjustment. On the paper's own
+reference it does. Both are properties of one model, answering two different questions.
+
+## Results for M1
+
+```{r emit}
+emit_results("P2", list(
+  n_domain   = fmtn(nrow(d)),
+  n_complete = fmtn(nrow(dcc)),
+  n_dropped  = fmtn(nrow(d) - nrow(dcc))
+), list(estimands = out))
+```

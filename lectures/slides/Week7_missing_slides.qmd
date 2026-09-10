@@ -1,0 +1,265 @@
+---
+title: "Week 7 — Missing Data: What Multiple Imputation Can and Cannot Fix"
+subtitle: "SPPH 604 · Application of Advanced Epidemiological Methods"
+author: "Running example: Kueh et al. (2026), MASLD / NHANES"
+format:
+  revealjs:
+    theme: default
+    slide-number: c/t
+    progress: true
+    incremental: false
+    embed-resources: true
+    width: 1280
+    height: 720
+    fig-align: center
+    smaller: true
+---
+
+## Week 7 — Missing Data {.center}
+
+### What Multiple Imputation Can and Cannot Fix
+
+**SPPH 604 · Application of Advanced Epidemiological Methods**
+
+Running example: **Kueh et al. (2026)**, MASLD / NHANES
+
+*Tuesday lecture — precedes Thursday lab L6 and increment P5*
+
+::: {.notes}
+Fifth and final interrogation lens. Frame the whole 2.5-hour session: today we separate a missingness problem MI can help with from one it cannot. This is the last "find the flaws" week: next week M1 compiles all five lenses, the critique of another group's M1 is M2 in Week 9, and improvement is defended at M3 in Week 11. ~2.5 h total.
+:::
+
+## Learning objectives
+
+- Classify each reduction by **type** first — design, eligibility, target population, outcome ascertainment, missingness — then apply MCAR / MAR / MNAR to the missingness only
+- Tell **design** apart from **missingness** — the two losses students most often conflate: selection into the fasting subsample is **design**, answered by the weight and a target-population sentence; item-missing confounders inside the cohort are the **missingness**, and only that is a missing-data problem
+- Contrast **complete-case**, a **model-free extreme-value stress test**, and **multiple imputation** on the **replication contrast (IV vs I), design-aware Model 1**: **2.97 → 2.98** — on the **locked scientific contrast (IV vs III)** the same sensitivity analysis never leaves **1.29**
+- Specify a defensible imputation model: variables in, number of imputations `M`, and **Rubin's rules** for pooling
+- Judge what MI **can** repair (MAR item-missingness) and **cannot** (structurally unobserved exposure)
+
+::: {.notes}
+Design-versus-missingness is the whole lecture in one line — students who leave calling the fasting subsample a missing-data layer have missed the point. Emphasize: mechanism is argued substantively, never tested from the data.
+:::
+
+## Continuity — from weighting to missingness
+
+- **Last week (Wk6, L5):** design-aware estimate — NHANES **weights + strata + PSU** pulled Group IV from naive **~15** toward **~12.4**
+- Weighting fixed *representation*; it did **not** fill in *missing values*
+- **Today:** confront values that are simply absent — separate what MI can help vs. what it cannot
+- Last interrogation method before M1 compiles all five — the shift from *"find the flaws"* to critique is M2 (Wk 9), and improvement is defended at M3 (Wk 11)
+- Sets up **L6** (pattern → MI → design-adjusted refit) and **P5** (your paper's missing-data sensitivity analysis)
+
+::: {.notes}
+Anchor the ledger students are building week by week. Weighting and imputation are different repairs for different defects — say it explicitly so they don't think weights "handle" missing data. ~2 min on this slide.
+:::
+
+## Where we are in the project
+
+- The arc: **Replicate + Interrogate** (survey design → missing data) → **M1** compiled and presented **next week** → **Critique** another group's M1 (**M2**, Wk 9) → **Improve & defend** (**M3**, Wk 11)
+- Missing data is the **fifth and final threat lens** before students write their critique of another group's M1
+- Today's method interacts with everything prior: **impute → weight → refit**
+- Hold two cohort sizes in mind: the **full analytic file** is **6,371** and the **locked domain** is **6,048** — the paper reports about **6,300**
+
+> **MASLD:** the reproduction lands on 6,371, not the paper's approximate 6,300 — so where did the *other* adults go?
+
+::: {.notes}
+~6 min. The "where did everyone go?" question seeds the typed funnel. Don't answer it yet — let it hang.
+:::
+
+## Why missingness is bias, not bookkeeping
+
+- Dropping incomplete rows silently changes *who* is in your analysis — the **estimand shifts** even if nothing is mis-measured
+- The *amount* missing bounds **power**; the *mechanism* determines **bias**
+- **5% MNAR** can mislead more than **30% MCAR**
+- Punchline preview: one loss MI handles well (item nonresponse), one it cannot touch because it is **design**, not missing data
+
+> **MASLD:** the paper counts **585** all-cause deaths, our reproduction **586**; those deaths drive the survival estimates — if the missing are systematically higher- or lower-risk, every HR moves.
+
+::: {.notes}
+~9 min. Kill the intuition that "only a little missing, so it's fine." Counterexample: small but value-dependent missingness (MNAR) is worse than large random missingness. The 586 deaths in our reproduction (the paper reports 585) are the engine of every HR — bias in who is missing propagates straight into the survival estimates.
+:::
+
+## The taxonomy: MCAR / MAR / MNAR
+
+- **MCAR** — missingness independent of everything; complete cases are a random subsample: unbiased but wasteful
+- **MAR** — missingness explained by *observed* data; recoverable by conditioning / imputing on those observables
+- **MNAR** — missingness depends on the *unobserved value itself*; not fixable from data alone
+- These labels are **untestable** from the data — argue the mechanism substantively, then run sensitivity analysis
+
+> **MASLD:** which label fits the **792 adults inside the fasting subsample who still lack an FLI**? Those never sampled into the subsample are a different question entirely.
+
+::: {.notes}
+~12 min. Spend real time here. The point students resist: you cannot test MAR against MNAR from the data alone — which is why classifying the *type* of loss first matters more than picking a label for all of it.
+:::
+
+## A picture of the taxonomy
+
+- Three arrows into the "missing" indicator: from **nothing** (MCAR) / from **observed X** (MAR) / from **the value itself** (MNAR)
+- The one diagnostic you *can* do: compare observed characteristics of **complete vs. incomplete** cases
+- That comparison can make MCAR *less* plausible — but **cannot** confirm MAR vs. MNAR
+- Complete-case analysis is unbiased only under **MCAR** (or MAR in covariates, not outcome-dependent)
+
+> **MASLD:** the complete-case vs. imputed contrast we run later *is* this diagnostic, live.
+
+::: {.notes}
+~9 min. Draw the three-panel schematic on the board if helpful. Be precise about what the complete-vs-incomplete table buys you: it refutes MCAR, it never confirms MAR. Everything past that is a substantive argument.
+:::
+
+## Classify first: which reductions are actually missing data?
+
+- **FLI** needs triglycerides + GGT + BMI + waist — and **triglycerides** come only from the NHANES **fasting subsample** (GGT and anthropometry are MEC-wide); one fasting input binds the whole index
+- **After eligibility**, the two largest reductions are **designed subsampling** and **disease definition** — neither is missing data
+- Genuine missingness across the whole funnel: **792 item-nonresponse losses**. A further **2 records fail outcome ascertainment** — a separate category, not missingness, and not added to them. Inside the **locked domain**, Model-1 missingness is **1.8%** — all of it cancer status
+- Upstream of any confounder adjustment — a scope question, not a missingness one
+
+> **MASLD:** this is why N collapses from all NHANES adults to the **full analytic file** (6,371) and the **locked domain** (6,048) — the phenotype simply cannot be assigned to most adults.
+
+::: {.notes}
+~11 min. The habit to break is calling every downward step "attrition". Four of the five categories are not missingness, and none of those four can be imputed.
+:::
+
+## Why designed subsampling is not MNAR
+
+- **Fasting status is not random** — it tracks appointment time, diabetes, medication, age: variables tied to metabolic risk
+- NHANES **designed** the fasting subsample and supplies `WTSAF2YR` for it — absence there is **not, by itself**, evidence of MNAR
+- The estimate then speaks to the **fasting subpopulation**, not all adults
+- MI cannot invent a measurement never taken — but that argues for the **right weight**, not for declaring the study irreparable
+- Honest fix: **scope language** ("among adults with ascertainable MASLD") + a selection / sensitivity argument
+
+> **MASLD:** back to M1's circularity — the fasting filter and the phenotype **share BMI + waist inputs**, so selection and exposure definition are entangled.
+
+::: {.notes}
+~12 min. The single most important teaching move of the day: MI is not a machine that manufactures unobserved exposures. Tie to the M1 circularity finding — groups and the FLI filter both use BMI + waist, so the selection is not incidental. The repair is words and design, not code.
+:::
+
+## Break
+
+**10-minute break**
+
+On return: we move from the loss **MI cannot repair** — design, which the **weight** answers — to the one it **can**.
+
+::: {.notes}
+~10 min. Reset. Restate the pivot: designed subsampling is a scope-and-weighting question; item nonresponse inside the subsample is the missing-data question. Different problems, different tools.
+:::
+
+## Item nonresponse inside the cohort
+
+- Within the **locked domain** — the **6,048** rows P5 analyses — confounders are only partly complete
+- **Income ~9% missing**, blood pressure **~3%** — but *neither is in the paper's Model 1*
+- Inside **Model 1**, exactly one covariate is incomplete: **cancer status, 109 rows, 1.8%**
+- Classic **item-missing covariates** — the setting MI was designed for, plausibly **MAR** given NHANES's rich covariates
+- Contrast with the design and disease steps: here the **rows exist**, exposure and outcome are **observed** — only some predictors are blank
+
+> **MASLD:** on the paper's Model 1, complete-case quietly drops **1.8%** of the cohort — 109 people, for a blank cancer-status field, not anything about liver fat. (Adding income and BP would make it ~12.8% — but that changes the adjustment set, and answers a different question.)
+
+::: {.notes}
+~9 min. The rows-exist point is the whole distinction. People are dropped for an unrelated blank field, not because they were never eligible to be measured.
+:::
+
+## Complete-case analysis: the hidden default
+
+- Most regression software **listwise-deletes** — the analyst rarely chooses it consciously
+- Costs: **lost precision**, plus **bias** whenever covariate missingness is associated with the outcome
+- Defensible only under **MCAR** — or **MAR in covariates, not outcome-dependent** — assumptions you usually cannot justify
+- The reported estimate reflects **whoever survived deletion** — an unstated subsample
+
+> **MASLD:** the paper's adjusted Group IV HR reflects whoever survived listwise deletion — a subsample it never names.
+
+::: {.notes}
+~8 min. Emphasize the "you didn't choose it, the software chose it" framing — complete-case is a decision made by default, and defaults deserve scrutiny. This is the bar MI has to beat.
+:::
+
+## Multiple imputation: the idea in three steps
+
+::: {.incremental}
+- **Impute** — draw `M` completed datasets from a model predicting each missing value from the observed ones (including the outcome)
+- **Analyze** — fit the *same* substantive model in each of the `M` datasets
+- **Pool** — combine with **Rubin's rules**: within- + between-imputation variance carries the uncertainty of not knowing the true value
+:::
+
+> **MASLD:** the **replication contrast (IV vs I), design-aware Model 1** — complete-case **2.97**, both extreme assignments **2.98 / 2.99**, MI **2.98**. Everything inside a 0.02 band.
+
+::: {.notes}
+~13 min. Walk the three steps slowly. The between-imputation variance is the conceptual heart — and here it is ~1e-11, which is *why* the estimate barely moves.
+:::
+
+## Reading a sensitivity analysis that changes nothing
+
+- Complete cases were a slightly **higher-risk slice**; restoring the dropped **1.8%** removes that selection **if MAR holds** — there is no observed truth here to check it against
+- What MI actually did: estimate **2.97 → 2.98**, and the interval came back marginally **wider**, not narrower — the imputed values have almost no leverage
+- Caution: MI moves the estimate only as much as the **missing predictors matter** — a *null move is also a finding*
+- **The wording that matters:** *this* missing-data problem mattered little **after we measured it**. The method was necessary because we did not know that in advance
+
+> **MASLD:** "missing data don't matter" is the wrong lesson. The right one: measure before you presume, and report a null sensitivity analysis as the result it is.
+
+::: {.notes}
+~9 min. Guard against magical thinking: MI is not a bias-eraser, it corrects the specific bias from droppable rows under MAR. If CC and MI agree, that's reassurance, not failure. The last bullet is the anti-conflation drill — repeat it.
+:::
+
+## Building a defensible imputation model
+
+- **Include the outcome** — for survival, the Nelson–Aalen cumulative hazard + event indicator; omitting it biases associations toward null
+- Be **inclusive**: all analysis-model covariates + useful auxiliary predictors of missingness (**congeniality**)
+- **Match variable types** — logistic / **PMM** for skewed or bounded variables; respect the survey design where feasible
+- A stripped-down imputation model is a *silent* source of bias
+
+> **MASLD:** income and BP should be imputed from age, sex, BMI, waist, comorbidity **AND the mortality outcome** — not from a stripped-down model.
+
+::: {.notes}
+~11 min. The outcome-in-the-imputation-model rule is counterintuitive and often violated — hammer it. Congeniality: the imputation model must be at least as rich as the analysis model. For survival, the Nelson–Aalen estimate is the correct way to bring the time-to-event outcome in.
+:::
+
+## How many imputations, and how to report
+
+- Rule of thumb: **`M` ≥ the % of incomplete cases** → roughly **10–20** here; more is cheap insurance, too few is false precision
+- Report: **mechanism assumed, variables imputed, `M`, software/method**, and the pooled estimate with **Rubin SEs**
+- Always show **complete-case vs. MI side by side** — divergence is a sensitivity signal, agreement is reassurance
+
+> **MASLD:** a small table on the **replication contrast (IV vs I), design-aware Model 1** (CC **2.97** / stress **2.98–2.99** / MI **2.98**) is the P5 deliverable in miniature — and the **survey design** moved this estimate far more than the missingness did.
+
+::: {.notes}
+~9 min. Reporting discipline is what separates a defensible sensitivity analysis from a black box. The side-by-side table is the deliverable template — students will build exactly this for P5. Reproducibility: state M and method so a reader can rerun.
+:::
+
+## What MI fixes vs. what it cannot
+
+- **Fixes (item nonresponse):** MAR item-missing confounders inside the cohort — recovers N and, **under MAR with a correctly specified imputation model**, removes complete-case selection bias
+- **Not a missing-data problem at all:** those never sampled into the fasting subsample — that is scope, addressed by the correct weight and an honest target-population statement
+- Designed subsampling is fixed by the **correct weight** and a clear target-population statement, not by imputation
+- Corollary: **MNAR item-missingness** also needs sensitivity analysis (e.g., **delta-adjustment**), not naive MI
+- Back to the gate: the categories MI cannot reach are the categories **M0 criterion 6** does not accept on their own
+
+> **MASLD:** the external-validity ceiling is a **scope** statement about the fasting subsample — the correct weight addresses it; imputation was never the tool.
+
+::: {.notes}
+~10 min. The one-sentence exam answer: classify before you impute; MI repairs item nonresponse; designed subsampling is repaired by the weight, not by imputation.
+:::
+
+## Putting the interrogation together
+
+- Sequence for a design- and missingness-aware refit: **impute (item nonresponse) → weight / strata / PSU (Wk6) → fit → pool**
+- Each threat moves Group IV a *defensible* direction — report the **stack**, not one number
+- Four headline numbers — **15.1 naive**, **~2.9 adjusted**, **~12.4 weighted-crude**, **2.98 imputed** — that are *not* a sequence: different models, different row sets
+- To separate **adjustment** from **design**, hold the rows fixed — P4's 2×2 on the same 5,939 rows: weighting at Model 1 moves **3.79 → 2.97**
+- Next week (M1): students compile the five lenses and name the dominant threat, not which fixes *their* paper needs — today supplies the missing-data piece
+
+> **MASLD:** discuss why **order and combination** matter — the number you report is a stack of defensible choices, not a single answer.
+
+::: {.notes}
+~9 min. This is the payoff of five weeks of interrogation. Do not narrate these four as one path. The 12.4 is a *crude* weighted estimate, so it does not show weighting 'raising' the adjusted 2.9 — the two differ in model as well as in design. On P4's fixed 5,939 rows, weighting at Model 1 moves 3.79 to 2.97: it *lowers* the adjusted estimate. Students should be able to narrate why each arrow points where it does. Transition straight into the lab bridge.
+:::
+
+## Bridge to today's lab (L6) and P5
+
+- **In L6** (EpiMethods missing-data module) students will:
+  - **(1)** tabulate the missingness pattern for the fixed dataset and name the likely mechanism per variable
+  - **(2)** run **MI** with a properly specified model and a justified `M`
+  - **(3)** refit the survival model with **Rubin pooling**, re-apply the Wk6 survey design, report **CC vs. MI vs. design-adjusted** side by side
+- Practice telling **design** apart from **missingness**: which gaps MI addresses vs. which are scope limits to write up
+- **P5 (your locked paper):** a missing-data sensitivity analysis — document each variable's mechanism, run MI where MAR is defensible, contrast with complete-case, and state plainly what imputation **cannot** recover
+
+> **MASLD:** the paper reports one HR from an unstated subsample — P5 asks you to show your number under missingness stress and name its true validity ceiling.
+
+::: {.notes}
+~8 min. P5 is optional and folds into the M1 package. The deliverable is the typed funnel, a small complete-case / stress-test / MI table, and one sentence naming the population the conclusion is about.
+:::

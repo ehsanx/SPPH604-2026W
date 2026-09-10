@@ -1,0 +1,306 @@
+---
+title: "Week 6 — Complex Survey Analysis: Why NHANES Is Not a Simple Random Sample"
+subtitle: "SPPH 604 · Application of Advanced Epidemiological Methods"
+author: "Running example: Kueh et al. (2026), MASLD / NHANES"
+format:
+  revealjs:
+    theme: default
+    slide-number: c/t
+    progress: true
+    incremental: false
+    embed-resources: true
+    width: 1280
+    height: 720
+    fig-align: center
+    smaller: true
+---
+
+## Learning objectives
+
+- Explain why **NHANES** is a stratified, multistage, clustered probability sample — and why that breaks default standard errors.
+- Name the three design objects every analysis needs: **weights** (`WTINT`/`WTMEC`/`WTSAF`), **strata** (`SDMVSTRA`), **PSU** (`SDMVPSU`).
+- Pick and **pool** the correct weight when combining cycles; state what **design effects** do to confidence intervals.
+- Contrast the paper's **unweighted** estimates with **design-aware** ones — and see why unweighted was a *choice*.
+- Reason about the **fasting-vs-non-fasting** weight puzzle that MASLD's own analyte mix creates.
+
+::: {.notes}
+Frame the week: this is not confounding (Wk4) or effect modification (Wk5). It is a question about *whose population* the numbers describe. Everything so far — P1, P2, P3 — sat on an unweighted analytic file. Today we interrogate that. Objectives map to the five plan bullets; return to them at the bridge slide.
+:::
+
+## Continuity: where Week 5 left us
+
+- **Recap Wk5:** the targeted IV-vs-III × sex test gave a ratio of HRs of **1.00 (0.42–2.35)** — underpowered rather than resolved.
+- Lesson: a crude stratum difference is **not an interaction test**, and a null test is **not evidence of homogeneity** — a null with its uncertainty attached, not a demonstration that sex is irrelevant (P3).
+- **Today:** a different threat — not confounding, not modification, but whose *population* the estimates describe.
+- The paper analyzed NHANES **as if it were a simple random sample**.
+- **Sets up L5** (naive vs survey-weighted) and **P4**, your first design-aware re-estimate.
+
+::: {.notes}
+~3 min. Bridge from last week explicitly: Wk5 ended on a null with its uncertainty attached, not on a modifier explained away; this week is about a *design* that was never named. Same paper, new lens. Say explicitly, as Week 5 now does, that an earlier version of these lectures told you the crude male-female gap was baseline-risk confounding rather than true modification; that claim is withdrawn. A p-value that moves when covariates enter tells you the estimate changed, not what generated the crude difference. Remind students P4 is where they apply this to their own paper — it feeds M1 (Wk8 replication) and M2 (Wk9 critique of another group's M1).
+:::
+
+## Where we are in the project
+
+- Course arc: **Replicate → Interrogate → Improve → Defend**.
+- **M1** replication due Wk8; **M2** critique of another group's M1 Wk9.
+- Done so far — **P1** eligibility, **P2** Table 1, **P3** effect modification — all built on an *unweighted* analytic file.
+- Today we question a **design assumption baked into every number so far**.
+
+::: {.MASLD .fragment}
+**MASLD:** the paper reports HRs to two decimals but does not name the survey design.
+:::
+
+::: {.notes}
+5 min. Situate today in the semester map. The key move: every P-deliverable so far treated each NHANES row as an independent, equally-weighted person. That assumption is invisible until you name it — which the paper does not do. Two-decimal precision with zero design vocabulary is the tension to sit with.
+:::
+
+## The motivating puzzle
+
+- The paper's headline: **Group IV** all-cause **HR ≈ 15.1** (unadjusted).
+- Ask the class: **15.1 for whom** — the *sample*, or *US adults* with MASLD?
+- That gap between **sample** and **population** is exactly what survey design bridges.
+- Punchline preview: design-aware weighting pulls Group IV toward **≈ 12.4** and **widens** the CI.
+
+::: {.MASLD .fragment}
+**MASLD:** the inference target is implicitly the US population, but the math is the sample's.
+:::
+
+::: {.notes}
+8 min. Don't resolve it yet — let the "for whom?" question hang. Most students instinctively read published HRs as population statements; the machinery that would earn that reading (weights + strata + PSU) is absent here. Foreshadow the 15.1 → 12.4 attenuation as the payoff we build toward on slide 11.
+:::
+
+## What "simple random sample" assumes
+
+- **SRS:** every person drawn *independently* and with *equal* probability.
+- Default SEs — including `coxph`'s — assume exactly this.
+- Two violations are coming:
+  - **Unequal selection probabilities** → handled by *weights*.
+  - **Non-independence** (clustering) → handled by *strata/PSU*.
+- Ignore them and: point estimates tilt toward **sample composition**; SEs run **too small**.
+
+::: {.MASLD .fragment}
+**MASLD:** the default `coxph` SEs in the replication silently assume SRS.
+:::
+
+::: {.notes}
+10 min. Anchor the whole week on these two assumptions — every later slide maps to one of them. Weights fix *bias toward the sample*; strata/PSU fix *falsely small SEs*. Students conflate the two; keep the columns separate. Note SEs "usually" too small — clustering inflates variance, so pretending independence understates it.
+:::
+
+## How NHANES is actually built
+
+- **Multistage** selection: (1) counties = **PSUs** → (2) segments → (3) households → (4) persons.
+- **Stratified** first by design domain; deliberate **oversampling** of targeted subgroups (older adults, some race/ethnicity groups, lower income).
+- Result: neither equal probabilities *nor* independent draws — **both** SRS assumptions fail *by design*.
+- This is a feature, not a flaw — it buys precision where policy needs it.
+
+::: {.MASLD .fragment}
+**MASLD:** MASLD adults are not sprinkled randomly across PSUs — they cluster with the sampled households.
+:::
+
+::: {.notes}
+12 min. Walk the four stages concretely. Oversampling is intentional: NHANES wants stable estimates for small subgroups, which *requires* unequal probabilities, which *requires* weights to undo for national estimates. Clustering at the household/PSU level is why two MASLD cases can be near-neighbors — their outcomes are not independent draws.
+:::
+
+## Weights: `WTINT`, `WTMEC`, `WTSAF`
+
+- A weight ≈ **how many people in the target population** this respondent represents.
+- Formally: **inverse selection probability**, adjusted for nonresponse and post-stratification.
+- Three nested tiers by how deep into the exam a variable lives:
+  - `WTINT` (interview) ⊇ `WTMEC` (mobile exam) ⊇ `WTSAF` (fasting subsample).
+- **Rule:** use the weight for the **most restrictive** data source your analysis actually needs.
+
+::: {.MASLD .fragment}
+**MASLD:** FLI needs **triglycerides** — a fasting analyte — so the honest weight is `WTSAF`, the smallest, most-adjusted tier.
+:::
+
+::: {.notes}
+12 min. The nesting is the mental model: fewer people show up fasting than for the exam than for the interview, so each fasting respondent stands in for more of the population — the weights grow and get more adjusted as the subsample shrinks. The "most restrictive variable" rule is the single most testable idea on this slide.
+:::
+
+## Strata and PSUs: `SDMVSTRA`, `SDMVPSU`
+
+- `SDMVSTRA` encodes the **design strata**; `SDMVPSU` the (masked) **primary sampling units** within a stratum.
+- These drive **variance, not the point estimate**.
+- Clustering: neighbors resemble each other → **effective N < row count**.
+- Analytic strata/PSU are **pseudo-values** released for disclosure control — use *as provided*, never re-derive.
+
+::: {.MASLD .fragment}
+**MASLD:** none of `SDMVSTRA` / `SDMVPSU` appear anywhere in the paper's methods.
+:::
+
+::: {.notes}
+10 min. Hammer the split: weights move the *estimate*, strata/PSU move the *uncertainty*. Students often try to "understand" the PSU codes — stop them; they are masked pseudo-PSUs for confidentiality, meaningful only to the variance estimator. Re-deriving or renumbering them corrupts the SEs.
+:::
+
+## Pooling weights across cycles
+
+- NHANES **2007–2018** = **six** 2-year cycles; the paper stacks all six.
+- Weights are built **per cycle** → divide by the number of cycles pooled (here **/6**) so the weighted population total isn't multiplied.
+- Use the **cycle-appropriate** weight variable and pool consistently.
+- **Strata/PSU** are pooled **as-is** — no division.
+
+::: {.MASLD .fragment}
+**MASLD:** with six cycles combined, the correct pooled fasting weight is **`WTSAF`/6** — a step easy to miss.
+:::
+
+::: {.notes}
+10 min. Concrete arithmetic: each cycle's weights sum to ~the US population; stack six and you claim six Americas. Dividing by 6 restores one. Only the *weights* get divided — strata and PSU are identifiers, not magnitudes. This /6 error is a top-2 mistake students make in L5.
+:::
+
+## The design effect (DEFF)
+
+- **DEFF ≈** variance under the real design ÷ variance under SRS.
+- Typically **> 1** because of clustering + unequal weights.
+- Practical read: when **DEFF > 1**, your **effective N is smaller** than your row count → honest CIs get **wider**.
+- "**N = 6,300**" overstates the information content once design is respected.
+
+::: {.MASLD .fragment}
+**MASLD:** the paper's tight CIs partly reflect pretending each of ~6,300 rows is an independent draw.
+:::
+
+::: {.notes}
+10 min. DEFF is the single number that translates "clustering + weighting" into "how much did I fool myself?" A DEFF of 2 means half your rows' worth of real information. Tie back to slide 3: the too-small SEs there become quantifiable here. This is why the design-aware CIs on slide 11 are wider, not narrower.
+:::
+
+## Short break (5 min)
+
+- Stretch, water, reset.
+- Coming up:
+  - what happens to the **MASLD numbers** when we do it right, and
+  - the genuine **fasting-weight puzzle** MASLD creates.
+
+::: {.notes}
+5 min hard stop. Keep it to a real break — resist the urge to teach through it. On return, we move from *mechanics* (weights/strata/PSU/DEFF) to *judgment* (was unweighted defensible? which weight is even correct?).
+:::
+
+## "Unweighted" is a choice, not a default
+
+- Some analysts defend **unweighted, model-based** inference when the outcome model is richly adjusted (a *conditional*, not *descriptive*, target).
+- But that stance must be **stated and defended** — silence reads as oversight, not decision.
+- **Two separate axes, not two rival framings:**
+  - **Design** decides *which population* the estimate speaks for.
+  - **Adjustment** decides *which covariates* it holds fixed.
+  - You **cross** them — crude/adjusted × unweighted/design-aware, on the **same rows**.
+- **Declare the estimand** — population-average, conditional on covariates, or both — name the weight and **which cell of the 2×2** your headline came from.
+
+::: {.MASLD .fragment}
+**MASLD:** the paper never declares which target it's after — so readers can't tell if unweighted was *reasoned* or *accidental*.
+:::
+
+::: {.notes}
+10 min. This is the most nuanced slide — don't let students hear "weighting is always right." Weighting is right *for a population-average estimand*. A defensible unweighted analysis exists, but it owes the reader an explicit estimand statement. The paper's sin is silence, not the choice itself. This distinction is what P4's "declare and justify" asks for. And do not let "design-based vs model-based" harden into a dichotomy: the axes are crossable, so "we weighted" and "we adjusted" are two independent statements a methods section owes the reader — the "Two axes, four cells" slide, two on from here, shows all four combinations.
+:::
+
+## What weighting does to MASLD
+
+![](../img/figure1_km.png)
+
+- Fit survey-aware Cox: pooled `WTSAF` + `SDMVSTRA` + `SDMVPSU`.
+- Group IV all-cause HR **≈ 15.1 → ≈ 12.4** (unadjusted); CIs **widen** from the design effect.
+- **Direction survives** — Group IV still worst (KM p **< 0.0001**) — but magnitude and precision are honestly smaller/wider.
+
+::: {.MASLD .fragment}
+**MASLD:** on the paper's IV-vs-I contrast, design decides whether the interval **excludes 1**; on the locked IV-vs-III contrast, **adjustment dominates** and design moves the estimate in the *opposite* direction, by less. "Survey design matters" is true of one contrast and much weaker for the other.
+:::
+
+::: {.notes}
+~7 min (the balance of plan Slide 11's 12 min goes to the next slide). Design-awareness changes **what you may claim**, not whether the science is right. For the locked IV-vs-III estimand it moves the crude estimate from 2.34 to 3.07 and the adjusted from 1.06 to 1.29 — both adjusted intervals still include 1.
+:::
+
+## Two axes, four cells
+
+All four cells on the **same** Model-1 complete-case rows (**n = 5,939**).
+
+| | IV vs I *(the paper's contrast)* | IV vs III *(our locked contrast)* |
+|---|---|---|
+| unweighted, crude | 16.05 (5.91–43.58) | 2.34 (1.72–3.18) |
+| unweighted, Model 1 | 3.79 (1.38–10.39) | **1.06 (0.77–1.45)** |
+| weighted, crude | 11.93 (2.60–54.84) | 3.07 (2.11–4.48) |
+| weighted, Model 1 | 2.97 (0.69–12.79) | **1.29 (0.90–1.86)** |
+
+- Read **down** a column for **adjustment**; **across** a row for **design**.
+- The familiar ledger — unadjusted, then fully adjusted, then survey-weighted — mixes crude and adjusted models fitted on **different row sets**. It is **not** a sequence of successive corrections, and we do not present it as one.
+
+::: {.notes}
+~5 min, from plan Slide 11's 12. Draw the empty 2×2 on the board and make the class predict the signs before revealing the numbers. Two payoffs. (1) Fixing the rows at n = 5,939 is what licenses reading a row or a column as "the effect of moving that axis" — it is also why the crude IV-vs-I cell reads 16.05 rather than the ≈ 15.1 of the full analytic file, which is a different row set. (2) "Survey design matters" holds for one contrast and is much weaker for the other, so the slogan does not transfer — the 2×2 does.
+:::
+
+## The question settled by CDC's least-common-denominator rule: fasting vs non-fasting analytes
+
+- **FLI** combines **triglycerides + GGT + BMI + waist**.
+- **TG** is a *fasting* analyte (`WTSAF` domain); **GGT** is *not* — it lives in the broader MEC (`WTMEC`).
+- The exposure definition **straddles two subsamples** — but this is *not* contested: the rule settles it.
+- **Least-common-denominator:** use the weight of the **smallest applicable** subsample → **`WTSAF`**, because FLI needs a fasting analyte.
+- **`WTMEC` is not a defensible *primary* weight here** — it weights to a population in which the exposure cannot be constructed at all.
+- But **run it anyway, labelled as a sensitivity analysis.** Showing how far the estimate moves under the wrong weight is how you demonstrate that the rule mattered.
+- The job is to **apply the rule, say so, and show what was at stake** — one prespecified primary, one labelled sensitivity run.
+
+::: {.MASLD .fragment}
+**MASLD:** MASLD's own ascertainment recipe forces a weight decision the paper never confronts.
+:::
+
+::: {.notes}
+12 min. The *primary* weight is not a fork: the least-common-denominator rule has one answer, and the binding constraint (fasting TG) settles it on WTSAF. Say that plainly first, so the primary estimand and weight are unambiguous. Then run WTMEC as an explicitly labelled sensitivity analysis — not because it is defensible as a primary, but because seeing how far the estimate moves under a weight that targets a population in which FLI cannot be computed is what makes the rule concrete. "Apply the rule, document it, and show what it bought you" beats both "argue it out" and "correct + silent." This slide is why P4 asks them to name the fasting-vs-non-fasting straddle, say which weight the rule selects, and report the sensitivity run.
+:::
+
+## Subset the design, never the data
+
+- **Cardinal rule:** declare the *full-survey* design **once**, then `subset()` **within it**.
+- **Never** filter rows first and re-declare a design on the survivors.
+- Dropping rows first discards the strata/PSU information non-selected units contribute to **variance** → wrong SEs.
+- This is the **#1 practical error** students hit in L5.
+
+::: {.MASLD .fragment}
+**MASLD:** eligibility (**FLI ≥ 60**, ≥ 1 cardiometabolic criterion) is a *subset* — apply it to the design, keeping `WTSAF`/strata/PSU intact.
+:::
+
+::: {.notes}
+10 min. Show the two code shapes side by side verbally: `svydesign(...)` then `subset(design, eligible)` (correct) vs `filter(data, eligible)` then `svydesign(...)` (wrong). The non-eligible rows still carry strata/PSU structure the variance estimator needs. Getting this wrong produces plausible-looking but silently biased SEs — the worst kind of error. Flag it hard; they will meet it Thursday.
+:::
+
+## Design-aware workflow, end to end
+
+Six steps, in order: {.incremental}
+
+1. **Pick the weight tier** by the most-restrictive variable.
+2. **Pool** — divide by number of cycles (`/6`).
+3. **Declare the design** with weight + strata + PSU.
+4. **Subset within** the design (never the rows).
+5. **Fit** the survey-aware model.
+6. **Report DEFF-widened CIs** — plus a one-line design statement in every table caption.
+
+- **Sensitivity analysis is part of the deliverable**, not optional polish. The weight has a settled primary (`WTSAF`), so the sensitivity run is the `WTMEC` comparison — reported and labelled, never swapped in as the headline.
+
+::: {.MASLD .fragment}
+**MASLD:** this six-step recipe is precisely what **P4** asks you to run on your own paper.
+:::
+
+::: {.notes}
+8 min. This is the checklist to screenshot. The one-line design statement in the caption is the cheap habit that would have fixed the paper entirely. Emphasize step 6's sensitivity analysis is required, not decorative — it operationalizes the slide-12 fork. Read the six steps as the literal spec for P4.
+:::
+
+## Common pitfalls checklist
+
+- Forgetting to **divide pooled weights** by the number of cycles.
+- **Filtering rows before declaring the design** — the fatal one.
+- Using `WTMEC` when a **fasting analyte** is in the model (or vice versa).
+- Reading **unweighted vs weighted** divergence as "error" rather than as **two different estimands**.
+
+::: {.notes}
+6 min. A rapid-fire recap; each bullet maps to an earlier slide (7, 13, 5/12, 10). Ask the class which one is fatal — the answer is #2, because it corrupts SEs silently while everything still runs. The last bullet is the conceptual trap: a naive/weighted gap is information, not a bug.
+:::
+
+## Bridge to today's lab (L5) and P4
+
+- **L5 (EpiMethods Complex Survey module):** re-fit the MASLD Group I–IV Cox model **two ways** on the fixed dataset:
+  - a **naive** unweighted fit, then
+  - a **design-aware** fit — declare `WTSAF`/6 + `SDMVSTRA` + `SDMVPSU`, and **subset the design** (not the rows) to the MASLD-eligible sample.
+- Tabulate **naive vs survey** HRs/CIs side by side; quantify the attenuation (**≈ 15 → ≈ 12.4**) and CI widening.
+- **P4 deliverable — your design-aware re-estimate:** run the same six-step workflow on *your* paper's headline estimate, **declare and justify** your chosen weight (name the fasting-vs-non-fasting tension if it applies), report the **naive-vs-weighted contrast**, and write the **one-line design statement** the paper omitted.
+- **Time-to-event route** (M0 criterion 5, no survey weights): those six steps are not yours, and there is **no naive-vs-correct number**. Reproduce the paper's survival estimand — follow-up time and censoring intact — then **interrogate the one structural choice you named at M0**: time scale, censoring rule, index date, competing events.
+- **What is comparable:** weighted vs unweighted fits of *the same* survival model on *the same* rows = one estimand, so the gap is the design. Survival model vs collapsed "ever died" = two estimands — that gap is the collapse, **not** a design correction.
+- P4 is **formative** and feeds directly into **M1** replication and **M2** critique of another group's M1.
+
+::: {.notes}
+7 min. Land the plane. L5 is the guided rehearsal on the shared dataset; P4 is the same moves on their own paper — the six survey steps for most groups, the survival-structure interrogation for the ones that qualified on a time-to-event structure. Either way the deliverable is small but load-bearing: it is the first time they produce a number the original authors did not. Say the comparability point out loud, because it is the one they will get wrong: weighted and unweighted fits of the same survival model on the same rows are one estimand on one scale, so the difference is the design; a survival model and a logistic model on "ever died" are two estimands on two scales, so the difference is the collapse and can never be presented as the corrected estimate. A group with no weights is not owed a naive-vs-correct number, and should hear that now rather than at M3. Remind them the design statement is one sentence — the point is the habit, not the length. Preview: next week continues interrogating the paper's assumptions.
+:::

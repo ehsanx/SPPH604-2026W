@@ -1,0 +1,295 @@
+---
+title: "P5 — Missing data: step-by-step reproducible code"
+subtitle: "SPPH 604 · demonstration paper (Kueh et al., BMJ Open 2026;16:e113719)"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    code-tools: true
+    df-print: kable
+execute:
+  warning: false
+  message: false
+---
+
+> Starts from **exactly** the target population and survey design used for the
+> corrected main estimate in P4, and uses **exactly** the paper's Model 1
+> covariates. No variable is added to the model in order to create a
+> missing-data problem.
+
+```{r setup}
+source("../_shared/paths.R")   # find_repro(), emit_results(), ci(), fmtn(), endash()
+repro <- find_repro()
+suppressPackageStartupMessages({library(dplyr); library(survey); library(survival)
+                                library(mice); library(mitools)})
+options(survey.lonely.psu = "adjust")
+
+m <- readRDS(file.path(repro,"data/derived/merged_all.rds"))
+a <- readRDS(file.path(repro,"data/derived/masld_analytic.rds"))
+m$in_analysis <- m$SEQN %in% a$SEQN
+m$group <- factor(m$group, levels=c("I","II","III","IV"))
+fast <- m %>% filter(!is.na(WTSAF2YR), WTSAF2YR > 0) %>% mutate(wt = WTSAF2YR/6)
+dom  <- fast %>% filter(in_analysis)
+
+## The paper's Model 1. Nothing else.
+COV <- c("age","female","dyslip","htn","t2dm","ckd","mi","cancer",
+         "on_htn_med","on_dm_med","on_lipid_med")
+f1  <- as.formula(paste("Surv(time_yr,dead) ~ group +", paste(COV, collapse=" + ")))
+gv  <- function(f,t="groupIV"){s<-summary(f); c(s$conf.int[t,1],s$conf.int[t,3],s$conf.int[t,4])}
+fm  <- function(x) sprintf("%.2f (%.2f-%.2f)", x[1],x[2],x[3])
+```
+
+## Step 0 — Three different kinds of downward step
+
+A cohort funnel shows N falling. It does **not** show *why*, and the reasons have
+completely different inferential meanings. Sort every step into one of three bins
+before you call anything "missing data".
+
+```{r waterfall}
+w <- function(lbl, df, kind) cat(sprintf("%-38s %6d  %13s   %s\n", lbl, nrow(df),
+        format(round(sum(df$wt)), big.mark=","), kind))
+ad  <- fast %>% filter(!is.na(age), age>=18)
+fli <- ad   %>% filter(!is.na(fli))
+st  <- fli  %>% filter(fli>=60)
+cat(sprintf("%-38s %6s  %13s   %s\n","step","n","weighted pop","kind"))
+w("fasting subsample frame",      fast, "DESIGN     - the weight handles this")
+w("  adults 18+",                 ad,   "ELIGIBILITY- definitional")
+w("  FLI computable",             fli,  "MISSINGNESS- item nonresponse")
+w("  steatosis, FLI >= 60",       st,   "DISEASE    - target population")
+w("  MASLD, linked, group known", dom,  "DISEASE + small missingness")
+```
+
+- **Design.** Fasting measures come from a *designed* NHANES subsample. Its absence
+  elsewhere is not missing data; it is why `WTSAF2YR` exists.
+- **Disease.** Most of the drop is people who do not have steatosis. They are not
+  missing — they are *not in the target population*.
+- **Missingness.** Only the item-nonresponse step is a missing-data problem, and it
+  is `r sprintf("%.1f%%", 100*mean(is.na(ad$fli)))` of adults in the fasting frame.
+
+The single most common error on a funnel is to call every step "attrition".
+
+## Step 1 — The missingness pattern, before choosing any method
+
+```{r pattern}
+miss <- sapply(COV, function(v) sum(is.na(dom[[v]])))
+for (v in names(miss)[miss>0])
+  cat(sprintf("  %-14s missing %4d   %.2f%% unweighted   %.2f%% weighted\n", v, miss[v],
+      100*miss[v]/nrow(dom), 100*sum(dom$wt[is.na(dom[[v]])])/sum(dom$wt)))
+cc <- complete.cases(dom[,COV])
+cat(sprintf("\n  variables with any missingness: %d of %d\n", sum(miss>0), length(COV)))
+cat(sprintf("  complete cases: %d of %d  (loses %d; %.2f%% unweighted, %.2f%% weighted)\n",
+    sum(cc), nrow(dom), sum(!cc), 100*mean(!cc), 100*sum(dom$wt[!cc])/sum(dom$wt)))
+```
+
+**One** Model-1 variable carries any missingness at all. There is no overlap pattern
+to examine, because there is nothing to overlap with.
+
+## Step 2 — State the estimand before comparing anything
+
+> The **weighted, Model-1-adjusted hazard ratio for Group IV versus Group I**, in the
+> MASLD domain of the NHANES fasting subsample, 2007–2018.
+
+Fixing this first matters: complete-case analysis and multiple imputation can
+silently target *different populations*, and then a difference between them is not
+evidence about missing data.
+
+## Step 3 — Complete case, on the corrected design
+
+```{r cc}
+des <- subset(svydesign(ids=~SDMVPSU, strata=~SDMVSTRA, weights=~wt,
+                        data=fast, nest=TRUE), in_analysis)
+fit_w  <- svycoxph(f1, design=des)
+fit_u  <- coxph(f1, data=dom)
+cat(sprintf("weighted   Model-1, complete case:  IV = %s   (n = %d)\n", fm(gv(fit_w)), fit_w$n))
+cat(sprintf("unweighted Model-1, complete case:  IV = %s   (n = %d)\n", fm(gv(fit_u)), fit_u$n))
+```
+
+## Step 3b — A stress test that needs no model
+
+The only incomplete Model-1 variable is **binary**. That permits a sensitivity
+analysis a reader can check by eye: assign every one of the 109 missing values to one
+extreme, then the other, and refit. This does not identify the missing values and it
+is **not** a formal bounds argument — it is a transparent stress test spanning the two extreme
+assignments the binary indicator permits.
+
+```{r stress}
+fitv <- function(val, lbl){
+  fk <- fast
+  if (!is.na(val)) fk$cancer[fk$in_analysis & is.na(fk$cancer)] <- val
+  f <- svycoxph(f1, design = subset(svydesign(ids=~SDMVPSU, strata=~SDMVSTRA,
+                  weights=~wt, data=fk, nest=TRUE), in_analysis))
+  g <- gv(f)
+  data.frame(scenario = lbl, HR = round(g[1],2),
+             lo = round(g[2],2), hi = round(g[3],2), n = f$n)
+}
+stress <- rbind(fitv(NA, "complete case (109 dropped)"),
+                fitv(0,  "all 109 assigned NO cancer"),
+                fitv(1,  "all 109 assigned CANCER"))
+stress
+```
+
+The Group IV estimate spans `r sprintf("%.2f to %.2f", min(stress$HR), max(stress$HR))`
+across both extremes — a total range of
+`r sprintf("%.2f", max(stress$HR)-min(stress$HR))` on the hazard ratio. These are **two global extreme scenarios**, not bounds over all assignments. A
+pattern of missingness correlated with phenotype and covariates could move the
+estimate further than either uniform assignment does, so we do not claim the true
+value must lie inside this range — only that two transparent extremes leave it
+essentially unchanged.
+
+## Step 4 — Multiple imputation, survey-aware
+
+Assumptions that would make this informative: the missingness is **MAR given the
+Model-1 covariates and the outcome**, and the imputation model is correctly
+specified. The outcome enters as the event indicator plus a Nelson–Aalen
+cumulative-hazard term — omitting it biases covariate–outcome associations toward
+the null.
+
+**This is not fully survey-modelled multiple imputation, and we do not claim it is.**
+The imputation model is a standard `mice()` fit with the sampling weight and stratum
+entered *as predictors*; the design is reintroduced at the analysis stage, when each
+completed dataset is refitted with `svycoxph()` on a properly subsetted design. A
+fully design-aware imputation would model the sampling structure inside the
+imputation itself. We report this as a **pragmatic sensitivity analysis** and check
+below whether the shortcut matters here.
+
+```{r mi}
+idat <- dom[, c(COV,"group","dead","time_yr","wt","SDMVSTRA")]
+idat$na_cumhaz <- mice::nelsonaalen(idat, time_yr, dead)
+ini <- mice(idat, maxit=0, printFlag=FALSE); pr <- ini$predictorMatrix
+pr[,"time_yr"] <- 0                                        # raw time: not a predictor
+pr[c("time_yr","dead","na_cumhaz","wt","SDMVSTRA"),] <- 0  # complete: never imputed
+imp <- mice(idat, m=10, predictorMatrix=pr, printFlag=FALSE, seed=604)
+
+fits <- lapply(1:10, function(i){
+  fk <- fast; fk[fk$in_analysis, COV] <- complete(imp,i)[,COV]
+  svycoxph(f1, design=subset(svydesign(ids=~SDMVPSU,strata=~SDMVSTRA,weights=~wt,
+                                       data=fk,nest=TRUE), in_analysis))
+})
+po <- summary(MIcombine(fits))["groupIV",]
+cat(sprintf("weighted   Model-1, MI (m=10):      IV = %.2f (%.2f-%.2f)\n",
+    exp(po[["results"]]), exp(po[["(lower"]]), exp(po[["upper)"]])))
+cat(sprintf("fraction of missing information:    %s\n", po[["missInfo"]]))
+```
+
+## Step 4b — The same four approaches, on the locked estimand
+
+Everything above is reported against **Group I**, the paper's reference, because that is
+the contrast the published analysis reports. The term's locked question is **IV vs III**.
+Re-levelling inside the same model gives it, and the missingness has to be checked there
+too rather than assumed to behave the same way.
+
+```{r locked}
+rl3  <- function(x){ x$group <- relevel(x$group, "III"); x }
+desL <- function(fk) subset(svydesign(ids=~SDMVPSU, strata=~SDMVSTRA, weights=~wt,
+                                      data = rl3(fk), nest = TRUE), in_analysis)
+fitL <- function(val, lbl){
+  fk <- fast
+  if (!is.na(val)) fk$cancer[fk$in_analysis & is.na(fk$cancer)] <- val
+  f <- svycoxph(f1, design = desL(fk))
+  data.frame(scenario = lbl, HR = fm(gv(f)), n = f$n)
+}
+fitsL <- lapply(1:10, function(i){
+  fk <- fast; fk[fk$in_analysis, COV] <- complete(imp, i)[, COV]
+  svycoxph(f1, design = desL(fk))
+})
+poL <- summary(MIcombine(fitsL))["groupIV", ]
+locked <- rbind(
+  fitL(NA, "complete case (109 dropped)"),
+  fitL(0,  "all 109 assigned NO cancer"),
+  fitL(1,  "all 109 assigned CANCER"),
+  data.frame(scenario = "MI (m = 10)", n = fitsL[[1]]$n,
+             HR = sprintf("%.2f (%.2f-%.2f)", exp(poL[["results"]]),
+                          exp(poL[["(lower"]]), exp(poL[["upper)"]]))))
+locked[, c("scenario","HR","n")]
+```
+
+The locked contrast behaves exactly as the replication contrast does: every approach
+returns the same estimate to two decimals. Note that this is a statement about *this*
+missingness, not a general result — it had to be computed on the locked contrast to be
+claimed about the locked contrast.
+
+## Step 5 — What this actually shows
+
+```{r summary}
+cc_w <- gv(fit_w); mi_w <- c(exp(po[["results"]]), exp(po[["(lower"]]), exp(po[["upper)"]]))
+cat(sprintf("  complete case (weighted): %s\n  imputed       (weighted): %s\n  difference in HR: %.3f\n",
+    fm(cc_w), fm(mi_w), mi_w[1]-cc_w[1]))
+```
+
+```{r between}
+co <- sapply(fits, function(f) coef(f)[["groupIV"]])
+cat(sprintf("  between-imputation variance of the Group IV log-HR: %.3e
+", var(co)))
+cat(sprintf("  distinct fitted values across m=10: %d
+", length(unique(round(co,10)))))
+```
+
+**The missingness is real and correcting it changes essentially nothing.** One
+covariate, `r sprintf("%.2f%%", 100*mean(!cc))` of the sample, and a hazard ratio that
+moves in the third significant figure.
+
+Be exact about the fraction of missing information: it prints as `r po[["missInfo"]]`,
+but that is **approximately zero at the displayed precision, not literally zero**. The
+between-imputation variance is `r sprintf("%.1e", var(co))` — the imputed `cancer` values really do
+differ between completions, they simply have almost no leverage on the Group IV
+coefficient. Reporting "0%" without that qualification would claim more than the
+object supports.
+
+It also means the shortcut flagged above is **immaterial here**: entering the weight
+and stratum as predictors rather than modelling the design inside the imputation
+changes the estimate not at all. That is a statement about this dataset with 1.8%
+missingness on one covariate, not a general licence.
+
+### The conclusion, stated as the evidence supports it
+
+> Within the locked domain — the 6,048 rows P5 analyses — only 1.8% of records are
+> incomplete on the paper's Model-1 covariates, entirely because of missing cancer
+> status. Complete-case analysis, extreme-value stress tests, and pragmatic multiple
+> imputation yield materially similar estimates. In this dataset, handling this residual
+> missingness does not alter the substantive inference; accounting for the complex survey
+> design has substantially greater impact.
+
+Note the two things that sentence is careful **not** to say. It does not say
+missingness is generally unimportant — it says it is numerically negligible *here*. And
+it does not say survey design is the paper's dominant threat; it says design mattered
+more than missingness *among the analyses run in P4 and P5*. Which threat most
+endangers the paper's conclusion is a judgment that needs all five increments, and it
+is made at M1, not here.
+
+**Methodological importance is measured, not presumed.** A sensitivity analysis that
+returns "no material change" has done its job.
+
+**What *does* move the conclusion is the design, not the missing data.** Compare the
+two complete-case rows in Step 3: unweighted, the adjusted interval excludes 1;
+correctly weighted, it does not. Respecting the sampling design changes what you can
+claim; imputing 1.8% of one covariate does not.
+
+**A sensitivity analysis we deliberately did not run.** Adding income (PIR, ~9%
+missing) and systolic BP would raise complete-case loss to about 13% and make the
+missing-data exercise look substantial. Neither is in the paper's Model 1. Adding
+variables to manufacture a missing-data problem changes the adjustment set and
+answers a different question. If you want them, introduce them as a separately
+labelled sensitivity model with its own estimand — not inside this comparison.
+
+## Results for M1
+
+```{r emit}
+lk <- function(s) endash(locked$HR[locked$scenario == s])
+emit_results("P5", list(
+  n_missing   = fmtn(sum(is.na(dom$cancer))),
+  pct_uw      = sprintf("%.2f", 100 * mean(!cc)),
+  pct_w       = sprintf("%.2f", 100 * sum(dom$wt[!cc]) / sum(dom$wt)),
+  n_vars_miss = fmtn(sum(miss > 0)),
+  n_vars      = fmtn(length(COV)),
+  locked_cc   = lk("complete case (109 dropped)"),
+  locked_no   = lk("all 109 assigned NO cancer"),
+  locked_yes  = lk("all 109 assigned CANCER"),
+  locked_mi   = lk("MI (m = 10)"),
+  n_cc        = fmtn(locked$n[locked$scenario == "complete case (109 dropped)"]),
+  n_full      = fmtn(locked$n[locked$scenario == "MI (m = 10)"])
+), list(locked_estimand = locked[, c("scenario","HR","n")],
+        replication_estimand = data.frame(
+          scenario = stress$scenario,
+          HR = endash(sprintf("%.2f (%.2f-%.2f)", stress$HR, stress$lo, stress$hi)),
+          n = stress$n)))
+```

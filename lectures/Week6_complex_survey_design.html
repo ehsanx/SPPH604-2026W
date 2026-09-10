@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Week6 complex survey design</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Week6 complex survey design</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#week-6-lecture-plan-complex-survey-analysis-why-nhanes-is-not-a-simple-random-sample" id="toc-week-6-lecture-plan-complex-survey-analysis-why-nhanes-is-not-a-simple-random-sample">Week
+6 Lecture Plan — Complex Survey Analysis: Why NHANES Is Not a Simple
+Random Sample</a>
+<ul>
+<li><a href="#learning-objectives" id="toc-learning-objectives">Learning
+objectives</a></li>
+<li><a href="#continuity" id="toc-continuity">Continuity</a></li>
+<li><a href="#slide-1-where-we-are-in-the-project-5-min" id="toc-slide-1-where-we-are-in-the-project-5-min">Slide 1 — Where we
+are in the project (5 min)</a></li>
+<li><a href="#slide-2-the-motivating-puzzle-8-min" id="toc-slide-2-the-motivating-puzzle-8-min">Slide 2 — The motivating
+puzzle (8 min)</a></li>
+<li><a href="#slide-3-what-simple-random-sample-assumes-10-min" id="toc-slide-3-what-simple-random-sample-assumes-10-min">Slide 3 — What
+“simple random sample” assumes (10 min)</a></li>
+<li><a href="#slide-4-how-nhanes-is-actually-built-12-min" id="toc-slide-4-how-nhanes-is-actually-built-12-min">Slide 4 — How
+NHANES is actually built (12 min)</a></li>
+<li><a href="#slide-5-weights-wtint-wtmec-wtsaf-12-min" id="toc-slide-5-weights-wtint-wtmec-wtsaf-12-min">Slide 5 — Weights:
+WTINT, WTMEC, WTSAF (12 min)</a></li>
+<li><a href="#slide-6-strata-and-psus-sdmvstra-sdmvpsu-10-min" id="toc-slide-6-strata-and-psus-sdmvstra-sdmvpsu-10-min">Slide 6 —
+Strata and PSUs: SDMVSTRA, SDMVPSU (10 min)</a></li>
+<li><a href="#slide-7-pooling-weights-across-cycles-10-min" id="toc-slide-7-pooling-weights-across-cycles-10-min">Slide 7 — Pooling
+weights across cycles (10 min)</a></li>
+<li><a href="#slide-8-the-design-effect-10-min" id="toc-slide-8-the-design-effect-10-min">Slide 8 — The design effect
+(10 min)</a></li>
+<li><a href="#slide-9-short-break-5-min" id="toc-slide-9-short-break-5-min">Slide 9 — Short break (5
+min)</a></li>
+<li><a href="#slide-10-unweighted-is-a-choice-not-a-default-10-min" id="toc-slide-10-unweighted-is-a-choice-not-a-default-10-min">Slide 10 —
+“Unweighted” is a choice, not a default (10 min)</a></li>
+<li><a href="#slide-11-what-weighting-does-to-masld-12-min" id="toc-slide-11-what-weighting-does-to-masld-12-min">Slide 11 — What
+weighting does to MASLD (12 min)</a></li>
+<li><a href="#slide-12-the-question-settled-by-cdcs-least-common-denominator-rule-fasting-vs-non-fasting-analytes-12-min" id="toc-slide-12-the-question-settled-by-cdcs-least-common-denominator-rule-fasting-vs-non-fasting-analytes-12-min">Slide
+12 — The question settled by CDC’s least-common-denominator rule:
+fasting vs non-fasting analytes (12 min)</a></li>
+<li><a href="#slide-13-subset-the-design-never-the-data-10-min" id="toc-slide-13-subset-the-design-never-the-data-10-min">Slide 13 —
+Subset the design, never the data (10 min)</a></li>
+<li><a href="#slide-14-design-aware-workflow-end-to-end-8-min" id="toc-slide-14-design-aware-workflow-end-to-end-8-min">Slide 14 —
+Design-aware workflow, end to end (8 min)</a></li>
+<li><a href="#slide-15-common-pitfalls-checklist-6-min" id="toc-slide-15-common-pitfalls-checklist-6-min">Slide 15 — Common
+pitfalls checklist (6 min)</a></li>
+<li><a href="#slide-16-bridge-to-todays-lab-l5-and-p4-7-min" id="toc-slide-16-bridge-to-todays-lab-l5-and-p4-7-min">Slide 16 — Bridge
+to today’s lab (L5) and P4 (7 min)</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="week-6-lecture-plan-complex-survey-analysis-why-nhanes-is-not-a-simple-random-sample">Week
+6 Lecture Plan — Complex Survey Analysis: Why NHANES Is Not a Simple
+Random Sample</h1>
+<p>Duration: 2.5 h = 150 min (Tue, before the Thu lab).</p>
+<p>Timing: the Slide 1–16 markers below sum to <strong>147</strong> —
+142 min of content plus the 5-minute break at Slide 9 — leaving
+<strong>3 min of float</strong> in the session. The deck
+(<code>slides/Week6_survey_slides.qmd</code>) spends that float on its
+opening Continuity recap, which this plan does not separately budget.
+<strong>Slide 15</strong> (pitfalls checklist, 6 min) recaps material
+already covered and is the designated cut if the mechanics slides 4–8
+run long.</p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ul>
+<li>Explain why NHANES is a stratified, multistage, clustered
+probability sample — not a simple random sample — and why that breaks
+default standard errors.</li>
+<li>Identify the three design objects every NHANES analysis needs:
+weights (WTINT / WTMEC / WTSAF), strata (SDMVSTRA), and PSU
+(SDMVPSU).</li>
+<li>Choose and pool the correct weight when combining survey cycles, and
+state what design effects do to confidence intervals.</li>
+<li>Contrast the MASLD paper’s unweighted estimates with design-aware
+ones, and articulate why unweighted was a <em>choice</em>.</li>
+<li>Reason about the fasting-vs-non-fasting weight puzzle that MASLD’s
+own analyte mix creates.</li>
+</ul>
+<h2 id="continuity">Continuity</h2>
+<ul>
+<li>Recap Wk5: the targeted IV-vs-III × sex test gave a ratio of HRs of
+1.00 (0.42–2.35) — underpowered rather than resolved. Today: the
+<strong>weight follows the measurement subsample</strong> (CDC’s
+least-common-denominator rule), and <strong>domain analysis</strong>
+preserves the parent design — build the design, then
+<code>subset()</code>.</li>
+<li>Today: a different threat entirely — not confounding or
+modification, but whose <em>population</em> the numbers describe. The
+paper analyzed NHANES as if it were a simple random sample.</li>
+<li>Sets up L5 (naive vs survey-weighted estimation) and P4, your first
+design-aware re-estimate of your own paper.</li>
+</ul>
+<h2 id="slide-1-where-we-are-in-the-project-5-min">Slide 1 — Where we
+are in the project (5 min)</h2>
+<ul>
+<li>Timeline recap: Replicate → Interrogate → Improve → Defend. M1 is
+Wk8; <strong>M2 (Wk9) is your critique of another group’s M1</strong>;
+M3 (Wk11) is your individual defense.</li>
+<li>P1 eligibility, P2 Table 1, P3 effect modification are done — all
+built on an <em>unweighted</em> analytic file.</li>
+<li>Today we question a design assumption baked into every number so
+far.</li>
+<li>MASLD hook: the paper reports HRs to two decimals but does not name
+the survey design.</li>
+</ul>
+<h2 id="slide-2-the-motivating-puzzle-8-min">Slide 2 — The motivating
+puzzle (8 min)</h2>
+<ul>
+<li>Show the paper’s Group IV all-cause HR ~15.1 (unadjusted). Ask: 15.1
+<em>for whom</em> — the sample, or US adults with MASLD?</li>
+<li>The gap between “sample” and “population” is exactly what survey
+design bridges.</li>
+<li>Preview the punchline: design-aware weighting attenuates Group IV
+toward ~12.4 and widens the CI.</li>
+<li>MASLD hook: the paper’s inference target is implicitly the US
+population, but its math is the sample’s.</li>
+</ul>
+<h2 id="slide-3-what-simple-random-sample-assumes-10-min">Slide 3 — What
+“simple random sample” assumes (10 min)</h2>
+<ul>
+<li>SRS: every person independently, equally likely to be drawn; default
+SEs assume this.</li>
+<li>Two violations coming: unequal selection probabilities (weights) and
+non-independence (clustering).</li>
+<li>Consequence of ignoring them: point estimates biased toward the
+sample composition; SEs usually too <em>small</em>.</li>
+<li>MASLD hook: default <code>coxph</code> SEs in the replication
+silently assume SRS.</li>
+</ul>
+<h2 id="slide-4-how-nhanes-is-actually-built-12-min">Slide 4 — How
+NHANES is actually built (12 min)</h2>
+<ul>
+<li>Multistage: (1) counties (PSUs), (2) segments, (3) households, (4)
+persons — selection at each stage.</li>
+<li>Stratified first by design domain; oversampling of targeted
+subgroups (e.g., older adults, some race/ethnicity groups, low
+income).</li>
+<li>Result: neither equal probabilities nor independent draws — the two
+SRS assumptions both fail by design.</li>
+<li>MASLD hook: MASLD adults are not spread randomly across PSUs; they
+cluster with the households sampled.</li>
+</ul>
+<h2 id="slide-5-weights-wtint-wtmec-wtsaf-12-min">Slide 5 — Weights:
+WTINT, WTMEC, WTSAF (12 min)</h2>
+<ul>
+<li>A weight ~ how many people in the target population this respondent
+represents (inverse selection probability, adjusted for nonresponse and
+post-stratification).</li>
+<li>Three tiers by how far into the exam a variable lives: WTINT
+(interview) ⊇ WTMEC (mobile exam) ⊇ WTSAF (fasting subsample).</li>
+<li>Rule: use the weight for the <em>most restrictive</em> data source
+your analysis actually requires.</li>
+<li>MASLD hook: FLI needs triglycerides (a fasting analyte) -&gt; the
+honest weight is WTSAF, the smallest, most-adjusted one.</li>
+</ul>
+<h2 id="slide-6-strata-and-psus-sdmvstra-sdmvpsu-10-min">Slide 6 —
+Strata and PSUs: SDMVSTRA, SDMVPSU (10 min)</h2>
+<ul>
+<li>SDMVSTRA encodes the design strata; SDMVPSU encodes the (masked)
+primary sampling units within a stratum.</li>
+<li>These drive <em>variance</em>, not the point estimate: clustering
+means neighbors resemble each other, so effective sample size &lt;
+N.</li>
+<li>Analytic strata/PSU are pseudo-values released for disclosure
+control — use as provided, never re-derive.</li>
+<li>MASLD hook: none of SDMVSTRA / SDMVPSU appear anywhere in the
+paper’s methods.</li>
+</ul>
+<h2 id="slide-7-pooling-weights-across-cycles-10-min">Slide 7 — Pooling
+weights across cycles (10 min)</h2>
+<ul>
+<li>NHANES 2007–2018 = six 2-year cycles; the paper stacks them.</li>
+<li>Weights are built per cycle -&gt; you must divide by the number of
+cycles pooled (here /6) so the weighted total isn’t multiplied.</li>
+<li>Use the survey-cycle-appropriate weight variable and pool
+consistently; strata/PSU are pooled as-is.</li>
+<li>MASLD hook: with six cycles combined, the correct pooled fasting
+weight is WTSAF/6, a step easy to miss.</li>
+</ul>
+<h2 id="slide-8-the-design-effect-10-min">Slide 8 — The design effect
+(10 min)</h2>
+<ul>
+<li>DEFF ~ variance under the real design ÷ variance under SRS;
+typically &gt; 1 because of clustering + weighting.</li>
+<li>Practical read: when DEFF &gt; 1, your <em>effective</em> N is
+smaller than your row count; honest CIs get wider.</li>
+<li>“N = 6,300” overstates the information content once design is
+respected.</li>
+<li>MASLD hook: the paper’s tight CIs partly reflect pretending each of
+~6,300 rows is an independent draw.</li>
+</ul>
+<h2 id="slide-9-short-break-5-min">Slide 9 — Short break (5 min)</h2>
+<ul>
+<li>Stretch. Coming up: what happens to the MASLD numbers when we do it
+right, and the fasting-weight puzzle.</li>
+</ul>
+<h2 id="slide-10-unweighted-is-a-choice-not-a-default-10-min">Slide 10 —
+“Unweighted” is a choice, not a default (10 min)</h2>
+<ul>
+<li>Some analysts argue for unweighted, model-based inference when the
+outcome model is richly adjusted (conditional, not descriptive,
+target).</li>
+<li>But that must be <em>stated and defended</em> — silence reads as an
+oversight, not a decision.</li>
+<li>Weighting and covariate adjustment are separate axes, not two rival
+framings. Design decides which population the estimate speaks for;
+adjustment decides which covariates it holds fixed. Every combination is
+available, and the honest report crosses them (Slide 11).</li>
+<li>Declare the estimand — population-average, conditional on
+covariates, or both — name the weight you used and why, and say which
+cell of the 2×2 your headline number came from.</li>
+<li>MASLD hook: the paper never declares which target it’s after, so
+readers can’t tell if unweighted was reasoned or accidental.</li>
+</ul>
+<h2 id="slide-11-what-weighting-does-to-masld-12-min">Slide 11 — What
+weighting does to MASLD (12 min)</h2>
+<ul>
+<li>Apply WTSAF (pooled) + SDMVSTRA + SDMVPSU via a survey-aware Cox
+fit.</li>
+<li>Group IV all-cause HR moves ~15.1 -&gt; ~12.4 unadjusted; CIs widen
+from the design effect.</li>
+<li>Direction of the headline survives — Group IV still worst — but the
+magnitude and precision are honestly smaller/wider.</li>
+<li>Then cross the axes and show all four cells, fitted on the
+<em>same</em> Model-1 complete-case rows (n = 5,939): read
+<strong>down</strong> a column for adjustment, <strong>across</strong> a
+row for design. Holding the rows fixed is the only thing that makes a
+difference attributable to the axis you moved — and it is why the crude
+IV-vs-I cell reads 16.05 rather than the ~15.1 of the full analytic
+file.</li>
+<li>IV vs I, the paper’s contrast: unweighted crude 16.05 (5.91–43.58),
+unweighted Model 1 3.79 (1.38–10.39); weighted crude 11.93 (2.60–54.84),
+weighted Model 1 2.97 (0.69–12.79).</li>
+<li>IV vs III, our locked contrast: unweighted crude 2.34 (1.72–3.18),
+unweighted Model 1 1.06 (0.77–1.45); weighted crude 3.07 (2.11–4.48),
+weighted Model 1 1.29 (0.90–1.86).</li>
+<li>The familiar ledger that runs unadjusted, then fully adjusted, then
+survey-weighted mixes crude and adjusted models fitted on different row
+sets. It is not a sequence of successive corrections and you do not
+present it as one.</li>
+<li>MASLD hook: on the paper’s own IV-vs-I contrast, design decides
+whether the interval excludes 1; on the locked IV-vs-III contrast,
+adjustment dominates and design moves the estimate in the opposite
+direction and by less. “Survey design matters” is true of one contrast
+and much weaker for the other.</li>
+</ul>
+<h2 id="slide-12-the-question-settled-by-cdcs-least-common-denominator-rule-fasting-vs-non-fasting-analytes-12-min">Slide
+12 — The question settled by CDC’s least-common-denominator rule:
+fasting vs non-fasting analytes (12 min)</h2>
+<ul>
+<li>FLI combines triglycerides + GGT + BMI + waist. TG is a
+<em>fasting</em> analyte (WTSAF domain); GGT is <em>not</em> (available
+in the broader MEC, WTMEC).</li>
+<li>Which weight is <strong>primary</strong> is settled by CDC’s
+least-common-denominator rule, not contested: use the weight of the
+smallest applicable subsample.</li>
+<li>The rule selects WTSAF (FLI needs a fasting analyte). MEC is not a
+defensible <em>primary</em> — it would weight to a population in which
+the exposure cannot be constructed — but a MEC-weighted run,
+<strong>explicitly labelled as a sensitivity analysis</strong>, shows
+students how much the rule was worth. The point is to apply the rule,
+say so, and quantify what it bought.</li>
+<li>MASLD hook: MASLD’s own ascertainment recipe forces a weight
+decision the paper never confronts.</li>
+</ul>
+<h2 id="slide-13-subset-the-design-never-the-data-10-min">Slide 13 —
+Subset the design, never the data (10 min)</h2>
+<ul>
+<li>Cardinal rule: define the full-survey design object once, then
+<em>subset within it</em> (e.g., <code>subset()</code> on the design),
+never filter rows first and re-declare a design on the survivors.</li>
+<li>Dropping rows first discards the strata/PSU information that
+non-selected units contribute to variance -&gt; wrong SEs.</li>
+<li>This is the #1 practical error students will hit in L5.</li>
+<li>MASLD hook: MASLD eligibility (FLI&gt;=60, ≥1 cardiometabolic
+criterion) is a <em>subset</em>, so it must be applied to the design,
+keeping WTSAF/strata/PSU intact.</li>
+</ul>
+<h2 id="slide-14-design-aware-workflow-end-to-end-8-min">Slide 14 —
+Design-aware workflow, end to end (8 min)</h2>
+<ul>
+<li>Steps: (1) pick weight tier by most-restrictive variable, (2) pool
+/cycles, (3) declare design with weight+strata+PSU, (4) subset within
+design, (5) fit survey-aware model, (6) report DEFF-widened CIs.</li>
+<li>Report a one-line “design statement” in every table caption — the
+habit that would have fixed the paper.</li>
+<li>Sensitivity analysis is part of the deliverable, not optional
+polish. For the weight that means: WTSAF primary by the rule, WTMEC
+reported alongside it and labelled as sensitivity.</li>
+<li>MASLD hook: this six-step recipe is precisely what P4 asks you to
+run on your paper.</li>
+</ul>
+<h2 id="slide-15-common-pitfalls-checklist-6-min">Slide 15 — Common
+pitfalls checklist (6 min)</h2>
+<ul>
+<li>Forgetting to divide pooled weights by the number of cycles.</li>
+<li>Filtering rows before declaring the design (the fatal one).</li>
+<li>Using WTMEC when a fasting analyte is in the model, or vice
+versa.</li>
+<li>Reading unweighted vs weighted divergence as “error” rather than as
+two different estimands.</li>
+</ul>
+<h2 id="slide-16-bridge-to-todays-lab-l5-and-p4-7-min">Slide 16 — Bridge
+to today’s lab (L5) and P4 (7 min)</h2>
+<ul>
+<li>In L5 (EpiMethods Complex Survey module) you will re-fit the MASLD
+Group I–IV Cox model two ways on the fixed dataset: a <em>naive</em>
+unweighted fit, then a <em>design-aware</em> fit declaring WTSAF/6 +
+SDMVSTRA + SDMVPSU, subsetting the design (not the rows) to the
+MASLD-eligible sample. You will tabulate naive vs survey HRs and CIs
+side by side and quantify the attenuation (~15 -&gt; ~12.4) and CI
+widening.</li>
+<li>This becomes <strong>P4, your design-aware re-estimate</strong>:
+apply the same six-step workflow to <em>your</em> paper’s headline
+estimate, declare and justify your chosen weight (naming the
+fasting-vs-non-fasting tension if it applies), report the
+naive-vs-weighted contrast, and write the one-line design statement your
+paper omitted. Those six steps are the survey route. A group whose paper
+qualified at M0 criterion 5 on a time-to-event structure instead has no
+weight to declare and therefore no naive-vs-correct number to report:
+their P4 is to reproduce the paper’s survival estimand keeping follow-up
+time and censoring, then interrogate the one structural choice they
+named at M0 — the time scale, the censoring rule, the index date, or how
+competing events were handled — and report what that choice does to the
+estimate and to its interpretation. Be exact about what is comparable:
+weighted and unweighted fits of the same survival model on the same rows
+are one estimand on one scale, so the gap between them is attributable
+to the design; a survival model set beside a collapsed “ever died” model
+is two different estimands on two different scales, so the gap between
+them measures the collapse, not the design, and is never the
+design-aware correction. P4 is formative and feeds directly into your M1
+replication and M2 critique of another group’s M1.</li>
+</ul>
+</body>
+</html>

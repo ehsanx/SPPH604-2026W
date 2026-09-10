@@ -1,0 +1,13 @@
+{
+  "emitted_by": "chain",
+  "facts": {
+    "locked_hr": "1.29",
+    "locked_ci": "0.90–1.86",
+    "locked_full": "1.29 (0.90–1.86)",
+    "locked_mi_full": "1.29 (0.89–1.85)",
+    "n_adults": "36,580",
+    "n_fasting": "14,962",
+    "n_fli": "14,170",
+    "n_lost_step2": "792"
+  }
+}

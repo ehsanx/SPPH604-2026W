@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Week4 confounding and table1</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Week4 confounding and table1</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#week-4-lecture-plan-variable-roles-confounding-dags" id="toc-week-4-lecture-plan-variable-roles-confounding-dags">Week 4
+Lecture Plan — Variable roles; confounding &amp; DAGs</a>
+<ul>
+<li><a href="#learning-objectives" id="toc-learning-objectives">Learning
+objectives</a></li>
+<li><a href="#continuity" id="toc-continuity">Continuity</a></li>
+<li><a href="#slide-1-where-we-are-in-the-project" id="toc-slide-1-where-we-are-in-the-project">Slide 1 — Where we are in
+the project</a></li>
+<li><a href="#slide-2-the-motivating-puzzle" id="toc-slide-2-the-motivating-puzzle">Slide 2 — The motivating
+puzzle</a></li>
+<li><a href="#slide-3-four-roles-a-variable-can-play" id="toc-slide-3-four-roles-a-variable-can-play">Slide 3 — Four roles a
+variable can play</a></li>
+<li><a href="#slide-4-confounding-a-common-cause" id="toc-slide-4-confounding-a-common-cause">Slide 4 — Confounding: a
+common cause</a></li>
+<li><a href="#slide-5-mediation-on-the-causal-path" id="toc-slide-5-mediation-on-the-causal-path">Slide 5 — Mediation: on
+the causal path</a></li>
+<li><a href="#slide-6-collider-bias-conditioning-on-a-common-effect" id="toc-slide-6-collider-bias-conditioning-on-a-common-effect">Slide 6 —
+Collider bias: conditioning on a common effect</a></li>
+<li><a href="#slide-7-a-minimal-dag-for-the-masld-question" id="toc-slide-7-a-minimal-dag-for-the-masld-question">Slide 7 — A
+minimal DAG for the MASLD question</a></li>
+<li><a href="#slide-8-age-the-dominant-confounder" id="toc-slide-8-age-the-dominant-confounder">Slide 8 — Age: the dominant
+confounder</a></li>
+<li><a href="#slide-9-the-phenotype-definition-exposure-construction" id="toc-slide-9-the-phenotype-definition-exposure-construction">Slide 9
+— The phenotype definition (exposure construction)</a></li>
+<li><a href="#slide-10-reading-tables-critically-the-mislabelled-cut" id="toc-slide-10-reading-tables-critically-the-mislabelled-cut">Slide 10
+— Reading tables critically: the mislabelled cut</a></li>
+<li><a href="#slide-11-break-10-min" id="toc-slide-11-break-10-min">Slide 11 — BREAK (10 min)</a></li>
+<li><a href="#slide-12-what-table-1-can-and-cannot-tell-you" id="toc-slide-12-what-table-1-can-and-cannot-tell-you">Slide 12 — What
+Table 1 can and cannot tell you</a></li>
+<li><a href="#slide-13-crude-vs-adjusted-the-collapse-explained" id="toc-slide-13-crude-vs-adjusted-the-collapse-explained">Slide 13 —
+Crude vs adjusted: the collapse explained</a></li>
+<li><a href="#slide-14-the-obesity-paradox-as-a-structural-question" id="toc-slide-14-the-obesity-paradox-as-a-structural-question">Slide 14
+— The “obesity paradox” as a structural question</a></li>
+<li><a href="#slide-15-what-adjustment-can-and-cannot-fix" id="toc-slide-15-what-adjustment-can-and-cannot-fix">Slide 15 — What
+adjustment can and cannot fix</a></li>
+<li><a href="#slide-16-bridge-to-todays-lab" id="toc-slide-16-bridge-to-todays-lab">Slide 16 — Bridge to today’s
+lab</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="week-4-lecture-plan-variable-roles-confounding-dags">Week 4
+Lecture Plan — Variable roles; confounding &amp; DAGs</h1>
+<p>Duration: ~2.5 h (Tue, before the Thu lab)</p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ul>
+<li>Distinguish the four roles a covariate can play — confounder,
+mediator, collider, and simple risk marker — and state the adjustment
+rule for each.</li>
+<li>Draw a minimal DAG for the MASLD question and read a backdoor path
+off it.</li>
+<li>Explain why age is the dominant confounder here, using the
+<sub>40-vs-</sub>62-year group age gap.</li>
+<li>Use Table 1 for what it can actually do — describe how the groups
+differ, expose sparse cells, positivity problems and coding errors, and
+raise questions worth investigating — rather than to identify
+confounders, and read a table critically enough to catch a mislabelled
+cut point.</li>
+<li>Interpret the crude→adjusted collapse of the Group IV hazard ratio
+without claiming which mechanism produced it, and read the “obesity
+paradox” as a structural question rather than a settled artefact.</li>
+</ul>
+<h2 id="continuity">Continuity</h2>
+<ul>
+<li><strong>Last week (Wk3 → L2/P1):</strong> we locked the analytic
+cohort — eligibility, the FLI≥60 exposure filter, and the frozen N. M0
+is now closed; your paper is locked.</li>
+<li><strong>This week:</strong> with the cohort fixed, we ask what
+<em>distorts</em> the exposure–mortality contrast. We name variable
+roles, draw the DAG, and read Table 1 as a description of the groups
+that raises questions the causal argument then has to answer — the
+conceptual groundwork for adjusted models.</li>
+<li><strong>Sets up:</strong> Thursday’s L3 takes Table 1 → crude →
+adjusted estimates; P2 is your own Table 1 plus the reasoning for what
+you will and will not adjust for.</li>
+</ul>
+<h2 id="slide-1-where-we-are-in-the-project">Slide 1 — Where we are in
+the project</h2>
+<ul>
+<li>Recap the arc: Replicate → Interrogate → Improve → Defend; we are
+entering <em>Interrogate</em>.</li>
+<li>M0 locked last week; the cohort and the four phenotype groups are
+now fixed inputs — the paper reports N ≈ 6,300, our full analytic file
+is 6,371.</li>
+<li>Today is purely conceptual scaffolding for adjustment — no new data
+steps.</li>
+<li><em>MASLD hook:</em> the four groups are settled — the paper’s
+counts are I 386 / II 4,541 / III 769 / IV 604 and ours are I 391 / II
+4,585 / III 787 / IV 608; today asks whether their mortality contrast is
+<em>real or confounded</em>.</li>
+<li>~8 min</li>
+</ul>
+<h2 id="slide-2-the-motivating-puzzle">Slide 2 — The motivating
+puzzle</h2>
+<ul>
+<li>Group IV (non-obese, high central adiposity) has the worst survival
+— but the number moves enormously with adjustment.</li>
+<li>Unadjusted all-cause HR ≈ 15.1; adjusted ≈ 2.9–3.3. Same data, one
+covariate set apart.</li>
+<li>Ask the room: what could make a hazard ratio shrink five-fold? Park
+answers; return at Slide 12.</li>
+<li><em>MASLD hook:</em> this single collapse (≈15 → ≈3) is the spine of
+the whole lecture.</li>
+<li>~8 min</li>
+</ul>
+<h2 id="slide-3-four-roles-a-variable-can-play">Slide 3 — Four roles a
+variable can play</h2>
+<ul>
+<li>A covariate is not “a control” by default — its role depends on the
+causal structure, not on the regression.</li>
+<li>Taxonomy: <strong>confounder</strong> (common cause),
+<strong>mediator</strong> (on the path), <strong>collider</strong>
+(common effect), <strong>risk marker</strong> (predicts outcome, no
+exposure link).</li>
+<li>The role dictates the action: adjust confounders, <em>don’t</em>
+adjust mediators or colliders.</li>
+<li><em>MASLD hook:</em> age, cardiometabolic criteria, and the FLI
+filter each play <em>different</em> roles in this study — naming them is
+the task.</li>
+<li>~12 min</li>
+</ul>
+<h2 id="slide-4-confounding-a-common-cause">Slide 4 — Confounding: a
+common cause</h2>
+<ul>
+<li>Definition: a variable that causes both exposure and outcome,
+opening a <strong>backdoor path</strong>.</li>
+<li>Signature: it causes both the exposure and the outcome, opening a
+backdoor path. Imbalance across exposure groups and outcome relevance
+tell you where to look; they do not establish the role. Whether
+adjusting it changes the estimate is not a test of confounding —
+adjusting a mediator changes the estimate too, and so does adjusting a
+collider. Non-collapsibility of the hazard ratio, a changed model
+specification, and a crude model fitted on more rows than the adjusted
+one all do the same.</li>
+<li>This is the one role where adjustment <em>removes</em> bias.</li>
+<li><em>MASLD hook:</em> age raises central adiposity/phenotype
+membership <em>and</em> raises mortality — the textbook confounder
+here.</li>
+<li>~10 min</li>
+</ul>
+<h2 id="slide-5-mediation-on-the-causal-path">Slide 5 — Mediation: on
+the causal path</h2>
+<ul>
+<li>Definition: exposure → mediator → outcome; the mediator transmits
+the effect.</li>
+<li>Adjusting a mediator removes part of the very effect you want —
+“over-adjustment.”</li>
+<li>Contrast with confounding: same regression syntax, opposite
+consequence.</li>
+<li><em>MASLD hook:</em> if central adiposity drives mortality
+<em>through</em> incident diabetes/CVD, controlling those downstream
+conditions would erase real effect — a mediation trap to flag.</li>
+<li>~10 min</li>
+</ul>
+<h2 id="slide-6-collider-bias-conditioning-on-a-common-effect">Slide 6 —
+Collider bias: conditioning on a common effect</h2>
+<ul>
+<li>Definition: exposure → C ← outcome (or their causes); C is a
+collider on that path.</li>
+<li>Conditioning on a collider — by adjustment <em>or by selection</em>
+— opens a spurious path.</li>
+<li>Selection into the sample is a form of conditioning: who gets
+measured matters.</li>
+<li><em>MASLD hook:</em> the paper adjusts for T2DM, hypertension, CKD
+and prior MI. Ask the class which of those they can
+<strong>justify</strong> as confounders rather than merely observe to be
+prognostic — several could be descendants or intermediates under
+plausible causal structures, and the data do not settle their causal
+roles or temporal ordering. Adjusting for a variable does not establish
+its causal role.</li>
+<li>~10 min</li>
+</ul>
+<h2 id="slide-7-a-minimal-dag-for-the-masld-question">Slide 7 — A
+minimal DAG for the MASLD question</h2>
+<ul>
+<li>Draw live: Phenotype (exposure) → Mortality (outcome); Age →
+Phenotype and Age → Mortality (backdoor); Cardiometabolic factors as
+shared causes.</li>
+<li>Trace the open backdoor Age creates; show that adjusting Age blocks
+it.</li>
+<li>Show a mediator arrow (Phenotype → diabetes → Mortality) to mark
+what <em>not</em> to block.</li>
+<li><em>MASLD hook:</em> one small hand-drawn DAG makes visible why age
+is adjusted and why downstream disease is not.</li>
+<li>~12 min</li>
+</ul>
+<h2 id="slide-8-age-the-dominant-confounder">Slide 8 — Age: the dominant
+confounder</h2>
+<ul>
+<li>Group mean ages differ sharply (roughly ~40 in the younger obese
+groups vs ~62 in the leaner high-central group).</li>
+<li>Non-obese high-central adults are, on average, <em>older</em> — and
+age alone predicts death.</li>
+<li>So a chunk of Group IV’s raw excess mortality is “being older,” not
+the phenotype.</li>
+<li><em>MASLD hook:</em> the <sub>40-vs-</sub>62 gap is the single
+largest driver of the crude HR ≈ 15.</li>
+<li>~10 min</li>
+</ul>
+<h2 id="slide-9-the-phenotype-definition-exposure-construction">Slide 9
+— The phenotype definition (exposure construction)</h2>
+<ul>
+<li>Two axes: obesity (BMI ≥ 30) × central adiposity (WHtR ≥ 0.6) → four
+groups (I–IV).</li>
+<li>Group IV = non-obese (BMI &lt; 30) but high central adiposity — the
+“hidden risk” cell.</li>
+<li>The cut points are analyst choices; they determine who lands in the
+worst-survival group.</li>
+<li><em>MASLD hook:</em> Group IV’s definition is exactly why
+“non-obese” can still be high-risk — the paper’s headline.</li>
+<li>~10 min</li>
+</ul>
+<h2 id="slide-10-reading-tables-critically-the-mislabelled-cut">Slide 10
+— Reading tables critically: the mislabelled cut</h2>
+<ul>
+<li>The published Table headers print the BMI cut as “&lt;25” when the
+actual analytic cut is 30.</li>
+<li>A reader trusting the header would misread the entire exposure; the
+<em>code</em>, not the label, is truth.</li>
+<li>Lesson: reconcile every table label against the methods and the
+derivation.</li>
+<li><em>MASLD hook:</em> this is a real, reproducible label–Methods
+mismatch in Kueh 2026 — a live example of why replication catches what
+reading cannot.</li>
+<li>~8 min</li>
+</ul>
+<h2 id="slide-11-break-10-min">Slide 11 — BREAK (10 min)</h2>
+<ul>
+<li>Stretch; leave the DAG on the board for the second half.</li>
+</ul>
+<h2 id="slide-12-what-table-1-can-and-cannot-tell-you">Slide 12 — What
+Table 1 can and cannot tell you</h2>
+<ul>
+<li>Reframe Table 1: not decoration, but the description of how the
+groups actually differ — a <em>data</em> diagnostic, not a confounder
+detector.</li>
+<li>Read across the phenotype columns — age, sex, cardiometabolic
+markers — looking for sparse cells that cannot support a model,
+positivity problems (a covariate level with almost nobody in one group),
+impossible or miscoded values, and contrasts worth investigating.</li>
+<li>Imbalance does not nominate an adjustment set. A variable belongs in
+it because causal and temporal reasoning puts it there — a common cause
+of both exposure and outcome, measured before the exposure — and a badly
+imbalanced variable can still be a mediator, a collider, or beside the
+point. Justify the set from science, not from a stepwise algorithm or a
+scan of the table.</li>
+<li><em>MASLD hook:</em> Table 1 reproduces closely (mean age ~51, BMI
+~33.2); the age row across groups (~40 vs ~62) is the question the table
+hands you — whether age <em>confounds</em> this contrast is a claim
+about causal structure, argued on the Slide 7 DAG, not read off the
+row.</li>
+<li>~14 min</li>
+</ul>
+<h2 id="slide-13-crude-vs-adjusted-the-collapse-explained">Slide 13 —
+Crude vs adjusted: the collapse explained</h2>
+<ul>
+<li>Return to Slide 2: Group IV all-cause HR ≈ 15 crude → ≈ 3.3 after
+adjustment.</li>
+<li>Walk the mechanism, then stop: adjustment can remove confounding,
+but it can also remove real effect by conditioning on mediators, and it
+can introduce bias by conditioning on colliders. Attenuation is
+diagnostic evidence about what the covariates are doing — it is not
+evidence that the adjusted estimate is correct.</li>
+<li>Two further reasons the number can move without any confounding
+being removed: the hazard ratio is non-collapsible, so it shifts on
+adjustment even under a null, and a crude model fitted on more rows than
+the adjusted one differs for two reasons at once. Fit both on the same
+complete-case rows.</li>
+<li>Name the residual ≈3 for what it is: the remaining conditional
+association under this adjustment set. Not the phenotype’s own signal,
+and not evidence that the phenotype matters beyond age.</li>
+<li><em>MASLD hook:</em> the ≈15→≈3 move is what the paper’s inherited
+adjustment set produces. Which of those explanations produced it is
+exactly what this analysis cannot settle — that is the threat you carry
+to M1, not a result.</li>
+<li>~12 min</li>
+</ul>
+<h2 id="slide-14-the-obesity-paradox-as-a-structural-question">Slide 14
+— The “obesity paradox” as a structural question</h2>
+<ul>
+<li>The paradox: obese patients sometimes look <em>protected</em> in
+crude comparisons.</li>
+<li>The candidate explanations are structural, not biological —
+confounding by age and severity, and selection into a sick-but-surviving
+sample. Naming a candidate is not the same as demonstrating one, and
+nothing in this design tells them apart.</li>
+<li>Group IV is where the naive reading gets tested, and the test has
+two halves. Descriptively, “leaner is safer” fails and the paper reports
+that accurately: Group IV has the poorest observed survival (19.5% died,
+against 9.6% in Group III). That claim follows.</li>
+<li>Comparatively, it does not follow. On the locked IV-vs-III contrast,
+fitted on the same complete-case rows, the adjusted hazard ratio is 1.06
+(0.77–1.45) unweighted, and the paper’s own Model 1 puts Groups III and
+IV almost on top of each other — an implied ratio of about 0.99. The
+ranking is a crude fact; conditioning does not sharpen it.</li>
+<li><em>MASLD hook:</em> so the headline is not the paradox resolved —
+it is the paradox posed on the cell that holds body-mass category fixed.
+Wk6 re-runs that same contrast design-aware, giving 1.29 (0.90–1.86),
+and the interval still includes 1.</li>
+<li>~10 min</li>
+</ul>
+<h2 id="slide-15-what-adjustment-can-and-cannot-fix">Slide 15 — What
+adjustment can and cannot fix</h2>
+<ul>
+<li>Adjustment closes <em>measured</em> backdoor paths only;
+residual/unmeasured confounding remains.</li>
+<li>Over-adjustment (mediators) and collider/selection bias can
+<em>add</em> bias — more covariates is not always better.</li>
+<li>Preview: survey design (Wk6) and missing-FLI selection (Wk7) are
+biases adjustment alone won’t fix.</li>
+<li><em>MASLD hook:</em> even the adjusted ≈3 is provisional — later
+weeks stress-test it.</li>
+<li>~8 min</li>
+</ul>
+<h2 id="slide-16-bridge-to-todays-lab">Slide 16 — Bridge to today’s
+lab</h2>
+<ul>
+<li><strong>L3 (Thursday):</strong> in the EpiMethods OER environment,
+move from the frozen cohort to estimates — build Table 1 across the four
+phenotype groups, then fit crude and age-adjusted models to watch the
+Group IV HR fall from ≈15 toward ≈3.</li>
+<li><strong>Workflow:</strong> build Table 1 to see the groups and to
+catch sparse cells, positivity problems and coding slips; then decide
+the adjustment set from causal and temporal reasoning — what precedes
+the exposure, what lies downstream of it — and record what you
+deliberately leave <em>out</em> (mediators, colliders). The table
+describes; the causal argument decides.</li>
+<li><strong>P2 (your paper):</strong> produce your own Table 1 plus a
+written adjustment rationale — which variables you adjust, which you
+don’t, and why — carrying forward into your M1 replication.</li>
+<li><em>MASLD hook:</em> you will reproduce, with your own hands, the
+crude→adjusted collapse we drew today.</li>
+<li>~6 min</li>
+</ul>
+</body>
+</html>

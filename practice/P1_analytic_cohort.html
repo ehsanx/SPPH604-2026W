@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>P1 analytic cohort</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">P1 analytic cohort</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#p1-analytic-cohort" id="toc-p1-analytic-cohort">P1 —
+Analytic cohort</a>
+<ul>
+<li><a href="#the-question-this-week" id="toc-the-question-this-week">The question this week</a></li>
+<li><a href="#what-to-do" id="toc-what-to-do">What to do</a></li>
+<li><a href="#deliverable" id="toc-deliverable">Deliverable</a></li>
+<li><a href="#worked-example-masldnhanes-demonstration" id="toc-worked-example-masldnhanes-demonstration">Worked example —
+MASLD/NHANES demonstration</a></li>
+<li><a href="#what-good-looks-like" id="toc-what-good-looks-like">What
+good looks like</a></li>
+<li><a href="#be-ready-to-defend-m3" id="toc-be-ready-to-defend-m3">Be
+ready to defend (M3)</a></li>
+<li><a href="#ai-co-pilot-note" id="toc-ai-co-pilot-note">AI co-pilot
+note</a></li>
+<li><a href="#lab-project-handoff" id="toc-lab-project-handoff">Lab →
+project handoff</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="p1-analytic-cohort">P1 — Analytic cohort</h1>
+<p><strong>Week 3 · applies L2 (Analytic data) · optional and ungraded —
+no separate deadline, nothing to submit; M1 is assembled from these five
+increments</strong> <strong>Keep in your group GitHub repo:</strong> a
+script that rebuilds the cohort + a flow table + a short
+<code>P1_notes.md</code>.</p>
+<h2 id="the-question-this-week">The question this week</h2>
+<p><em>Can you rebuild your paper’s analytic cohort from the raw source
+data, and account for every person who is included or excluded?</em>
+Rebuilding the sample <strong>is</strong> the first result — everything
+downstream depends on getting this right.</p>
+<h2 id="what-to-do">What to do</h2>
+<ol type="1">
+<li><strong>Find the source files.</strong> List every raw data file
+(and version/cycle) your paper’s cohort is built from, and the key you
+merge on.</li>
+<li><strong>Reconstruct eligibility.</strong> Translate the paper’s
+inclusion/exclusion criteria and exposure/outcome definitions into code.
+Build the exposure and link the outcome.</li>
+<li><strong>Make a flow table.</strong> Report <strong>N after each
+exclusion step</strong>, ending at your analytic N.</li>
+<li><strong>Compare to the paper and explain the gap.</strong> State
+your N vs the paper’s. Trace any difference to a specific decision.
+<strong>Do not tune your code to hit the paper’s number.</strong></li>
+</ol>
+<h2 id="deliverable">Deliverable</h2>
+<ul>
+<li>Reproducible cohort-building script (runs start-to-finish on a fresh
+machine).</li>
+<li>A flow table (CSV or figure) → becomes your M1 <strong>cohort flow
+diagram</strong>.</li>
+<li><code>P1_notes.md</code>: your one-sentence study question, and a
+numbered list of every eligibility decision with the reasoning where the
+paper was ambiguous.</li>
+</ul>
+<h2 id="worked-example-masldnhanes-demonstration">Worked example —
+MASLD/NHANES demonstration</h2>
+<ul>
+<li>Six NHANES cycles + linked mortality merged on <code>SEQN</code>;
+FLI computed; four BMI/WHtR groups formed. <strong>Not a target — a
+comparison.</strong> The paper reports N ≈ 6,300, groups 386 / 4,541 /
+769 / 604 and 585 deaths; our reproduction’s <strong>full analytic
+file</strong> lands on <strong>N = 6,371</strong>, groups <strong>391 /
+4,585 / 787 / 608</strong> and <strong>586 deaths</strong>, and its
+<strong>locked domain</strong> — the rows carrying a valid fasting
+weight — is <strong>6,048</strong>. Getting 6,371 rather than the
+paper’s number is not a failure: it is the finding, and tracing
+<em>why</em> the two differ is the skill being taught. An unexplained
+exact match is worth less than a discrepancy you can account for.</li>
+<li><strong>Trap 1 — one sentence, three cohorts.</strong> “Significant
+alcohol (&gt;2 drinks/day men, &gt;1 women)” coded three defensible ways
+gives <strong>N = 4,308 / 5,944 / 6,371</strong>. The paper’s numbers
+match <em>no effective exclusion</em>. Which did the authors use? You
+cannot tell from the paper — so you <strong>document the
+ambiguity</strong>, you don’t force it.</li>
+<li><strong>Trap 2 — a table label that disagrees with the
+Methods.</strong> The Table 1 headers say “BMI &lt; 25”, but the
+non-obese groups have BMI medians of 27.6 and 28.8. The operative cut is
+<strong>30</strong> (from the Methods). Coding to 30 reproduces the
+groups; coding to 25 does not.</li>
+</ul>
+<h2 id="what-good-looks-like">What good looks like</h2>
+<ul>
+<li><strong>Exceptional:</strong> full step-by-step funnel; the residual
+N gap is <em>traced and explained</em> (e.g., complete-case on
+covariates; here, exactly one person missing serum creatinine);
+ambiguities documented rather than tuned away.</li>
+<li><strong>Adequate:</strong> cohort rebuilt and runs; N close; most
+exclusions justified.</li>
+<li><strong>Weak:</strong> “N matches ✓” with no funnel, or code that
+hard-codes the target N.</li>
+</ul>
+<h2 id="be-ready-to-defend-m3">Be ready to defend (M3)</h2>
+<blockquote>
+<p><em>“Show me one person who is in your cohort but not the paper’s —
+and tell me why.”</em></p>
+</blockquote>
+<h2 id="ai-co-pilot-note">AI co-pilot note</h2>
+<p>A co-pilot will happily write code that filters until N equals the
+paper’s number. That is the exact failure this increment tests. You must
+be able to show the funnel and defend each cut.</p>
+<h2 id="lab-project-handoff">Lab → project handoff</h2>
+<p>You are applying <strong>L2 (Analytic data)</strong> — multi-source
+download, merge, cleaning, eligibility, and exposure/outcome
+construction (EpiMethods <code>accessingE3</code> and
+<code>accessingE2</code>). Same moves, your paper’s data.</p>
+</body>
+</html>
