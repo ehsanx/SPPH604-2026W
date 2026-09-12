@@ -12,7 +12,7 @@ and worked through in [`../examples/`](../examples/).
 > Kueh MTW, Chew NWS, et al. Body weight categories and fat distribution in relation to
 > all-cause mortality among adults with metabolic dysfunction-associated steatotic liver
 > disease. ***BMJ Open*** 2026;16:e113719.
-> doi:[10.1136/bmjopen-2025-113719](https://doi.org/10.1136/bmjopen-2025-113719)
+> [doi:10.1136/bmjopen-2025-113719](https://doi.org/10.1136/bmjopen-2025-113719)
 
 > © Author(s) (or their employer(s)) 2026.
 > **Re-use permitted under CC BY-NC. No commercial re-use.**
@@ -52,7 +52,7 @@ example of design-aware practice**.
 > Karim ME, Hossain MB, Zheng C. Examining the Role of Race/Ethnicity and Sex in Modifying
 > the Association Between Early Smoking Initiation and Mortality: A 20-Year NHANES
 > Analysis. ***AJPM Focus*** 2025;4(2):100282.
-> doi:[10.1016/j.focus.2024.100282](https://doi.org/10.1016/j.focus.2024.100282)
+> [doi:10.1016/j.focus.2024.100282](https://doi.org/10.1016/j.focus.2024.100282)
 
 > © 2024 The Author(s). Published by Elsevier Inc.
 > **Open access under CC BY.** <https://creativecommons.org/licenses/by/4.0/>

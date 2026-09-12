@@ -11,7 +11,7 @@
 > Kueh MTW, Chew NWS, et al. Body weight categories and fat distribution in relation to
 > all-cause mortality among adults with metabolic dysfunction-associated steatotic liver
 > disease. *BMJ Open* 2026;16:e113719.
-> doi:[10.1136/bmjopen-2025-113719](https://doi.org/10.1136/bmjopen-2025-113719)
+> [doi:10.1136/bmjopen-2025-113719](https://doi.org/10.1136/bmjopen-2025-113719)
 
 Open access (CC BY-NC). Built entirely on public NHANES data with NCHS linked mortality.
 

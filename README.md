@@ -78,7 +78,7 @@ Everything in `examples/` and `reproduction/` is built on:
 
 > Kueh MTW et al. Body weight categories and fat distribution in relation to all-cause
 > mortality among adults with MASLD. *BMJ Open* 2026;16:e113719. NHANES 2007–2018 with
-> NCHS linked mortality. doi:[10.1136/bmjopen-2025-113719](https://doi.org/10.1136/bmjopen-2025-113719)
+> NCHS linked mortality. [doi:10.1136/bmjopen-2025-113719](https://doi.org/10.1136/bmjopen-2025-113719)
 
 It reproduces: N = 6,371 against the paper's ~6,300, groups 391 / 4,585 / 787 / 608, 586
 deaths, and a Group IV hazard ratio of 15.14 unadjusted → 2.91 adjusted (published:

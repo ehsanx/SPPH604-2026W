@@ -40,7 +40,7 @@ it.**
 > **Re-use permitted under CC BY-NC. No commercial re-use.**
 > Published by BMJ Group.
 > Kueh MTW, Chew NWS, et al. *BMJ Open* 2026;16:e113719.
-> doi:[10.1136/bmjopen-2025-113719](https://doi.org/10.1136/bmjopen-2025-113719)
+> [doi:10.1136/bmjopen-2025-113719](https://doi.org/10.1136/bmjopen-2025-113719)
 
 **CC BY-NC is not CC BY.** The repository licence above does not extend to that file, and
 you may not re-use it commercially. See [`paper/README.md`](paper/README.md).
@@ -51,7 +51,7 @@ included** in this repository; download it from the publisher.
 ### `PIIS2773065424001007.pdf` and `mmc1.pdf` — CC BY
 
 > Karim ME, Hossain MB, Zheng C. *AJPM Focus* 2025;4(2):100282.
-> doi:[10.1016/j.focus.2024.100282](https://doi.org/10.1016/j.focus.2024.100282)
+> [doi:10.1016/j.focus.2024.100282](https://doi.org/10.1016/j.focus.2024.100282)
 > © 2024 The Author(s), published by Elsevier Inc.
 > **Open access under CC BY.**
 
