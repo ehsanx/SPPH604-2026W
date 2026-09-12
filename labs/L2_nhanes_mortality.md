@@ -46,3 +46,16 @@ You receive **Complete** if the document knitted without errors, your group name
 members are in it, and it was submitted before the lab ended. Only members present in the
 room receive credit.
 
+---
+
+## Where this lab fits
+
+This lab is one step in a weekly chain: Tuesday’s lecture sets up the method, Thursday’s lab runs it on fixed teaching data, and your increment applies it to the paper your group locked at M0.
+
+| | Document | How this lab connects |
+|---|---|---|
+| **This week’s lecture** | [Week 3 — Cohort construction (FLI, MASLD criteria, eligibility)](https://ehsanx.github.io/SPPH604-2026W/lectures/Week3_cohort_construction_FLI.html) | Tuesday built the MASLD cohort definition on the board — coding the FLI, applying FLI ≥ 60 plus at least one cardiometabolic criterion, and choosing one defensible alcohol coding. This lab implements it, and outputs a funnel with N at every step. |
+| **Slide deck** | [Week 3 deck](https://ehsanx.github.io/SPPH604-2026W/lectures/slides/Week3_cohort_FLI_slides.html) | The same material as slides, with speaker notes. Press `S` for notes, `F` for fullscreen. |
+| **Your increment** | [P1 — Analytic cohort](https://ehsanx.github.io/SPPH604-2026W/practice/P1_analytic_cohort.html) | Repeat the funnel for *your own* locked paper: write each inclusion and exclusion as executable logic, report N at every step, and flag one ambiguous eligibility sentence you had to adjudicate. |
+| **Milestone** | [M1 — Replication and interrogation](https://ehsanx.github.io/SPPH604-2026W/milestones/M1_assignment.html) | P1 enters M1 as **Analytic cohort and eligibility**. P1 is optional and ungraded with nothing to submit; M1 is where it is assessed. |
+| **Builds on** | [L1 — NHANES data wrangling](https://ehsanx.github.io/SPPH604-2026W/labs/L1_data_wrangling.html) | You build today’s analytic dataset from the merged frame you made in L1. |

@@ -50,3 +50,15 @@ You receive **Complete** if the document knitted without errors, your group name
 members are in it, and it was submitted before the lab ended. Only members present in the
 room receive credit.
 
+---
+
+## Where this lab fits
+
+This lab is one step in a weekly chain: Tuesday’s lecture sets up the method, Thursday’s lab runs it on fixed teaching data, and your increment applies it to the paper your group locked at M0.
+
+| | Document | How this lab connects |
+|---|---|---|
+| **This week’s lecture** | [Week 6 — Complex survey design (weights, strata, PSU)](https://ehsanx.github.io/SPPH604-2026W/lectures/Week6_complex_survey_design.html) | Tuesday showed why a complex survey is not a simple random sample, and what weights, strata and PSUs are actually doing. This lab makes the contrast concrete: a naive unweighted fit beside a design-aware one, with the attenuation and the CI widening tabulated side by side. |
+| **Slide deck** | [Week 6 deck](https://ehsanx.github.io/SPPH604-2026W/lectures/slides/Week6_survey_slides.html) | The same material as slides, with speaker notes. Press `S` for notes, `F` for fullscreen. |
+| **Your increment** | [P4 — Design-aware estimate](https://ehsanx.github.io/SPPH604-2026W/practice/P4_design_aware_estimate.html) | Apply the same workflow to *your* paper’s headline estimate: declare and justify the weight you chose, report the naive-versus-weighted contrast, and write the one-line design statement your paper omitted. |
+| **Milestone** | [M1 — Replication and interrogation](https://ehsanx.github.io/SPPH604-2026W/milestones/M1_assignment.html) | P4 enters M1 as **Design-aware estimate**. P4 is optional and ungraded with nothing to submit; M1 is where it is assessed. |

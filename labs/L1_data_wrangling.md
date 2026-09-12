@@ -40,3 +40,16 @@ You receive **Complete** if the document knitted without errors, your group name
 members are in it, and it was submitted before the lab ended. Only members present in the
 room receive credit.
 
+---
+
+## Where this lab fits
+
+This lab is one step in a weekly chain: Tuesday’s lecture sets up the method, Thursday’s lab runs it on fixed teaching data, and your increment applies it to the paper your group locked at M0.
+
+| | Document | How this lab connects |
+|---|---|---|
+| **This week’s lecture** | [Week 2 — NHANES data sources; reading Methods critically](https://ehsanx.github.io/SPPH604-2026W/lectures/Week2_nhanes_and_reading_methods.html) | Tuesday read the demonstration paper’s Methods section as the first act of reproduction, and gave you the four-primitive template. This lab turns that reading into data: several NHANES cycles downloaded, the raw topic files read, and everything merged on `SEQN` into one row per person. |
+| **Slide deck** | [Week 2 deck](https://ehsanx.github.io/SPPH604-2026W/lectures/slides/Week2_nhanes_slides.html) | The same material as slides, with speaker notes. Press `S` for notes, `F` for fullscreen. |
+| **Milestone** | [M1 — Replication and interrogation](https://ehsanx.github.io/SPPH604-2026W/milestones/M1_assignment.html) | Only indirectly, and only through the paper you lock at M0. Nothing you build today is submitted for M1. |
+| **Milestone** | [M0 — Feasibility memo](https://ehsanx.github.io/SPPH604-2026W/milestones/M0_assignment.html) | Use this week’s template and the M0 criteria to shortlist two or three candidate NHANES papers of your own. You lock one at M0 in Week 3. |
+| **Every later lab** | — | L1’s merge is the substrate for the whole term. Table 1, confounding, interaction, survey weights and missing data all run on the table you build today, so a clean merge now saves you five weeks of debugging. |

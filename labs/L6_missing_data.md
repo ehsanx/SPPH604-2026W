@@ -56,3 +56,16 @@ room receive credit.
 > reduce the number of imputations (for example `m = 5`) so your document knits in time.
 > You can run the full version later for P5.
 
+---
+
+## Where this lab fits
+
+This lab is one step in a weekly chain: Tuesday’s lecture sets up the method, Thursday’s lab runs it on fixed teaching data, and your increment applies it to the paper your group locked at M0.
+
+| | Document | How this lab connects |
+|---|---|---|
+| **This week’s lecture** | [Week 7 — Missing data (MCAR/MAR/MNAR; multiple imputation)](https://ehsanx.github.io/SPPH604-2026W/lectures/Week7_missing_data.html) | Tuesday covered missingness mechanisms and multiple imputation, and the distinction that matters most: which gaps imputation can address, and which are scope limits to be written up rather than imputed. This lab implements MI inside the survey framework from last week. |
+| **Slide deck** | [Week 7 deck](https://ehsanx.github.io/SPPH604-2026W/lectures/slides/Week7_missing_slides.html) | The same material as slides, with speaker notes. Press `S` for notes, `F` for fullscreen. |
+| **Your increment** | [P5 — Missing-data sensitivity](https://ehsanx.github.io/SPPH604-2026W/practice/P5_missing_data.html) | Show your paper’s number under missingness stress: a small complete-case / stress-test / MI comparison, and one sentence naming the population your conclusion is actually about. |
+| **Milestone** | [M1 — Replication and interrogation](https://ehsanx.github.io/SPPH604-2026W/milestones/M1_assignment.html) | P5 enters M1 as **Missing-data sensitivity**. P5 is optional and ungraded with nothing to submit; M1 is where it is assessed. |
+| **Builds on** | [L5 — Survey data analysis](https://ehsanx.github.io/SPPH604-2026W/labs/L5_survey_analysis.html) | The imputation here runs inside the survey design you declared in L5, so the design and the missingness are handled together rather than one after the other. |

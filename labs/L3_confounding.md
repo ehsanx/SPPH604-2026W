@@ -41,3 +41,15 @@ You receive **Complete** if the document knitted without errors, your group name
 members are in it, and it was submitted before the lab ended. Only members present in the
 room receive credit.
 
+---
+
+## Where this lab fits
+
+This lab is one step in a weekly chain: Tuesday’s lecture sets up the method, Thursday’s lab runs it on fixed teaching data, and your increment applies it to the paper your group locked at M0.
+
+| | Document | How this lab connects |
+|---|---|---|
+| **This week’s lecture** | [Week 4 — Confounding and DAGs; Table 1; variable roles](https://ehsanx.github.io/SPPH604-2026W/lectures/Week4_confounding_and_table1.html) | Tuesday moved from a frozen cohort to estimates: what Table 1 is for, how to decide an adjustment set from causal and temporal reasoning, and why what you leave out (mediators, colliders) matters as much as what you put in. This lab runs that sequence on the RHC data and watches crude, conditional and marginal estimates behave differently. |
+| **Slide deck** | [Week 4 deck](https://ehsanx.github.io/SPPH604-2026W/lectures/slides/Week4_confounding_slides.html) | The same material as slides, with speaker notes. Press `S` for notes, `F` for fullscreen. |
+| **Your increment** | [P2 — Confounding diagnostic](https://ehsanx.github.io/SPPH604-2026W/practice/P2_confounding_diagnostic.html) | Produce your own Table 1 plus a written adjustment rationale — which variables you adjust for, which you deliberately do not, and why. |
+| **Milestone** | [M1 — Replication and interrogation](https://ehsanx.github.io/SPPH604-2026W/milestones/M1_assignment.html) | P2 enters M1 as **Confounding, adjustment set, Table 1**. P2 is optional and ungraded with nothing to submit; M1 is where it is assessed. |

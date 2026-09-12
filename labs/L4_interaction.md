@@ -50,3 +50,15 @@ You receive **Complete** if the document knitted without errors, your group name
 members are in it, and it was submitted before the lab ended. Only members present in the
 room receive credit.
 
+---
+
+## Where this lab fits
+
+This lab is one step in a weekly chain: Tuesday’s lecture sets up the method, Thursday’s lab runs it on fixed teaching data, and your increment applies it to the paper your group locked at M0.
+
+| | Document | How this lab connects |
+|---|---|---|
+| **This week’s lecture** | [Week 5 — Interaction and effect modification](https://ehsanx.github.io/SPPH604-2026W/lectures/Week5_interaction_effect_modification.html) | Tuesday separated effect modification from interaction, and separated the multiplicative scale from the additive one. This lab fits the product term, extracts stratum-specific estimates, and computes RERI, AP and SI so you have done both scales by hand. |
+| **Slide deck** | [Week 5 deck](https://ehsanx.github.io/SPPH604-2026W/lectures/slides/Week5_interaction_slides.html) | The same material as slides, with speaker notes. Press `S` for notes, `F` for fullscreen. |
+| **Your increment** | [P3 — Effect modification](https://ehsanx.github.io/SPPH604-2026W/practice/P3_effect_modification.html) | Run **one pre-specified** effect-modification test on your own paper’s exposure, and state the verdict as evidence rather than as a mechanism: what the data show at the precision you have, and what the interval leaves open. |
+| **Milestone** | [M1 — Replication and interrogation](https://ehsanx.github.io/SPPH604-2026W/milestones/M1_assignment.html) | P3 enters M1 as **Effect modification**. P3 is optional and ungraded with nothing to submit; M1 is where it is assessed. |
