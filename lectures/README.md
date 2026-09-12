@@ -76,7 +76,7 @@ and stale the first time one of them is retimed.
 ## Built decks (`slides/`)
 
 The plans have been turned into finished **Quarto `revealjs` decks** in
-[`slides/`](slides) — one `.qmd` per week plus a self-contained rendered `.html`
+[`slides/`](https://github.com/ehsanx/SPPH604-2026W/tree/main/lectures/slides) — one `.qmd` per week plus a self-contained rendered `.html`
 (open in any browser; arrow keys to navigate, `S` for speaker notes, `F` for
 fullscreen). Each deck has a title slide, objectives, a continuity slide, the
 plan's content slides with **MASLD** running-example callouts, and detailed
@@ -90,4 +90,4 @@ it with Quarto rather than editing the `.html`. From this directory:
 quarto render slides/Week5_interaction_slides.qmd
 ```
 
-`img/` holds the two embedded figures, copied from [`../reproduction/output/figures/`](../reproduction/output/figures/).
+`img/` holds the two embedded figures, copied from [`reproduction/output/figures/`](https://github.com/ehsanx/SPPH604-2026W/tree/main/reproduction/output/figures).

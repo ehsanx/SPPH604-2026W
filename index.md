@@ -2,6 +2,9 @@
 
 **Application of Advanced Epidemiological Methods · Term 1, 2026W**
 
+**Repository:** <https://github.com/ehsanx/SPPH604-2026W>
+— browse or clone every file, including the sources behind these pages.
+
 This page is the student-facing map of the public repository. Use the **HTML** links to read
 course material in your browser, **PDF** links to download or print, and **Source** links only
 when you want to inspect the underlying Markdown / Quarto file.
