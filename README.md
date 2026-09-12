@@ -10,16 +10,22 @@ All course materials live here. **Canvas carries submissions and grading**, and 
 the syllabus points there for: the rubric grids, the worked AI-use example, Zoom links, and
 anything posted in the weekly Modules.
 
+**Prefer a guided view?** Use the
+[SPPH 604 student guide](https://ehsanx.github.io/SPPH604-2026W/) for a
+week-by-week map, assignment overview, repository map, and searchable file catalogue.
+This README remains the compact overview of the repository itself.
+
 ---
 
 ## How the course works
 
 You pick one recent, open-data paper in Week 3 and carry it all term:
 
-> **Replicate → Interrogate → Improve → Defend**
+> **Orient → Lock → Build → Replicate → Review → Improve & Defend → Reanalyse**
 
-Rebuild the authors' analytic cohort and results, stress-test their methodological
-choices, propose and execute an improvement, and defend your reasoning live.
+You form a group, lock one feasible paper, build the analysis through P1–P5, assemble the
+first complete argument at M1, review another group's work at M2, improve and defend your
+own analysis at M3, and carry the best-defended version into the final M4 reanalysis.
 
 | | What | Weight |
 |---|---|:--:|
@@ -28,7 +34,7 @@ choices, propose and execute an improvement, and defend your reasoning live.
 | **P1–P5** | Weekly increments on *your* paper — optional, ungraded, no deadline, nothing to submit | — |
 | **M1** | Your five increments compiled + which threat most endangers the paper (deck + repository zip) | 30% |
 | **M2** | A live critique of **another group's M1** | 15% |
-| **M3** | Individual oral defense of your improved analysis | 15% |
+| **M3** | Individual oral defense: improve and defend the analysis; changes may be reviewer-prompted or self-initiated | 15% |
 | **M4** | Reanalysis letter + reproducible repository | 30% |
 
 The full rules are in the [syllabus](syllabus/SPPH604-syllabus-2026W.pdf).
@@ -49,14 +55,22 @@ The full rules are in the [syllabus](syllabus/SPPH604-syllabus-2026W.pdf).
 
 ## Start here
 
-0. Or just open [`index.md`](index.md) — every document, indexed.
-1. Read the [syllabus](syllabus/SPPH604-syllabus-2026W.pdf).
-2. Skim [`practice/README.md`](practice/README.md) — it explains how the five increments
-   build into M1.
-3. Look at one worked example, say
+1. Open the [student guide](https://ehsanx.github.io/SPPH604-2026W/) if you want the
+   easiest way to navigate the course.
+2. Read the [syllabus](syllabus/SPPH604-syllabus-2026W.pdf) — it is authoritative on
+   deadlines, weights, grading, and policy.
+3. Use the [weekly map](https://ehsanx.github.io/SPPH604-2026W/weekly.html) to see which
+   lecture, lab, project increment, and milestone belong together.
+4. Use the [assignments guide](https://ehsanx.github.io/SPPH604-2026W/assignments.html)
+   when you need to know what to do, what to submit, how it is graded, and what it feeds.
+5. Skim [`practice/README.md`](practice/README.md) — it explains how P1–P5 build into M1.
+6. Look at one worked example, for example
    [`examples/P1_analytic_cohort/`](examples/P1_analytic_cohort/), to see the standard.
-4. Work through [`labs/L0_setup.md`](labs/L0_setup.md) **before the first class** —
+7. Work through [`labs/L0_setup.md`](labs/L0_setup.md) **before the first class** —
    R, RStudio, the PDF toolchain, a GitHub account, and a test knit.
+
+If you already know the filename you need, open [`index.md`](index.md) or use the
+[searchable file catalogue](https://ehsanx.github.io/SPPH604-2026W/files.html).
 
 ## The demonstration paper
 

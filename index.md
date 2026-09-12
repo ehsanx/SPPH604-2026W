@@ -1,38 +1,67 @@
-# Document index
+# SPPH 604 — Course index
 
-> Every item below ships as **HTML** (read in the browser) and **PDF** (download).
-> You do not need R, Quarto, Pandoc or LaTeX to read anything in this repository.
+**Application of Advanced Epidemiological Methods · Term 1, 2026W**
 
-Everything in this repository, in one place. Links are relative, so they work on the course site, while browsing on GitHub,
-and after cloning.
+This page is the student-facing map of the public repository. Use the **HTML** links to read
+course material in your browser, **PDF** links to download or print, and **Source** links only
+when you want to inspect the underlying Markdown / Quarto file.
 
-Canvas carries **submissions and grading**, and also the things the syllabus points there
-for: the rubric grids, weekly chapter signposts, Zoom links, AI-use examples and the
-weekly Modules. This repository holds the course materials themselves.
+> **Canvas** is used for submissions, grading, rubric grids, Zoom links, AI-use examples,
+> and weekly Modules. **This repository** contains the course materials themselves.
 
 ---
 
-## Start of term
+## Start here
 
-| | |
+| Start here | Purpose |
 |---|---|
-| [Syllabus](syllabus/SPPH604-syllabus-2026W.pdf) | Authoritative on deadlines, weights and policy |
-| [L0 — Setup](labs/L0_setup.md) | **Do this before the first class.** R, RStudio, TinyTeX, GitHub, test knit |
-| [Practice overview](practice/README.md) | How P1–P5 build into M1 |
-| [Licence](LICENSE.md) | CC BY 4.0, with named carve-outs |
-| [All compiled artifacts](ARTIFACTS.md) | Every document, with its HTML and PDF |
+| [**Course overview**](README.html) | Short orientation to the course, assessment arc, folders, demonstration paper, and AI-use rules |
+| [**Syllabus**](syllabus/SPPH604-syllabus-2026W.pdf) | **Authoritative** on deadlines, weights, grading, and policy |
+| [**L0 — Setup**](labs/L0_setup.html) | **Do before the first class.** R, RStudio, TinyTeX, GitHub, and a test knit |
+| [**Practice overview — PDF**](practice/README.pdf) | How P1–P5 build your project toward M1 |
+| [**Complete file catalogue**](ARTIFACTS.html) | Every compiled student-facing document, with its HTML and PDF versions |
+| [**Licence**](LICENSE.md) | CC BY 4.0 for instructor-authored material, with stated carve-outs |
+
+### Which format should I open?
+
+| If you want to… | Use |
+|---|---|
+| Read a lecture, lab, practice increment, or milestone in your browser | **HTML** |
+| Download, print, or annotate the same document | **PDF** |
+| Inspect or edit how a document was written | **Source** (`.md`, `.qmd`, `.Rmd`) |
+| Find every compiled document in one place | [**ARTIFACTS.html**](ARTIFACTS.html) |
+
+**Most students should normally use HTML or PDF.** Source files are included for transparency
+and reproducibility; they are not the preferred reading format.
 
 ---
 
-## Weekly work
+## How the course fits together
 
-### Labs — in person, weekly
+> **Orient → Lock → Build → Replicate → Review → Improve & Defend → Reanalyse**
 
-Graded **Complete / Incomplete**. Day, room and due dates are in the syllabus.
+| Stage | What happens |
+|---|---|
+| **Week 1 — Orientation** | Form project groups, complete setup, understand the course arc, and begin scanning candidate papers |
+| **M0 — Lock** | Establish that one paper, question, dataset, and analysis plan are feasible |
+| **P1–P5 — Build** | Apply each week's method to your own paper; optional and ungraded, but they become the building blocks of M1 |
+| **M1 — Replicate + interrogate** | Assemble the first complete analysis and identify the most consequential threat to interpretation |
+| **M2 — Review** | Critique another group's actual M1; reviewers are free to disagree with the group's own ranking of threats |
+| **M3 — Improve + defend** | Improve the analysis and defend decisions. Changes may be reviewer-prompted, self-initiated, or tested-and-retained |
+| **M4 — Reanalyse** | Carry forward the best-defended analysis and write the final reanalysis letter with the reproducible repository |
 
-| Lab | Topic | Read | Download | Source | Feeds |
+The [syllabus](syllabus/SPPH604-syllabus-2026W.pdf) controls if anything here differs from the
+formal schedule or assessment policy.
+
+---
+
+## Weekly labs
+
+Labs use fixed teaching data to practise the methods that you later apply to your own paper.
+
+| Lab | Topic | Read online | PDF | Source | Feeds |
 |---|---|:--:|:--:|:--:|:--:|
-| **L0** | Setup — do this before the first class | [HTML](labs/L0_setup.html) | [PDF](labs/L0_setup.pdf) | [md](labs/L0_setup.md) | — |
+| **L0** | Setup | [HTML](labs/L0_setup.html) | [PDF](labs/L0_setup.pdf) | [md](labs/L0_setup.md) | — |
 | **L1** | NHANES data wrangling | [HTML](labs/L1_data_wrangling.html) | [PDF](labs/L1_data_wrangling.pdf) | [md](labs/L1_data_wrangling.md) | — |
 | **L2** | NHANES–mortality linkage | [HTML](labs/L2_nhanes_mortality.html) | [PDF](labs/L2_nhanes_mortality.pdf) | [md](labs/L2_nhanes_mortality.md) | P1 |
 | **L3** | Confounding & collapsibility | [HTML](labs/L3_confounding.html) | [PDF](labs/L3_confounding.pdf) | [md](labs/L3_confounding.md) | P2 |
@@ -40,51 +69,38 @@ Graded **Complete / Incomplete**. Day, room and due dates are in the syllabus.
 | **L5** | Complex survey analysis | [HTML](labs/L5_survey_analysis.html) | [PDF](labs/L5_survey_analysis.pdf) | [md](labs/L5_survey_analysis.md) | P4 |
 | **L6** | Missing data & multiple imputation | [HTML](labs/L6_missing_data.html) | [PDF](labs/L6_missing_data.pdf) | [md](labs/L6_missing_data.md) | P5 |
 
-### Practice increments — optional, ungraded
+---
 
-The same method applied to **your** paper. No deadline, not submitted, not marked — but
-M1 is assembled from these five, and they are the practice you draw on at M2 and M3.
+## P1–P5 project increments
 
-| | Topic | Read | Download | Source | Model answer |
+These are **optional and ungraded**. They apply the week's method to **your group's paper**.
+Nothing is submitted separately, but the work accumulates into M1 and supports later review
+and defense.
+
+| Increment | Topic | Read online | PDF | Source | Worked example |
 |---|---|:--:|:--:|:--:|---|
-| **P1** | Analytic cohort | [HTML](practice/P1_analytic_cohort.html) | [PDF](practice/P1_analytic_cohort.pdf) | [md](practice/P1_analytic_cohort.md) | [example](examples/P1_analytic_cohort/) |
-| **P2** | Confounding & Table 1 | [HTML](practice/P2_confounding_diagnostic.html) | [PDF](practice/P2_confounding_diagnostic.pdf) | [md](practice/P2_confounding_diagnostic.md) | [example](examples/P2_confounding/) |
-| **P3** | Effect modification | [HTML](practice/P3_effect_modification.html) | [PDF](practice/P3_effect_modification.pdf) | [md](practice/P3_effect_modification.md) | [example](examples/P3_effect_modification/) |
-| **P4** | Design-aware estimate | [HTML](practice/P4_design_aware_estimate.html) | [PDF](practice/P4_design_aware_estimate.pdf) | [md](practice/P4_design_aware_estimate.md) | [example](examples/P4_design_aware/) |
-| **P5** | Missing-data sensitivity | [HTML](practice/P5_missing_data.html) | [PDF](practice/P5_missing_data.pdf) | [md](practice/P5_missing_data.md) | [example](examples/P5_missing_data/) |
+| **P1** | Analytic cohort | [HTML](practice/P1_analytic_cohort.html) | [PDF](practice/P1_analytic_cohort.pdf) | [md](practice/P1_analytic_cohort.md) | [Example](examples/P1_analytic_cohort/) |
+| **P2** | Confounding & Table 1 | [HTML](practice/P2_confounding_diagnostic.html) | [PDF](practice/P2_confounding_diagnostic.pdf) | [md](practice/P2_confounding_diagnostic.md) | [Example](examples/P2_confounding/) |
+| **P3** | Effect modification | [HTML](practice/P3_effect_modification.html) | [PDF](practice/P3_effect_modification.pdf) | [md](practice/P3_effect_modification.md) | [Example](examples/P3_effect_modification/) |
+| **P4** | Design-aware estimate | [HTML](practice/P4_design_aware_estimate.html) | [PDF](practice/P4_design_aware_estimate.pdf) | [md](practice/P4_design_aware_estimate.md) | [Example](examples/P4_design_aware/) |
+| **P5** | Missing-data sensitivity | [HTML](practice/P5_missing_data.html) | [PDF](practice/P5_missing_data.pdf) | [md](practice/P5_missing_data.md) | [Example](examples/P5_missing_data/) |
+
+[Practice overview — PDF](practice/README.pdf) · [Practice overview — source](practice/README.md)
+
 ---
 
 ## Milestones
 
-Weights and deadlines are in the syllabus.
-
-| | What | Read | Download | Source | Model answer |
+| Milestone | What you do | Read online | PDF | Source | Worked example |
 |---|---|:--:|:--:|:--:|---|
-| **M0** | Feasibility memo — lock your paper | [HTML](milestones/M0_assignment.html) | [PDF](milestones/M0_assignment.pdf) | [md](milestones/M0_assignment.md) | [example](examples/M0_feasibility/) |
-| **M1** | Five increments compiled + dominant-threat judgment (deck + repository zip) | [HTML](milestones/M1_assignment.html) | [PDF](milestones/M1_assignment.pdf) | [md](milestones/M1_assignment.md) | [example](examples/M1_replication/) |
-| **M2** | Live critique of another group's M1 | [HTML](milestones/M2_assignment.html) | [PDF](milestones/M2_assignment.pdf) | [md](milestones/M2_assignment.md) | [example](examples/M2_critique/) |
-| **M3** | Individual oral defense | [HTML](milestones/M3_assignment.html) | [PDF](milestones/M3_assignment.pdf) | [md](milestones/M3_assignment.md) | [example](examples/M3_defense/) |
-| **M4** | Reanalysis letter + repository | [HTML](milestones/M4_assignment.html) | [PDF](milestones/M4_assignment.pdf) | [md](milestones/M4_assignment.md) | [example](examples/M4_reanalysis_letter/) |
+| **M0** | Feasibility gate — lock a viable paper and analysis plan | [HTML](milestones/M0_assignment.html) | [PDF](milestones/M0_assignment.pdf) | [md](milestones/M0_assignment.md) | [Example](examples/M0_feasibility/) |
+| **M1** | Replication + interrogation — assemble the project and make the dominant-threat judgment | [HTML](milestones/M1_assignment.html) | [PDF](milestones/M1_assignment.pdf) | [md](milestones/M1_assignment.md) | [Example](examples/M1_replication/) |
+| **M2** | Critique another group's actual M1 | [HTML](milestones/M2_assignment.html) | [PDF](milestones/M2_assignment.pdf) | [md](milestones/M2_assignment.md) | [Example](examples/M2_critique/) |
+| **M3** | Improve + defend — respond to review, make any additional changes you identify, and justify final decisions | [HTML](milestones/M3_assignment.html) | [PDF](milestones/M3_assignment.pdf) | [md](milestones/M3_assignment.md) | [Example](examples/M3_defense/) |
+| **M4** | Final reanalysis letter + reproducible repository | [HTML](milestones/M4_assignment.html) | [PDF](milestones/M4_assignment.pdf) | [md](milestones/M4_assignment.md) | [Example](examples/M4_reanalysis_letter/) |
 
-**Read the model answers in order.** M1 → M2 → M3 → M4 tells one continuous story: a group
-replicates a paper, another group critiques that replication, the first group answers the
-critique under questioning, and the result is written up. That arc *is* the course.
-
----
-
-## The demonstration paper
-
-| | |
-|---|---|
-| [The paper](paper/) | Kueh et al., *BMJ Open* 2026;16:e113719 (CC BY-NC) |
-| [Reproduction pipeline](reproduction/) | Full R code that rebuilds every number |
-| [Pipeline walkthrough](reproduction/WALKTHROUGH.md) | What each script decides, the sample funnel, and two NHANES traps |
-| [Reproduction report](reproduction/reproduction_report.md) | What reproduced, what did not, and why |
-
-Headline: N = 6,371 against the published ~6,300; Group IV hazard ratio 15.14 unadjusted →
-2.91 adjusted (published 15.13 → 2.89).
-
-**These are answer keys, not templates.** You will do this on *your* paper.
+**Read the M1 → M2 → M3 → M4 worked examples in order.** They form one continuous
+scientific-review story rather than four independent model answers.
 
 ---
 
@@ -92,33 +108,61 @@ Headline: N = 6,371 against the published ~6,300; Group IV hazard ratio 15.14 un
 
 | Week | Topic | Lecture plan | Slide deck |
 |:--:|---|---|---|
-| 1 | Intro & reproducibility | [HTML](lectures/Week1_intro_and_reproducibility.html) · [PDF](lectures/Week1_intro_and_reproducibility.pdf) · [md](lectures/Week1_intro_and_reproducibility.md) | [HTML](lectures/slides/Week1_intro_slides.html) · [PDF](lectures/slides/Week1_intro_slides.pdf) · [qmd](lectures/slides/Week1_intro_slides.qmd) |
-| 2 | NHANES & reading methods | [HTML](lectures/Week2_nhanes_and_reading_methods.html) · [PDF](lectures/Week2_nhanes_and_reading_methods.pdf) · [md](lectures/Week2_nhanes_and_reading_methods.md) | [HTML](lectures/slides/Week2_nhanes_slides.html) · [PDF](lectures/slides/Week2_nhanes_slides.pdf) · [qmd](lectures/slides/Week2_nhanes_slides.qmd) |
-| 3 | Cohort construction & FLI | [HTML](lectures/Week3_cohort_construction_FLI.html) · [PDF](lectures/Week3_cohort_construction_FLI.pdf) · [md](lectures/Week3_cohort_construction_FLI.md) | [HTML](lectures/slides/Week3_cohort_FLI_slides.html) · [PDF](lectures/slides/Week3_cohort_FLI_slides.pdf) · [qmd](lectures/slides/Week3_cohort_FLI_slides.qmd) |
-| 4 | Confounding & Table 1 | [HTML](lectures/Week4_confounding_and_table1.html) · [PDF](lectures/Week4_confounding_and_table1.pdf) · [md](lectures/Week4_confounding_and_table1.md) | [HTML](lectures/slides/Week4_confounding_slides.html) · [PDF](lectures/slides/Week4_confounding_slides.pdf) · [qmd](lectures/slides/Week4_confounding_slides.qmd) |
-| 5 | Interaction & effect modification | [HTML](lectures/Week5_interaction_effect_modification.html) · [PDF](lectures/Week5_interaction_effect_modification.pdf) · [md](lectures/Week5_interaction_effect_modification.md) | [HTML](lectures/slides/Week5_interaction_slides.html) · [PDF](lectures/slides/Week5_interaction_slides.pdf) · [qmd](lectures/slides/Week5_interaction_slides.qmd) |
-| 6 | Complex survey design | [HTML](lectures/Week6_complex_survey_design.html) · [PDF](lectures/Week6_complex_survey_design.pdf) · [md](lectures/Week6_complex_survey_design.md) | [HTML](lectures/slides/Week6_survey_slides.html) · [PDF](lectures/slides/Week6_survey_slides.pdf) · [qmd](lectures/slides/Week6_survey_slides.qmd) |
-| 7 | Missing data | [HTML](lectures/Week7_missing_data.html) · [PDF](lectures/Week7_missing_data.pdf) · [md](lectures/Week7_missing_data.md) | [HTML](lectures/slides/Week7_missing_slides.html) · [PDF](lectures/slides/Week7_missing_slides.pdf) · [qmd](lectures/slides/Week7_missing_slides.qmd) |
+| **1** | Intro & reproducibility | [HTML](lectures/Week1_intro_and_reproducibility.html) · [PDF](lectures/Week1_intro_and_reproducibility.pdf) · [Source](lectures/Week1_intro_and_reproducibility.md) | [HTML](lectures/slides/Week1_intro_slides.html) · [PDF](lectures/slides/Week1_intro_slides.pdf) · [Source](lectures/slides/Week1_intro_slides.qmd) |
+| **2** | NHANES & reading methods | [HTML](lectures/Week2_nhanes_and_reading_methods.html) · [PDF](lectures/Week2_nhanes_and_reading_methods.pdf) · [Source](lectures/Week2_nhanes_and_reading_methods.md) | [HTML](lectures/slides/Week2_nhanes_slides.html) · [PDF](lectures/slides/Week2_nhanes_slides.pdf) · [Source](lectures/slides/Week2_nhanes_slides.qmd) |
+| **3** | Cohort construction & FLI | [HTML](lectures/Week3_cohort_construction_FLI.html) · [PDF](lectures/Week3_cohort_construction_FLI.pdf) · [Source](lectures/Week3_cohort_construction_FLI.md) | [HTML](lectures/slides/Week3_cohort_FLI_slides.html) · [PDF](lectures/slides/Week3_cohort_FLI_slides.pdf) · [Source](lectures/slides/Week3_cohort_FLI_slides.qmd) |
+| **4** | Confounding & Table 1 | [HTML](lectures/Week4_confounding_and_table1.html) · [PDF](lectures/Week4_confounding_and_table1.pdf) · [Source](lectures/Week4_confounding_and_table1.md) | [HTML](lectures/slides/Week4_confounding_slides.html) · [PDF](lectures/slides/Week4_confounding_slides.pdf) · [Source](lectures/slides/Week4_confounding_slides.qmd) |
+| **5** | Interaction & effect modification | [HTML](lectures/Week5_interaction_effect_modification.html) · [PDF](lectures/Week5_interaction_effect_modification.pdf) · [Source](lectures/Week5_interaction_effect_modification.md) | [HTML](lectures/slides/Week5_interaction_slides.html) · [PDF](lectures/slides/Week5_interaction_slides.pdf) · [Source](lectures/slides/Week5_interaction_slides.qmd) |
+| **6** | Complex survey design | [HTML](lectures/Week6_complex_survey_design.html) · [PDF](lectures/Week6_complex_survey_design.pdf) · [Source](lectures/Week6_complex_survey_design.md) | [HTML](lectures/slides/Week6_survey_slides.html) · [PDF](lectures/slides/Week6_survey_slides.pdf) · [Source](lectures/slides/Week6_survey_slides.qmd) |
+| **7** | Missing data | [HTML](lectures/Week7_missing_data.html) · [PDF](lectures/Week7_missing_data.pdf) · [Source](lectures/Week7_missing_data.md) | [HTML](lectures/slides/Week7_missing_slides.html) · [PDF](lectures/slides/Week7_missing_slides.pdf) · [Source](lectures/slides/Week7_missing_slides.qmd) |
 
-Later in the term the lectures give way to the M1, M2 and M3 presentation sessions, a
-midterm break, and a closing open session. The syllabus schedule gives the weeks and
-dates.
+Later weeks shift from lectures to milestone presentations, review, defense, and the closing
+session. See the syllabus for the formal schedule.
 
 ---
 
-## Textbooks — both free
+## Demonstration paper and worked examples
 
-- [Advanced Epidemiological Methods](https://ehsanx.github.io/EpiMethods/) — the labs are drawn from here
+The worked examples and reproduction pipeline use the demonstration paper throughout.
+
+| Resource | What it is |
+|---|---|
+| [`paper/`](paper/) | Demonstration paper, the additional P4 paper, and licence/attribution information |
+| [`examples/`](examples/) | Worked examples for P1–P5 and M0–M4 |
+| [`reproduction/`](reproduction/) | Full R analysis pipeline behind the demonstration-paper results |
+| [Reproduction walkthrough — source](reproduction/WALKTHROUGH.md) | How the scripts fit together, the sample funnel, and key NHANES decisions |
+| [Reproduction report — source](reproduction/reproduction_report.md) | What reproduced, what did not, and why |
+
+Where a reference document has no compiled HTML version, the link is explicitly labelled
+**source** rather than being presented as a browser-rendered course page.
+
+---
+
+## Repository map
+
+| Folder / file | Purpose |
+|---|---|
+| [`syllabus/`](syllabus/) | Formal course syllabus |
+| [`labs/`](labs/) | L0 setup and L1–L6 lab handouts |
+| [`lectures/`](lectures/) | Weekly lecture plans and slide decks |
+| [`practice/`](practice/) | P1–P5 project increments |
+| [`milestones/`](milestones/) | M0–M4 assignment briefs |
+| [`examples/`](examples/) | Worked model answers and exemplar artifacts |
+| [`paper/`](paper/) | Demonstration/companion papers and attribution |
+| [`reproduction/`](reproduction/) | Reproducible analysis code and reports |
+| [`tools/`](tools/) | Repository rendering utilities; students normally do not need this folder |
+| [**README.html**](README.html) | Course/repository overview |
+| [**ARTIFACTS.html**](ARTIFACTS.html) | Complete compiled-artifact catalogue |
+| `README.md`, `ARTIFACTS.md`, `index.md` | Source versions of the root pages |
+| [`LICENSE.md`](LICENSE.md) | Licence for instructor-authored material |
+| [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) | Third-party licence and attribution notices |
+
+---
+
+## Free reference resources
+
+- [Advanced Epidemiological Methods](https://ehsanx.github.io/EpiMethods/)
 - [Scientific Writing for Health Research](https://ehsanx.github.io/Scientific-Writing-for-Health-Research/)
-- [`svyTable1`](https://ehsanx.github.io/svyTable1) — survey-weighted descriptive tables
+- [`svyTable1`](https://ehsanx.github.io/svyTable1)
 
 **Estimated cost of required materials: $0.**
-
----
-
-## Turning this into a website
-
-This index works as-is when browsing on GitHub. To serve it as a site instead, set
-**Settings → Pages → Source** to *Deploy from a branch*, branch `master`, folder **`/ (root)`**
-— not `/docs`, because the links above point outside this folder and Pages only serves
-what is under its chosen root.
