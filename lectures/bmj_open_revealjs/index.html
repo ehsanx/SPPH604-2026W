@@ -153,7 +153,7 @@
   <h1>Decomposing the Study Aim</h1>
   <h2>BMI, central adiposity, and mortality in MASLD</h2>
   <p><strong>Example paper:</strong> Kueh et al. <em>BMJ Open</em>. 2026;16:e113719</p>
-  <p><strong>Teaching focus:</strong><br>Move from a broad published aim to a clearly defined research question &mdash; and see exactly which NHANES variables it rests on.</p>
+  <p><strong>Teaching focus:</strong> Move from a broad published aim to a clearly defined research question — and see exactly which NHANES variables it rests on.</p>
 </section>
 
 <section>
@@ -181,10 +181,10 @@
 <section>
   <h1>First: how NHANES is organised</h1>
   <ul>
-    <li><strong>Six two-year cycles</strong>, 2007&ndash;2018. Each cycle has its own file suffix: <code>E F G H I J</code>.</li>
+    <li><strong>Six two-year cycles</strong>, 2007–2018. Each cycle has its own file suffix: <code>E F G H I J</code>.</li>
     <li>Files are <strong>.XPT</strong> (SAS transport), read in R with <code>haven::read_xpt()</code>.</li>
-    <li>Each file is <strong>one row per participant</strong> for one topic &mdash; not one big table.</li>
-    <li><span class="accent">SEQN is the key.</span> Every component is joined on it.</li>
+    <li>Each file is <strong>one row per participant</strong> for one topic — not one big table.</li>
+    <li>SEQN is the key. Every component is joined on it.</li>
   </ul>
   <table>
     <thead><tr><th>Family</th><th>Examples</th><th>What it holds</th></tr></thead>
@@ -203,17 +203,17 @@
   <table>
     <thead><tr><th>Concept</th><th>NHANES variable</th><th>Component</th></tr></thead>
     <tbody>
-      <tr><td>Participant ID</td><td><code>SEQN</code></td><td><em>every file &mdash; the merge key</em></td></tr>
+      <tr><td>Participant ID</td><td><code>SEQN</code></td><td><em>every file — the merge key</em></td></tr>
       <tr><td>Age, sex, race</td><td><code>RIDAGEYR</code>, <code>RIAGENDR</code>, <code>RIDRETH3</code></td><td><code>DEMO</code></td></tr>
       <tr><td>BMI, waist, height</td><td><code>BMXBMI</code>, <code>BMXWAIST</code>, <code>BMXHT</code></td><td><code>BMX</code></td></tr>
       <tr><td>Triglycerides</td><td><code>LBXTR</code></td><td><code>TRIGLY</code></td></tr>
       <tr><td>GGT</td><td><code>LBXSGTSI</code></td><td><code>BIOPRO</code></td></tr>
       <tr><td>Glucose, HbA1c</td><td><code>LBXGLU</code>, <code>LBXGH</code></td><td><code>GLU</code>, <code>GHB</code></td></tr>
       <tr><td>HDL cholesterol</td><td><code>LBDHDD</code></td><td><code>HDL</code></td></tr>
-      <tr><td>Blood pressure</td><td><code>BPXSY1&ndash;4</code>, <code>BPXDI1&ndash;4</code></td><td><code>BPX</code></td></tr>
+      <tr><td>Blood pressure</td><td><code>BPXSY1–4</code>, <code>BPXDI1–4</code></td><td><code>BPX</code></td></tr>
     </tbody>
   </table>
-  <p><span class="small muted">Measured in the exam or assayed in the lab &mdash; none of it self-reported.</span></p>
+  <p>Anthropometry, blood pressure and laboratory values are measured/assayed. Age, sex and race/ethnicity come from the demographic interview/file.</p>
 </section>
 
 <section>
@@ -228,33 +228,46 @@
       <tr><td>Mortality</td><td><code>MORTSTAT</code>, <code>PERMTH_EXM</code>, <code>ELIGSTAT</code></td><td>linked mortality file</td></tr>
     </tbody>
   </table>
-  <div class="callout">One research question reaches into <strong>four exam and lab files</strong> and <strong>four questionnaires</strong>, plus a separate mortality file. That is what L1 assembles.</div>
+  <div class="callout">In the variables shown here, the analysis reaches across <strong>seven examination/laboratory component files</strong>, plus demographics and questionnaire components, and a separate linked mortality file. That is what L1 assembles.</div>
 </section>
 
 <section>
-  <h1>Four NHANES traps &mdash; each one has bitten this project</h1>
+  <h1>Four NHANES traps — each one has bitten this project</h1>
   <ul>
-    <li><span class="warn">777 = refused, 999 = don&rsquo;t know.</span> They are codes, not counts. Reading <code>ALQ130</code> literally over-excluded about 2,000 people here.</li>
-    <li><span class="warn">A diastolic blood pressure of 0</span> means &ldquo;not obtainable&rdquo;, not zero. Averaging it in drags the mean down.</li>
-    <li><span class="warn"><code>RIDRETH3</code> does not exist before 2011.</span> It is what identifies Asian participants for the lower BMI threshold, so the first two cycles cannot apply it.</li>
-    <li><span class="warn">Fasting labs carry their own weight.</span> <code>LBXTR</code> and <code>LBXGLU</code> come from the fasting subsample, which is weighted by <code>WTSAF2YR</code>, not <code>WTMEC2YR</code>.</li>
+    <li>777 = refused, 999 = don’t know. They are codes, not counts. Reading <code>ALQ130</code> literally over-excluded about 2,000 people here.</li>
+    <li><strong>Do not automatically recode diastolic BP = 0 as missing.</strong> NHANES explicitly allows a diastolic value of 0; failure to obtain a reading is handled separately. Treating every 0 as missing would also be an error.</li>
+    <li><code>RIDRETH3</code> does not exist before 2011. It is what identifies Asian participants for the lower BMI threshold, so the first two cycles cannot apply it.</li>
+    <li>Fasting labs carry their own weight. <code>LBXTR</code> and <code>LBXGLU</code> come from the fasting subsample, which is weighted by <code>WTSAF2YR</code>, not <code>WTMEC2YR</code>.</li>
   </ul>
 </section>
 
 <section>
+  <h1>Survey design: paper versus reproduction</h1>
+  <p>NHANES is a <strong>complex, multistage probability sample</strong>.</p>
+  <p>For analyses using fasting triglycerides, CDC provides the fasting-subsample weight <code>WTSAF2YR</code>, together with strata and PSU variables.</p>
+  <h3>Important distinction</h3>
+  <ul>
+    <li>The <strong>published paper's Statistical analysis section does not report using NHANES survey weights, strata or PSUs</strong>.</li>
+    <li>Our reproduction pipeline includes survey-design variables and fasting-subsample weights.</li>
+    <li>Therefore, a survey-weighted reproduction is a <strong>design-informed reanalysis</strong>, not necessarily a literal reproduction of every published analytic choice.</li>
+  </ul>
+  <div class="callout">Without the appropriate NHANES design information, estimates and standard errors should not be described as design-based nationally representative estimates.</div>
+</section>
+
+<section>
   <h1>Population: who is being studied?</h1>
-  <h2>Adults with MASLD in NHANES, 2007&ndash;2018</h2>
+  <h2>Adults with MASLD in NHANES, 2007–2018</h2>
   <p><strong>MASLD</strong> = metabolic dysfunction-associated steatotic liver disease: excess fat in the liver together with metabolic dysfunction.</p>
-  <div class="callout">But nobody looked at a liver. <strong>Steatosis was estimated by a formula</strong> &mdash; see the next slide.</div>
+  <div class="callout">But nobody looked at a liver. <strong>Steatosis was estimated by a formula</strong> — see the next slide.</div>
   <p>The study population is <strong>not the general population</strong>. Everyone in the main analysis already meets the study definition of MASLD.</p>
 </section>
 
 <section>
   <h1>How MASLD was actually ascertained</h1>
-  <p>Hepatic steatosis was <strong>estimated</strong> using the <strong>Fatty Liver Index</strong> (Bedogni 2006), thresholded at <span class="accent">FLI &ge; 60</span>:</p>
-  <div class="equation">FLI uses: triglycerides (LBXTR) &nbsp;&middot;&nbsp; BMI (BMXBMI) &nbsp;&middot;&nbsp; GGT (LBXSGTSI) &nbsp;&middot;&nbsp; waist (BMXWAIST)</div>
+  <p>Hepatic steatosis was <strong>estimated</strong> using the <strong>Fatty Liver Index</strong> (Bedogni 2006), thresholded at FLI ≥ 60:</p>
+  <div class="equation">FLI uses: triglycerides (LBXTR) · BMI (BMXBMI) · GGT (LBXSGTSI) · waist (BMXWAIST)</div>
   <p>Plus <strong>at least one of five cardiometabolic criteria</strong>: adiposity, raised glucose/HbA1c or diabetes, raised blood pressure or treatment, raised triglycerides or treatment, or low HDL.</p>
-  <p><span class="small muted">So &ldquo;MASLD&rdquo; here is a <strong>derived variable</strong>, not a diagnosis. No imaging, no biopsy.</span></p>
+  <p>So “MASLD” here is a <strong>derived variable</strong>, not a diagnosis. No imaging, no biopsy.</p>
 </section>
 
 <section>
@@ -262,37 +275,38 @@
   <table>
     <thead><tr><th></th><th>Inputs</th></tr></thead>
     <tbody>
-      <tr><td><strong>Eligibility</strong> (FLI)</td><td>triglycerides, GGT, <span class="warn">BMI</span>, <span class="warn">waist</span></td></tr>
-      <tr><td><strong>Exposure</strong> (phenotype group)</td><td><span class="warn">BMI</span>, <span class="warn">waist</span> &divide; height</td></tr>
+      <tr><td><strong>Eligibility</strong> (FLI)</td><td>triglycerides, GGT, BMI, waist</td></tr>
+      <tr><td><strong>Exposure</strong> (phenotype group)</td><td>BMI, waist / height</td></tr>
     </tbody>
   </table>
-  <div class="callout"><strong>The population and the exposure are built from the same two measurements.</strong> Being selected into the study and being placed in a phenotype group are not independent events. This is <span class="accent">circularity</span>.</div>
-  <p><span class="small">We only <em>name</em> it today. You will dissect what it does to the estimate at <strong>M1</strong>.</span></p>
+  <div class="callout"><strong>The population definition and the exposure classification share BMI and waist measurements.</strong> This creates structural dependence between cohort eligibility and phenotype classification. For a causal question, conditioning on this selected population could create selection/collider bias under some causal structures; for a prognostic question, it primarily defines a selected target population. It is not automatically 'circularity' or bias.</div>
+  <p>We only <em>name</em> it today. You will dissect what it does to the estimate at <strong>M1</strong>.</p>
 </section>
 
 <section>
   <h1>What is the main exposure?</h1>
   <p>The exposure is not one measurement. It is built in two steps:</p>
-  <p class="flow"><code>BMXWAIST</code> + <code>BMXHT</code> &rarr; <strong>waist-to-height ratio</strong><br><code>BMXBMI</code> &rarr; <strong>obesity category</strong><br><span class="accent">BMI category &times; WHtR category &rarr; four phenotype groups</span></p>
+  <p><code>BMXWAIST</code> + <code>BMXHT</code> → <strong>waist-to-height ratio</strong> <code>BMXBMI</code> → <strong>obesity category</strong> BMI category × WHtR category → four phenotype groups</p>
 </section>
 
 <section>
   <h1>Exposure component 1: BMI</h1>
-  <div class="equation">BMI = weight (kg) / height&sup2; (m&sup2;)</div>
+  <div class="equation">BMI = weight (kg) / height² (m²)</div>
   <ul>
     <li>Weight and height were <strong>measured</strong> in the exam, not self-reported (<code>BMXBMI</code>).</li>
     <li>BMI marks <strong>overall body size</strong>.</li>
-    <li>Obesity defined as <strong>BMI &ge; 30</strong>; for Asian participants <strong>BMI &ge; 25</strong> (<code>RIDRETH3 == 6</code>).</li>
+    <li>Obesity defined as <strong>BMI ≥ 30</strong>; for Asian participants <strong>BMI ≥ 25</strong> (<code>RIDRETH3 == 6</code>).</li>
   </ul>
   <p>BMI does not measure body fat, or where fat is stored.</p>
+  <div class="callout"><strong>Paper reporting note:</strong> the Methods define obesity as BMI ≥30 kg/m² (≥25 kg/m² for Asians), but the published Tables 1–2 label the groups as BMI ≥25 versus &lt;25. Those table labels conflict with the Methods and with the reported group BMI distributions, so they appear to be a reporting error.</div>
 </section>
 
 <section>
   <h1>Exposure component 2: waist-to-height ratio</h1>
-  <div class="equation">WHtR = waist (cm) / height (cm) &nbsp; = &nbsp; BMXWAIST / BMXHT</div>
+  <div class="equation">WHtR = waist (cm) / height (cm) = BMXWAIST / BMXHT</div>
   <p>A person 170 cm tall with a 102 cm waist has WHtR = 102/170 = <strong>0.60</strong>.</p>
   <ul>
-    <li>High central adiposity is defined as <strong>WHtR &ge; 0.60</strong>.</li>
+    <li>High central adiposity is defined as <strong>WHtR ≥ 0.60</strong>.</li>
     <li>WHtR is a simple marker of <strong>abdominal adiposity</strong>.</li>
     <li>It is not a CT or MRI measurement of visceral fat.</li>
   </ul>
@@ -301,19 +315,19 @@
 <section>
   <h1>The exposure is the combination</h1>
   <table>
-    <thead><tr><th></th><th>Lower central adiposity<br>WHtR &lt; 0.60</th><th>High central adiposity<br>WHtR &ge; 0.60</th></tr></thead>
+    <thead><tr><th></th><th>Lower central adiposity WHtR &lt; 0.60</th><th>High central adiposity WHtR ≥ 0.60</th></tr></thead>
     <tbody>
-      <tr><td><strong>Obesity by BMI</strong></td><td><strong>Group I</strong><br><span class="small muted">reference</span></td><td><strong>Group II</strong></td></tr>
-      <tr><td><strong>No obesity by BMI</strong></td><td><strong>Group III</strong></td><td><span class="accent">Group IV</span></td></tr>
+      <tr><td><strong>Obesity by BMI</strong></td><td><strong>Group I</strong> reference</td><td><strong>Group II</strong></td></tr>
+      <tr><td><strong>No obesity by BMI</strong></td><td><strong>Group III</strong></td><td>Group IV</td></tr>
     </tbody>
   </table>
-  <div class="callout"><span class="accent">Group IV</span> &mdash; not obese by BMI, but a large waist for their height. The study asks whether BMI alone misses this higher-risk phenotype.</div>
-  <p><span class="small">Every hazard ratio in the paper is measured <strong>against Group I</strong>. A ratio without its reference group means nothing.</span></p>
+  <div class="callout">Group IV — not obese by BMI, but a large waist for their height. The study asks whether BMI alone misses this higher-risk phenotype.</div>
+  <p>Every hazard ratio in the paper is measured <strong>against Group I</strong>. A ratio without its reference group means nothing.</p>
 </section>
 
 <section>
   <h1>Exposure and comparison</h1>
-  <p>There is no single &ldquo;treated&rdquo; group and &ldquo;control&rdquo; group.</p>
+  <p>There is no single “treated” group and “control” group.</p>
   <ul>
     <li>The <strong>four-category phenotype</strong> is the exposure / index factor.</li>
     <li>Mortality is compared <strong>across the four categories</strong>.</li>
@@ -323,30 +337,32 @@
 
 <section>
   <h1>Outcome and follow-up</h1>
-  <p><strong>Primary outcome:</strong> all-cause mortality &mdash; death from any cause (<code>MORTSTAT</code>).</p>
+  <p><strong>Primary outcome:</strong> all-cause mortality — death from any cause (<code>MORTSTAT</code>).</p>
   <ul>
     <li>Participants entered NHANES between <strong>2007 and 2018</strong>.</li>
     <li>Mortality follow-up ran through <strong>31 December 2019</strong>, via the NCHS linked mortality file.</li>
-    <li>Follow-up time is <code>PERMTH_EXM</code> &mdash; months from exam to death or censoring.</li>
-    <li>Participants therefore had <strong>different lengths of follow-up</strong>, which is why this is a survival analysis and not a risk difference.</li>
+    <li>Follow-up time is <code>PERMTH_EXM</code> — months from exam to death or censoring.</li>
+    <li>Participants had <strong>different lengths of follow-up and censoring</strong>, so time-to-event methods are appropriate. A risk difference could still be estimated at a fixed time horizon using methods that account for censoring.</li>
   </ul>
 </section>
 
 <section>
-  <h1>How 59,842 people became 6,048</h1>
+  <h1>Our reproduction: how 59,842 people became 6,048</h1>
   <table>
     <thead><tr><th>Step</th><th>N</th><th>What kind of step</th></tr></thead>
     <tbody>
-      <tr><td>NHANES 2007&ndash;2018 records</td><td>59,842</td><td></td></tr>
-      <tr><td>Age &ge; 18</td><td>36,580</td><td>eligibility</td></tr>
-      <tr><td>In fasting subsample</td><td><span class="warn">14,962</span></td><td><span class="warn">design &mdash; drops 21,618</span></td></tr>
+      <tr><td>NHANES 2007–2018 records</td><td>59,842</td><td></td></tr>
+      <tr><td>Age ≥ 18</td><td>36,580</td><td>eligibility</td></tr>
+      <tr><td>In fasting subsample</td><td>14,962</td><td>design — drops 21,618</td></tr>
       <tr><td>FLI computable</td><td>14,170</td><td>missingness</td></tr>
-      <tr><td>Steatosis (FLI &ge; 60)</td><td>6,052</td><td>target population</td></tr>
-      <tr><td>MASLD (&ge;1 criterion)</td><td>6,050</td><td>target population</td></tr>
+      <tr><td>Steatosis (FLI ≥ 60)</td><td>6,052</td><td>target population</td></tr>
+      <tr><td>MASLD (≥1 criterion)</td><td>6,050</td><td>target population</td></tr>
       <tr><td>Mortality-linked</td><td><strong>6,048</strong></td><td>outcome ascertainment</td></tr>
     </tbody>
   </table>
-  <div class="callout">The largest single exclusion is not clinical. It is the <strong>fasting subsample</strong> &mdash; a design feature, because the FLI needs fasting triglycerides.</div>
+  <div class="callout">The largest single exclusion in <strong>our reproduction</strong> is the fasting subsample — a design feature because the analysis uses fasting triglycerides.</div>
+  <p><strong>Reproducibility note:</strong> the published paper reports <strong>6,300</strong> participants with MASLD, whereas this pipeline yields <strong>6,048</strong> mortality-linked participants. The two numbers should not be presented as if they were the same cohort.</p>
+  <p>The paper also states eligibility as <strong>age &gt;18 years</strong>, while this reproduction flow uses <strong>age ≥18</strong>. Small implementation differences like this should be recorded rather than silently harmonized.</p>
 </section>
 
 <section>
@@ -354,51 +370,84 @@
   <table>
     <thead><tr><th>Element</th><th>This study</th></tr></thead>
     <tbody>
-      <tr><td><strong>P</strong> &mdash; Population</td><td>Adults with MASLD by FLI &ge; 60 + &ge;1 cardiometabolic criterion, in the fasting subsample</td></tr>
-      <tr><td><strong>E</strong> &mdash; Exposure</td><td>Four-category BMI &times; WHtR phenotype</td></tr>
-      <tr><td><strong>C</strong> &mdash; Comparison</td><td>Groups II, III, IV versus <strong>Group I</strong></td></tr>
-      <tr><td><strong>O</strong> &mdash; Outcome</td><td>All-cause mortality to 31 Dec 2019</td></tr>
-      <tr><td><strong>T</strong> &mdash; Time</td><td>Months from exam to death or censoring</td></tr>
+      <tr><td><strong>P</strong> — Population</td><td>Adults with MASLD by FLI ≥ 60 + ≥1 cardiometabolic criterion, in the fasting subsample</td></tr>
+      <tr><td><strong>E</strong> — Exposure</td><td>Four-category BMI × WHtR phenotype</td></tr>
+      <tr><td><strong>C</strong> — Comparison</td><td>Groups II, III, IV versus <strong>Group I</strong></td></tr>
+      <tr><td><strong>O</strong> — Outcome</td><td>All-cause mortality to 31 Dec 2019</td></tr>
+      <tr><td><strong>T</strong> — Time</td><td>Months from exam to death or censoring</td></tr>
     </tbody>
   </table>
 </section>
 
 <section>
   <h1>Reconstructed mortality question</h1>
-  <div class="callout"><span class="lead">Among adults with MASLD, are BMI/WHtR phenotypes associated with different subsequent risks of all-cause mortality?</span></div>
-  <p>This wording makes the population, exposure, comparison, outcome and time structure explicit &mdash; and it is now honest about how the population was defined.</p>
+  <div class="callout">Among adults with MASLD, are BMI/WHtR phenotypes associated with different subsequent risks of all-cause mortality?</div>
+  <p>This wording makes the population, exposure, comparison, outcome and time structure explicit — and it is now honest about how the population was defined.</p>
 </section>
 
 <section>
-  <h1>What does &ldquo;prognostic value&rdquo; mean here?</h1>
+  <h1>What does “prognostic value” mean here?</h1>
   <p>A prognostic question asks: does knowing the phenotype tell us something about what is likely to happen later?</p>
   <p>After multivariable adjustment: does phenotype remain associated with mortality among people who are similar on the other variables in the model?</p>
   <div class="callout">That is an <strong>adjusted prognostic association</strong>. It is not automatically a causal effect.</div>
 </section>
 
 <section>
-  <h1>Same variables, different research goals</h1>
+  <h1>Same variables, different targets</h1>
   <table>
-    <thead><tr><th>Research goal</th><th>Question</th></tr></thead>
+    <thead><tr><th>Research goal</th><th>Scientific target in this example</th></tr></thead>
     <tbody>
-      <tr><td><strong>Description</strong></td><td>What characteristics are common in each phenotype?</td></tr>
-      <tr><td><strong>Association</strong></td><td>Are phenotype groups associated with different mortality?</td></tr>
-      <tr><td><strong>Prognostic factor</strong></td><td>Does phenotype inform future mortality beyond other measured factors?</td></tr>
-      <tr><td><strong>Causal</strong></td><td>Would changing central adiposity change mortality?</td></tr>
-      <tr><td><strong>Prediction</strong></td><td>Does adding WHtR improve individual mortality prediction?</td></tr>
+      <tr><td><strong>Description</strong></td><td>What are the characteristics and mortality experience of each phenotype group?</td></tr>
+      <tr><td><strong>Association</strong></td><td>Is phenotype statistically associated with subsequent mortality?</td></tr>
+      <tr><td><strong>Prognostic factor</strong></td><td>Does phenotype carry prognostic information about mortality <strong>over and above</strong> other known prognostic factors?</td></tr>
+      <tr><td><strong>Prediction</strong></td><td>How accurately can we predict an individual's mortality risk, and does adding WHtR improve prediction?</td></tr>
+      <tr><td><strong>Causal</strong></td><td>What would mortality have been under a specified intervention or exposure contrast that changed central adiposity?</td></tr>
     </tbody>
   </table>
+  <div class="callout">The variables can be identical. <strong>The target quantity is not.</strong></div>
+</section>
+
+<section>
+  <h1>Same variables, different analyses</h1>
+  <table>
+    <thead><tr><th>Goal</th><th>Typical analysis/design</th><th>How are other variables handled?</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Description</strong></td><td>Survey-weighted means, proportions, prevalence; Kaplan–Meier or standardized survival summaries</td><td>Used for stratification/standardization if scientifically useful</td></tr>
+      <tr><td><strong>Association</strong></td><td>Cox regression, splines, group comparisons</td><td>Included to define a <strong>conditional association</strong>; no automatic causal interpretation</td></tr>
+      <tr><td><strong>Prognostic factor</strong></td><td>Multivariable Cox model containing established prognostic factors + the index factor</td><td>Adjust for <strong>other prognostic factors</strong> to ask whether the index factor contributes information beyond them</td></tr>
+      <tr><td><strong>Prediction</strong></td><td>Develop/validate a multivariable survival prediction model; compare a base model with a base + WHtR model</td><td>Choose predictors for predictive value, availability and intended use; control overfitting with shrinkage/penalization and validation</td></tr>
+      <tr><td><strong>Causal</strong></td><td>Specify the causal estimand/target trial; use standardization, g-formula, inverse-probability weighting or another identification strategy</td><td>Select <strong>confounders</strong> using causal knowledge/DAGs; avoid inappropriate control of mediators/colliders for the chosen estimand</td></tr>
+    </tbody>
+  </table>
+  <div class="callout">A Cox model can appear in several rows. <strong>The model family does not determine the research goal.</strong></div>
+</section>
+
+<section>
+  <h1>Same variables, different evidence of success</h1>
+  <table>
+    <thead><tr><th>Goal</th><th>Main result / performance evidence</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Description</strong></td><td>Absolute summaries with uncertainty: means, prevalences, survival/risk at clinically meaningful times, group differences</td></tr>
+      <tr><td><strong>Association</strong></td><td>Association measure such as HR with 95% CI; model assumptions and functional form</td></tr>
+      <tr><td><strong>Prognostic factor</strong></td><td>Adjusted prognostic effect (for example HR + CI). If claiming <strong>incremental prognostic information</strong>, compare a model with versus without the factor (for example likelihood-ratio change / explained variation); if claiming improved <strong>prediction</strong>, also show changes in calibration/discrimination/error</td></tr>
+      <tr><td><strong>Prediction</strong></td><td><strong>Calibration</strong> (plot, calibration-in-the-large, slope), <strong>discrimination</strong> (C-index/time-dependent AUC), overall error such as <strong>Brier score</strong>, plus internal/external validation; clinical use may require decision-curve/net-benefit analysis</td></tr>
+      <tr><td><strong>Causal</strong></td><td>A prespecified causal contrast—preferably an absolute risk/survival difference or ratio at a fixed time, or RMST difference—plus diagnostics for positivity/weights/balance and sensitivity analyses for unmeasured confounding/selection</td></tr>
+    </tbody>
+  </table>
+  <h3>A useful distinction</h3>
+  <p><strong>HR + CI</strong> can be enough to report an adjusted association or prognostic-factor effect.</p>
+  <p>It is <strong>not</strong> evidence that a prediction model is good, and it is <strong>not</strong> by itself evidence that a causal effect has been identified.</p>
 </section>
 
 <section>
   <h1>What does this paper most directly support?</h1>
-  <p><span class="good">It directly supports:</span></p>
+  <p>It directly supports:</p>
   <ul>
     <li>description of how phenotype groups differ clinically;</li>
     <li>association between phenotype and subsequent mortality;</li>
     <li>an adjusted prognostic association.</li>
   </ul>
-  <p><span class="warn">It does not, by itself, establish:</span></p>
+  <p>It does not, by itself, establish:</p>
   <ul>
     <li>that central adiposity <strong>causes</strong> the mortality difference;</li>
     <li>that reducing WHtR would reduce mortality;</li>
@@ -409,20 +458,29 @@
 <section>
   <h1>Take-home sequence</h1>
   <ol>
-    <li><strong>Define the population</strong> &mdash; and state how membership was <em>ascertained</em>, not just what it means.</li>
-    <li><strong>Define exactly how the exposure is measured</strong> &mdash; down to the variable name and the file it came from.</li>
+    <li><strong>Define the population</strong> — and state how membership was <em>ascertained</em>, not just what it means.</li>
+    <li><strong>Define exactly how the exposure is measured</strong> — down to the variable name and the file it came from.</li>
     <li><strong>Check whether the two overlap.</strong> Here they do.</li>
-    <li><strong>Define outcome and time</strong> &mdash; all-cause mortality to 2019.</li>
+    <li><strong>Define outcome and time</strong> — all-cause mortality to 2019.</li>
     <li><strong>State the research question</strong> so that all five are explicit.</li>
   </ol>
-  <div class="callout">Before Thursday&rsquo;s lab, you should be able to name the component each variable above comes from.</div>
+  <div class="callout">Before Thursday’s lab, you should be able to name the component each variable above comes from.</div>
+</section>
+
+<section>
+  <h1>Methods references for these distinctions</h1>
+  <ul>
+    <li><strong>Prognostic factors:</strong> Riley RD, et al. <em>BMJ</em> 2019;364:k4597 — adjusted prognostic effects and value over and above other prognostic factors.</li>
+    <li><strong>Prediction models:</strong> Moons KGM, et al. <em>BMJ</em> 2009;338:b375; Riley RD, et al. <em>BMJ</em> 2024;386:e078276 — development, validation, calibration and discrimination.</li>
+    <li><strong>Causal inference:</strong> Hernán MA, Robins JM. <em>J Epidemiol Community Health</em> 2006 — estimating causal effects from epidemiologic data; Hernán MA, Dahabreh IJ. <em>Ann Intern Med</em> 2025 — target-trial framing and explicit causal estimands.</li>
+  </ul>
 </section>
 
 <section>
   <h1>Reference</h1>
-  <p>Kueh MTW, Intaran MAU, Goh R, et al. <strong>Body weight categories and fat distribution in relation to all-cause mortality among adults with metabolic dysfunction-associated steatotic liver disease: a population-based analysis of NHANES, 2007&ndash;2018.</strong> <em>BMJ Open</em>. 2026;16:e113719.</p>
-  <p><span class="small">doi: <a href="https://doi.org/10.1136/bmjopen-2025-113719">10.1136/bmjopen-2025-113719</a></span></p>
-  <p><span class="tiny muted">Cohort counts and variable names on these slides come from this repository&rsquo;s own reproduction pipeline, not from the paper&rsquo;s prose.</span></p>
+  <p>Kueh MTW, Intaran MAU, Goh R, et al. <strong>Body weight categories and fat distribution in relation to all-cause mortality among adults with metabolic dysfunction-associated steatotic liver disease: a population-based analysis of NHANES, 2007–2018.</strong> <em>BMJ Open</em>. 2026;16:e113719.</p>
+  <p>doi: <a href="https://doi.org/10.1136/bmjopen-2025-113719">10.1136/bmjopen-2025-113719</a></p>
+  <p>Cohort counts and variable names on these slides come from this repository’s own reproduction pipeline, not from the paper’s prose.</p>
 </section>
 
 </div>

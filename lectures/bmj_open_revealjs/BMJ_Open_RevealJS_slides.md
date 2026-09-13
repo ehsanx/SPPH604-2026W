@@ -5,9 +5,6 @@ transition: slide
 slideNumber: true
 ---
 
-<!-- GENERATED - edit the generator, not this file. index.html and this file
-     are emitted together so they cannot drift apart. -->
-
 # Decomposing the Study Aim
 
 ## BMI, central adiposity, and mortality in MASLD
@@ -71,7 +68,7 @@ A single paper can contain more than one research question.
 | HDL cholesterol | `LBDHDD` | `HDL` |
 | Blood pressure | `BPXSY1–4`, `BPXDI1–4` | `BPX` |
 
-Measured in the exam or assayed in the lab — none of it self-reported.
+Anthropometry, blood pressure and laboratory values are measured/assayed. Age, sex and race/ethnicity come from the demographic interview/file.
 
 ---
 
@@ -85,16 +82,32 @@ Measured in the exam or assayed in the lab — none of it self-reported.
 | Survey design | `WTMEC2YR`, `WTSAF2YR`, `SDMVSTRA`, `SDMVPSU` | `DEMO`, `TRIGLY` |
 | Mortality | `MORTSTAT`, `PERMTH_EXM`, `ELIGSTAT` | linked mortality file |
 
-> One research question reaches into **four exam and lab files** and **four questionnaires**, plus a separate mortality file. That is what L1 assembles.
+> In the variables shown here, the analysis reaches across **seven examination/laboratory component files**, plus demographics and questionnaire components, and a separate linked mortality file. That is what L1 assembles.
 
 ---
 
 # Four NHANES traps — each one has bitten this project
 
 - 777 = refused, 999 = don’t know. They are codes, not counts. Reading `ALQ130` literally over-excluded about 2,000 people here.
-- A diastolic blood pressure of 0 means “not obtainable”, not zero. Averaging it in drags the mean down.
+- **Do not automatically recode diastolic BP = 0 as missing.** NHANES explicitly allows a diastolic value of 0; failure to obtain a reading is handled separately. Treating every 0 as missing would also be an error.
 - `RIDRETH3` does not exist before 2011. It is what identifies Asian participants for the lower BMI threshold, so the first two cycles cannot apply it.
 - Fasting labs carry their own weight. `LBXTR` and `LBXGLU` come from the fasting subsample, which is weighted by `WTSAF2YR`, not `WTMEC2YR`.
+
+---
+
+# Survey design: paper versus reproduction
+
+NHANES is a **complex, multistage probability sample**.
+
+For analyses using fasting triglycerides, CDC provides the fasting-subsample weight `WTSAF2YR`, together with strata and PSU variables.
+
+### Important distinction
+
+- The **published paper's Statistical analysis section does not report using NHANES survey weights, strata or PSUs**.
+- Our reproduction pipeline includes survey-design variables and fasting-subsample weights.
+- Therefore, a survey-weighted reproduction is a **design-informed reanalysis**, not necessarily a literal reproduction of every published analytic choice.
+
+> Without the appropriate NHANES design information, estimates and standard errors should not be described as design-based nationally representative estimates.
 
 ---
 
@@ -129,7 +142,7 @@ So “MASLD” here is a **derived variable**, not a diagnosis. No imaging, no b
 | **Eligibility** (FLI) | triglycerides, GGT, BMI, waist |
 | **Exposure** (phenotype group) | BMI, waist / height |
 
-> **The population and the exposure are built from the same two measurements.** Being selected into the study and being placed in a phenotype group are not independent events. This is circularity.
+> **The population definition and the exposure classification share BMI and waist measurements.** This creates structural dependence between cohort eligibility and phenotype classification. For a causal question, conditioning on this selected population could create selection/collider bias under some causal structures; for a prognostic question, it primarily defines a selected target population. It is not automatically 'circularity' or bias.
 
 We only *name* it today. You will dissect what it does to the estimate at **M1**.
 
@@ -152,6 +165,8 @@ $$ BMI = weight (kg) / height² (m²) $$
 - Obesity defined as **BMI ≥ 30**; for Asian participants **BMI ≥ 25** (`RIDRETH3 == 6`).
 
 BMI does not measure body fat, or where fat is stored.
+
+> **Paper reporting note:** the Methods define obesity as BMI ≥30 kg/m² (≥25 kg/m² for Asians), but the published Tables 1–2 label the groups as BMI ≥25 versus <25. Those table labels conflict with the Methods and with the reported group BMI distributions, so they appear to be a reporting error.
 
 ---
 
@@ -197,11 +212,11 @@ There is no single “treated” group and “control” group.
 - Participants entered NHANES between **2007 and 2018**.
 - Mortality follow-up ran through **31 December 2019**, via the NCHS linked mortality file.
 - Follow-up time is `PERMTH_EXM` — months from exam to death or censoring.
-- Participants therefore had **different lengths of follow-up**, which is why this is a survival analysis and not a risk difference.
+- Participants had **different lengths of follow-up and censoring**, so time-to-event methods are appropriate. A risk difference could still be estimated at a fixed time horizon using methods that account for censoring.
 
 ---
 
-# How 59,842 people became 6,048
+# Our reproduction: how 59,842 people became 6,048
 
 | Step | N | What kind of step |
 |---|---|---|
@@ -213,7 +228,11 @@ There is no single “treated” group and “control” group.
 | MASLD (≥1 criterion) | 6,050 | target population |
 | Mortality-linked | **6,048** | outcome ascertainment |
 
-> The largest single exclusion is not clinical. It is the **fasting subsample** — a design feature, because the FLI needs fasting triglycerides.
+> The largest single exclusion in **our reproduction** is the fasting subsample — a design feature because the analysis uses fasting triglycerides.
+
+**Reproducibility note:** the published paper reports **6,300** participants with MASLD, whereas this pipeline yields **6,048** mortality-linked participants. The two numbers should not be presented as if they were the same cohort.
+
+The paper also states eligibility as **age >18 years**, while this reproduction flow uses **age ≥18**. Small implementation differences like this should be recorded rather than silently harmonized.
 
 ---
 
@@ -247,15 +266,49 @@ After multivariable adjustment: does phenotype remain associated with mortality 
 
 ---
 
-# Same variables, different research goals
+# Same variables, different targets
 
-| Research goal | Question |
+| Research goal | Scientific target in this example |
 |---|---|
-| **Description** | What characteristics are common in each phenotype? |
-| **Association** | Are phenotype groups associated with different mortality? |
-| **Prognostic factor** | Does phenotype inform future mortality beyond other measured factors? |
-| **Causal** | Would changing central adiposity change mortality? |
-| **Prediction** | Does adding WHtR improve individual mortality prediction? |
+| **Description** | What are the characteristics and mortality experience of each phenotype group? |
+| **Association** | Is phenotype statistically associated with subsequent mortality? |
+| **Prognostic factor** | Does phenotype carry prognostic information about mortality **over and above** other known prognostic factors? |
+| **Prediction** | How accurately can we predict an individual's mortality risk, and does adding WHtR improve prediction? |
+| **Causal** | What would mortality have been under a specified intervention or exposure contrast that changed central adiposity? |
+
+> The variables can be identical. **The target quantity is not.**
+
+---
+
+# Same variables, different analyses
+
+| Goal | Typical analysis/design | How are other variables handled? |
+|---|---|---|
+| **Description** | Survey-weighted means, proportions, prevalence; Kaplan–Meier or standardized survival summaries | Used for stratification/standardization if scientifically useful |
+| **Association** | Cox regression, splines, group comparisons | Included to define a **conditional association**; no automatic causal interpretation |
+| **Prognostic factor** | Multivariable Cox model containing established prognostic factors + the index factor | Adjust for **other prognostic factors** to ask whether the index factor contributes information beyond them |
+| **Prediction** | Develop/validate a multivariable survival prediction model; compare a base model with a base + WHtR model | Choose predictors for predictive value, availability and intended use; control overfitting with shrinkage/penalization and validation |
+| **Causal** | Specify the causal estimand/target trial; use standardization, g-formula, inverse-probability weighting or another identification strategy | Select **confounders** using causal knowledge/DAGs; avoid inappropriate control of mediators/colliders for the chosen estimand |
+
+> A Cox model can appear in several rows. **The model family does not determine the research goal.**
+
+---
+
+# Same variables, different evidence of success
+
+| Goal | Main result / performance evidence |
+|---|---|
+| **Description** | Absolute summaries with uncertainty: means, prevalences, survival/risk at clinically meaningful times, group differences |
+| **Association** | Association measure such as HR with 95% CI; model assumptions and functional form |
+| **Prognostic factor** | Adjusted prognostic effect (for example HR + CI). If claiming **incremental prognostic information**, compare a model with versus without the factor (for example likelihood-ratio change / explained variation); if claiming improved **prediction**, also show changes in calibration/discrimination/error |
+| **Prediction** | **Calibration** (plot, calibration-in-the-large, slope), **discrimination** (C-index/time-dependent AUC), overall error such as **Brier score**, plus internal/external validation; clinical use may require decision-curve/net-benefit analysis |
+| **Causal** | A prespecified causal contrast—preferably an absolute risk/survival difference or ratio at a fixed time, or RMST difference—plus diagnostics for positivity/weights/balance and sensitivity analyses for unmeasured confounding/selection |
+
+### A useful distinction
+
+**HR + CI** can be enough to report an adjusted association or prognostic-factor effect.
+
+It is **not** evidence that a prediction model is good, and it is **not** by itself evidence that a causal effect has been identified.
 
 ---
 
@@ -284,6 +337,14 @@ It does not, by itself, establish:
 5. **State the research question** so that all five are explicit.
 
 > Before Thursday’s lab, you should be able to name the component each variable above comes from.
+
+---
+
+# Methods references for these distinctions
+
+- **Prognostic factors:** Riley RD, et al. *BMJ* 2019;364:k4597 — adjusted prognostic effects and value over and above other prognostic factors.
+- **Prediction models:** Moons KGM, et al. *BMJ* 2009;338:b375; Riley RD, et al. *BMJ* 2024;386:e078276 — development, validation, calibration and discrimination.
+- **Causal inference:** Hernán MA, Robins JM. *J Epidemiol Community Health* 2006 — estimating causal effects from epidemiologic data; Hernán MA, Dahabreh IJ. *Ann Intern Med* 2025 — target-trial framing and explicit causal estimands.
 
 ---
 
