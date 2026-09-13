@@ -11,7 +11,7 @@
 
 
 
-<title>README</title>
+<title>reproduction_report</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -352,245 +352,652 @@ display: none;
 </div>
 
 
-<div id="spph-604-application-of-advanced-epidemiological-methods" class="section level1">
-<h1>SPPH 604 — Application of Advanced Epidemiological Methods</h1>
-<p><strong>UBC School of Population and Public Health · Term 1,
-2026W</strong></p>
+<div id="reproduction-report" class="section level1">
+<h1>Reproduction Report</h1>
+<p><strong>Paper:</strong> Kueh MTW, Intaran MAU, Goh R, et al. <em>Body
+weight categories and fat distribution in relation to all-cause
+mortality among adults with metabolic dysfunction-associated steatotic
+liver disease: a population-based analysis of NHANES, 2007–2018.</em>
+<strong>BMJ Open</strong> 2026;16:e113719.</p>
+<p><strong>Data:</strong> NHANES 2007–2018 (6 cycles) + NCHS Public-Use
+Linked Mortality Files (2019 release), all public.
+<strong>Software:</strong> R 4.5.1.</p>
 <blockquote>
-<p><strong>Student preview — 2026W.</strong> This repository is
-available now so you can see the course structure, materials, and
-submission formats. Minor wording and Canvas configuration updates may
-still be made before this version is declared final.</p>
+<p><strong>Scope note.</strong> These materials document a teaching
+reproduction of published analyses using the specified public data and
+course implementation. Differences from published results are
+reproducibility findings, not allegations of research misconduct, and
+may reflect analytic, implementation, or data-version differences. The
+findings below stand as recorded; this note frames how to read them, not
+whether they hold.</p>
 </blockquote>
-<p>All course materials live here. <strong>Canvas carries submissions
-and grading</strong>, and the things the syllabus points there for: the
-rubric grids, the worked AI-use example, Zoom links, and anything posted
-in the weekly Modules.</p>
-<p><strong>Prefer a guided view?</strong> Use the <a href="https://ehsanx.github.io/SPPH604-2026W/">SPPH 604 student
-guide</a> for a week-by-week map, assignment overview, repository map,
-and searchable file catalogue. This README remains the compact overview
-of the repository itself.</p>
+<p><strong>Verdict:</strong> <strong>Table 1, Table 2 and Figure 1
+reproduce closely</strong> from the public data — analytic cohort, group
+sizes, death counts, hazard ratios and number-at-risk all match the
+publication to within a few tenths of a percent. <strong>Figure 2
+reproduces for BMI (panel a) but not for WHtR (panel b)</strong>, where
+our curve turns down above WHtR ≈ 0.75 while the published curve keeps
+rising; the paper does not report the spline specification, so the
+difference cannot be resolved from what is published. Six
+reproducibility <em>findings</em> surfaced along the way (alcohol
+exclusion, BMI cut-point labelling, CV-death definition, FLI
+circularity, survey design, the WHtR spline) and are documented below —
+these are the pedagogically useful part.</p>
 <hr />
-<div id="how-the-course-works" class="section level2">
-<h2>How the course works</h2>
-<p>You pick one recent, open-data paper in Week 3 and carry it all
-term:</p>
-<blockquote>
-<p><strong>Orient → Lock → Build → Replicate → Review → Improve &amp;
-Defend → Reanalyse</strong></p>
-</blockquote>
-<p>You form a group, lock one feasible paper, build the analysis through
-P1–P5, assemble the first complete argument at M1, review another
-group’s work at M2, improve and defend your own analysis at M3, and
-carry the best-defended version into the final M4 reanalysis.</p>
+<div id="sample-funnel-typed-and-two-row-sets-kept-apart" class="section level2">
+<h2>1. Sample funnel — typed, and two row sets kept apart</h2>
+<p><strong>Every step carries a type label.</strong> A funnel shows N
+falling; it does not show <em>why</em>, and the reasons are not
+interchangeable.</p>
 <table>
 <colgroup>
-<col width="30%" />
+<col width="17%" />
+<col width="17%" />
+<col width="23%" />
+<col width="17%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>Criterion</th>
+<th align="right">N</th>
+<th>Type</th>
+<th align="right">Dropped</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>NHANES 2007–2018 records</td>
+<td align="right">59,842</td>
+<td>—</td>
+<td align="right">—</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>Age ≥ 18</td>
+<td align="right">36,580</td>
+<td>ELIGIBILITY</td>
+<td align="right">23,262</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>In fasting subsample</td>
+<td align="right">14,962</td>
+<td><strong>DESIGN</strong></td>
+<td align="right">21,618</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>FLI computable (TG + GGT + BMI + waist)</td>
+<td align="right">14,170</td>
+<td><strong>MISSINGNESS</strong></td>
+<td align="right">792</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>Steatosis (FLI ≥ 60)</td>
+<td align="right">6,052</td>
+<td><strong>TARGET POPULATION</strong></td>
+<td align="right">8,118</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>MASLD (≥ 1 cardiometabolic criterion)</td>
+<td align="right">6,050</td>
+<td>TARGET POPULATION</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>Phenotype group assignable</td>
+<td align="right">6,050</td>
+<td>MISSINGNESS</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>Mortality-eligible and linked</td>
+<td align="right"><strong>6,048</strong></td>
+<td>OUTCOME ASCERTAINMENT</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<p>After eligibility, the two largest drops are <strong>Step 2
+(design)</strong> and <strong>Step 4 (target population)</strong>, and
+<em>neither is missing data</em>. Step 2 is the NHANES fasting
+subsample: it was selected deliberately, and <code>WTSAF2YR</code>
+exists to account for that selection stage and its nonresponse, so the
+correct response is the right weight and a domain analysis (P4), not
+imputation. Step 4 is people without hepatic steatosis, who are not
+missing — they are not who the paper is about. Genuine missingness here
+is <strong>792 item-nonresponse losses</strong> at Step 3 and,
+separately, <strong>2 outcome-ascertainment losses</strong> at Step 7:
+different problems, not added together, and not 30,532, which is what
+reading every post-age-eligibility reduction as attrition would
+give.</p>
+<p><strong>Two row sets, kept apart.</strong></p>
+<table>
+<colgroup>
 <col width="30%" />
 <col width="40%" />
+<col width="30%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th></th>
-<th>What</th>
-<th align="center">Weight</th>
+<th>Row set</th>
+<th align="right">N</th>
+<th>What it is</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>M0</strong></td>
-<td>Feasibility memo — lock your paper</td>
-<td align="center">pass/fail</td>
+<td><strong>Full analytic file</strong></td>
+<td align="right"><strong>6,371</strong></td>
+<td>the funnel above with Step 2 removed: every adult with a computable
+FLI, whether or not they carry a valid fasting weight. It is the row set
+the paper itself analyses and the cohort
+<code>02_build_analytic.R</code> saves, so every table and figure under
+<code>output/</code> is built on it.</td>
 </tr>
 <tr class="even">
-<td><strong>L1–L6</strong></td>
-<td>Weekly labs on fixed teaching data</td>
-<td align="center">10%</td>
-</tr>
-<tr class="odd">
-<td><strong>P1–P5</strong></td>
-<td>Weekly increments on <em>your</em> paper — optional, ungraded, no
-deadline, nothing to submit</td>
-<td align="center">—</td>
-</tr>
-<tr class="even">
-<td><strong>M1</strong></td>
-<td>Your five increments compiled + which threat most endangers the
-paper (deck + repository zip)</td>
-<td align="center">30%</td>
-</tr>
-<tr class="odd">
-<td><strong>M2</strong></td>
-<td>A live critique of <strong>another group’s M1</strong></td>
-<td align="center">15%</td>
-</tr>
-<tr class="even">
-<td><strong>M3</strong></td>
-<td>Individual oral defense: improve and defend the analysis; changes
-may be reviewer-prompted or self-initiated</td>
-<td align="center">15%</td>
-</tr>
-<tr class="odd">
-<td><strong>M4</strong></td>
-<td>Reanalysis letter + reproducible repository</td>
-<td align="center">30%</td>
+<td><strong>Locked domain</strong></td>
+<td align="right"><strong>6,048</strong></td>
+<td>the funnel above as written: the records carrying a valid
+<code>WTSAF2YR</code>. It is the only row set on which a design-aware
+estimate is possible, and it is what P1 locks and P2–P5 analyse.</td>
 </tr>
 </tbody>
 </table>
-<p>The full rules are in the <a href="syllabus/SPPH604-syllabus-2026W.pdf">syllabus</a>.</p>
+<p>The two differ by <strong>323</strong> records and neither is an
+error. Dropping Step 2 lets 819 adults through Step 3 who have all four
+FLI inputs but no valid fasting weight — that is why the full analytic
+file’s own FLI step is <strong>14,989</strong> rather than 14,170 — and
+323 of those 819 survive to the end. The paper is unweighted, so
+<strong>6,371</strong> is what reproduces it; <strong>6,048</strong> is
+a different (correct) denominator, not a correction to the first. Quote
+6,371 when you mean <em>what reproduces the paper</em>, and 6,048 when
+you mean <em>what a design-aware estimate can be computed on</em>.
+<code>logs/sample_funnel.csv</code> logs both chains, typed, and closes
+with the <code>Alcohol exclusion applied = FALSE</code> switch, which is
+why the full analytic file stays at 6,371 rather than dropping
+further.</p>
+<p><strong>Fatty Liver Index</strong> (Bedogni 2006):
+<code>FLI = e^L / (1+e^L) × 100</code>,
+<code>L = 0.953·ln(TG) + 0.139·BMI + 0.718·ln(GGT) + 0.053·WC − 15.745</code>,
+steatosis if FLI ≥ 60.</p>
+<p><strong>Phenotype groups:</strong> obesity = BMI ≥ 30 (≥ 25 for
+Asians); high central adiposity = WHtR ≥ 0.6.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Group</th>
+<th>Definition</th>
+<th align="right">Reproduced N</th>
+<th align="right">Paper N</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>I</td>
+<td>obese, low central</td>
+<td align="right">391</td>
+<td align="right">386</td>
+</tr>
+<tr class="even">
+<td>II</td>
+<td>obese, high central</td>
+<td align="right">4,585</td>
+<td align="right">4,541</td>
+</tr>
+<tr class="odd">
+<td>III</td>
+<td>non-obese, low central</td>
+<td align="right">787</td>
+<td align="right">769</td>
+</tr>
+<tr class="even">
+<td>IV</td>
+<td>non-obese, high central</td>
+<td align="right">608</td>
+<td align="right">604</td>
+</tr>
+</tbody>
+</table>
+<hr />
 </div>
-<div id="where-things-are" class="section level2">
-<h2>Where things are</h2>
+<div id="table-1-baseline-characteristics-overall-column" class="section level2">
+<h2>2. Table 1 — baseline characteristics (Overall column)</h2>
 <table>
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="23%" />
+<col width="23%" />
+<col width="23%" />
+<col width="30%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th>Folder</th>
-<th>What’s in it</th>
+<th>Characteristic</th>
+<th>Reproduced</th>
+<th>Published</th>
+<th align="center">Match</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><a href="https://ehsanx.github.io/SPPH604-2026W/syllabus/SPPH604-syllabus-2026W.pdf"><code>syllabus/</code></a></td>
-<td>The syllabus. Authoritative on deadlines, weights and policy.</td>
+<td>N (full analytic file)</td>
+<td>6,371</td>
+<td>6,300</td>
+<td align="center">~</td>
 </tr>
 <tr class="even">
-<td><a href="labs/"><code>labs/</code></a></td>
-<td>L0 setup (self-study) and the L1–L6 handouts. Labs run Thursdays
-10–12, SPPH 143, Weeks 2–7.</td>
+<td>Age, year (mean SD)</td>
+<td>51.0 (16.6)</td>
+<td>51.0 (16.6)</td>
+<td align="center">✓ exact</td>
 </tr>
 <tr class="odd">
-<td><a href="https://ehsanx.github.io/SPPH604-2026W/practice/README.html"><code>practice/</code></a></td>
-<td>P1–P5 handouts — the same methods applied to your own paper.</td>
+<td>Female, n (%)</td>
+<td>2,997 (47.0)</td>
+<td>2,973 (47.2)</td>
+<td align="center">✓</td>
 </tr>
 <tr class="even">
-<td><a href="milestones/"><code>milestones/</code></a></td>
-<td>M0–M4 assignment briefs — what each milestone asks for.</td>
+<td>Waist, cm (median IQR)</td>
+<td>110.5 (103.7–119.5)</td>
+<td>111.0 (104.0–120.0)</td>
+<td align="center">✓</td>
 </tr>
 <tr class="odd">
-<td><a href="examples/"><code>examples/</code></a></td>
-<td><strong>Worked model answers</strong> for P1–P5 and M0–M4, on the
-demonstration paper.</td>
+<td>BMI, kg/m²</td>
+<td>33.2 (30.1–37.4)</td>
+<td>33.2 (30.2–37.4)</td>
+<td align="center">✓ exact median</td>
 </tr>
 <tr class="even">
-<td><a href="reproduction/"><code>reproduction/</code></a></td>
-<td>The full R pipeline behind the demonstration paper.</td>
+<td>Systolic BP</td>
+<td>124.0 (114.7–136.0)</td>
+<td>124.0 (114.0–135.0)</td>
+<td align="center">✓</td>
 </tr>
 <tr class="odd">
-<td><a href="lectures/"><code>lectures/</code></a></td>
-<td>Week 1–7 plans and slide decks.</td>
+<td>Diastolic BP</td>
+<td>72.0 (64.0–79.3)</td>
+<td>72.0 (64.7–79.3)</td>
+<td align="center">✓</td>
 </tr>
 <tr class="even">
-<td><a href="paper/"><code>paper/</code></a></td>
-<td>Two papers under different licences — the demonstration paper (CC
-BY-NC) and a second NHANES paper (CC BY) read alongside P4 — and their
-attribution.</td>
+<td>Current smoking</td>
+<td>1,238 (40.9)</td>
+<td>1,210 (40.6)</td>
+<td align="center">✓</td>
 </tr>
 <tr class="odd">
-<td><a href="index.md"><code>index.md</code></a></td>
-<td><strong>Index of every document in the repository.</strong></td>
+<td>Family history CHD</td>
+<td>911 (14.6)</td>
+<td>904 (15.0)</td>
+<td align="center">✓</td>
+</tr>
+<tr class="even">
+<td>Hypertension</td>
+<td>3,444 (54.1)</td>
+<td>3,238 (52.6)</td>
+<td align="center">≈ (+1.5)</td>
+</tr>
+<tr class="odd">
+<td>T2DM</td>
+<td>1,595 (25.0)</td>
+<td>1,645 (26.1)</td>
+<td align="center">≈ (−1.1)</td>
+</tr>
+<tr class="even">
+<td>Dyslipidaemia</td>
+<td>3,839 (60.3)</td>
+<td>3,612 (57.7)</td>
+<td align="center">≈ (+2.6)</td>
+</tr>
+<tr class="odd">
+<td>CKD</td>
+<td>1,296 (20.3)</td>
+<td>1,142 (18.1)</td>
+<td align="center">≈ (+2.2)</td>
+</tr>
+<tr class="even">
+<td>Stroke</td>
+<td>270 (4.3)</td>
+<td>269 (4.4)</td>
+<td align="center">✓</td>
+</tr>
+<tr class="odd">
+<td>MI</td>
+<td>520 (8.2)</td>
+<td>518 (8.4)</td>
+<td align="center">✓</td>
+</tr>
+<tr class="even">
+<td>Heart failure</td>
+<td>283 (4.5)</td>
+<td>283 (4.6)</td>
+<td align="center">✓ exact n</td>
+</tr>
+<tr class="odd">
+<td>COPD</td>
+<td>157 (5.2)</td>
+<td>152 (5.2)</td>
+<td align="center">✓ exact %</td>
+</tr>
+<tr class="even">
+<td>Cancer</td>
+<td>624 (10.0)</td>
+<td>624 (10.1)</td>
+<td align="center">✓ exact n</td>
 </tr>
 </tbody>
 </table>
-</div>
-<div id="start-here" class="section level2">
-<h2>Start here</h2>
-<ol style="list-style-type: decimal">
-<li>Open the <a href="https://ehsanx.github.io/SPPH604-2026W/">student
-guide</a> if you want the easiest way to navigate the course.</li>
-<li>Read the <a href="syllabus/SPPH604-syllabus-2026W.pdf">syllabus</a>
-— it is authoritative on deadlines, weights, grading, and policy.</li>
-<li>Use the <a href="https://ehsanx.github.io/SPPH604-2026W/#how-the-course-fits-together">course
-map</a> to see which lecture, lab, project increment, and milestone
-belong together.</li>
-<li>Use the <a href="https://ehsanx.github.io/SPPH604-2026W/#milestones">milestone
-index</a> when you need to know what to do, what to submit, how it is
-graded, and what it feeds.</li>
-<li>Skim <a href="https://ehsanx.github.io/SPPH604-2026W/practice/README.html"><code>practice/README.md</code></a>
-— it explains how P1–P5 build into M1.</li>
-<li>Look at one worked example, for example <a href="https://ehsanx.github.io/SPPH604-2026W/examples/P1_analytic_cohort/P1_analytic_cohort_submission.html"><code>examples/P1_analytic_cohort/</code></a>,
-to see the standard.</li>
-<li>Work through <a href="labs/L0_setup.md"><code>labs/L0_setup.md</code></a> <strong>before
-the first class</strong> — R, RStudio, the PDF toolchain, a GitHub
-account, and a test knit.</li>
-</ol>
-<p>If you already know the filename you need, open <a href="index.md"><code>index.md</code></a> or use the <a href="https://ehsanx.github.io/SPPH604-2026W/ARTIFACTS.html">complete
-file catalogue</a>.</p>
-</div>
-<div id="the-demonstration-paper" class="section level2">
-<h2>The demonstration paper</h2>
-<p>Everything in <code>examples/</code> and <code>reproduction/</code>
-is built on:</p>
-<blockquote>
-<p>Kueh MTW et al. Body weight categories and fat distribution in
-relation to all-cause mortality among adults with MASLD. <em>BMJ
-Open</em> 2026;16:e113719. NHANES 2007–2018 with NCHS linked mortality.
-<a href="https://doi.org/10.1136/bmjopen-2025-113719">doi:10.1136/bmjopen-2025-113719</a></p>
-</blockquote>
-<p>It reproduces: N = 6,371 against the paper’s ~6,300, groups 391 /
-4,585 / 787 / 608, 586 deaths, and a Group IV hazard ratio of 15.14
-unadjusted → 2.91 adjusted (published: 15.13 → 2.89).</p>
-<p><strong>These are answer keys, not templates to copy.</strong> You
-will do this on <em>your</em> paper. What transfers is the sequence of
-moves, not the numbers.</p>
-<p>The article is included in <a href="paper/"><code>paper/</code></a>
-and is redistributed under <strong>CC BY-NC</strong> (© Author(s) 2026,
-published by BMJ Group; no commercial re-use). See <a href="paper/README.md"><code>paper/README.md</code></a> for the full
-attribution. Its peer-review history file carries no stated licence and
-is not redistributed here.</p>
-</div>
-<div id="running-the-reproduction-code" class="section level2">
-<h2>Running the reproduction code</h2>
-<pre class="r"><code># from the reproduction/ folder
-source(&quot;R/run_all.R&quot;)</code></pre>
-<p>Needs R with <code>haven</code>, <code>dplyr</code>,
-<code>survival</code>, <code>survminer</code>, <code>rms</code>,
-<code>survey</code>, <code>mice</code>, <code>tableone</code>,
-<code>ggplot2</code>, <code>nhanesA</code>.</p>
-<p><strong>The NHANES microdata is not in this repository</strong> — it
-is ~211 MB and freely available from CDC. <code>R/01_download.R</code>
-fetches it into <code>reproduction/data/</code>. The URL pattern is:</p>
-<pre><code>https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/&lt;year&gt;/DataFiles/&lt;FILE&gt;.xpt</code></pre>
-</div>
-<div id="using-ai-in-this-course" class="section level2">
-<h2>Using AI in this course</h2>
-<p>Permitted, with disclosure, and specified per assessment in the
-syllabus. Two things are never permitted: <strong>AI assistance during
-the live M3 defense</strong>, and <strong>putting any part of another
-group’s unpublished work into an AI tool</strong>. Preparing for M3 with
-an AI is permitted and needs no disclosure, because M3 has no
-submission. While running a reviewed group’s code you may ask an AI
-about your own machine and public documentation: paste what is yours or
-public, describe what is theirs. Supports approved through UBC’s Centre
-for Accessibility are the exception to the live-defense rule; they are
-arranged in advance through the syllabus section <em>Academic
-Accommodation Letter</em>.</p>
-<p>You remain responsible for the integrity and accuracy of everything
-you submit. The oral defense is where the course checks that the
-reasoning is yours.</p>
-</div>
-<div id="contact" class="section level2">
-<h2>Contact</h2>
-<p><strong>Dr. M. Ehsan Karim</strong> — <a href="mailto:ehsan.karim@ubc.ca" class="email">ehsan.karim@ubc.ca</a> ·
-<a href="http://www.ehsank.com/">ehsank.com</a> Put
-<code>SPPH 604</code> in the subject line. Replies within 48 hours on
-weekdays. Ask the TA in lab or in TA office hours, not by email.</p>
-</div>
-<div id="licence" class="section level2">
-<h2>Licence</h2>
-<p>Course materials are <strong>CC BY 4.0</strong> — reuse and adapt
-freely with attribution, with named carve-outs rather than one
-exception: material distributed only through Canvas and not published
-here — if it is not in this repository, do not post it — plus
-third-party material, the exercise datasets, session recordings, student
-work, and the papers in <code>paper/</code>, which carry their own
-publisher licences (the demonstration paper is CC BY-NC). See <a href="LICENSE.md"><code>LICENSE.md</code></a>.</p>
+<p>All group-stratified columns and p-values are in
+<code>output/tables/table1_reproduced.{csv,html}</code>.</p>
+<p><strong>Comorbidity definitions</strong> (calibrated to the paper’s
+prevalences — the paper uses composites, not pure self-report): -
+Hypertension = self-report <strong>or</strong> measured BP ≥ 140/90 -
+T2DM = self-report <strong>or</strong> HbA1c ≥ 6.5% - Dyslipidaemia =
+self-report <strong>or</strong> lipid-lowering meds <strong>or</strong>
+LDL ≥ 130 - MI = prior heart attack <strong>or</strong> coronary heart
+disease (MCQ160E ∪ MCQ160C) - CKD = eGFR &lt; 60 (CKD-EPI 2021)
+<strong>or</strong> ACR ≥ 30 - Current smoking is expressed as a
+<strong>% of ever-smokers</strong> (matches the paper’s 40.6%)</p>
 <hr />
-<p>UBC’s Point Grey Campus is located on the traditional, ancestral, and
-unceded territory of the xʷməθkʷəy̓əm (Musqueam) people.</p>
+</div>
+<div id="table-2-cox-regression-hr-95-ci" class="section level2">
+<h2>3. Table 2 — Cox regression (HR, 95% CI)</h2>
+<p><strong>All-cause mortality</strong></p>
+<table style="width:100%;">
+<colgroup>
+<col width="16%" />
+<col width="16%" />
+<col width="16%" />
+<col width="16%" />
+<col width="16%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Group</th>
+<th>Events (repro / paper)</th>
+<th>Unadjusted (repro)</th>
+<th>Unadjusted (paper)</th>
+<th>Model 2 (repro)</th>
+<th>Model 2 (paper)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>I</td>
+<td>5 / 5</td>
+<td>Reference</td>
+<td>Reference</td>
+<td>Reference</td>
+<td>Reference</td>
+</tr>
+<tr class="even">
+<td>II</td>
+<td>389 / 388</td>
+<td>6.68 (2.76–16.14)</td>
+<td>6.66 (2.76–16.09)</td>
+<td>2.37 (0.97–5.76)</td>
+<td>2.30 (0.94–5.60)</td>
+</tr>
+<tr class="odd">
+<td>III</td>
+<td>74 / 74</td>
+<td>6.23 (2.52–15.41)</td>
+<td>6.25 (2.53–15.47)</td>
+<td>2.99 (1.20–7.43)</td>
+<td>3.03 (1.22–7.53)</td>
+</tr>
+<tr class="even">
+<td>IV</td>
+<td>118 / 118</td>
+<td>15.14 (6.19–37.04)</td>
+<td>15.13 (6.18–37.02)</td>
+<td>2.91 (1.18–7.20)</td>
+<td>2.89 (1.17–7.17)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cardiovascular mortality</strong> (CV death = underlying
+cause = <em>diseases of heart</em>)</p>
+<table>
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Group</th>
+<th>Events (repro / paper)</th>
+<th>Unadjusted (repro)</th>
+<th>Unadjusted (paper)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>I</td>
+<td>1 / 1</td>
+<td>Reference</td>
+<td>Reference</td>
+</tr>
+<tr class="even">
+<td>II</td>
+<td>112 / 112</td>
+<td>9.64 (1.35–69.04)</td>
+<td>9.64 (1.35–69.05)</td>
+</tr>
+<tr class="odd">
+<td>III</td>
+<td>19 / 19</td>
+<td>8.08 (1.08–60.38)</td>
+<td>8.11 (1.09–60.61)</td>
+</tr>
+<tr class="even">
+<td>IV</td>
+<td>26 / 26</td>
+<td>16.75 (2.27–123.5)</td>
+<td>16.75 (2.27–123.4)</td>
+</tr>
+</tbody>
+</table>
+<p>Event counts match <strong>exactly</strong>; HRs agree to the 2nd–3rd
+significant figure. Full three-model table in
+<code>output/tables/table2_reproduced.csv</code>.</p>
+<ul>
+<li><strong>Model 1:</strong> age, sex, dyslipidaemia, hypertension,
+T2DM, CKD, MI, cancer, antihypertensive / antidiabetic / lipid-lowering
+medication use.</li>
+<li><strong>Model 2:</strong> Model 1 + current smoking + sedentary
+minutes/day.</li>
+</ul>
+<hr />
+</div>
+<div id="figures" class="section level2">
+<h2>4. Figures</h2>
+<ul>
+<li><code>output/figures/figure1_km.png</code> — Kaplan–Meier by group.
+Group IV falls to ≈ 0.80 survival at ~7 y; Group I stays highest;
+log-rank p &lt; 0.0001. Number-at-risk matches (e.g. Group IV 608 / 549
+/ 431 / 330 vs paper 604 / 546 / 433 / 334).</li>
+<li><code>output/figures/figure2_rcs.png</code> — restricted cubic
+splines (4 knots, unadjusted, probability scale, matching the published
+caption). <strong>Panel (a) BMI reproduces:</strong> a steep fall from ≈
+0.22 at BMI 22 to ≈ 0.08 by BMI 33, then a shallow tail — the paper’s
+“J-shaped trend towards reduced all-cause mortality as BMI increased”
+(nonlinear p = 0.003). <strong>Panel (b) WHtR does <em>not</em>
+reproduce at the upper tail.</strong> The published curve rises and then
+flattens, staying highest at WHtR 1.0 (≈ 0.045 → ≈ 0.12). Ours rises to
+a peak of ≈ 0.11 near WHtR 0.75 and then <em>declines</em> to ≈ 0.086 by
+1.0 — an inverted U, not a monotonic increase. The overall association
+is significant (p = 0.004) but the non-linearity is not (p = 0.073), and
+the confidence band above WHtR ≈ 0.85 is very wide. See finding #6.</li>
+</ul>
+<hr />
+</div>
+<div id="key-reproduction-findings-the-interesting-part" class="section level2">
+<h2>5. Key reproduction findings (the interesting part)</h2>
+<ol style="list-style-type: decimal">
+<li><p><strong>The Table 1/2 column headers and the Methods text state
+different BMI cut-points.</strong> The headers read “BMI ≥ 25 / &lt;
+25”, while the reported BMI medians in the <em>non-obese</em> groups are
+27.6 and 28.8, which a 25 cut cannot produce. The Methods text gives
+obesity = BMI ≥ 30, and coding to <strong>30</strong> reproduces the
+published group sizes; coding to 25 does not. We therefore read the
+analysis as using 30 and the printed headers as a labelling
+inconsistency.</p></li>
+<li><p><strong>The stated alcohol exclusion does not match the reported
+numbers.</strong> The paper says it excluded “significant alcohol” (&gt;
+2 drinks/day men, &gt; 1/day women), yet its N = 6,300 and 585 deaths
+match a cohort with <strong>no material alcohol exclusion</strong> (our
+6,371, 586 deaths). A faithful average-daily exclusion removes ~430
+people (N → 5,944). We keep the paper-matching cohort as primary and
+expose the exclusion as a sensitivity switch
+(<code>APPLY_ALCOHOL_EXCL</code> in <code>02_build_analytic.R</code>).
+<em>We could not reconcile the stated exclusion with the reported N
+under any coding of the public alcohol variables we implemented; a
+different implementation of the same sentence may reconcile
+them.</em></p></li>
+<li><p><strong>CV mortality = “diseases of heart” only.</strong> Using
+heart + cerebrovascular gives 185 CV deaths; heart-only gives exactly
+the paper’s <strong>158</strong>.</p></li>
+<li><p><strong>FLI circularity (Reviewer 1’s point).</strong> FLI uses
+BMI and waist circumference, which also define the BMI/WHtR exposure
+groups — exposure and steatosis ascertainment share inputs. The paper’s
+TyG-index sensitivity analysis addresses this; it is the single most
+important methodological threat to interrogate.</p></li>
+<li><p><strong>Complex survey design not applied.</strong> The paper
+(and this reproduction) treat NHANES as a simple cohort — no
+<code>svydesign</code>, weights, strata, or PSUs. Defensible for
+internal HR estimation but affects national representativeness of the
+descriptives.</p></li>
+<li><p><strong>The WHtR spline does not reproduce, and the specification
+needed to check it is not reported.</strong> The published Figure 2b
+rises across the whole WHtR range and stays highest at the top; ours
+peaks near WHtR 0.75 and turns down (see §4). The Methods say only that
+“restricted cubic splines were constructed” — no knot count, no knot
+placement, no statement of whether the model was adjusted, and no
+trimming rule for the sparse upper tail. Those are exactly the choices
+that determine the shape where the data run out. Our panels use
+<code>rcs(x, 4)</code> with the <code>rms</code> default knot placement,
+so a different knot count, knot placement or trimming rule is a
+plausible explanation for the divergence where the data thin out. This
+is the clearest case in the paper of a published result that
+<em>cannot</em> be checked from what is reported, and it is a better
+worked example of under-specification than anything above.</p></li>
+</ol>
+<hr />
+</div>
+<div id="assumptions-deviations-from-an-unknown-ground-truth" class="section level2">
+<h2>6. Assumptions / deviations from an unknown ground truth</h2>
+<ul>
+<li>Medication classes for the Cox models use NHANES questionnaire
+self-report (BPQ/DIQ) as a proxy; GLP-1 / SGLT2i-specific flags would
+need the RXQ_RX drug file parsed against the Multum lexicon (the lexicon
+file 404’d at download and is not required for the primary
+results).</li>
+<li>Residual ±1–3 pt differences in HTN/T2DM/dyslipidaemia/CKD reflect
+the paper’s under-specified composite definitions (“as previously
+described”).</li>
+<li>N differs by +71 (1.1%), almost entirely the alcohol-exclusion
+ambiguity above.</li>
+</ul>
+<hr />
+</div>
+<div id="map-to-the-course-project-increments-p1p5" class="section level2">
+<h2>7. Map to the course project increments (P1–P5)</h2>
+<p>This reproduction <em>is</em> a worked example of the term project
+spine — and at two of the five increments, a worked example of what the
+increment has to <em>repair</em>:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Increment</th>
+<th>Course task</th>
+<th>Where it lives in this reproduction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>P1 — Analytic cohort</strong></td>
+<td>rebuild the cohort and type every funnel step</td>
+<td><code>02_build_analytic.R</code> +
+<code>logs/sample_funnel.csv</code>; §1 above is the typed funnel, and
+the alcohol-exclusion finding (#2) is the P1 eligibility judgment
+call</td>
+</tr>
+<tr class="even">
+<td><strong>P2 — Confounding diagnostic (Table 1)</strong></td>
+<td>Table 1, variable roles, crude vs adjusted</td>
+<td><code>03_table1.R</code> and §2; the BMI cut-point labelling
+discrepancy (#1) and the composite comorbidity definitions are the P2
+interrogation targets</td>
+</tr>
+<tr class="odd">
+<td><strong>P3 — Effect modification</strong></td>
+<td>stratum-specific estimates plus a formal interaction test, on the
+locked contrast</td>
+<td><strong>not in this pipeline</strong> — no script here fits an
+interaction. P3 is where a group adds one</td>
+</tr>
+<tr class="even">
+<td><strong>P4 — Design-aware main estimate</strong></td>
+<td>replicate the headline, then re-estimate the way the design
+demands</td>
+<td><code>04_table2_cox.R</code> replicates the <em>unweighted</em>
+headline; the survey-design omission (#5) is precisely what P4 repairs,
+using <code>WTSAF2YR</code> on the locked domain (§1)</td>
+</tr>
+<tr class="odd">
+<td><strong>P5 — Missing-data sensitivity</strong></td>
+<td>analyse the genuine missingness, and scope the rest</td>
+<td>the <strong>792 FLI item-nonresponse losses</strong> and the
+complete-case covariate loss in Models 1–2 (§1). The fasting-subsample
+restriction is <strong>DESIGN</strong>, not missingness: it is answered
+by the P4 weight and by a sentence naming the population it leaves you
+with, never by imputation</td>
+</tr>
+</tbody>
+</table>
+<p>Naming the <strong>single dominant threat</strong> is not a weekly
+increment; it is the analytic-judgment core of <strong>M1</strong>. The
+candidates this reproduction surfaces are FLI circularity (#4), the
+survey-design omission (#5), and the under-specified WHtR spline
+(#6).</p>
+<p><strong>What this reproduction does and does not establish.</strong>
+The pipeline reproduces the paper’s analysis, and the discrepancies
+above are documented rather than tuned away. Read crudely, Group IV has
+the poorest observed survival, and the paper reports exactly that —
+<strong>that descriptive claim does follow</strong>. Read adjusted, the
+picture is different: the Model 2 estimates for Groups III and IV are
+near enough to each other to be indistinguishable (repro 2.99 vs 2.91;
+paper 3.03 vs 2.89, both against Group I), so the adjusted results
+<strong>do not provide clear evidence</strong> that Group IV has higher
+mortality than Group III. Estimated directly on the locked domain, that
+contrast is compatible with no difference as well as with a meaningful
+increase — 1.06 (0.77–1.45) unweighted and 1.29 (0.90–1.86) design-aware
+(course increments P2 and P4).</p>
+<p>So the replication succeeds, and the disagreement is not with the
+authors’ arithmetic but with which contrast supports the stated
+conclusion. Do not report this reproduction as confirming the stronger,
+comparative reading — that the Group IV phenotype carries higher
+mortality than Group III, and does so independently of overall body
+weight. Neither the published table nor this pipeline establishes
+that.</p>
 </div>
 </div>
 

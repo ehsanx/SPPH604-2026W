@@ -4,7 +4,7 @@ Six in-person labs, Thursdays 10 am–12 pm in **SPPH 143**, Weeks 2–7.
 
 Each lab teaches one method on a fixed teaching dataset. The matching **practice
 increment** then applies that same method to your own locked paper — see
-[`../practice/`](../practice/).
+[`practice/`](https://ehsanx.github.io/SPPH604-2026W/practice/README.html).
 
 | Lab | Topic | Feeds | Due |
 |---|---|:--:|---|

@@ -8,7 +8,7 @@ NHANES 2007–2018). Each assignment has its **own subfolder** containing:
 - a step-by-step **`.qmd`** that produces the numbers in that submission; the code is the source of truth and the prose follows it
   (plus a rendered `.html` so students can read code + output without running it).
 
-These accompany the assignment handouts in [`practice/`](https://github.com/ehsanx/SPPH604-2026W/tree/main/practice) — `P1_analytic_cohort.md` … `P5_missing_data.md`, and [`README.md`](../practice/README.md).
+These accompany the assignment handouts in [`practice/`](https://github.com/ehsanx/SPPH604-2026W/tree/main/practice) — `P1_analytic_cohort.md` … `P5_missing_data.md`, and [`practice/README.md`](https://ehsanx.github.io/SPPH604-2026W/practice/README.html).
 Students do this on **their own** M0-locked paper; this is the instructor's answer key.
 
 ## Two kinds of example, and why the difference matters

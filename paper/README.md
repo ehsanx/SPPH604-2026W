@@ -40,7 +40,7 @@ the closest thing to a worked example of the M2 genre. To get it:
 | Group IV HR, unadjusted → adjusted | 15.13 → 2.89 | 15.14 → 2.91 |
 
 The gap is documented rather than tuned away — see
-[`../examples/M1_replication/`](../examples/M1_replication/).
+[`examples/M1_replication/`](https://ehsanx.github.io/SPPH604-2026W/examples/M1_replication/M1_replication_deck.html).
 
 ---
 
@@ -88,4 +88,4 @@ asks for *one justified* missing-data analysis. A reasoned refusal is a justific
 
 NHANES microdata and NCHS linked mortality files are **US government public-domain data**,
 not covered by either licence above, and not redistributed here.
-[`../reproduction/R/01_download.R`](../reproduction/R/) fetches them from CDC.
+[`reproduction/R/01_download.R`](https://ehsanx.github.io/SPPH604-2026W/reproduction/R/01_download.R) fetches them from CDC.

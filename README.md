@@ -59,9 +59,9 @@ The full rules are in the [syllabus](syllabus/SPPH604-syllabus-2026W.pdf).
    easiest way to navigate the course.
 2. Read the [syllabus](syllabus/SPPH604-syllabus-2026W.pdf) — it is authoritative on
    deadlines, weights, grading, and policy.
-3. Use the [weekly map](https://ehsanx.github.io/SPPH604-2026W/weekly.html) to see which
+3. Use the [course map](https://ehsanx.github.io/SPPH604-2026W/#how-the-course-fits-together) to see which
    lecture, lab, project increment, and milestone belong together.
-4. Use the [assignments guide](https://ehsanx.github.io/SPPH604-2026W/assignments.html)
+4. Use the [milestone index](https://ehsanx.github.io/SPPH604-2026W/#milestones)
    when you need to know what to do, what to submit, how it is graded, and what it feeds.
 5. Skim [`practice/README.md`](https://ehsanx.github.io/SPPH604-2026W/practice/README.html) — it explains how P1–P5 build into M1.
 6. Look at one worked example, for example
@@ -70,7 +70,7 @@ The full rules are in the [syllabus](syllabus/SPPH604-syllabus-2026W.pdf).
    R, RStudio, the PDF toolchain, a GitHub account, and a test knit.
 
 If you already know the filename you need, open [`index.md`](index.md) or use the
-[searchable file catalogue](https://ehsanx.github.io/SPPH604-2026W/files.html).
+[complete file catalogue](https://ehsanx.github.io/SPPH604-2026W/ARTIFACTS.html).
 
 ## The demonstration paper
 
