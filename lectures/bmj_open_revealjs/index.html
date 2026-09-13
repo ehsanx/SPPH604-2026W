@@ -245,7 +245,10 @@
   <h1>Survey design: paper versus reproduction</h1>
   <p>NHANES is a <strong>complex, multistage probability sample</strong>.</p>
   <p>For analyses using fasting triglycerides, CDC provides the fasting-subsample weight <code>WTSAF2YR</code>, together with strata and PSU variables.</p>
-  <h3>Important distinction</h3>
+</section>
+
+<section>
+  <h1>Survey design: the distinction that matters</h1>
   <ul>
     <li>The <strong>published paper's Statistical analysis section does not report using NHANES survey weights, strata or PSUs</strong>.</li>
     <li>Our reproduction pipeline includes survey-design variables and fasting-subsample weights.</li>
@@ -361,6 +364,10 @@
     </tbody>
   </table>
   <div class="callout">The largest single exclusion in <strong>our reproduction</strong> is the fasting subsample — a design feature because the analysis uses fasting triglycerides.</div>
+</section>
+
+<section>
+  <h1>What the funnel reveals</h1>
   <p><strong>Reproducibility note:</strong> the published paper reports <strong>6,300</strong> participants with MASLD, whereas this pipeline yields <strong>6,048</strong> mortality-linked participants. The two numbers should not be presented as if they were the same cohort.</p>
   <p>The paper also states eligibility as <strong>age &gt;18 years</strong>, while this reproduction flow uses <strong>age ≥18</strong>. Small implementation differences like this should be recorded rather than silently harmonized.</p>
 </section>
@@ -434,7 +441,10 @@
       <tr><td><strong>Causal</strong></td><td>A prespecified causal contrast—preferably an absolute risk/survival difference or ratio at a fixed time, or RMST difference—plus diagnostics for positivity/weights/balance and sensitivity analyses for unmeasured confounding/selection</td></tr>
     </tbody>
   </table>
-  <h3>A useful distinction</h3>
+</section>
+
+<section>
+  <h1>HR + CI: what it is, and is not, evidence for</h1>
   <p><strong>HR + CI</strong> can be enough to report an adjusted association or prognostic-factor effect.</p>
   <p>It is <strong>not</strong> evidence that a prediction model is good, and it is <strong>not</strong> by itself evidence that a causal effect has been identified.</p>
 </section>

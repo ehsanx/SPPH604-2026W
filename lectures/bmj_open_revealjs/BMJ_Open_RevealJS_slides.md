@@ -101,7 +101,9 @@ NHANES is a **complex, multistage probability sample**.
 
 For analyses using fasting triglycerides, CDC provides the fasting-subsample weight `WTSAF2YR`, together with strata and PSU variables.
 
-### Important distinction
+---
+
+# Survey design: the distinction that matters
 
 - The **published paper's Statistical analysis section does not report using NHANES survey weights, strata or PSUs**.
 - Our reproduction pipeline includes survey-design variables and fasting-subsample weights.
@@ -230,6 +232,10 @@ There is no single “treated” group and “control” group.
 
 > The largest single exclusion in **our reproduction** is the fasting subsample — a design feature because the analysis uses fasting triglycerides.
 
+---
+
+# What the funnel reveals
+
 **Reproducibility note:** the published paper reports **6,300** participants with MASLD, whereas this pipeline yields **6,048** mortality-linked participants. The two numbers should not be presented as if they were the same cohort.
 
 The paper also states eligibility as **age >18 years**, while this reproduction flow uses **age ≥18**. Small implementation differences like this should be recorded rather than silently harmonized.
@@ -304,7 +310,9 @@ After multivariable adjustment: does phenotype remain associated with mortality 
 | **Prediction** | **Calibration** (plot, calibration-in-the-large, slope), **discrimination** (C-index/time-dependent AUC), overall error such as **Brier score**, plus internal/external validation; clinical use may require decision-curve/net-benefit analysis |
 | **Causal** | A prespecified causal contrast—preferably an absolute risk/survival difference or ratio at a fixed time, or RMST difference—plus diagnostics for positivity/weights/balance and sensitivity analyses for unmeasured confounding/selection |
 
-### A useful distinction
+---
+
+# HR + CI: what it is, and is not, evidence for
 
 **HR + CI** can be enough to report an adjusted association or prognostic-factor effect.
 
