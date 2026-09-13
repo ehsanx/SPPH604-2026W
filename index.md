@@ -119,6 +119,14 @@ scientific-review story rather than four independent model answers.
 | **6** | Complex survey design | [HTML](lectures/Week6_complex_survey_design.html) · [PDF](lectures/Week6_complex_survey_design.pdf) · [Source](lectures/Week6_complex_survey_design.md) | [HTML](lectures/slides/Week6_survey_slides.html) · [PDF](lectures/slides/Week6_survey_slides.pdf) · [Source](https://github.com/ehsanx/SPPH604-2026W/blob/main/lectures/slides/Week6_survey_slides.qmd) |
 | **7** | Missing data | [HTML](lectures/Week7_missing_data.html) · [PDF](lectures/Week7_missing_data.pdf) · [Source](lectures/Week7_missing_data.md) | [HTML](lectures/slides/Week7_missing_slides.html) · [PDF](lectures/slides/Week7_missing_slides.pdf) · [Source](https://github.com/ehsanx/SPPH604-2026W/blob/main/lectures/slides/Week7_missing_slides.qmd) |
 
+### Reading the demonstration paper
+
+| Deck | What it covers |
+|---|---|
+| [Decomposing the study aim](https://ehsanx.github.io/SPPH604-2026W/lectures/bmj_open_revealjs/) | Turning the paper’s published aim into a PECOT research question, and the NHANES variables and component files each piece rests on. [Source](https://github.com/ehsanx/SPPH604-2026W/blob/main/lectures/bmj_open_revealjs/BMJ_Open_RevealJS_slides.md) |
+
+**Work through this before L1.** It names every NHANES variable the demonstration paper uses and the component file each one comes from, so the merge in the lab is not the first time you meet them.
+
 Later weeks shift from lectures to milestone presentations, review, defense, and the closing
 session. See the syllabus for the formal schedule.
 

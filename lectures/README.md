@@ -73,6 +73,16 @@ owes a trim in its own file, not a footnote here. This README publishes no table
 current totals on purpose — it would be a frozen snapshot of seven files it does not own,
 and stale the first time one of them is retimed.
 
+## Reading the demonstration paper (`bmj_open_revealjs/`)
+
+A standalone reveal.js deck that decomposes the paper's published aim into a PECOT
+question, states how MASLD was actually ascertained (the Fatty Liver Index, not imaging),
+and lists every NHANES variable the study uses beside the component file it comes from.
+Intended to be worked through **before L1**.
+
+Open it at
+[ehsanx.github.io/SPPH604-2026W/lectures/bmj_open_revealjs/](https://ehsanx.github.io/SPPH604-2026W/lectures/bmj_open_revealjs/).
+
 ## Built decks (`slides/`)
 
 The plans have been turned into finished **Quarto `revealjs` decks** in
