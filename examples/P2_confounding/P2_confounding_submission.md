@@ -18,7 +18,7 @@ We reproduced the descriptive table from the raw NHANES 2007–2018 files. Repro
 | BMI, kg/m² (median) | 33.2 | 33.2 |
 | SBP / DBP, mm Hg | 124 / 72 | 124 / 72 |
 | Current smoking (% of ever-smokers) | 1,238 (40.9) | 1,210 (40.6) |
-| Hypertension, n (%) | 3,444 (54.1) | 3,238 (52.6) |
+| Hypertension, n (%) | 3,448 (54.1) | 3,238 (52.6) |
 | Type 2 diabetes, n (%) | 1,595 (25.0) | 1,645 (26.1) |
 | Dyslipidaemia, n (%) | 3,839 (60.3) | 3,612 (57.7) |
 | CKD, n (%) | 1,296 (20.3) | 1,142 (18.1) |

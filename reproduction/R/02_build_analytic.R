@@ -90,6 +90,26 @@ cat("Merged raw participants (all cycles):", nrow(dat), "\n")
 
 ## ---- derived clinical variables -------------------------------------------
 yn <- function(x) as.integer(x == 1)              # NHANES 1=Yes, 2=No -> 1/0
+
+## NHANES mean blood pressure, per the Blood Pressure Procedures Manual s3.1.7.3.
+## Readings are taken in order; a fourth exists only when one attempt was interrupted,
+## so "how many were obtained" is what matters, not which columns are populated.
+bp_average <- function(r1, r2, r3, r4, diastolic) {
+  m <- cbind(r1, r2, r3, r4)
+  vapply(seq_len(nrow(m)), function(i) {
+    v <- m[i, ]
+    v <- v[!is.na(v)]                       # readings actually obtained, in order
+    if (length(v) == 0L) return(NA_real_)
+    if (length(v) >  1L) v <- v[-1]         # the first reading is always excluded
+    if (diastolic) {
+      # A zero is a measurement. It stands alone, but never dilutes a positive one.
+      if (all(v == 0)) return(0)
+      v <- v[v > 0]
+    }
+    if (length(v) == 0L) return(NA_real_)
+    mean(v)
+  }, numeric(1))
+}
 dat <- dat %>% mutate(
   age    = RIDAGEYR,
   female = as.integer(RIAGENDR == 2),
@@ -99,15 +119,45 @@ dat <- dat %>% mutate(
   waist  = BMXWAIST,
   height = BMXHT,
   whtr   = BMXWAIST / BMXHT,
-  # blood pressure: mean of available readings; DBP=0 is "not obtainable" -> NA
-  sbp = rowMeans(cbind(BPXSY1,BPXSY2,BPXSY3,BPXSY4), na.rm = TRUE),
-  dbp = rowMeans(cbind(na_if(BPXDI1,0),na_if(BPXDI2,0),na_if(BPXDI3,0),na_if(BPXDI4,0)), na.rm=TRUE),
+  # Blood pressure: NHANES averaging protocol, not a plain rowMeans.
+  #
+  # Source: NHANES Blood Pressure Procedures Manual, section 3.1.7.3 "Averaging Rules
+  # for Determining Mean Blood Pressure", and the BPX data-file documentation
+  # ("Systolic blood pressure cannot be zero (diastolic blood pressure can be zero)").
+  #
+  #   - one reading obtained        -> that reading is the average;
+  #   - more than one               -> THE FIRST READING IS ALWAYS EXCLUDED;
+  #   - diastolic, all zero         -> the average is zero;
+  #   - diastolic, zero alongside a positive reading -> the zero is NOT used.
+  #
+  # Two earlier versions of this line were wrong in different ways. na_if(BPXDI*, 0)
+  # treated a measured zero as missing, which NHANES explicitly says it is not. Plain
+  # rowMeans over all four readings then averaged zeros in alongside positive readings,
+  # which the protocol's exception forbids, and kept the first reading, which it excludes.
+  sbp = bp_average(BPXSY1, BPXSY2, BPXSY3, BPXSY4, diastolic = FALSE),
+  dbp = bp_average(BPXDI1, BPXDI2, BPXDI3, BPXDI4, diastolic = TRUE),
   # Fatty Liver Index (Bedogni 2006); needs TG(mg/dL), BMI, GGT(U/L), waist(cm)
   fli_L = 0.953*log(LBXTR) + 0.139*BMXBMI + 0.718*log(LBXSGTSI) + 0.053*BMXWAIST - 15.745,
   fli   = exp(fli_L) / (1 + exp(fli_L)) * 100,
   steatosis = as.integer(fli >= 60)
 )
 dat$sbp[is.nan(dat$sbp)] <- NA; dat$dbp[is.nan(dat$dbp)] <- NA
+
+## ---- regression check: a measured DBP of 0 must not become missing ---------
+## NHANES records "not obtainable" as NA, separately from a measured 0, and both
+## appear in BPXDI1-4. An earlier version of the line above ran na_if(BPXDI*, 0),
+## which silently turned 277 all-zero records into NA. This asserts they survive.
+local({
+  m  <- as.matrix(dat[, c("BPXDI1","BPXDI2","BPXDI3","BPXDI4")])
+  az <- rowSums(m == 0, na.rm = TRUE) > 0 & rowSums(m > 0, na.rm = TRUE) == 0
+  n_az <- sum(az)
+  lost <- sum(az & is.na(dat$dbp))
+  if (lost > 0)
+    stop(sprintf(paste("DBP regression: %d of %d participants whose diastolic readings",
+                       "are all zero came out missing. A measured 0 is a value, not a",
+                       "missing-data code - check for na_if(BPXDI*, 0)."), lost, n_az))
+  cat("DBP check: all-zero diastolic records retained:", n_az, "\n")
+})
 
 ## ---- MASLD cardiometabolic criteria (>=1 required) ------------------------
 dat <- dat %>% mutate(
@@ -221,8 +271,11 @@ dat <- dat %>% left_join(mort, by = "SEQN") %>% mutate(
 ## Two row sets, kept apart, and every step typed.
 ##   FULL ANALYTIC FILE - the row set the paper itself analyses, and the cohort
 ##     this script saves. No fasting-frame filter.
-##   LOCKED DOMAIN      - its subset carrying a valid WTSAF2YR: the only rows on
-##     which a design-aware estimate is possible. P1 locks it; P2-P5 use it.
+##   LOCKED DOMAIN      - its subset carrying a valid WTSAF2YR (n = 6,048): the only
+##     rows on which a design-aware estimate is possible, used where a design-aware
+##     analysis is explicitly specified. The reproduction scripts below (03-06) all
+##     read masld_analytic.rds, which is the FULL analytic file, unless a script says
+##     otherwise - so quote the row set with any N taken from them.
 ## A funnel shows N falling and does not show WHY, so every row carries a type:
 ## ELIGIBILITY / DESIGN / MISSINGNESS / TARGET POPULATION / OUTCOME ASCERTAINMENT.
 ## The fasting subsample is DESIGN, not missingness - NHANES selected it

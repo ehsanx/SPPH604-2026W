@@ -95,11 +95,11 @@ adiposity = WHtR ≥ 0.6.
 | Female, n (%) | 2,997 (47.0) | 2,973 (47.2) | ✓ |
 | Waist, cm (median IQR) | 110.5 (103.7–119.5) | 111.0 (104.0–120.0) | ✓ |
 | BMI, kg/m² | 33.2 (30.1–37.4) | 33.2 (30.2–37.4) | ✓ exact median |
-| Systolic BP | 124.0 (114.7–136.0) | 124.0 (114.0–135.0) | ✓ |
-| Diastolic BP | 72.0 (64.0–79.3) | 72.0 (64.7–79.3) | ✓ |
+| Systolic BP | 124.0 (114.0–136.0) | 124.0 (114.0–135.0) | ✓ |
+| Diastolic BP | 72.0 (64.0–79.0) | 72.0 (64.7–79.3) | ✓ |
 | Current smoking | 1,238 (40.9) | 1,210 (40.6) | ✓ |
 | Family history CHD | 911 (14.6) | 904 (15.0) | ✓ |
-| Hypertension | 3,444 (54.1) | 3,238 (52.6) | ≈ (+1.5) |
+| Hypertension | 3,448 (54.1) | 3,238 (52.6) | ≈ (+1.5) |
 | T2DM | 1,595 (25.0) | 1,645 (26.1) | ≈ (−1.1) |
 | Dyslipidaemia | 3,839 (60.3) | 3,612 (57.7) | ≈ (+2.6) |
 | CKD | 1,296 (20.3) | 1,142 (18.1) | ≈ (+2.2) |
@@ -226,6 +226,18 @@ Full three-model table in `output/tables/table2_reproduced.csv`.
 - Residual ±1–3 pt differences in HTN/T2DM/dyslipidaemia/CKD reflect the paper's
   under-specified composite definitions ("as previously described").
 - N differs by +71 (1.1%), almost entirely the alcohol-exclusion ambiguity above.
+- **Blood pressure follows the documented NHANES averaging protocol, not a plain mean.**
+  The Blood Pressure Procedures Manual (s3.1.7.3) excludes the first reading whenever more
+  than one was obtained, treats an all-zero diastolic set as zero, and omits a zero that
+  sits alongside a positive diastolic reading. The published paper does not specify its BP
+  averaging implementation in enough detail to establish that it used the same algorithm,
+  so this is a **documentation-informed analytic choice, not a claim of exact computational
+  reproduction** - the same status as the alcohol-exclusion switch above.
+  Correcting it changed the derived SBP/DBP for 5,523 of 6,371 participants and moved
+  hypertension from 3,444 to 3,448. Cohort N, phenotype cell counts and deaths did not
+  move, and the adjusted hazard ratios shifted only in the third significant figure
+  (Group IV Model 2: 2.91 (1.18-7.20) -> 2.91 (1.18-7.21)). A coding error can be real and
+  worth fixing even when the headline estimate turns out to be robust to it.
 
 ---
 
