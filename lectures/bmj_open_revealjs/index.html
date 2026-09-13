@@ -488,6 +488,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.js"></script>
 <script>
+  var DECK_W = 1280, DECK_H = 720;
+
   Reveal.initialize({
     hash: true,
     controls: true,
@@ -495,10 +497,45 @@
     center: true,
     transition: 'slide',
     slideNumber: 'c/t',
-    width: 1280,
-    height: 720,
+    width: DECK_W,
+    height: DECK_H,
     margin: 0.06
   });
+
+  // Auto-fit: shrink any slide taller than the deck until it fits.
+  //
+  // reveal.js scales the whole deck to the window but does NOT scale an individual
+  // slide whose content is taller than the configured height - it simply overflows,
+  // and on a projector the bottom rows are cut off with nothing on screen to say so.
+  // Three slides in this deck did exactly that (972px, 849px and 839px against a 720
+  // budget), all of them wide tables.
+  //
+  // This measures each slide once and steps its font size down until it fits, to a
+  // floor of 60% so nothing becomes unreadable. It is a PRESENTATION fix applied to
+  // the scaffold, so slide content never has to be trimmed to satisfy the geometry.
+  function autofit() {
+    var budget = DECK_H - 16;          // leave room for the slide-number chrome
+    var slides = document.querySelectorAll('.slides > section');
+    for (var i = 0; i < slides.length; i++) {
+      var s = slides[i];
+      var wasDisplay = s.style.display, wasVis = s.style.visibility;
+      s.style.display = 'block';
+      s.style.visibility = 'hidden';
+      s.style.fontSize = '';
+      var scale = 1;
+      while (s.scrollHeight > budget && scale > 0.6) {
+        scale -= 0.05;
+        s.style.fontSize = (scale * 100).toFixed(0) + '%';
+      }
+      if (scale < 1) {
+        s.setAttribute('data-autofit', scale.toFixed(2));
+      }
+      s.style.display = wasDisplay;
+      s.style.visibility = wasVis;
+    }
+  }
+
+  if (Reveal.isReady()) { autofit(); } else { Reveal.on('ready', autofit); }
 </script>
 </body>
 </html>
