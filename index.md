@@ -82,13 +82,13 @@ and defense.
 
 | Increment | Topic | Read online | PDF | Source | Worked example |
 |---|---|:--:|:--:|:--:|---|
-| **P1** | Analytic cohort | [HTML](practice/P1_analytic_cohort.html) | [PDF](practice/P1_analytic_cohort.pdf) | [md](practice/P1_analytic_cohort.md) | [Example](examples/P1_analytic_cohort/) |
-| **P2** | Confounding & Table 1 | [HTML](practice/P2_confounding_diagnostic.html) | [PDF](practice/P2_confounding_diagnostic.pdf) | [md](practice/P2_confounding_diagnostic.md) | [Example](examples/P2_confounding/) |
-| **P3** | Effect modification | [HTML](practice/P3_effect_modification.html) | [PDF](practice/P3_effect_modification.pdf) | [md](practice/P3_effect_modification.md) | [Example](examples/P3_effect_modification/) |
-| **P4** | Design-aware estimate | [HTML](practice/P4_design_aware_estimate.html) | [PDF](practice/P4_design_aware_estimate.pdf) | [md](practice/P4_design_aware_estimate.md) | [Example](examples/P4_design_aware/) |
-| **P5** | Missing-data sensitivity | [HTML](practice/P5_missing_data.html) | [PDF](practice/P5_missing_data.pdf) | [md](practice/P5_missing_data.md) | [Example](examples/P5_missing_data/) |
+| **P1** | Analytic cohort | [HTML](practice/P1_analytic_cohort.html) | [PDF](practice/P1_analytic_cohort.pdf) | [md](https://github.com/ehsanx/SPPH604-2026W/blob/main/practice/P1_analytic_cohort.md) | [Example](https://ehsanx.github.io/SPPH604-2026W/examples/P1_analytic_cohort/P1_analytic_cohort_submission.html) |
+| **P2** | Confounding & Table 1 | [HTML](practice/P2_confounding_diagnostic.html) | [PDF](practice/P2_confounding_diagnostic.pdf) | [md](https://github.com/ehsanx/SPPH604-2026W/blob/main/practice/P2_confounding_diagnostic.md) | [Example](https://ehsanx.github.io/SPPH604-2026W/examples/P2_confounding/P2_confounding_submission.html) |
+| **P3** | Effect modification | [HTML](practice/P3_effect_modification.html) | [PDF](practice/P3_effect_modification.pdf) | [md](https://github.com/ehsanx/SPPH604-2026W/blob/main/practice/P3_effect_modification.md) | [Example](https://ehsanx.github.io/SPPH604-2026W/examples/P3_effect_modification/P3_effect_modification_submission.html) |
+| **P4** | Design-aware estimate | [HTML](practice/P4_design_aware_estimate.html) | [PDF](practice/P4_design_aware_estimate.pdf) | [md](https://github.com/ehsanx/SPPH604-2026W/blob/main/practice/P4_design_aware_estimate.md) | [Example](https://ehsanx.github.io/SPPH604-2026W/examples/P4_design_aware/P4_design_aware_submission.html) |
+| **P5** | Missing-data sensitivity | [HTML](practice/P5_missing_data.html) | [PDF](practice/P5_missing_data.pdf) | [md](https://github.com/ehsanx/SPPH604-2026W/blob/main/practice/P5_missing_data.md) | [Example](https://ehsanx.github.io/SPPH604-2026W/examples/P5_missing_data/P5_missing_data_submission.html) |
 
-[Practice overview — PDF](practice/README.pdf) · [Practice overview — source](practice/README.md)
+[Practice overview — PDF](practice/README.pdf) · [Practice overview — source](https://ehsanx.github.io/SPPH604-2026W/practice/README.html)
 
 ---
 
@@ -96,11 +96,11 @@ and defense.
 
 | Milestone | What you do | Read online | PDF | Source | Worked example |
 |---|---|:--:|:--:|:--:|---|
-| **M0** | Feasibility gate — lock a viable paper and analysis plan | [HTML](milestones/M0_assignment.html) | [PDF](milestones/M0_assignment.pdf) | [md](milestones/M0_assignment.md) | [Example](examples/M0_feasibility/) |
-| **M1** | Replication + interrogation — assemble the project and make the dominant-threat judgment | [HTML](milestones/M1_assignment.html) | [PDF](milestones/M1_assignment.pdf) | [md](milestones/M1_assignment.md) | [Example](examples/M1_replication/) |
-| **M2** | Critique another group's actual M1 | [HTML](milestones/M2_assignment.html) | [PDF](milestones/M2_assignment.pdf) | [md](milestones/M2_assignment.md) | [Example](examples/M2_critique/) |
-| **M3** | Improve + defend — respond to review, make any additional changes you identify, and justify final decisions | [HTML](milestones/M3_assignment.html) | [PDF](milestones/M3_assignment.pdf) | [md](milestones/M3_assignment.md) | [Example](examples/M3_defense/) |
-| **M4** | Final reanalysis letter + reproducible repository | [HTML](milestones/M4_assignment.html) | [PDF](milestones/M4_assignment.pdf) | [md](milestones/M4_assignment.md) | [Example](examples/M4_reanalysis_letter/) |
+| **M0** | Feasibility gate — lock a viable paper and analysis plan | [HTML](milestones/M0_assignment.html) | [PDF](milestones/M0_assignment.pdf) | [md](milestones/M0_assignment.md) | [Example](https://ehsanx.github.io/SPPH604-2026W/examples/M0_feasibility/M0_feasibility_memo.html) |
+| **M1** | Replication + interrogation — assemble the project and make the dominant-threat judgment | [HTML](milestones/M1_assignment.html) | [PDF](milestones/M1_assignment.pdf) | [md](milestones/M1_assignment.md) | [Example](https://ehsanx.github.io/SPPH604-2026W/examples/M1_replication/M1_replication_deck.html) |
+| **M2** | Critique another group's actual M1 | [HTML](milestones/M2_assignment.html) | [PDF](milestones/M2_assignment.pdf) | [md](milestones/M2_assignment.md) | [Example](https://ehsanx.github.io/SPPH604-2026W/examples/M2_critique/M2_critique_deck.html) |
+| **M3** | Improve + defend — respond to review, make any additional changes you identify, and justify final decisions | [HTML](milestones/M3_assignment.html) | [PDF](milestones/M3_assignment.pdf) | [md](milestones/M3_assignment.md) | [Example](https://ehsanx.github.io/SPPH604-2026W/examples/M3_defense/M3_defense.html) |
+| **M4** | Final reanalysis letter + reproducible repository | [HTML](milestones/M4_assignment.html) | [PDF](milestones/M4_assignment.pdf) | [md](milestones/M4_assignment.md) | [Example](https://ehsanx.github.io/SPPH604-2026W/examples/M4_reanalysis_letter/M4_reanalysis_letter.html) |
 
 **Read the M1 → M2 → M3 → M4 worked examples in order.** They form one continuous
 scientific-review story rather than four independent model answers.
@@ -145,15 +145,15 @@ Where a reference document has no compiled HTML version, the link is explicitly 
 
 | Folder / file | Purpose |
 |---|---|
-| [`syllabus/`](syllabus/) | Formal course syllabus |
+| [`syllabus/`](https://ehsanx.github.io/SPPH604-2026W/syllabus/SPPH604-syllabus-2026W.pdf) | Formal course syllabus |
 | [`labs/`](labs/) | L0 setup and L1–L6 lab handouts |
 | [`lectures/`](lectures/) | Weekly lecture plans and slide decks |
-| [`practice/`](practice/) | P1–P5 project increments |
+| [`practice/`](https://ehsanx.github.io/SPPH604-2026W/practice/README.html) | P1–P5 project increments |
 | [`milestones/`](milestones/) | M0–M4 assignment briefs |
 | [`examples/`](examples/) | Worked model answers and exemplar artifacts |
 | [`paper/`](paper/) | Demonstration/companion papers and attribution |
 | [`reproduction/`](reproduction/) | Reproducible analysis code and reports |
-| [`tools/`](tools/) | Repository rendering utilities; students normally do not need this folder |
+| [`tools/`](https://github.com/ehsanx/SPPH604-2026W/tree/main/tools) | Repository rendering utilities; students normally do not need this folder |
 | [**README.html**](README.html) | Course/repository overview |
 | [**ARTIFACTS.html**](ARTIFACTS.html) | Complete compiled-artifact catalogue |
 | `README.md`, `ARTIFACTS.md`, `index.md` | Source versions of the root pages |

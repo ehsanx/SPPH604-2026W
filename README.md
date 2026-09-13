@@ -43,9 +43,9 @@ The full rules are in the [syllabus](syllabus/SPPH604-syllabus-2026W.pdf).
 
 | Folder | What's in it |
 |---|---|
-| [`syllabus/`](syllabus/) | The syllabus. Authoritative on deadlines, weights and policy. |
+| [`syllabus/`](https://ehsanx.github.io/SPPH604-2026W/syllabus/SPPH604-syllabus-2026W.pdf) | The syllabus. Authoritative on deadlines, weights and policy. |
 | [`labs/`](labs/) | L0 setup (self-study) and the L1–L6 handouts. Labs run Thursdays 10–12, SPPH 143, Weeks 2–7. |
-| [`practice/`](practice/) | P1–P5 handouts — the same methods applied to your own paper. |
+| [`practice/`](https://ehsanx.github.io/SPPH604-2026W/practice/README.html) | P1–P5 handouts — the same methods applied to your own paper. |
 | [`milestones/`](milestones/) | M0–M4 assignment briefs — what each milestone asks for. |
 | [`examples/`](examples/) | **Worked model answers** for P1–P5 and M0–M4, on the demonstration paper. |
 | [`reproduction/`](reproduction/) | The full R pipeline behind the demonstration paper. |
@@ -63,9 +63,9 @@ The full rules are in the [syllabus](syllabus/SPPH604-syllabus-2026W.pdf).
    lecture, lab, project increment, and milestone belong together.
 4. Use the [assignments guide](https://ehsanx.github.io/SPPH604-2026W/assignments.html)
    when you need to know what to do, what to submit, how it is graded, and what it feeds.
-5. Skim [`practice/README.md`](practice/README.md) — it explains how P1–P5 build into M1.
+5. Skim [`practice/README.md`](https://ehsanx.github.io/SPPH604-2026W/practice/README.html) — it explains how P1–P5 build into M1.
 6. Look at one worked example, for example
-   [`examples/P1_analytic_cohort/`](examples/P1_analytic_cohort/), to see the standard.
+   [`examples/P1_analytic_cohort/`](https://ehsanx.github.io/SPPH604-2026W/examples/P1_analytic_cohort/P1_analytic_cohort_submission.html), to see the standard.
 7. Work through [`labs/L0_setup.md`](labs/L0_setup.md) **before the first class** —
    R, RStudio, the PDF toolchain, a GitHub account, and a test knit.
 
