@@ -51,14 +51,17 @@ here, not extra content:
 - MASLD hook: FLI needs triglycerides + GGT (lab) + BMI + waist (MEC) — the exposure spans *two* settings, so a person missing either is missing the exposure.
 
 ## Slide 5 — SEQN: the key that holds it together (7 min)
-- Every respondent has one **SEQN** (respondent sequence number), unique within a cycle.
+- Every respondent has one **SEQN** (respondent sequence number) — the identifier CDC uses to sort and merge NHANES files.
 - Analysis = pick the topic files you need, then **merge them on SEQN** into one row-per-person table.
-- Gotcha: SEQN is unique *within* a cycle, not across cycles — you add a cycle indicator before stacking.
+- SEQN does **not** repeat across the continuous cycles. The six 2007–2018 cycles occupy contiguous, non-overlapping ranges (41,475 → 102,956) and all **59,842 values are distinct**, so joining on SEQN alone across stacked cycles is safe — which is exactly what our reproduction pipeline does.
+- Keep a **cycle variable** anyway: for provenance, for harmonising definitions that change between cycles, and because the weights are built per cycle. Not to disambiguate SEQN.
 - MASLD hook: reproducing Table 1 means merging DEMO + BMX + BIOPRO + TRIGLY + ALQ + mortality, all keyed on SEQN across six cycles.
 
 ## Slide 6 — The fasting subsample (and why it will haunt us) (7 min)
 - Some labs (fasting glucose, triglycerides for the calculation path) are collected only in the morning fasting subsample -> smaller N with its own weight (WTSAF).
-- Being in the fasting subsample is *not random* with respect to health — a preview of selection bias.
+- It is a **statistically designed subsample**, not a self-selected one, and it carries its own weight (`WTSAF2YR`) built to keep it nationally representative.
+- Check it rather than assume it: among adults, those in and out of the fasting subsample differ by **0.2 years of age, 0.02 kg/m² of BMI and 0.07 cm of waist**. It is balanced on the very measurements this paper's exposure is built from.
+- So the Week 2 distinction is **designed subsampling ≠ ordinary missingness** — *not* “the fasting subsample is a biased sample.”
 - MASLD hook: FLI needs fasting labs, so it is computable only in NHANES' **designed fasting subsample**. That absence is a *design* feature with its own weight (`WTSAF2YR`), **not** ordinary missingness. Park the distinction — it is the spine of Weeks 3, 6 and 7.
 
 ## Slide 7 — What "MASLD" actually is (6 min)
@@ -88,7 +91,7 @@ here, not extra content:
 ## Slide 12 — Extract the OUTCOME and follow-up (5 min)
 - Outcome = all-cause mortality via NHANES linked mortality files; time-to-event with median follow-up ~6.7 y.
 - Ask: mortality source, censoring date, and time origin all stated? Yes — linked NDI is standard and documented.
-- MASLD hook: the paper counts 585 all-cause deaths and our reproduction 586; Group IV unadjusted HR ~15.1 collapses to ~2.9 after adjustment — a first lesson that confounding is enormous here (Wk4 preview).
+- MASLD hook: the paper counts 585 all-cause deaths and our reproduction 586; Group IV unadjusted HR ~15.1 collapses to ~2.9 after adjustment. Conditioning on the adjustment set moves the estimate enormously. What that movement *means* — confounding controlled, mediation removed, or a collider opened — depends on the research goal and on the causal role of those variables. **Wk4 does that work; today we only note the size of the move.**
 
 ## Slide 13 — Extract ELIGIBILITY — and read it adversarially (8 min)
 - Eligibility = adults with MASLD (FLI >= 60 + >= 1 cardiometabolic criterion), with stated alcohol and missingness exclusions.

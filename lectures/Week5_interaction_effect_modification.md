@@ -10,7 +10,7 @@ Duration: 2.5 h = 150 min (Tue, before the Thu lab). The Slide 1–16 markers be
 - Preview the term's **dominant threat** (FLI circularity) that students will name at M1.
 
 ## Continuity
-- **Last week (Wk4 / L3):** we adjusted for confounders and built Table 1 (P2). Adjustment made the Group IV HR shrink from ~15 to ~2.9 — confounders *distort* one effect.
+- **Last week (Wk4 / L3):** we built Table 1 and adjusted (P2). Adjustment moved the Group IV HR from ~15 to ~2.9 — adjustment changes *one* effect estimate.
 - **Today:** a different question — does the effect *differ across subgroups*? We separate that from confounding and from bare statistical interaction.
 - **Sets up Thursday (L4):** product terms and stratum-specific estimates, which each student then runs on their own paper as **P3**.
 

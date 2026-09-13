@@ -66,7 +66,7 @@ Duration: ~2.5 h (Tue, before the Thu lab)
 ## Slide 8 — Age: the dominant confounder
 - Group mean ages differ sharply (roughly ~40 in the younger obese groups vs ~62 in the leaner high-central group).
 - Non-obese high-central adults are, on average, *older* — and age alone predicts death.
-- So a chunk of Group IV's raw excess mortality is "being older," not the phenotype.
+- So a chunk of Group IV's raw excess mortality travels with age rather than with the phenotype label. Whether that makes age a *confounder* of this contrast depends on the research goal and on age's causal role — which is what the rest of today establishes, and what Wk2 deliberately left open.
 - *MASLD hook:* the ~40-vs-~62 gap is the single largest driver of the crude HR ≈ 15.
 - ~10 min
 
