@@ -53,7 +53,7 @@ here, not extra content:
 ## Slide 5 — SEQN: the key that holds it together (7 min)
 - Every respondent has one **SEQN** (respondent sequence number) — the identifier CDC uses to sort and merge NHANES files.
 - Analysis = pick the topic files you need, then **merge them on SEQN** into one row-per-person table.
-- SEQN does **not** repeat across the continuous cycles. The six 2007–2018 cycles occupy contiguous, non-overlapping ranges (41,475 → 102,956) and all **59,842 values are distinct**, so joining on SEQN alone across stacked cycles is safe — which is exactly what our reproduction pipeline does.
+- SEQN does **not** repeat across the continuous cycles. Across the six 2007–2018 cycles all **59,842 values are distinct**, and the per-cycle ranges do not overlap (41,475–51,623, then 51,624–62,160, and so on up to 102,956 — with a gap of 1,640 between the 2011–2012 and 2013–2014 cycles, so the ranges are consecutive but not gapless). Joining on SEQN alone across stacked cycles is therefore safe — which is exactly what our reproduction pipeline does.
 - Keep a **cycle variable** anyway: for provenance, for harmonising definitions that change between cycles, and because the weights are built per cycle. Not to disambiguate SEQN.
 - MASLD hook: reproducing Table 1 means merging DEMO + BMX + BIOPRO + TRIGLY + ALQ + mortality, all keyed on SEQN across six cycles.
 

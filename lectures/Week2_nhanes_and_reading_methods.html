@@ -330,10 +330,13 @@ number) — the identifier CDC uses to sort and merge NHANES files.</li>
 <li>Analysis = pick the topic files you need, then <strong>merge them on
 SEQN</strong> into one row-per-person table.</li>
 <li>SEQN does <strong>not</strong> repeat across the continuous cycles.
-The six 2007–2018 cycles occupy contiguous, non-overlapping ranges
-(41,475 → 102,956) and all <strong>59,842 values are distinct</strong>,
-so joining on SEQN alone across stacked cycles is safe — which is
-exactly what our reproduction pipeline does.</li>
+Across the six 2007–2018 cycles all <strong>59,842 values are
+distinct</strong>, and the per-cycle ranges do not overlap
+(41,475–51,623, then 51,624–62,160, and so on up to 102,956 — with a gap
+of 1,640 between the 2011–2012 and 2013–2014 cycles, so the ranges are
+consecutive but not gapless). Joining on SEQN alone across stacked
+cycles is therefore safe — which is exactly what our reproduction
+pipeline does.</li>
 <li>Keep a <strong>cycle variable</strong> anyway: for provenance, for
 harmonising definitions that change between cycles, and because the
 weights are built per cycle. Not to disambiguate SEQN.</li>
