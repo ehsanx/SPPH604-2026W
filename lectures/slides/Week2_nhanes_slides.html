@@ -442,7 +442,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Running example: Kueh et al. (2026), MASLD / NHANES">
-  <title>Week 2 — Survey Data Sources &amp; Reading a Methods Section Critically</title>
+  <title>Week 2 — Six Questions for Reading a Methods Section</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -986,7 +986,7 @@ margin-right: 0; }
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Week 2 — Survey Data Sources &amp; Reading a Methods Section Critically</h1>
+  <h1 class="title">Week 2 — Six Questions for Reading a Methods Section</h1>
   <p class="subtitle">SPPH 604 · Application of Advanced Epidemiological Methods</p>
 
 <div class="quarto-title-authors">
@@ -1000,15 +1000,14 @@ Running example: Kueh et al. (2026), MASLD / NHANES
 </section>
 <section id="week-2" class="slide level2 center">
 <h2>Week 2</h2>
-<h3 id="survey-data-sources-reading-a-methods-section-critically">Survey Data Sources &amp; Reading a Methods Section Critically</h3>
-<p><strong>The data engine underneath the paper — and how a replicator reads Methods.</strong></p>
+<h3 id="six-questions-for-reading-a-methods-section">Six questions for reading a Methods section</h3>
+<p><strong>Know what you are trying to rebuild, before you try to rebuild it.</strong></p>
 <ul>
-<li>Data source: <strong>NHANES</strong> (public, documented, versioned)</li>
-<li>Skill: strip a Methods section for its reproducible parts</li>
+<li>One argument, not two halves: the questions come first, NHANES arrives where a question cannot be answered without it</li>
 <li>Feeds <strong>L1</strong> (Thu) and <strong>M0</strong> shortlisting (due Wk3)</li>
 </ul>
 <aside class="notes">
-<p>Welcome to Week 2. Last week we met the paper and the term-long arc; today we go one level down — into the <em>data engine</em> (NHANES) — and we practice the core replicator skill: reading a Methods section for parts. Set the tone: this is where the term’s hands-on work begins. Timing: the per-slide markers in these notes sum to ~105 min including the break; the remaining ~45 min of the 150-min session is live work and discussion on the same material — the three-way alcohol recoding at “Extract ELIGIBILITY”, the six M0 criteria, the two class prompts already in these notes, and Q&amp;A. The lecture plan carries the full split.</p>
+<p>(3 min) Timing: per-slide markers in these notes sum to 122 min including the break, against a 150-minute cap. The remaining ~28 minutes are questions, the two vote-and-argue moments, and live recomputation. The lecture plan carries the identical split — if you retime a slide, retime it in both files.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1021,17 +1020,16 @@ overflow: hidden!important;
 display:block!important;
 }</style></aside>
 </section>
-<section id="learning-objectives" class="slide level2">
-<h2>Learning objectives</h2>
+<section id="why-the-question-comes-before-the-data" class="slide level2">
+<h2>Why the question comes before the data</h2>
 <ul>
-<li>Describe <strong>NHANES structure</strong>: 2-year cycles; interview / MEC / lab components; the <code>SEQN</code> merge key; the fasting subsample</li>
-<li>Explain why MASLD is a <strong>surrogate-defined</strong> outcome here (<strong>Fatty Liver Index</strong>) — what non-invasive scores buy and cost</li>
-<li>Read a Methods section to extract the <strong>four primitives</strong>: exposure, outcome, eligibility, variables</li>
-<li>State the <strong>six M0 feasibility criteria</strong> — and place the four primitives correctly inside them: reconstructability is the <strong>pre-screen</strong>, not the whole gate</li>
-<li>Anticipate <strong>L1</strong>: download multiple NHANES cycles and merge on <code>SEQN</code></li>
+<li>The instinct is “what did they run?” — a model family answers nothing on its own</li>
+<li>A <strong>Cox model appears under four different research goals</strong></li>
+<li>Reading a Methods section <em>is</em> the first act of reproduction</li>
 </ul>
+<p><em>By the end of today: this paper answers four of six questions clearly, one partially, and one not at all.</em></p>
 <aside class="notes">
-<p>Preview the five objectives; tell students the whole lecture is organized so that by the end they can fill a four-box template for Kueh 2026 and screen any candidate paper the same way — while being clear that the four boxes are the reconstructability screen and M0 asks for six criteria. Objectives map onto slide clusters: NHANES structure (3-6), MASLD/FLI (7-8), four primitives (10-14), M0 (15-16).</p>
+<p>(4 min) Set the frame. Resist the urge to jump to the model. Tell them the scoreboard up front — four clear, one partial, one unanswered — so they are listening for which is which.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1044,16 +1042,21 @@ overflow: hidden!important;
 display:block!important;
 }</style></aside>
 </section>
-<section id="where-weve-been-where-were-going" class="slide level2">
-<h2>Where we’ve been, where we’re going</h2>
-<ul>
-<li><strong>Wk1 recap:</strong> we set up the course and only <strong>named</strong> the paper (Kueh 2026, MASLD phenotypes &amp; mortality) — one teaser slide, no methods</li>
-<li>We unpack the paper <strong>one piece at a time</strong>, the week each method needs it — <strong>today is the first piece</strong></li>
-<li><strong>Today:</strong> open the <em>data engine</em> (<strong>NHANES</strong>) + read Methods like a replicator — and meet <strong>what MASLD is</strong> and the <strong>Fatty Liver Index</strong></li>
-<li><strong>Sets up:</strong> Thu <strong>L1</strong> (multi-cycle download + merge on <code>SEQN</code>) and <strong>M0</strong> (shortlist candidate papers)</li>
-</ul>
+<section id="the-six-questions" class="slide level2 center">
+<h2>The six questions</h2>
+<ol type="1">
+<li>What is the <strong>research goal</strong>?</li>
+<li>Who is the <strong>population</strong>, and how is eligibility operationalised?</li>
+<li>What is the <strong>exposure / index factor</strong>, and the comparison?</li>
+<li>What is the <strong>outcome</strong>, time zero, and follow-up?</li>
+<li>What <strong>other variables</strong> enter, and what role are they supposed to play?</li>
+<li>What <strong>design and analysis features</strong> must be respected?</li>
+</ol>
+<blockquote>
+<p><strong>If any one is under-specified, the study is not reconstructable — no matter how clean the results look.</strong></p>
+</blockquote>
 <aside class="notes">
-<p>Continuity slide. Week 1 deliberately only <em>mentioned</em> the paper; today is the first real slice of it. Reconnect to the four-verb arc from Week 1, then make the promise concrete: everything downstream — Table 1, confounding, interaction, weights, missing data — rests on understanding this data source and reading the paper’s Methods. Say plainly: “you are not expected to know MASLD or the FLI yet — that starts now.”</p>
+<p>(6 min) Keep this slide reachable all session; every section fills one row. Stress that these are not this paper’s questions — they are the template students take to their own M0 candidates. This replaces the old “four primitives”, which asked what variables exist but never what question they were meant to answer.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1066,20 +1069,20 @@ overflow: hidden!important;
 display:block!important;
 }</style></aside>
 </section>
-<section id="where-we-are-in-the-project" class="slide level2">
-<h2>Where we are in the project</h2>
+<section>
+<section id="q1-what-is-the-research-goal" class="title-slide slide level1 center">
+<h1>Q1 — What is the research goal?</h1>
+
+</section>
+<section id="the-paper-states-two-aims-not-one" class="slide level2">
+<h2>The paper states two aims, not one</h2>
 <ul>
-<li>Term map: <strong>Replicate (Wk2–8) → Interrogate → Improve → Defend</strong></li>
-<li>Milestones: <strong>M0 (Wk3)</strong> through <strong>M4 (Dec)</strong></li>
-<li>Today’s job: understand the <strong>data source</strong> and <em>strip a Methods section for parts</em></li>
-<li>Two deliverables this week feeds:
-<ul>
-<li><strong>L1</strong> (Thu lab)</li>
-<li><strong>M0 shortlisting</strong> (due Wk3)</li>
-</ul></li>
+<li><strong>Aim 1</strong> — the <em>clinical correlates</em> of four groups defined by BMI and waist-to-height ratio</li>
+<li><strong>Aim 2</strong> — the <em>prognostic value</em> of that classification for mortality</li>
 </ul>
+<p>Related, but not the same question: the first is cross-sectional at baseline, the second needs follow-up.</p>
 <aside class="notes">
-<p>(3 min) Orient students on the timeline. M0 is next week — so today’s four-primitive template and feasibility criteria are immediately actionable. Keep this fast; it’s a map, not a lecture.</p>
+<p>(4 min) Read both aims off the abstract. The point is textual, not critical: one paper can carry more than one research question, and they have different time structures.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1092,16 +1095,45 @@ overflow: hidden!important;
 display:block!important;
 }</style></aside>
 </section>
-<section id="why-start-with-the-data-source" class="slide level2">
-<h2>Why start with the data source</h2>
-<ul>
-<li>You cannot judge or reproduce a study you don’t understand <strong>at the data level</strong></li>
-<li>The Methods section is a <strong>promise</strong> about data — one you must be able to keep</li>
-<li>NHANES is <strong>public, documented, and versioned</strong> — ideal for a replication course</li>
-</ul>
-<p><strong>MASLD:</strong> Kueh 2026 uses NHANES <strong>2007–2018</strong> (six cycles) — every number we reproduce traces back to public files.</p>
+<section id="five-goals-the-same-variables-can-serve" class="slide level2">
+<h2>Five goals the same variables can serve</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Goal</th>
+<th>What it asks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Description</td>
+<td>How do the four groups differ, and what is their mortality experience?</td>
+</tr>
+<tr class="even">
+<td>Association</td>
+<td>Is phenotype statistically associated with subsequent mortality?</td>
+</tr>
+<tr class="odd">
+<td>Prognostic factor</td>
+<td>Does phenotype inform mortality <strong>over and above</strong> other known factors?</td>
+</tr>
+<tr class="even">
+<td>Prediction</td>
+<td>How accurately can we predict individual risk; does WHtR improve it?</td>
+</tr>
+<tr class="odd">
+<td>Causal</td>
+<td>What would mortality have been under a specified change in central adiposity?</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The variables can be identical. The target quantity is not.</strong></p>
 <aside class="notes">
-<p>(4 min) The framing move of the whole course: reproduction starts at the data. A beautiful results table means nothing if you can’t obtain and reconstruct the inputs. Stress “promise you must keep” — Methods is a contract with the reader.</p>
+<p>(5 min) Walk the ladder. Same exposure, same outcome, same covariates — five different target quantities. Ask which row a “multivariable Cox model” sits on: it sits on several.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1113,18 +1145,43 @@ width: 1px!important;
 overflow: hidden!important;
 display:block!important;
 }</style></aside>
+</section>
+<section id="different-goals-need-different-evidence" class="slide level2">
+<h2>Different goals need different evidence</h2>
+<ul>
+<li>An <strong>HR with a CI</strong> is enough for an adjusted association or a prognostic effect</li>
+<li>It is <strong>not</strong> evidence a prediction model is good — that needs calibration and discrimination</li>
+<li>And not by itself evidence a causal effect was identified</li>
+</ul>
+<p><em>The paper names “prognostic value” and supplies adjusted association.</em></p>
+<aside class="notes">
+<p>(6 min) This is the heart of Q1. The gap is invisible unless you ask what evidence each goal would require. Vote and argue: which row is this paper actually on? Do not resolve it for them too quickly.</p>
+<style type="text/css">
+span.MJX_Assistive_MathML {
+position:absolute!important;
+clip: rect(1px, 1px, 1px, 1px);
+padding: 1px 0 0 0!important;
+border: 0!important;
+height: 1px!important;
+width: 1px!important;
+overflow: hidden!important;
+display:block!important;
+}</style></aside>
+</section></section>
+<section>
+<section id="q2-who-is-the-population" class="title-slide slide level1 center">
+<h1>Q2 — Who is the population?</h1>
+
 </section>
 <section id="nhanes-in-one-picture" class="slide level2">
 <h2>NHANES in one picture</h2>
 <ul>
-<li>Continuous NHANES released in <strong>2-year cycles</strong>: 2007-08, 2009-10, … 2017-18</li>
-<li>~5,000 examined persons per cycle after screening</li>
-<li>Nationally representative of the US civilian non-institutionalized population via a <strong>complex multistage design</strong> (weights exist — we <em>use</em> them in Wk6)</li>
-<li>Data arrive as <strong>many small files by topic</strong>, not one table</li>
+<li>Continuous NHANES in <strong>2-year cycles</strong>; ~<strong>5,000 examined persons per cycle</strong>; six cycles stacked here (2007–2018)</li>
+<li>Three collection settings — <strong>Interview</strong> (home) · <strong>MEC exam</strong> (measured body size, BP) · <strong>Laboratory</strong> (triglycerides, GGT, glucose)</li>
+<li>Data arrive as <strong>many small topic files</strong>, not one table</li>
 </ul>
-<p><strong>MASLD:</strong> “2007–2018” = six cycles stacked; combining cycles is why the analytic <strong>N runs to several thousand</strong> — the paper reports <strong>~6,300</strong>, our <strong>full analytic file</strong> lands on <strong>6,371</strong>.</p>
 <aside class="notes">
-<p>(8 min) Draw the picture: a stack of cycles, each a bundle of topic files. Note weights exist but defer their use to Wk6 — today just plant the flag. The “many small files” point motivates the merge skill in L1.</p>
+<p>(5 min) The three settings matter in two slides’ time: the exposure spans two of them, and some lab assays exist only in the fasting subsample.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1137,16 +1194,16 @@ overflow: hidden!important;
 display:block!important;
 }</style></aside>
 </section>
-<section id="the-three-data-collection-settings" class="slide level2">
-<h2>The three data-collection settings</h2>
+<section id="seqn-is-the-join-key" class="slide level2">
+<h2>SEQN is the join key</h2>
 <ul>
-<li><strong>Interview (questionnaire)</strong> — at home: demographics, income, alcohol, medical history</li>
-<li><strong>MEC exam</strong> (Mobile Examination Center) — physical measures: <strong>BMI</strong>, <strong>waist circumference</strong>, blood pressure</li>
-<li><strong>Laboratory</strong> — blood draws: <strong>triglycerides</strong>, <strong>GGT</strong>, glucose; some assays only in the <strong>fasting subsample</strong></li>
+<li>Every respondent has one <strong><code>SEQN</code></strong> — the identifier CDC uses to sort and merge files</li>
+<li>Analysis = pick the topic files you need, <strong>merge on <code>SEQN</code></strong>, one row per person</li>
+<li>SEQN does <strong>not</strong> repeat across cycles: all <strong>59,842</strong> values across 2007–2018 are distinct and the per-cycle ranges do not overlap — <em>analysis set: all NHANES 2007–2018 records, N = 59,842</em></li>
+<li>Keep a <strong>cycle variable</strong> anyway — provenance, changing definitions, per-cycle weights. Not to disambiguate SEQN</li>
 </ul>
-<p><strong>MASLD:</strong> FLI needs triglycerides + GGT (lab) + BMI + waist (MEC) — the exposure spans <em>two</em> settings, so anyone missing either is <strong>missing the exposure</strong>.</p>
 <aside class="notes">
-<p>(7 min) The three settings map to three sources of files. The key teaching point: the FLI exposure is assembled across settings, so a participant can be present but still un-classifiable. This foreshadows the fasting-subsample and missingness problems.</p>
+<p>(4 min) Correct a common belief here: students are often told to add a cycle key because SEQN “repeats”. It does not. Checked against the raw DEMO files for all six cycles: 59,842 values, 59,842 distinct. The reproduction pipeline’s joins are correct because of this.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1159,16 +1216,16 @@ overflow: hidden!important;
 display:block!important;
 }</style></aside>
 </section>
-<section id="seqn-the-key-that-holds-it-together" class="slide level2">
-<h2><code>SEQN</code>: the key that holds it together</h2>
+<section id="masld-is-a-derived-variable-not-a-diagnosis" class="slide level2">
+<h2>“MASLD” is a derived variable, not a diagnosis</h2>
 <ul>
-<li>Every respondent has one <strong><code>SEQN</code></strong> (respondent sequence number), unique <em>within</em> a cycle</li>
-<li>Analysis = pick the topic files you need, then <strong>merge on <code>SEQN</code></strong> into one row-per-person table</li>
-<li><strong>Gotcha:</strong> <code>SEQN</code> is unique within a cycle, <em>not across</em> cycles → add a <strong>cycle indicator</strong> before stacking</li>
+<li>MASLD = hepatic steatosis <strong>plus</strong> ≥1 cardiometabolic criterion</li>
+<li>Gold-standard steatosis is biopsy or imaging — <strong>NHANES has neither</strong> in this window</li>
+<li>So: the <strong>Fatty Liver Index</strong>, thresholded at <strong>FLI ≥ 60</strong>, computed from <strong>triglycerides, BMI, GGT and waist</strong></li>
 </ul>
-<p><strong>MASLD:</strong> reproducing Table 1 means merging <code>DEMO</code> + <code>BMX</code> + <code>BIOPRO</code> + <code>TRIGLY</code> + <code>ALQ</code> + mortality — all keyed on <code>SEQN</code>, across six cycles.</p>
+<p><em>The disease definition forces the workaround. It is a feature of the data, not a shortcut.</em></p>
 <aside class="notes">
-<p>(7 min) This is the conceptual heart of L1. Make the gotcha vivid: two different people in two cycles can share a SEQN value. If you stack first without a cycle tag, you can silently collide records. Add cycle indicator, then stack — that’s the L1 recipe.</p>
+<p>(4 min) Do not let this land as criticism. Every population study of MASLD in NHANES faces the same constraint. What matters is that eligibility is computed, and we will see in Q3 what it is computed from.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1181,15 +1238,57 @@ overflow: hidden!important;
 display:block!important;
 }</style></aside>
 </section>
-<section id="the-fasting-subsample-and-why-it-will-haunt-us" class="slide level2">
-<h2>The fasting subsample (and why it will haunt us)</h2>
-<ul>
-<li>Some labs (fasting glucose, triglycerides on the calculation path) come <strong>only</strong> from the morning <strong>fasting subsample</strong> → smaller N, its own weight (<code>WTSAF</code>)</li>
-<li>Being in the fasting subsample is <strong>not random</strong> with respect to health — a preview of <strong>selection bias</strong></li>
-</ul>
-<p><strong>MASLD:</strong> FLI needs fasting labs, so it is computable only in NHANES’ <strong>designed fasting subsample</strong>. That is a <em>design</em> feature with its own weight, <strong>not</strong> missing data.</p>
+<section id="the-funnel-with-a-type-on-every-row" class="slide level2">
+<h2>The funnel, with a type on every row</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>N</th>
+<th>Kind of step</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NHANES 2007–2018 records</td>
+<td>59,842</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Age ≥ 18</td>
+<td>36,580</td>
+<td>eligibility</td>
+</tr>
+<tr class="odd">
+<td>In fasting subsample</td>
+<td>14,962</td>
+<td><strong>design</strong> — drops 21,618</td>
+</tr>
+<tr class="even">
+<td>FLI computable</td>
+<td>14,170</td>
+<td>missingness</td>
+</tr>
+<tr class="odd">
+<td>Steatosis (FLI ≥ 60)</td>
+<td>6,052</td>
+<td>target population</td>
+</tr>
+<tr class="even">
+<td>MASLD (≥1 criterion)</td>
+<td>6,050</td>
+<td>target population</td>
+</tr>
+<tr class="odd">
+<td>Mortality-linked</td>
+<td><strong>6,048</strong></td>
+<td>outcome ascertainment</td>
+</tr>
+</tbody>
+</table>
+<p><em>Analysis set: locked mortality-linked cohort, N = 6,048.</em></p>
 <aside class="notes">
-<p>(7 min) Plant the distinction that runs through Weeks 3, 6 and 7: absence <em>by design</em> is handled by the subsample weight; absence <em>within</em> the subsample is item nonresponse. Ask the class which of the two an imputation model could ever address.</p>
+<p>(3 min) A funnel shows N falling; the type column shows why. The largest exclusion is not clinical — it is design, because the FLI needs fasting labs. Note the row-set label and say why it is there: the full reconstructed file is 6,371, and the two are not interchangeable.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1202,16 +1301,10 @@ overflow: hidden!important;
 display:block!important;
 }</style></aside>
 </section>
-<section id="what-masld-actually-is" class="slide level2">
-<h2>What “MASLD” actually is</h2>
-<ul>
-<li><strong>MASLD</strong> = metabolic dysfunction-associated steatotic liver disease (the 2023 rename of <strong>NAFLD</strong>): hepatic <strong>steatosis</strong> <strong>+</strong> ≥ 1 cardiometabolic criterion</li>
-<li>Gold-standard steatosis = <strong>biopsy or imaging</strong> — neither exists in NHANES for this window</li>
-<li>So the paper needs a <strong>surrogate</strong> for “fatty liver”</li>
-</ul>
-<p><strong>MASLD:</strong> the disease definition itself <em>forces</em> a non-invasive workaround — a feature of the data, not a shortcut by the authors.</p>
+<section id="break" class="slide level2 center">
+<h2>BREAK</h2>
 <aside class="notes">
-<p>(6 min) Be fair to the authors here: there is no biopsy/imaging in this NHANES window, so a surrogate isn’t cutting corners — it’s the only option. This fairness matters for M1: we interrogate the consequences without impugning intent.</p>
+<p>(10 min)</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1223,264 +1316,291 @@ width: 1px!important;
 overflow: hidden!important;
 display:block!important;
 }</style></aside>
-</section>
-<section id="surrogate-outcomes-the-fatty-liver-index" class="slide level2">
-<h2>Surrogate outcomes: the Fatty Liver Index</h2>
-<ul>
-<li><strong>FLI</strong> is a published score from <strong>triglycerides, BMI, GGT, waist circumference</strong></li>
-<li>Kueh calls steatosis at <strong>FLI ≥ 60</strong></li>
-<li>Non-invasive scores make population studies possible — but <strong>embed their inputs into the case definition</strong></li>
-</ul>
-<p><strong>MASLD:</strong> seed for <strong>M1</strong> — the phenotype groups are built from <strong>BMI × waist (WHtR)</strong>, and FLI eligibility <em>also</em> uses <strong>BMI + waist</strong>. Exposure and cohort selection share inputs → <strong>circularity</strong>. Name it today; dissect it at M1.</p>
-<aside class="notes">
-<p>(8 min) The circularity seed. Say it slowly: the groups are defined by BMI and waist; the eligibility filter (FLI) is also built from BMI and waist. Same variables on both sides. We only <em>name</em> it now — the full dissection is M1. This is one of the richest interrogation threads in the whole paper.</p>
-<style type="text/css">
-span.MJX_Assistive_MathML {
-position:absolute!important;
-clip: rect(1px, 1px, 1px, 1px);
-padding: 1px 0 0 0!important;
-border: 0!important;
-height: 1px!important;
-width: 1px!important;
-overflow: hidden!important;
-display:block!important;
-}</style></aside>
-</section>
-<section id="break" class="slide level2">
-<h2>Break</h2>
-<p><strong>10 minutes.</strong></p>
-<p>Back for the second half: the <strong>four primitives</strong> and the <strong>M0 feasibility</strong> test.</p>
-<aside class="notes">
-<p>(10 min) Break. When you return, the mode shifts from “understand the data source” to “operationalize reading Methods.” Tell them the second half is a template they’ll reuse for their own M0 papers next week.</p>
-<style type="text/css">
-span.MJX_Assistive_MathML {
-position:absolute!important;
-clip: rect(1px, 1px, 1px, 1px);
-padding: 1px 0 0 0!important;
-border: 0!important;
-height: 1px!important;
-width: 1px!important;
-overflow: hidden!important;
-display:block!important;
-}</style></aside>
-</section>
-<section id="the-four-primitives-of-a-reproducible-study" class="slide level2">
-<h2>The four primitives of a reproducible study</h2>
-<ul>
-<li>To reproduce <em>any</em> paper, extract four things from the Methods:
-<ul>
-<li><strong>Exposure</strong></li>
-<li><strong>Outcome</strong></li>
-<li><strong>Eligibility</strong></li>
-<li><strong>Variables</strong> (confounders / covariates)</li>
-</ul></li>
-<li>If any one is under-specified, the study is <strong>not reconstructable</strong> — no matter how clean the results look</li>
-</ul>
-<p><strong>MASLD:</strong> we’ll find <strong>three</strong> boxes clear and <strong>one</strong> (eligibility) <em>internally contradictory</em>.</p>
-<aside class="notes">
-<p>(6 min) Introduce the 4-box template. Draw four boxes on the board. The rest of the lecture fills them for Kueh 2026. Foreshadow the punchline: eligibility is the broken box — and that’s a gift, not a disqualifier.</p>
-<style type="text/css">
-span.MJX_Assistive_MathML {
-position:absolute!important;
-clip: rect(1px, 1px, 1px, 1px);
-padding: 1px 0 0 0!important;
-border: 0!important;
-height: 1px!important;
-width: 1px!important;
-overflow: hidden!important;
-display:block!important;
-}</style></aside>
-</section>
-<section id="extract-the-exposure" class="slide level2">
-<h2>Extract the EXPOSURE</h2>
-<ul>
-<li>Exposure = <strong>four phenotypes</strong> from obesity (<strong>BMI ≥ 30</strong>) × central adiposity (<strong>WHtR ≥ 0.6</strong>):
-<ul>
-<li><strong>I</strong> obese / low-central</li>
-<li><strong>II</strong> obese / high-central</li>
-<li><strong>III</strong> non-obese / low-central</li>
-<li><strong>IV</strong> non-obese / high-central</li>
-</ul></li>
-<li>Ask: are cut-points, variables, and coding fully stated? <strong>Mostly yes.</strong></li>
-</ul>
-<p><strong>MASLD:</strong> the <strong>paper’s</strong> group sizes are <strong>386 / 4,541 / 769 / 604</strong>; <strong>our reproduction</strong> gives <strong>391 / 4,585 / 787 / 608</strong>. Either way <strong>Group IV</strong> (non-obese, high-central) has the <strong>worst survival</strong> — the paper’s headline.</p>
-
-<img role="img" data-src="data:image/png;base64,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" class="r-stretch"><aside class="notes">
-<p>(5 min) Fill the Exposure box. The 2×2 logic (BMI × WHtR) is clean and codeable — this box passes. The KM curve on screen previews the headline: Group IV, the “normal-weight but centrally adipose” group, separates downward. Note the counterintuitive result now; we quantify and adjust it over the following weeks.</p>
-<style type="text/css">
-span.MJX_Assistive_MathML {
-position:absolute!important;
-clip: rect(1px, 1px, 1px, 1px);
-padding: 1px 0 0 0!important;
-border: 0!important;
-height: 1px!important;
-width: 1px!important;
-overflow: hidden!important;
-display:block!important;
-}</style></aside>
-</section>
-<section id="extract-the-outcome-and-follow-up" class="slide level2">
-<h2>Extract the OUTCOME and follow-up</h2>
-<ul>
-<li>Outcome = <strong>all-cause mortality</strong> via NHANES <strong>linked mortality files</strong></li>
-<li>Time-to-event; <strong>median follow-up ~6.7 y</strong></li>
-<li>Ask: mortality source, censoring date, time origin all stated? <strong>Yes</strong> — linked NDI is standard and documented</li>
-</ul>
-<p><strong>MASLD:</strong> the paper counts <strong>585</strong> all-cause deaths, our reproduction <strong>586</strong>; Group IV <strong>unadjusted HR ~15.1</strong> collapses to <strong>~2.9</strong> after adjustment — a first lesson that <strong>confounding is enormous</strong> here (Wk4 preview).</p>
-<aside class="notes">
-<p>(5 min) Fill the Outcome box — this one passes cleanly. The dramatic HR shrinkage (15.1 → 2.9) is the hook for the confounding week: the crude signal is real but hugely inflated by age and metabolic covariates. Don’t explain the mechanism yet; just make the shrinkage memorable.</p>
-<style type="text/css">
-span.MJX_Assistive_MathML {
-position:absolute!important;
-clip: rect(1px, 1px, 1px, 1px);
-padding: 1px 0 0 0!important;
-border: 0!important;
-height: 1px!important;
-width: 1px!important;
-overflow: hidden!important;
-display:block!important;
-}</style></aside>
-</section>
-<section id="extract-eligibility-read-it-adversarially" class="slide level2">
-<h2>Extract ELIGIBILITY — read it adversarially</h2>
-<ul>
-<li>Eligibility = adults with <strong>MASLD</strong> (FLI ≥ 60 <strong>+</strong> ≥ 1 cardiometabolic criterion), plus stated <strong>alcohol</strong> and <strong>missingness</strong> exclusions</li>
-<li>Reading critically = check that the prose <strong>arithmetic</strong> actually lands on the reported <strong>N</strong></li>
-</ul>
-<p><strong>MASLD — two real discrepancies on screen:</strong> {.incremental}</p>
-<ul>
-<li>Alcohol-exclusion sentence, coded three plausible ways → <strong>N = 4,308 / 5,944 / 6,371</strong> — the text doesn’t pin down the cohort</li>
-<li>Table headers mislabel the BMI cut as <strong>“&lt;25”</strong> when the analysis uses <strong>30</strong> — never trust a label you haven’t recomputed</li>
-</ul>
-<aside class="notes">
-<p>(8 min) This is the broken box — and the most important slide of the day. Walk through the alcohol sentence three ways and show three different N’s. Then the “&lt;25” vs 30 label discrepancy. Message: the paper is <em>reconstructable</em> but its eligibility prose is contradictory. That contradiction is interrogation fuel for M1, not a reason to reject the paper.</p>
-<style type="text/css">
-span.MJX_Assistive_MathML {
-position:absolute!important;
-clip: rect(1px, 1px, 1px, 1px);
-padding: 1px 0 0 0!important;
-border: 0!important;
-height: 1px!important;
-width: 1px!important;
-overflow: hidden!important;
-display:block!important;
-}</style></aside>
-</section>
-<section id="extract-the-variables-confounders-covariates" class="slide level2">
-<h2>Extract the VARIABLES (confounders &amp; covariates)</h2>
-<ul>
-<li>Variables = <strong>age, sex, race/ethnicity, income, smoking, comorbidities</strong> — each must map to a specific NHANES file/field</li>
-<li>Ask: is every adjustment variable named precisely enough to pull it? <strong>Mostly</strong> — but <strong>income has ~9% missing</strong> (a Wk7 thread)</li>
-</ul>
-<p><strong>MASLD:</strong> reproduced Table 1 matches closely (<strong>mean age ~51</strong>, <strong>BMI ~33.2</strong>) — evidence the variable definitions are recoverable even where the eligibility prose is not.</p>
-<aside class="notes">
-<p>(5 min) Fill the Variables box — passes, with one flag (income missingness) parked for Wk7. Contrast with eligibility: the paper can have a broken box and three clean ones. Reproducibility is box-by-box, not all-or-nothing.</p>
-<style type="text/css">
-span.MJX_Assistive_MathML {
-position:absolute!important;
-clip: rect(1px, 1px, 1px, 1px);
-padding: 1px 0 0 0!important;
-border: 0!important;
-height: 1px!important;
-width: 1px!important;
-overflow: hidden!important;
-display:block!important;
-}</style></aside>
-</section>
-<section id="m0-feasibility-the-four-boxes-are-a-pre-screen" class="slide level2">
-<h2>M0 feasibility: the four boxes are a pre-screen</h2>
-<p>A paper is <strong>reconstructable</strong> only if a replicator can — from public data + Methods alone — fill all four boxes:</p>
-<ul>
-<li><strong>Data:</strong> public, obtainable source (ideally NHANES) with stated version/cycles</li>
-<li><strong>Exposure &amp; outcome:</strong> explicit variables and cut-points</li>
-<li><strong>Eligibility:</strong> resolves to a <strong>countable N</strong> (flag contradictions early — they’re <em>interrogation fuel</em>, not disqualifiers)</li>
-<li><strong>Confounders:</strong> named, mapping to real fields</li>
-</ul>
-<p><em>A little ambiguity is fine — it’s what M1 interrogates. <strong>Total</strong> under-specification is not.</em></p>
-<p><strong>Necessary, not sufficient:</strong> filling the boxes makes a paper reconstructable. It does not get it through <strong>M0</strong>.</p>
-<aside class="notes">
-<p>(4 min) The pre-screen. Emphasize the paradox: the <em>best</em> replication targets are papers with clean-enough boxes AND juicy contradictions. A flawless paper is boring; an unreconstructable one is useless. Kueh sits in the productive middle. Then hold the punchline for the next slide — reconstructable is where M0 <em>starts</em>.</p>
-<style type="text/css">
-span.MJX_Assistive_MathML {
-position:absolute!important;
-clip: rect(1px, 1px, 1px, 1px);
-padding: 1px 0 0 0!important;
-border: 0!important;
-height: 1px!important;
-width: 1px!important;
-overflow: hidden!important;
-display:block!important;
-}</style></aside>
-</section>
-<section id="m0-has-six-criteria-the-boxes-reach-three" class="slide level2">
-<h2>M0 has six criteria — the boxes reach three</h2>
-<p>The boxes give you criteria <strong>1–3</strong>: reconstructable data, a clear exposure and outcome, plausible confounders. Three more must <strong>also</strong> hold:</p>
-<ul>
-<li><strong>4 · Size and events</strong> — enough observations, and for time-to-event outcomes enough events, for the main analysis <em>and</em> at least one stable subgroup/interaction analysis</li>
-<li><strong>5 · Design variables</strong> — the design feature the analysis has to respect, and what encodes it: survey weights/strata/PSU, a cluster or repeated-measure ID, or follow-up time and censoring. <strong>Not waivable</strong></li>
-<li><strong>6 · A genuine incomplete-observation problem</strong> — a variable the locked analysis <em>actually uses</em> that is absent for records which should have carried it. Shrinkage from designed subsampling, eligibility or the disease definition is <strong>not</strong> this</li>
-</ul>
-<p><strong>MASLD:</strong> Kueh 2026 clears <strong>all six</strong> — which is why it can carry P1–P5 — <em>and</em> hands us a rich interrogation agenda.</p>
-<aside class="notes">
-<p>(3 min) The mistake students make is to screen a paper for how readably its Methods are written and stop there. A beautifully written paper with 40 events, no design feature to respect, or covariates complete by construction fails M0 with all four boxes full. Criteria 5 and 6 are the ones that strand a group at P4 if they are waved through now. Each criterion is confirmed with a specific pointer — a variable name, a file name, a number. Full wording is in the M0 brief.</p>
-<style type="text/css">
-span.MJX_Assistive_MathML {
-position:absolute!important;
-clip: rect(1px, 1px, 1px, 1px);
-padding: 1px 0 0 0!important;
-border: 0!important;
-height: 1px!important;
-width: 1px!important;
-overflow: hidden!important;
-display:block!important;
-}</style></aside>
-</section>
-<section id="common-traps-when-reading-methods" class="slide level2">
-<h2>Common traps when reading Methods</h2>
-<ul>
-<li><strong>Labels vs. computations</strong> — the “&lt;25 = 30” trap</li>
-<li><strong>Prose arithmetic</strong> that never sums to the reported N</li>
-<li><strong>Silent design choices</strong> — unweighted analysis of a survey; a fasting-only exposure treated as universal</li>
-<li><strong>“Defined-by” scores</strong> whose inputs overlap the exposure → <strong>circularity</strong> — log it now, test at M1</li>
-</ul>
-<p><strong>MASLD:</strong> every trap on this slide is one the demonstration paper <strong>actually contains</strong>.</p>
-<aside class="notes">
-<p>(4 min) A portable checklist students carry into their own M0 papers. The punchline lands hard: this isn’t a hypothetical list — Kueh 2026 contains all four. That’s exactly why it’s the demonstration paper.</p>
-<style type="text/css">
-span.MJX_Assistive_MathML {
-position:absolute!important;
-clip: rect(1px, 1px, 1px, 1px);
-padding: 1px 0 0 0!important;
-border: 0!important;
-height: 1px!important;
-width: 1px!important;
-overflow: hidden!important;
-display:block!important;
-}</style></aside>
-</section>
-<section id="bridge-to-todays-lab-l1-your-increment" class="slide level2">
-<h2>Bridge to today’s lab (L1) &amp; your increment</h2>
-<ul>
-<li><strong>In L1 (Thu, EpiMethods wrangling module):</strong> download several NHANES cycles (<strong>2007–2018</strong>), read raw topic files (<code>DEMO</code>, <code>BMX</code>, lab files), and <strong>merge on <code>SEQN</code></strong> into one analytic-ready, one-row-per-person table — adding a <strong>cycle indicator before stacking</strong>. <em>Output: a merged multi-cycle dataset you can count and describe.</em></li>
-<li><strong>Why it matters:</strong> L1’s merge is the <strong>substrate for the whole term</strong> — every later lab (Table 1, confounding, interaction, weights, missing data) runs on this table</li>
-<li><strong>M0 shortlisting (toward Wk3 lock):</strong> using today’s <strong>four-primitive template</strong> + the <strong>six M0 criteria</strong>, shortlist <strong>2–3 candidate NHANES papers</strong>; for each, be ready to say whether exposure / outcome / eligibility / variables are extractable — the <strong>pre-screen</strong> — <em>and</em> whether the paper has enough observations and events, a <strong>design feature to respect</strong>, and a <strong>missing variable the analysis actually uses</strong>. <strong>Lock one at M0 (Wk3).</strong></li>
-</ul>
-<p><strong>Takeaway:</strong> reading a Methods section <em>is</em> the first act of reproduction — you did it to Kueh today; do it to your candidates before Wk3.</p>
-<aside class="notes">
-<p>(5 min) Close the loop. Make the L1 deliverable concrete: a merged, one-row-per-person, multi-cycle table with a cycle indicator. Stress that this table is load-bearing for the entire term. Then set the M0 homework: apply today’s template to their own candidate papers and come to Wk3 ready to lock one. End on the takeaway: today’s lecture <em>was</em> an act of reproduction.</p>
-<style type="text/css">
-span.MJX_Assistive_MathML {
-position:absolute!important;
-clip: rect(1px, 1px, 1px, 1px);
-padding: 1px 0 0 0!important;
-border: 0!important;
-height: 1px!important;
-width: 1px!important;
-overflow: hidden!important;
-display:block!important;
-}</style></aside>
+</section></section>
+<section>
+<section id="q3-exposure-and-comparison" class="title-slide slide level1 center">
+<h1>Q3 — Exposure and comparison</h1>
 
 </section>
+<section id="the-exposure-is-constructed-not-measured" class="slide level2">
+<h2>The exposure is constructed, not measured</h2>
+<ul>
+<li>Obesity by <strong>BMI ≥ 30</strong> (Asian participants <strong>≥ 25</strong>) × central adiposity by <strong>WHtR ≥ 0.60</strong></li>
+<li>Four phenotype groups; <strong>Group IV</strong> = not obese by BMI, high waist-for-height</li>
+<li>The exposure spans <strong>two collection settings</strong> — BMI and waist both from the MEC exam, so a person missing either is missing the exposure</li>
+</ul>
+<aside class="notes">
+<p>(5 min) Emphasise “constructed”: two continuous measurements, two thresholds, one 2x2. Every one of those four choices is a place a replicator can diverge from the authors.</p>
+<style type="text/css">
+span.MJX_Assistive_MathML {
+position:absolute!important;
+clip: rect(1px, 1px, 1px, 1px);
+padding: 1px 0 0 0!important;
+border: 0!important;
+height: 1px!important;
+width: 1px!important;
+overflow: hidden!important;
+display:block!important;
+}</style></aside>
+</section>
+<section id="which-group-is-the-comparison" class="slide level2">
+<h2>Which group is the comparison?</h2>
+<ul>
+<li>No treated and control arm — the four-category phenotype is the <strong>index factor</strong></li>
+<li>Mortality is compared <strong>across</strong> the categories</li>
+<li><strong>Group I is the reference.</strong> Every hazard ratio is measured against it</li>
+</ul>
+<p><em>A ratio without its referent means nothing — and here the referent is an obese group.</em></p>
+<aside class="notes">
+<p>(4 min) Students routinely read “HR 2.9” without asking “against what?”. Make them say the comparison out loud: non-obese high-central versus obese low-central.</p>
+<style type="text/css">
+span.MJX_Assistive_MathML {
+position:absolute!important;
+clip: rect(1px, 1px, 1px, 1px);
+padding: 1px 0 0 0!important;
+border: 0!important;
+height: 1px!important;
+width: 1px!important;
+overflow: hidden!important;
+display:block!important;
+}</style></aside>
+</section>
+<section id="eligibility-and-exposure-share-their-inputs" class="slide level2">
+<h2>Eligibility and exposure share their inputs</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th></th>
+<th>Inputs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Eligibility (FLI)</td>
+<td>triglycerides, GGT, <strong>BMI</strong>, <strong>waist</strong></td>
+</tr>
+<tr class="even">
+<td>Exposure (phenotype)</td>
+<td><strong>BMI</strong>, <strong>waist</strong> ÷ height</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Being selected into the study and being placed in a phenotype group are <strong>not independent events</strong>. That is <strong>structural dependence</strong>.</p>
+</blockquote>
+<p><em>Never trust a label you have not recomputed.</em></p>
+<aside class="notes">
+<p>(6 min) Name it as structural dependence, not as a diagnosed bias. What it does to an estimate depends on the research goal and the causal structure — Q1 arriving with consequences. We name it today; M1 dissects it. This is deliberate seeding, not a spoiler.</p>
+<style type="text/css">
+span.MJX_Assistive_MathML {
+position:absolute!important;
+clip: rect(1px, 1px, 1px, 1px);
+padding: 1px 0 0 0!important;
+border: 0!important;
+height: 1px!important;
+width: 1px!important;
+overflow: hidden!important;
+display:block!important;
+}</style></aside>
+</section></section>
+<section>
+<section id="q4-outcome-time-zero-follow-up" class="title-slide slide level1 center">
+<h1>Q4 — Outcome, time zero, follow-up</h1>
+
+</section>
+<section id="outcome-and-the-clock" class="slide level2">
+<h2>Outcome and the clock</h2>
+<ul>
+<li><strong>All-cause mortality</strong> (<code>MORTSTAT</code>) via the NCHS linked mortality file — <em>not</em> an NHANES file, a separate linked fixed-width one</li>
+<li><strong>Time zero is the MEC examination</strong>; <code>PERMTH_EXM</code> is person-months from that exam</li>
+<li>Follow-up through <strong>31 December 2019</strong>, stated in the NCHS 2019 Linked Mortality File linkage methodology document — not inferred from the filename</li>
+<li>Entry spans 2007–2018, so follow-up lengths differ → survival analysis, not a risk difference</li>
+</ul>
+<aside class="notes">
+<p>(6 min) Point at the sourcing explicitly: we know the date because NCHS documents it, not because the filename says MORT_2019. That is the standard we are asking of them.</p>
+<style type="text/css">
+span.MJX_Assistive_MathML {
+position:absolute!important;
+clip: rect(1px, 1px, 1px, 1px);
+padding: 1px 0 0 0!important;
+border: 0!important;
+height: 1px!important;
+width: 1px!important;
+overflow: hidden!important;
+display:block!important;
+}</style></aside>
+</section>
+<section id="time-zero-is-a-question-the-checklist-never-asks" class="slide level2">
+<h2>Time zero is a question the checklist never asks</h2>
+<ul>
+<li>“Exposure, outcome, covariates” can all be specified while <strong>time zero stays ambiguous</strong></li>
+<li>An ambiguous time zero silently changes who is at risk, and for how long</li>
+<li>Here exposure is measured <strong>at</strong> time zero — convenient, and rarer than you would think</li>
+</ul>
+<p><em>Ask of your M0 candidates: when does follow-up begin, and does everyone start together?</em></p>
+<aside class="notes">
+<p>(5 min) This is one of the two places the six questions beat the old four primitives outright. The primitives never forced this question, and it is where cohort studies most often go quietly wrong.</p>
+<style type="text/css">
+span.MJX_Assistive_MathML {
+position:absolute!important;
+clip: rect(1px, 1px, 1px, 1px);
+padding: 1px 0 0 0!important;
+border: 0!important;
+height: 1px!important;
+width: 1px!important;
+overflow: hidden!important;
+display:block!important;
+}</style></aside>
+</section></section>
+<section>
+<section id="q5-other-variables-and-their-roles" class="title-slide slide level1 center">
+<h1>Q5 — Other variables, and their roles</h1>
+
+</section>
+<section id="in-the-model-is-not-the-same-as-confounding" class="slide level2">
+<h2>“In the model” is not the same as “confounding”</h2>
+<ul>
+<li>The paper adjusts for age, sex, comorbidities, medications</li>
+<li><strong>“We adjusted for X” says where X sits in the syntax. It does not say what X does.</strong></li>
+<li>The same variable can be a confounder, a mediator, a competing prognostic factor, or a collider — and which it is depends on the <strong>research goal from Q1</strong></li>
+</ul>
+<aside class="notes">
+<p>(6 min) Q1 pays off again. Under a prognostic-factor question the adjustment set need not be confounders at all; they may be other prognostic factors.</p>
+<style type="text/css">
+span.MJX_Assistive_MathML {
+position:absolute!important;
+clip: rect(1px, 1px, 1px, 1px);
+padding: 1px 0 0 0!important;
+border: 0!important;
+height: 1px!important;
+width: 1px!important;
+overflow: hidden!important;
+display:block!important;
+}</style></aside>
+</section>
+<section id="what-a-crude-to-adjusted-change-establishes" class="slide level2">
+<h2>What a crude-to-adjusted change establishes</h2>
+<ul>
+<li>Group IV all-cause HR ≈ <strong>15.1 crude → ≈ 2.9 adjusted</strong></li>
+<li>Conditioning on the adjustment set moves the estimate <strong>enormously</strong></li>
+<li>What that movement <em>means</em> — confounding controlled, mediation removed, a collider opened — depends on the goal and the causal role of those variables</li>
+</ul>
+<p><em>Analysis set: full reconstructed analytic file, N = 6,371.</em></p>
+<aside class="notes">
+<p>(8 min) <strong>Week 4 does this work.</strong> Today it is enough that the size of a move is not itself an interpretation. Vote and argue: what would you need to know to call this confounding? Resist answering — Week 4 is where the DAG logic arrives.</p>
+<style type="text/css">
+span.MJX_Assistive_MathML {
+position:absolute!important;
+clip: rect(1px, 1px, 1px, 1px);
+padding: 1px 0 0 0!important;
+border: 0!important;
+height: 1px!important;
+width: 1px!important;
+overflow: hidden!important;
+display:block!important;
+}</style></aside>
+</section></section>
+<section>
+<section id="q6-design-and-analysis-features" class="title-slide slide level1 center">
+<h1>Q6 — Design and analysis features</h1>
+
+</section>
+<section id="nhanes-is-not-a-simple-random-sample" class="slide level2">
+<h2>NHANES is not a simple random sample</h2>
+<ul>
+<li>Complex multistage probability design: <strong>weights</strong>, <strong>strata</strong> (<code>SDMVSTRA</code>), <strong>PSUs</strong> (<code>SDMVPSU</code>)</li>
+<li>We <em>use</em> them in <strong>Week 6</strong>; today, note they exist and that ignoring them is a choice</li>
+<li>Fasting-subsample analyses carry their own weight — <strong><code>WTSAF2YR</code></strong>, not <code>WTMEC2YR</code></li>
+</ul>
+<aside class="notes">
+<p>(5 min) Do not teach the survey mechanics here; Week 6 owns them. The Q6 point is that a design feature exists and a Methods section should say how it was handled.</p>
+<style type="text/css">
+span.MJX_Assistive_MathML {
+position:absolute!important;
+clip: rect(1px, 1px, 1px, 1px);
+padding: 1px 0 0 0!important;
+border: 0!important;
+height: 1px!important;
+width: 1px!important;
+overflow: hidden!important;
+display:block!important;
+}</style></aside>
+</section>
+<section id="designed-subsampling-is-not-missingness" class="slide level2">
+<h2>Designed subsampling is not missingness</h2>
+<ul>
+<li>The fasting subsample is <strong>statistically designed</strong>, not self-selected, and carries a weight built to keep it nationally representative</li>
+<li>Check rather than assume: adults in and out of it differ by <strong>0.2 years of age, 0.02 kg/m² BMI, 0.07 cm waist</strong></li>
+<li>It is balanced on the very measurements this paper’s exposure is built from</li>
+</ul>
+<p><em>Analysis set: all NHANES adults 2007–2018, N = 36,580.</em></p>
+<blockquote>
+<p><strong>Designed subsampling ≠ ordinary missingness.</strong></p>
+</blockquote>
+<aside class="notes">
+<p>(6 min) An earlier version of this lecture taught the fasting subsample as a preview of selection bias. That was wrong, and the measured balance above is why. The distinction worth teaching is design versus missingness. Close Q6 by noting the paper’s Statistical analysis section never names the survey design — Q6 answered by omission.</p>
+<style type="text/css">
+span.MJX_Assistive_MathML {
+position:absolute!important;
+clip: rect(1px, 1px, 1px, 1px);
+padding: 1px 0 0 0!important;
+border: 0!important;
+height: 1px!important;
+width: 1px!important;
+overflow: hidden!important;
+display:block!important;
+}</style></aside>
+</section></section>
+<section>
+<section id="closing" class="title-slide slide level1 center">
+<h1>Closing</h1>
+
+</section>
+<section id="m0-ask-the-six-of-your-own-papers" class="slide level2">
+<h2>M0 — ask the six of your own papers</h2>
+<ul>
+<li>Shortlist two or three candidate NHANES papers; answer <strong>all six</strong>, each with a pointer to where in the paper you found it</li>
+<li><strong>Reconstructable is necessary, not sufficient</strong> — a perfectly specified paper can still be a poor M0 choice</li>
+<li>M0 wants: enough observations and events, a design feature its analysis must respect, and a missing variable the analysis actually uses</li>
+<li>An unanswered question is not a disqualification — it is a candidate for the judgement you defend at <strong>M1</strong></li>
+</ul>
+<aside class="notes">
+<p>(12 min) Work one candidate live if time allows. The six answers plus pointers are the M0 deliverable’s spine.</p>
+<style type="text/css">
+span.MJX_Assistive_MathML {
+position:absolute!important;
+clip: rect(1px, 1px, 1px, 1px);
+padding: 1px 0 0 0!important;
+border: 0!important;
+height: 1px!important;
+width: 1px!important;
+overflow: hidden!important;
+display:block!important;
+}</style></aside>
+</section>
+<section id="bridge-to-the-lab-and-m0" class="slide level2">
+<h2>Bridge to the lab and M0</h2>
+<ul>
+<li><strong>In L1 (Thu):</strong> download several cycles, read the raw topic files, merge on <code>SEQN</code> into one analytic-ready table with a cycle indicator</li>
+<li><strong>How it becomes your project:</strong> L1’s merge is the substrate for the whole term</li>
+<li><strong>Toward M0 (Wk3):</strong> bring six answers per candidate paper, not a summary</li>
+</ul>
+<p><em>Reading a Methods section is the first act of reproduction.</em></p>
+<aside class="notes">
+<p>(5 min) Send them to L1 knowing exactly which files they are merging and why.</p>
+<style type="text/css">
+span.MJX_Assistive_MathML {
+position:absolute!important;
+clip: rect(1px, 1px, 1px, 1px);
+padding: 1px 0 0 0!important;
+border: 0!important;
+height: 1px!important;
+width: 1px!important;
+overflow: hidden!important;
+display:block!important;
+}</style></aside>
+
+</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
