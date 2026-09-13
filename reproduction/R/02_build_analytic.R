@@ -244,6 +244,12 @@ dat <- dat %>% mutate(
 )
 
 ## ---- linked mortality (public-use, fixed width) ---------------------------
+## Follow-up runs through 31 December 2019. Source: "The Linkage of National Center
+## for Health Statistics Survey Data to the National Death Index - 2019 Linked
+## Mortality File (LMF): Linkage Methodology and Analytic Considerations", Division
+## of Analysis and Epidemiology, NCHS/CDC, released 2021-07-08 (version 2022-06-02):
+## "NCHS has recently linked the following surveys to the NDI data through December
+## 31, 2019." PERMTH_EXM is person-months from the MEC exam to death or that date.
 read_mort <- function() {
   purrr::map_dfr(seq_len(nrow(CYCLES)), function(i) {
     cyc <- gsub("-", "_", CYCLES$cycle[i])
@@ -269,11 +275,13 @@ dat <- dat %>% left_join(mort, by = "SEQN") %>% mutate(
 
 ## ---- sample funnel (documentation) ----------------------------------------
 ## Two row sets, kept apart, and every step typed.
-##   FULL ANALYTIC FILE - the row set the paper itself analyses, and the cohort
-##     this script saves. No fasting-frame filter.
-##   LOCKED DOMAIN      - its subset carrying a valid WTSAF2YR (n = 6,048): the only
-##     rows on which a design-aware estimate is possible, used where a design-aware
-##     analysis is explicitly specified. The reproduction scripts below (03-06) all
+##   FULL ANALYTIC FILE - the reconstruction's primary paper-matching row set, and
+##     the cohort this script saves. No fasting-frame filter. It is the row set we
+##     compare against the paper, not a claim to BE the paper's: ours is n = 6,371
+##     against a reported ~6,300.
+##   LOCKED DOMAIN      - its subset carrying a valid WTSAF2YR (n = 6,048): the rows
+##     required for any analysis that uses the fasting-subsample design weight, and
+##     used where such an analysis is explicitly specified. The scripts below (03-06) all
 ##     read masld_analytic.rds, which is the FULL analytic file, unless a script says
 ##     otherwise - so quote the row set with any N taken from them.
 ## A funnel shows N falling and does not show WHY, so every row carries a type:

@@ -212,7 +212,7 @@ There is no single “treated” group and “control” group.
 **Primary outcome:** all-cause mortality — death from any cause (`MORTSTAT`).
 
 - Participants entered NHANES between **2007 and 2018**.
-- Mortality follow-up ran through **31 December 2019**, via the NCHS linked mortality file.
+- Mortality follow-up ran through **31 December 2019**, via the NCHS linked mortality file — the date is stated in the NCHS 2019 Linked Mortality File linkage methodology document, not inferred from the filename.
 - Follow-up time is `PERMTH_EXM` — months from exam to death or censoring.
 - Participants had **different lengths of follow-up and censoring**, so time-to-event methods are appropriate. A risk difference could still be estimated at a fixed time horizon using methods that account for censoring.
 

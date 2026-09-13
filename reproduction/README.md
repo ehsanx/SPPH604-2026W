@@ -71,7 +71,13 @@ reproduction/
   `data/raw/_download_manifest.csv`.
 - **Mortality:** NCHS Public-Use Linked Mortality Files, 2019 release
   (`ftp.cdc.gov/pub/Health_Statistics/NCHS/datalinkage/linked_mortality/`),
-  follow-up censored 31 Dec 2019.
+  follow-up censored 31 Dec 2019. The cut-off is documented, not inferred from the
+  filename: *The Linkage of National Center for Health Statistics Survey Data to the
+  National Death Index — 2019 Linked Mortality File (LMF): Linkage Methodology and
+  Analytic Considerations*, Division of Analysis and Epidemiology, NCHS/CDC (released
+  2021-07-08, version 2022-06-02) — “NCHS has recently linked the following surveys to
+  the NDI data through December 31, 2019.” `PERMTH_EXM` is person-months from the MEC
+  examination to death or to that date.
 
 ## Key definitions (see `02_build_analytic.R`)
 
