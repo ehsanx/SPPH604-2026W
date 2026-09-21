@@ -170,6 +170,71 @@ margin: 0 0.8em 0.2em -1.6em;
 vertical-align: middle;
 }
 .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 </head>
 <body>
@@ -184,68 +249,117 @@ questions for reading a Methods section</a>
 <li><a href="#learning-objectives" id="toc-learning-objectives">Learning
 objectives</a></li>
 <li><a href="#continuity" id="toc-continuity">Continuity</a></li>
+<li><a href="#frame-10-minutes-across-the-slides-below" id="toc-frame-10-minutes-across-the-slides-below">Frame · 10 minutes
+across the slides below</a></li>
 <li><a href="#slide-1-where-we-are-in-the-project-3-min" id="toc-slide-1-where-we-are-in-the-project-3-min">Slide 1 — Where we
 are in the project (3 min)</a></li>
-<li><a href="#slide-2-why-the-question-comes-before-the-data-4-min" id="toc-slide-2-why-the-question-comes-before-the-data-4-min">Slide 2 —
-Why the question comes before the data (4 min)</a></li>
-<li><a href="#slide-3-the-six-questions-6-min" id="toc-slide-3-the-six-questions-6-min">Slide 3 — The six questions (6
+<li><a href="#slide-2-why-the-question-comes-before-the-data-3-min" id="toc-slide-2-why-the-question-comes-before-the-data-3-min">Slide 2 —
+Why the question comes before the data (3 min)</a></li>
+<li><a href="#slide-3-the-six-questions-4-min" id="toc-slide-3-the-six-questions-4-min">Slide 3 — The six questions (4
 min)</a></li>
-<li><a href="#q1-what-is-the-research-goal-15-minutes-across-the-slides-below" id="toc-q1-what-is-the-research-goal-15-minutes-across-the-slides-below">Q1
-— What is the research goal? · 15 minutes across the slides
+<li><a href="#q1-what-is-the-research-goal-20-minutes-across-the-slides-below" id="toc-q1-what-is-the-research-goal-20-minutes-across-the-slides-below">Q1
+— What is the research goal? · 20 minutes across the slides
 below</a></li>
 <li><a href="#slide-4-the-paper-states-two-aims-not-one-4-min" id="toc-slide-4-the-paper-states-two-aims-not-one-4-min">Slide 4 — The
 paper states two aims, not one (4 min)</a></li>
-<li><a href="#slide-5-five-goals-the-same-variables-can-serve-5-min" id="toc-slide-5-five-goals-the-same-variables-can-serve-5-min">Slide 5 —
-Five goals the same variables can serve (5 min)</a></li>
-<li><a href="#slide-6-different-goals-need-different-evidence-6-min" id="toc-slide-6-different-goals-need-different-evidence-6-min">Slide 6 —
-Different goals need different evidence (6 min)</a></li>
-<li><a href="#q2-who-is-the-population-and-how-is-eligibility-operationalised-16-minutes-across-the-slides-below" id="toc-q2-who-is-the-population-and-how-is-eligibility-operationalised-16-minutes-across-the-slides-below">Q2
-— Who is the population, and how is eligibility operationalised? · 16
-minutes across the slides below</a></li>
-<li><a href="#slide-7-nhanes-in-one-picture-5-min" id="toc-slide-7-nhanes-in-one-picture-5-min">Slide 7 — NHANES in one
-picture (5 min)</a></li>
-<li><a href="#slide-8-seqn-is-the-join-key-4-min" id="toc-slide-8-seqn-is-the-join-key-4-min">Slide 8 — SEQN is the join
-key (4 min)</a></li>
-<li><a href="#slide-9-masld-is-a-derived-variable-not-a-diagnosis-4-min" id="toc-slide-9-masld-is-a-derived-variable-not-a-diagnosis-4-min">Slide
-9 — “MASLD” is a derived variable, not a diagnosis (4 min)</a></li>
-<li><a href="#slide-10-the-funnel-with-a-type-on-every-row-3-min" id="toc-slide-10-the-funnel-with-a-type-on-every-row-3-min">Slide 10 —
-The funnel, with a type on every row (3 min)</a></li>
-<li><a href="#slide-11-break-10-min" id="toc-slide-11-break-10-min">Slide 11 — BREAK (10 min)</a></li>
-<li><a href="#q3-what-is-the-exposure-and-the-comparison-15-minutes-across-the-slides-below" id="toc-q3-what-is-the-exposure-and-the-comparison-15-minutes-across-the-slides-below">Q3
-— What is the exposure, and the comparison? · 15 minutes across the
+<li><a href="#slide-5-five-goals-the-same-variables-can-serve-4-min" id="toc-slide-5-five-goals-the-same-variables-can-serve-4-min">Slide 5 —
+Five goals the same variables can serve (4 min)</a></li>
+<li><a href="#slide-6-same-variables-different-analyses-4-min" id="toc-slide-6-same-variables-different-analyses-4-min">Slide 6 — Same
+variables, different analyses (4 min)</a></li>
+<li><a href="#slide-7-same-variables-different-evidence-of-success-4-min" id="toc-slide-7-same-variables-different-evidence-of-success-4-min">Slide
+7 — Same variables, different evidence of success (4 min)</a></li>
+<li><a href="#slide-8-hr-ci-what-it-is-and-is-not-evidence-for-2-min" id="toc-slide-8-hr-ci-what-it-is-and-is-not-evidence-for-2-min">Slide 8
+— HR + CI: what it is, and is not, evidence for (2 min)</a></li>
+<li><a href="#slide-9-what-does-this-paper-most-directly-support-2-min" id="toc-slide-9-what-does-this-paper-most-directly-support-2-min">Slide
+9 — What does this paper most directly support? (2 min)</a></li>
+<li><a href="#q2-who-is-the-population-and-how-is-eligibility-operationalised-18-minutes-for-the-nhanes-anatomy-14-more-after-the-break" id="toc-q2-who-is-the-population-and-how-is-eligibility-operationalised-18-minutes-for-the-nhanes-anatomy-14-more-after-the-break">Q2
+— Who is the population, and how is eligibility operationalised? · 18
+minutes for the NHANES anatomy, 14 more after the break</a></li>
+<li><a href="#slide-10-first-how-nhanes-is-organised-5-min" id="toc-slide-10-first-how-nhanes-is-organised-5-min">Slide 10 — First:
+how NHANES is organised (5 min)</a></li>
+<li><a href="#slide-11-where-the-measurements-and-labs-come-from-4-min" id="toc-slide-11-where-the-measurements-and-labs-come-from-4-min">Slide
+11 — Where the measurements and labs come from (4 min)</a></li>
+<li><a href="#slide-12-where-the-questionnaire-design-and-outcome-come-from-4-min" id="toc-slide-12-where-the-questionnaire-design-and-outcome-come-from-4-min">Slide
+12 — Where the questionnaire, design and outcome come from (4
+min)</a></li>
+<li><a href="#slide-13-seqn-is-the-join-key-5-min" id="toc-slide-13-seqn-is-the-join-key-5-min">Slide 13 — SEQN is the join
+key (5 min)</a></li>
+<li><a href="#thursday-previewed-l1-builds-exactly-this-14-minutes-across-the-slides-below" id="toc-thursday-previewed-l1-builds-exactly-this-14-minutes-across-the-slides-below">Thursday,
+previewed: L1 builds exactly this · 14 minutes across the slides
+below</a></li>
+<li><a href="#slide-14-l1-in-one-screen-two-files-one-key-4-min" id="toc-slide-14-l1-in-one-screen-two-files-one-key-4-min">Slide 14 — L1
+in one screen: two files, one key (4 min)</a></li>
+<li><a href="#slide-15-then-do-it-for-every-cycle-4-min" id="toc-slide-15-then-do-it-for-every-cycle-4-min">Slide 15 — Then do it
+for every cycle (4 min)</a></li>
+<li><a href="#slide-16-raw-names-in-analysis-names-out-3-min" id="toc-slide-16-raw-names-in-analysis-names-out-3-min">Slide 16 — Raw
+names in, analysis names out (3 min)</a></li>
+<li><a href="#slide-17-look-at-what-is-missing-before-you-model-it-3-min" id="toc-slide-17-look-at-what-is-missing-before-you-model-it-3-min">Slide
+17 — Look at what is missing before you model it (3 min)</a></li>
+<li><a href="#slide-18-break-10-min" id="toc-slide-18-break-10-min">Slide 18 — BREAK (10 min)</a></li>
+<li><a href="#q2-continued-the-population-this-paper-defines-14-minutes-across-the-slides-below" id="toc-q2-continued-the-population-this-paper-defines-14-minutes-across-the-slides-below">Q2,
+continued — the population this paper defines · 14 minutes across the
 slides below</a></li>
-<li><a href="#slide-12-the-exposure-is-constructed-not-measured-5-min" id="toc-slide-12-the-exposure-is-constructed-not-measured-5-min">Slide
-12 — The exposure is constructed, not measured (5 min)</a></li>
-<li><a href="#slide-13-which-group-is-the-comparison-4-min" id="toc-slide-13-which-group-is-the-comparison-4-min">Slide 13 — Which
-group is the comparison? (4 min)</a></li>
-<li><a href="#slide-14-eligibility-and-exposure-share-their-inputs-6-min" id="toc-slide-14-eligibility-and-exposure-share-their-inputs-6-min">Slide
-14 — Eligibility and exposure share their inputs (6 min)</a></li>
+<li><a href="#slide-19-population-who-is-being-studied-3-min" id="toc-slide-19-population-who-is-being-studied-3-min">Slide 19 —
+Population: who is being studied? (3 min)</a></li>
+<li><a href="#slide-20-how-masld-was-actually-ascertained-4-min" id="toc-slide-20-how-masld-was-actually-ascertained-4-min">Slide 20 —
+How MASLD was actually ascertained (4 min)</a></li>
+<li><a href="#slide-21-the-funnel-with-a-type-on-every-row-4-min" id="toc-slide-21-the-funnel-with-a-type-on-every-row-4-min">Slide 21 —
+The funnel, with a type on every row (4 min)</a></li>
+<li><a href="#slide-22-what-the-funnel-reveals-3-min" id="toc-slide-22-what-the-funnel-reveals-3-min">Slide 22 — What the
+funnel reveals (3 min)</a></li>
+<li><a href="#q3-what-is-the-exposure-and-the-comparison-16-minutes-across-the-slides-below" id="toc-q3-what-is-the-exposure-and-the-comparison-16-minutes-across-the-slides-below">Q3
+— What is the exposure, and the comparison? · 16 minutes across the
+slides below</a></li>
+<li><a href="#slide-23-the-exposure-is-constructed-not-measured-3-min" id="toc-slide-23-the-exposure-is-constructed-not-measured-3-min">Slide
+23 — The exposure is constructed, not measured (3 min)</a></li>
+<li><a href="#slide-24-exposure-component-1-bmi-4-min" id="toc-slide-24-exposure-component-1-bmi-4-min">Slide 24 — Exposure
+component 1: BMI (4 min)</a></li>
+<li><a href="#slide-25-exposure-component-2-waist-to-height-ratio-2-min" id="toc-slide-25-exposure-component-2-waist-to-height-ratio-2-min">Slide
+25 — Exposure component 2: waist-to-height ratio (2 min)</a></li>
+<li><a href="#slide-26-the-exposure-is-the-combination-4-min" id="toc-slide-26-the-exposure-is-the-combination-4-min">Slide 26 — The
+exposure is the combination (4 min)</a></li>
+<li><a href="#slide-27-eligibility-and-exposure-share-their-inputs-3-min" id="toc-slide-27-eligibility-and-exposure-share-their-inputs-3-min">Slide
+27 — Eligibility and exposure share their inputs (3 min)</a></li>
 <li><a href="#q4-what-is-the-outcome-time-zero-and-follow-up-11-minutes-across-the-slides-below" id="toc-q4-what-is-the-outcome-time-zero-and-follow-up-11-minutes-across-the-slides-below">Q4
 — What is the outcome, time zero, and follow-up? · 11 minutes across the
 slides below</a></li>
-<li><a href="#slide-15-outcome-and-the-clock-6-min" id="toc-slide-15-outcome-and-the-clock-6-min">Slide 15 — Outcome and the
+<li><a href="#slide-28-outcome-and-the-clock-6-min" id="toc-slide-28-outcome-and-the-clock-6-min">Slide 28 — Outcome and the
 clock (6 min)</a></li>
-<li><a href="#slide-16-time-zero-is-a-question-the-checklist-never-asks-5-min" id="toc-slide-16-time-zero-is-a-question-the-checklist-never-asks-5-min">Slide
-16 — Time zero is a question the checklist never asks (5 min)</a></li>
-<li><a href="#q5-what-other-variables-enter-and-in-what-role-14-minutes-across-the-slides-below" id="toc-q5-what-other-variables-enter-and-in-what-role-14-minutes-across-the-slides-below">Q5
-— What other variables enter, and in what role? · 14 minutes across the
+<li><a href="#slide-29-time-zero-is-a-question-the-checklist-never-asks-5-min" id="toc-slide-29-time-zero-is-a-question-the-checklist-never-asks-5-min">Slide
+29 — Time zero is a question the checklist never asks (5 min)</a></li>
+<li><a href="#q5-what-other-variables-enter-and-in-what-role-15-minutes-across-the-slides-below" id="toc-q5-what-other-variables-enter-and-in-what-role-15-minutes-across-the-slides-below">Q5
+— What other variables enter, and in what role? · 15 minutes across the
 slides below</a></li>
-<li><a href="#slide-17-in-the-model-is-not-the-same-as-confounding-6-min" id="toc-slide-17-in-the-model-is-not-the-same-as-confounding-6-min">Slide
-17 — In the model is not the same as confounding (6 min)</a></li>
-<li><a href="#slide-18-what-a-crude-to-adjusted-change-establishes-8-min" id="toc-slide-18-what-a-crude-to-adjusted-change-establishes-8-min">Slide
-18 — What a crude-to-adjusted change establishes (8 min)</a></li>
-<li><a href="#q6-what-design-and-analysis-features-must-be-respected-11-minutes-across-the-slides-below" id="toc-q6-what-design-and-analysis-features-must-be-respected-11-minutes-across-the-slides-below">Q6
-— What design and analysis features must be respected? · 11 minutes
+<li><a href="#slide-30-in-the-model-is-not-the-same-as-confounding-4-min" id="toc-slide-30-in-the-model-is-not-the-same-as-confounding-4-min">Slide
+30 — In the model is not the same as confounding (4 min)</a></li>
+<li><a href="#slide-31-what-a-crude-to-adjusted-change-establishes-5-min" id="toc-slide-31-what-a-crude-to-adjusted-change-establishes-5-min">Slide
+31 — What a crude-to-adjusted change establishes (5 min)</a></li>
+<li><a href="#slide-32-five-nhanes-traps-each-of-which-has-bitten-this-project-3-min" id="toc-slide-32-five-nhanes-traps-each-of-which-has-bitten-this-project-3-min">Slide
+32 — Five NHANES traps, each of which has bitten this project (3
+min)</a></li>
+<li><a href="#slide-33-the-blood-pressure-trap-in-full-3-min" id="toc-slide-33-the-blood-pressure-trap-in-full-3-min">Slide 33 — The
+blood pressure trap, in full (3 min)</a></li>
+<li><a href="#q6-what-design-and-analysis-features-must-be-respected-10-minutes-across-the-slides-below" id="toc-q6-what-design-and-analysis-features-must-be-respected-10-minutes-across-the-slides-below">Q6
+— What design and analysis features must be respected? · 10 minutes
 across the slides below</a></li>
-<li><a href="#slide-19-nhanes-is-not-a-simple-random-sample-5-min" id="toc-slide-19-nhanes-is-not-a-simple-random-sample-5-min">Slide 19 —
-NHANES is not a simple random sample (5 min)</a></li>
-<li><a href="#slide-20-designed-subsampling-is-not-missingness-6-min" id="toc-slide-20-designed-subsampling-is-not-missingness-6-min">Slide 20
-— Designed subsampling is not missingness (6 min)</a></li>
-<li><a href="#slide-21-m0-ask-the-six-of-your-own-papers-12-min" id="toc-slide-21-m0-ask-the-six-of-your-own-papers-12-min">Slide 21 —
-M0: ask the six of your own papers (12 min)</a></li>
-<li><a href="#slide-22-bridge-to-todays-lab-l1-and-m0-5-min" id="toc-slide-22-bridge-to-todays-lab-l1-and-m0-5-min">Slide 22 — Bridge
-to today’s lab (L1) and M0 (5 min)</a></li>
+<li><a href="#slide-34-nhanes-is-not-a-simple-random-sample-3-min" id="toc-slide-34-nhanes-is-not-a-simple-random-sample-3-min">Slide 34 —
+NHANES is not a simple random sample (3 min)</a></li>
+<li><a href="#slide-35-designed-subsampling-is-not-missingness-4-min" id="toc-slide-35-designed-subsampling-is-not-missingness-4-min">Slide 35
+— Designed subsampling is not missingness (4 min)</a></li>
+<li><a href="#slide-36-survey-design-paper-versus-reproduction-3-min" id="toc-slide-36-survey-design-paper-versus-reproduction-3-min">Slide 36
+— Survey design: paper versus reproduction (3 min)</a></li>
+<li><a href="#closing-6-minutes-across-the-slides-below" id="toc-closing-6-minutes-across-the-slides-below">Closing · 6 minutes
+across the slides below</a></li>
+<li><a href="#slide-37-pecot-and-the-question-rebuilt-2-min" id="toc-slide-37-pecot-and-the-question-rebuilt-2-min">Slide 37 — PECOT,
+and the question rebuilt (2 min)</a></li>
+<li><a href="#slide-38-m0-ask-the-six-of-your-own-papers-2-min" id="toc-slide-38-m0-ask-the-six-of-your-own-papers-2-min">Slide 38 — M0:
+ask the six of your own papers (2 min)</a></li>
+<li><a href="#slide-39-bridge-to-l1-and-m0-2-min" id="toc-slide-39-bridge-to-l1-and-m0-2-min">Slide 39 — Bridge to L1 and
+M0 (2 min)</a></li>
+<li><a href="#if-you-are-running-behind" id="toc-if-you-are-running-behind">If you are running behind</a></li>
 <li><a href="#deliberately-deferred" id="toc-deliberately-deferred">Deliberately deferred</a></li>
+<li><a href="#relationship-to-the-companion-deck" id="toc-relationship-to-the-companion-deck">Relationship to the
+companion deck</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -253,15 +367,22 @@ to today’s lab (L1) and M0 (5 min)</a></li>
 questions for reading a Methods section</h1>
 <p>Duration: ~2.5 h (Tue, before the Thu lab)</p>
 <p>Cap: <strong>150 min</strong>. Markers below total
-<strong>122</strong>; the remaining ~28 minutes are the room’s —
-questions, the vote-and-argue moments, and the two live
-recomputations.</p>
-<p>The lecture is one argument, not two halves. It opens with six
-questions a reader must be able to answer about any study, then fills
-them in with the demonstration paper, reaching for NHANES mechanics
-<strong>at the point where a question cannot be answered without
-them</strong>. The closing M0 section turns the six questions on the
-students’ own candidate papers.</p>
+<strong>144</strong>, leaving ~6 minutes of slack.</p>
+<blockquote>
+<p><strong>The timing accounting changed on 2026-09-12.</strong> The
+previous version marked 122 minutes of content and left ~28 minutes
+unmarked as “the room’s”. That under-filled a 2.5-hour session and hid
+where the discussion actually goes. The markers below now include the
+interactive moments — the two vote-and-argue slides and the lab preview
+block — so the total is what happens in the room. See <em>If you are
+running behind</em> at the foot of this file for the drop order.</p>
+</blockquote>
+<p>The lecture is one argument. The <strong>six questions are the
+spine</strong>; the NHANES anatomy is what the answers are <strong>made
+of</strong>, so the component files, variable names and join key are
+taught in full rather than gestured at. A dedicated preview block before
+the break puts Thursday’s actual L1 code on screen, so the lab is the
+execution of Tuesday’s lecture rather than a new topic.</p>
 <blockquote>
 <p><strong>Row-set discipline.</strong> Every quantitative slide names
 the analysis set it is quoting. <em>Analysis set: defined here, then
@@ -281,7 +402,8 @@ say what evidence that goal would require.</li>
 show where the paper leaves one of them under-specified.</li>
 <li>Locate any NHANES quantity a study uses: the <strong>component
 file</strong>, the <strong>variable name</strong>, and the <strong>join
-key</strong>.</li>
+key</strong> — and write the <code>nhanesA</code> call that fetches
+it.</li>
 <li>Distinguish a <strong>design feature</strong> from
 <strong>missingness</strong>, and a <strong>row set</strong> from a
 cohort.</li>
@@ -292,14 +414,17 @@ establish.</li>
 <ul>
 <li><strong>Last week (Wk1):</strong> reproducibility as a practice, and
 the course arc.</li>
-<li><strong>Today:</strong> what a Methods section has to tell you, and
-whether this one does.</li>
+<li><strong>Today:</strong> what a Methods section has to tell you,
+whether this one does, and what the NHANES files underneath it actually
+look like.</li>
 <li><strong>Thursday (L1):</strong> build the merged NHANES frame those
-answers rest on.</li>
+answers rest on — previewed here.</li>
 <li><strong>Toward M0 (Wk3):</strong> ask the same six questions of two
 or three candidate papers.</li>
 </ul>
 <hr />
+<h2 id="frame-10-minutes-across-the-slides-below">Frame · 10 minutes
+across the slides below</h2>
 <h2 id="slide-1-where-we-are-in-the-project-3-min">Slide 1 — Where we
 are in the project (3 min)</h2>
 <ul>
@@ -307,22 +432,23 @@ are in the project (3 min)</h2>
 finding.</li>
 <li>Today is the step before rebuilding: knowing <strong>what</strong>
 you are trying to rebuild.</li>
-<li>By Thursday you need a merged NHANES table; by Week 3 you need a
-locked paper.</li>
+<li>The six questions are the spine; the NHANES anatomy is what the
+answers are made of.</li>
+<li>Everything named today — component files, variable names, the join
+key — is used on Thursday in L1 and again for M0.</li>
 </ul>
-<h2 id="slide-2-why-the-question-comes-before-the-data-4-min">Slide 2 —
-Why the question comes before the data (4 min)</h2>
+<h2 id="slide-2-why-the-question-comes-before-the-data-3-min">Slide 2 —
+Why the question comes before the data (3 min)</h2>
 <ul>
 <li>The instinct is to start with “what did they run?”. A model family
-answers nothing on its own: a Cox model appears under four different
+answers nothing on its own: a Cox model appears under several different
 research goals.</li>
-<li>Reading a Methods section is the first act of reproduction. You do
-it to Kueh today, then to your own candidates before Week 3.</li>
+<li>Reading a Methods section is the first act of reproduction.</li>
 <li><em>MASLD hook:</em> by the end of today you will have watched this
 paper answer four of the six questions clearly, one partially, and one
 not at all.</li>
 </ul>
-<h2 id="slide-3-the-six-questions-6-min">Slide 3 — The six questions (6
+<h2 id="slide-3-the-six-questions-4-min">Slide 3 — The six questions (4
 min)</h2>
 <ol type="1">
 <li>What is the <strong>research goal</strong>?</li>
@@ -344,8 +470,8 @@ reconstructable — no matter how clean the results look.</strong></li>
 your own at M0.</li>
 </ul>
 <hr />
-<h2 id="q1-what-is-the-research-goal-15-minutes-across-the-slides-below">Q1
-— What is the research goal? · 15 minutes across the slides below</h2>
+<h2 id="q1-what-is-the-research-goal-20-minutes-across-the-slides-below">Q1
+— What is the research goal? · 20 minutes across the slides below</h2>
 <h2 id="slide-4-the-paper-states-two-aims-not-one-4-min">Slide 4 — The
 paper states two aims, not one (4 min)</h2>
 <ul>
@@ -353,12 +479,12 @@ paper states two aims, not one (4 min)</h2>
 defined by BMI and waist-to-height ratio.</li>
 <li>Aim 2: the <strong>prognostic value</strong> of that classification
 for mortality.</li>
-<li>Related, but not the same question: the first is cross-sectional at
-baseline, the second needs follow-up. One paper can carry more than one
-research question.</li>
+<li>A two-column table contrasts the question and the <strong>time
+structure</strong>: cross-sectional at baseline versus longitudinal
+follow-up. One needs the linked mortality file; one does not.</li>
 </ul>
-<h2 id="slide-5-five-goals-the-same-variables-can-serve-5-min">Slide 5 —
-Five goals the same variables can serve (5 min)</h2>
+<h2 id="slide-5-five-goals-the-same-variables-can-serve-4-min">Slide 5 —
+Five goals the same variables can serve (4 min)</h2>
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -366,8 +492,8 @@ Five goals the same variables can serve (5 min)</h2>
 </colgroup>
 <thead>
 <tr>
-<th>Goal</th>
-<th>What it asks</th>
+<th>Research goal</th>
+<th>Scientific target in this example</th>
 </tr>
 </thead>
 <tbody>
@@ -402,38 +528,195 @@ adiposity?</td>
 <li>The variables can be identical. <strong>The target quantity is
 not.</strong></li>
 </ul>
-<h2 id="slide-6-different-goals-need-different-evidence-6-min">Slide 6 —
-Different goals need different evidence (6 min)</h2>
+<h2 id="slide-6-same-variables-different-analyses-4-min">Slide 6 — Same
+variables, different analyses (4 min)</h2>
 <ul>
-<li>An <strong>HR with a CI</strong> is enough to report an adjusted
-association or a prognostic effect.</li>
-<li>It is <strong>not</strong> evidence that a prediction model is good
-— that needs calibration and discrimination — and not by itself evidence
-that a causal effect was identified.</li>
+<li>One table, five rows: typical analysis for each goal, and how other
+variables are handled under it — stratification, conditional
+association, other prognostic factors, predictive value with shrinkage,
+confounder selection by causal knowledge.</li>
+<li><strong>A Cox model appears in several rows. The model family does
+not determine the goal.</strong></li>
+<li>This is the slide that kills “they ran a Cox model, so it is an
+association study”.</li>
+</ul>
+<h2 id="slide-7-same-variables-different-evidence-of-success-4-min">Slide 7
+— Same variables, different evidence of success (4 min)</h2>
+<ul>
+<li>Description: absolute summaries with uncertainty. Association: HR +
+CI plus assumptions.</li>
+<li>Prognostic factor: adjusted effect, and for <em>incremental</em>
+value a model with versus without the factor. Prediction: calibration,
+discrimination, Brier score, validation.</li>
+<li>Causal: a prespecified contrast, positivity/balance diagnostics,
+sensitivity analyses.</li>
+<li>Do not rush this table — students reuse it at M0 and M1.</li>
+</ul>
+<h2 id="slide-8-hr-ci-what-it-is-and-is-not-evidence-for-2-min">Slide 8
+— HR + CI: what it is, and is not, evidence for (2 min)</h2>
+<ul>
+<li>Enough to report an adjusted association or a prognostic-factor
+effect.</li>
+<li><strong>Not</strong> evidence that a prediction model is good, and
+<strong>not</strong> by itself evidence that a causal effect was
+identified.</li>
 <li><em>MASLD hook:</em> the paper names “prognostic value” and supplies
-adjusted association. That gap is invisible unless you ask what evidence
-each goal would require.</li>
-<li>Vote and argue: which row is this paper actually on?</li>
+adjusted association.</li>
+</ul>
+<h2 id="slide-9-what-does-this-paper-most-directly-support-2-min">Slide
+9 — What does this paper most directly support? (2 min)</h2>
+<ul>
+<li>Directly supports: description; association; an adjusted prognostic
+association.</li>
+<li>Does not by itself establish: causation; that reducing WHtR would
+reduce mortality; that adding WHtR improves individual prediction.</li>
+<li><strong>Vote and argue:</strong> which row of the ladder is this
+paper actually on? Take a show of hands before revealing the second
+half, and do not resolve it too quickly.</li>
 </ul>
 <hr />
-<h2 id="q2-who-is-the-population-and-how-is-eligibility-operationalised-16-minutes-across-the-slides-below">Q2
-— Who is the population, and how is eligibility operationalised? · 16
-minutes across the slides below</h2>
-<h2 id="slide-7-nhanes-in-one-picture-5-min">Slide 7 — NHANES in one
-picture (5 min)</h2>
+<h2 id="q2-who-is-the-population-and-how-is-eligibility-operationalised-18-minutes-for-the-nhanes-anatomy-14-more-after-the-break">Q2
+— Who is the population, and how is eligibility operationalised? · 18
+minutes for the NHANES anatomy, 14 more after the break</h2>
+<h2 id="slide-10-first-how-nhanes-is-organised-5-min">Slide 10 — First:
+how NHANES is organised (5 min)</h2>
 <ul>
-<li>Continuous NHANES, released in <strong>2-year cycles</strong>;
-roughly <strong>5,000 examined persons per cycle</strong> after
-screening; six cycles stacked here (2007–2018).</li>
-<li>Three collection settings, and the distinction matters in a moment:
-<strong>Interview</strong> at home · <strong>MEC exam</strong> (measured
-body size, blood pressure) · <strong>Laboratory</strong> (triglycerides,
-GGT, glucose; some assays only in the fasting subsample).</li>
-<li>Data arrive as <strong>many small topic files</strong>, not one
-table.</li>
+<li><strong>Six two-year cycles</strong>, 2007–2018, each with a file
+suffix: <code>E F G H I J</code>. H = 2013–2014, I = 2015–2016, J =
+2017–2018 — the letters they will type on Thursday.</li>
+<li>Files are <strong><code>.XPT</code></strong> (SAS transport):
+<code>haven::read_xpt()</code>, or <code>nhanesA::nhanes()</code>.</li>
+<li>Each file is <strong>one row per participant for one topic</strong>
+— not one big table.</li>
+<li>Three collection settings: <strong>Interview</strong> (home) ·
+<strong>MEC exam</strong> (measured body size, blood pressure) ·
+<strong>Laboratory</strong> (triglycerides, GGT, glucose).</li>
+<li>Component families: Demographics (<code>DEMO</code>) · Examination
+(<code>BMX</code>, <code>BPX</code>) · Laboratory (<code>TRIGLY</code>,
+<code>BIOPRO</code>, <code>GLU</code>, <code>GHB</code>,
+<code>HDL</code>) · Questionnaire (<code>ALQ</code>, <code>BPQ</code>,
+<code>DIQ</code>, <code>SMQ</code>).</li>
+<li><strong>Mortality is not an NHANES file.</strong> It is a separate
+linked, fixed-width file from NCHS.</li>
 </ul>
-<h2 id="slide-8-seqn-is-the-join-key-4-min">Slide 8 — SEQN is the join
-key (4 min)</h2>
+<h2 id="slide-11-where-the-measurements-and-labs-come-from-4-min">Slide
+11 — Where the measurements and labs come from (4 min)</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>NHANES variable</th>
+<th>Component</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Participant ID</td>
+<td><code>SEQN</code></td>
+<td><em>every file — the merge key</em></td>
+</tr>
+<tr>
+<td>Age, sex, race</td>
+<td><code>RIDAGEYR</code>, <code>RIAGENDR</code>,
+<code>RIDRETH3</code></td>
+<td><code>DEMO</code></td>
+</tr>
+<tr>
+<td>BMI, waist, height</td>
+<td><code>BMXBMI</code>, <code>BMXWAIST</code>, <code>BMXHT</code></td>
+<td><code>BMX</code></td>
+</tr>
+<tr>
+<td>Triglycerides</td>
+<td><code>LBXTR</code></td>
+<td><code>TRIGLY</code></td>
+</tr>
+<tr>
+<td>GGT</td>
+<td><code>LBXSGTSI</code></td>
+<td><code>BIOPRO</code></td>
+</tr>
+<tr>
+<td>Glucose, HbA1c</td>
+<td><code>LBXGLU</code>, <code>LBXGH</code></td>
+<td><code>GLU</code>, <code>GHB</code></td>
+</tr>
+<tr>
+<td>HDL cholesterol</td>
+<td><code>LBDHDD</code></td>
+<td><code>HDL</code></td>
+</tr>
+<tr>
+<td>Blood pressure</td>
+<td><code>BPXSY1–4</code>, <code>BPXDI1–4</code></td>
+<td><code>BPX</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Do not read the table aloud. Ask instead which rows the
+<strong>exposure</strong> is built from and which the
+<strong>eligibility rule</strong> is built from. Both answers are needed
+in Q3, and the fact that the two lists overlap is the whole of Slide
+27.</li>
+</ul>
+<h2 id="slide-12-where-the-questionnaire-design-and-outcome-come-from-4-min">Slide
+12 — Where the questionnaire, design and outcome come from (4 min)</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concept</th>
+<th>NHANES variable</th>
+<th>Component</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BP / lipid medication</td>
+<td><code>BPQ050A</code>, <code>BPQ100D</code></td>
+<td><code>BPQ</code></td>
+</tr>
+<tr>
+<td>Diabetes</td>
+<td><code>DIQ010</code>, <code>DIQ050</code>, <code>DIQ070</code></td>
+<td><code>DIQ</code></td>
+</tr>
+<tr>
+<td>Alcohol</td>
+<td><code>ALQ130</code>, <code>ALQ120Q</code>, <code>ALQ120U</code>,
+<code>ALQ121</code></td>
+<td><code>ALQ</code></td>
+</tr>
+<tr>
+<td>Survey design</td>
+<td><code>WTMEC2YR</code>, <code>WTSAF2YR</code>, <code>SDMVSTRA</code>,
+<code>SDMVPSU</code></td>
+<td><code>DEMO</code>, <code>TRIGLY</code></td>
+</tr>
+<tr>
+<td>Mortality</td>
+<td><code>MORTSTAT</code>, <code>PERMTH_EXM</code>,
+<code>ELIGSTAT</code></td>
+<td>linked mortality file</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>These variables alone reach across <strong>seven examination and
+laboratory components</strong>, plus demographics, plus questionnaire
+components, plus a linked mortality file. <strong>That is what L1
+assembles.</strong></li>
+<li>Dwell on the last row: the outcome does not live in NHANES at all.
+Note too that the fasting weight <code>WTSAF2YR</code> ships on
+<code>TRIGLY</code> — a design variable living in a lab file.</li>
+</ul>
+<h2 id="slide-13-seqn-is-the-join-key-5-min">Slide 13 — SEQN is the join
+key (5 min)</h2>
 <ul>
 <li>Every respondent has one <strong>SEQN</strong>, the identifier CDC
 uses to sort and merge NHANES files.</li>
@@ -441,30 +724,156 @@ uses to sort and merge NHANES files.</li>
 SEQN</strong> into one row per person.</li>
 <li>SEQN does <strong>not</strong> repeat across the continuous cycles:
 all 59,842 values across 2007–2018 are distinct and the per-cycle ranges
-do not overlap. Joining on SEQN alone across stacked cycles is safe.
-<em>Analysis set: all NHANES 2007–2018 records, N = 59,842.</em></li>
+do not overlap. <em>Analysis set: all NHANES 2007–2018 records, N =
+59,842.</em></li>
+<li>The ranges are <strong>not contiguous</strong>: a gap of 1,640 sits
+between 2011–2012 and 2013–2014, so a cycle cannot be recovered
+arithmetically from an ID.</li>
 <li>Keep a <strong>cycle variable</strong> anyway — provenance,
 definitions that change between cycles, and weights built per cycle. Not
 to disambiguate SEQN.</li>
-<li><em>MASLD hook:</em> reproducing Table 1 means merging DEMO + BMX +
-BIOPRO + TRIGLY + ALQ + mortality, all keyed on SEQN across six
-cycles.</li>
 </ul>
-<h2 id="slide-9-masld-is-a-derived-variable-not-a-diagnosis-4-min">Slide
-9 — “MASLD” is a derived variable, not a diagnosis (4 min)</h2>
+<hr />
+<h2 id="thursday-previewed-l1-builds-exactly-this-14-minutes-across-the-slides-below">Thursday,
+previewed: L1 builds exactly this · 14 minutes across the slides
+below</h2>
+<p>This block is new. It exists because L1 is not “merge on SEQN” — it
+is a download, a join, a cycle loop, a stack, a rename, a derivation, a
+missingness inspection and a descriptive table. Showing the code before
+the lab turns Thursday into execution rather than a new topic, and every
+line on these four slides uses a name taught on Slides 10–13.</p>
+<h2 id="slide-14-l1-in-one-screen-two-files-one-key-4-min">Slide 14 — L1
+in one screen: two files, one key (4 min)</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, nhanesA, tableone, naniar)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>demo <span class="ot">&lt;-</span> <span class="fu">nhanes</span>(<span class="st">&quot;DEMO_H&quot;</span>, <span class="at">translated =</span> <span class="cn">TRUE</span>)   <span class="co"># 2013-2014 demographics</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>bmx  <span class="ot">&lt;-</span> <span class="fu">nhanes</span>(<span class="st">&quot;BMX_H&quot;</span>,  <span class="at">translated =</span> <span class="cn">TRUE</span>)   <span class="co"># 2013-2014 body measures</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>merged <span class="ot">&lt;-</span> <span class="fu">full_join</span>(demo, bmx, <span class="at">by =</span> <span class="st">&quot;SEQN&quot;</span>)</span></code></pre></div>
 <ul>
-<li>MASLD = hepatic steatosis <strong>plus</strong> at least one
-cardiometabolic criterion.</li>
-<li>Gold-standard steatosis is biopsy or imaging. <strong>NHANES has
-neither</strong> in this window.</li>
-<li>So the paper uses a surrogate: the <strong>Fatty Liver
-Index</strong>, thresholded at <strong>FLI ≥ 60</strong>, computed from
-<strong>triglycerides, BMI, GGT and waist</strong>.</li>
-<li>The disease definition forces the workaround; it is a feature of the
-data, not a shortcut.</li>
+<li><code>DEMO_H</code> and <code>BMX_H</code> are the same
+<code>DEMO</code> and <code>BMX</code> from Slide 11, cycle
+<strong>H</strong>.</li>
+<li><code>translated = TRUE</code> turns stored codes into labels.
+Convenient — and it changes what a value <em>looks like</em>, so recode
+rules written against raw codes silently miss.</li>
+<li><strong><code>full_join</code> keeps people measured in one file but
+not the other.</strong> A row-set decision made by a single word:
+<code>inner_join</code> would be a different study. Ask which verb they
+want and why; there is no universally right answer, which is the
+point.</li>
 </ul>
-<h2 id="slide-10-the-funnel-with-a-type-on-every-row-3-min">Slide 10 —
-The funnel, with a type on every row (3 min)</h2>
+<h2 id="slide-15-then-do-it-for-every-cycle-4-min">Slide 15 — Then do it
+for every cycle (4 min)</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cycles <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;H&quot;</span>, <span class="st">&quot;I&quot;</span>, <span class="st">&quot;J&quot;</span>)                     <span class="co"># 2013-14, 2015-16, 2017-18</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>all_cycles <span class="ot">&lt;-</span> <span class="fu">lapply</span>(cycles, <span class="cf">function</span>(cy) {</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">nhanes</span>(<span class="fu">paste0</span>(<span class="st">&quot;DEMO_&quot;</span>, cy), <span class="at">translated =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">nhanes</span>(<span class="fu">paste0</span>(<span class="st">&quot;BMX_&quot;</span>,  cy), <span class="at">translated =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(d, b, <span class="at">by =</span> <span class="st">&quot;SEQN&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">cycle =</span> cy)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>stacked <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(all_cycles)</span></code></pre></div>
+<ul>
+<li><code>paste0(&quot;DEMO_&quot;, cy)</code> is why the suffix table was worth
+memorising.</li>
+<li><code>bind_rows()</code> stacks cycles; the joins happen
+<strong>within</strong> a cycle first.</li>
+<li>Our reproduction does the same over all six cycles, <code>E</code>
+through <code>J</code>.</li>
+<li><em>Flag forward to Q5:</em> a variable present in later cycles may
+be absent in earlier ones, so a column can appear mid-stack and
+<code>bind_rows()</code> fills the rest with NA. That is a changing
+instrument, not missingness in the usual sense.</li>
+</ul>
+<h2 id="slide-16-raw-names-in-analysis-names-out-3-min">Slide 16 — Raw
+names in, analysis names out (3 min)</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>analysis <span class="ot">&lt;-</span> stacked <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Sex =</span> RIAGENDR, <span class="at">Age =</span> RIDAGEYR,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">RaceEthnicity =</span> RIDRETH3, <span class="at">BMI =</span> BMXBMI) <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Age <span class="sc">&gt;=</span> <span class="dv">20</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">BMICat =</span> <span class="fu">cut</span>(BMI, <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">18.5</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="cn">Inf</span>), <span class="at">right =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Underweight&quot;</span>, <span class="st">&quot;Normal weight&quot;</span>, <span class="st">&quot;Overweight&quot;</span>, <span class="st">&quot;Obese&quot;</span>)))</span></code></pre></div>
+<ul>
+<li>Every rename is a <strong>decision you must be able to
+defend</strong>, not cosmetics.</li>
+<li><strong><code>right = FALSE</code> is not optional</strong>, and it
+is worth thirty seconds. <code>cut()</code> defaults to right-closed
+intervals, which would put BMI exactly 30.0 in <em>Overweight</em> — the
+mirror image of the WHO convention, of the lab’s own code, and of
+<code>reproduction/R/02_build_analytic.R</code>. A boundary convention
+hidden in a default argument silently reassigns everyone sitting on a
+cut-point.</li>
+<li><code>BMICat</code> uses standard WHO cut-points. <strong>The paper
+does not</strong>: obesity at BMI ≥ 30, and ≥ 25 for Asian
+participants.</li>
+<li>The lab keeps <strong>age ≥ 20</strong>; the paper says <strong>age
+&gt; 18</strong>; our reproduction uses <strong>≥ 18</strong>.
+<strong>Same variable, three eligibility rules, three different
+studies.</strong> Record which rule you used, every time.</li>
+</ul>
+<h2 id="slide-17-look-at-what-is-missing-before-you-model-it-3-min">Slide 17
+— Look at what is missing before you model it (3 min)</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(analysis))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>naniar<span class="sc">::</span><span class="fu">gg_miss_var</span>(analysis, <span class="at">show_pct =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>tab1_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Age&quot;</span>, <span class="st">&quot;RaceEthnicity&quot;</span>, <span class="st">&quot;BMI&quot;</span>, <span class="st">&quot;BMICat&quot;</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">CreateTableOne</span>(<span class="at">vars =</span> tab1_vars, <span class="at">data =</span> analysis, <span class="at">strata =</span> <span class="st">&quot;Sex&quot;</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">addOverall =</span> <span class="cn">TRUE</span>, <span class="at">test =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<ul>
+<li>Missingness is inspected first, then decided about — never
+discovered inside a model.</li>
+<li><code>CreateTableOne</code> is the Table 1 they rebuild for the
+paper’s cohort at M1.</li>
+<li><code>test = FALSE</code> on purpose: a p-value comparing baseline
+groups answers no question anyone asked.</li>
+<li>Name what Thursday produces: one merged table, a missingness
+picture, a descriptive table. Week 7 is where the missingness picture
+becomes a method.</li>
+</ul>
+<hr />
+<h2 id="slide-18-break-10-min">Slide 18 — BREAK (10 min)</h2>
+<hr />
+<h2 id="q2-continued-the-population-this-paper-defines-14-minutes-across-the-slides-below">Q2,
+continued — the population this paper defines · 14 minutes across the
+slides below</h2>
+<h2 id="slide-19-population-who-is-being-studied-3-min">Slide 19 —
+Population: who is being studied? (3 min)</h2>
+<ul>
+<li>Adults with <strong>MASLD</strong> in NHANES 2007–2018: excess liver
+fat with metabolic dysfunction.</li>
+<li><strong>But nobody looked at a liver.</strong> Steatosis was
+estimated by a formula.</li>
+<li>The study population is <strong>not the general population</strong>
+— everyone in the main analysis already meets the study’s own
+definition.</li>
+<li>The hinge: the population is defined by a computation, so it can be
+recomputed, and therefore it can disagree.</li>
+</ul>
+<h2 id="slide-20-how-masld-was-actually-ascertained-4-min">Slide 20 —
+How MASLD was actually ascertained (4 min)</h2>
+<ul>
+<li>Steatosis estimated with the <strong>Fatty Liver Index</strong>
+(Bedogni 2006), thresholded at <strong>FLI ≥ 60</strong>. A small table
+on the slide gives its four inputs with their component files:
+triglycerides (<code>LBXTR</code>, <code>TRIGLY</code>), BMI
+(<code>BMXBMI</code>, <code>BMX</code>), GGT (<code>LBXSGTSI</code>,
+<code>BIOPRO</code>), waist (<code>BMXWAIST</code>, <code>BMX</code>).
+Say explicitly that these enter a published logistic formula and are
+<strong>not multiplied together</strong> — the slide used to present
+them <code>·</code>-separated, which reads as a product.</li>
+<li>Plus <strong>at least one of five cardiometabolic criteria</strong>:
+adiposity; raised glucose/HbA1c or diabetes; raised blood pressure or
+treatment; raised triglycerides or treatment; low HDL.</li>
+<li>So MASLD here is a <strong>derived variable, not a
+diagnosis</strong> — no imaging, no biopsy.</li>
+<li>Not a criticism: every population study of MASLD in NHANES this
+decade faces the same constraint. What matters is that eligibility is
+<em>computed</em>, from four named variables in three different
+component files — two of which return in Q3 as the exposure.</li>
+</ul>
+<h2 id="slide-21-the-funnel-with-a-type-on-every-row-4-min">Slide 21 —
+The funnel, with a type on every row (4 min)</h2>
 <table>
 <thead>
 <tr>
@@ -482,7 +891,7 @@ The funnel, with a type on every row (3 min)</h2>
 <tr>
 <td>Age ≥ 18</td>
 <td>36,580</td>
-<td>eligibility</td>
+<td>eligibility — drops 23,262</td>
 </tr>
 <tr>
 <td>In fasting subsample</td>
@@ -497,7 +906,7 @@ The funnel, with a type on every row (3 min)</h2>
 <tr>
 <td>Steatosis (FLI ≥ 60)</td>
 <td>6,052</td>
-<td>target population</td>
+<td>target population — drops 8,118</td>
 </tr>
 <tr>
 <td>MASLD (≥1 criterion)</td>
@@ -514,42 +923,122 @@ The funnel, with a type on every row (3 min)</h2>
 <p><em>Analysis set: locked mortality-linked cohort, N = 6,048.</em></p>
 <ul>
 <li>A funnel shows N falling; the <strong>type</strong> column shows
-why. The largest exclusion is not clinical — it is a design feature,
-because the FLI needs fasting labs.</li>
-<li>Check that the prose arithmetic actually lands on the reported N.
-Ours does not match the paper’s ~6,300, and saying so is the work.</li>
+why, and the types are not interchangeable.</li>
+<li><strong>Scope the claim exactly.</strong> The age criterion removes
+more people than anything else (23,262), but that is the study’s own
+eligibility rule. <strong>After eligibility</strong>, the two largest
+drops are <strong>design</strong> (the fasting subsample, 21,618) and
+the <strong>disease definition</strong> (8,118) — and neither is missing
+data. The printed drops are on the table so a student can check the
+sentence rather than take it on trust.</li>
+<li>This scoped form is the course-wide wording:
+<code>reproduction/reproduction_report.md</code>,
+<code>Week7_missing_slides.qmd</code>, the M1 deck and the P1 exemplar
+all state it this way. An unscoped “the largest single exclusion is
+design” is false against this table.</li>
+<li>Name the row-set label and say why it is there: the full
+reconstructed file is 6,371.</li>
+</ul>
+<h2 id="slide-22-what-the-funnel-reveals-3-min">Slide 22 — What the
+funnel reveals (3 min)</h2>
+<ul>
+<li>The published paper reports <strong>~6,300</strong> participants
+with MASLD; this pipeline yields <strong>6,048</strong> mortality-linked
+participants. <em>Analysis set: locked mortality-linked cohort, N =
+6,048.</em> The two should not be presented as the same cohort.</li>
+<li>The paper states eligibility as <strong>age &gt; 18</strong>; this
+reproduction uses <strong>age ≥ 18</strong>. Small implementation
+differences are <strong>recorded, not silently harmonised</strong>.</li>
+<li>Tie back to Slide 16: they have just seen three age rules on one
+slide. A reproduction that quietly adopts the other rule has destroyed
+its own evidence.</li>
 </ul>
 <hr />
-<h2 id="slide-11-break-10-min">Slide 11 — BREAK (10 min)</h2>
-<hr />
-<h2 id="q3-what-is-the-exposure-and-the-comparison-15-minutes-across-the-slides-below">Q3
-— What is the exposure, and the comparison? · 15 minutes across the
+<h2 id="q3-what-is-the-exposure-and-the-comparison-16-minutes-across-the-slides-below">Q3
+— What is the exposure, and the comparison? · 16 minutes across the
 slides below</h2>
-<h2 id="slide-12-the-exposure-is-constructed-not-measured-5-min">Slide
-12 — The exposure is constructed, not measured (5 min)</h2>
+<h2 id="slide-23-the-exposure-is-constructed-not-measured-3-min">Slide
+23 — The exposure is constructed, not measured (3 min)</h2>
 <ul>
-<li>Obesity by <strong>BMI ≥ 30</strong> (Asian participants <strong>≥
-25</strong>) × central adiposity by <strong>WHtR ≥ 0.60</strong>, giving
-four phenotype groups.</li>
-<li>Group IV = not obese by BMI, high waist-for-height — the cell the
-paper is about.</li>
-<li><em>MASLD hook:</em> the exposure spans <strong>two collection
-settings</strong> — BMI and waist from the MEC exam — so a person
-missing either is missing the exposure.</li>
+<li><code>BMXWAIST</code> ÷ <code>BMXHT</code> → <strong>waist-to-height
+ratio</strong>; <code>BMXBMI</code> → <strong>obesity category</strong>;
+the two categories crossed → <strong>four phenotype
+groups</strong>.</li>
+<li>All three inputs come from <strong>one component,
+<code>BMX</code></strong>, in the MEC exam — so a person missing the
+exam is missing the exposure entirely.</li>
+<li><strong>Contrast with eligibility</strong>, which needs
+<code>BMX</code> <em>and</em> the laboratory (<code>LBXTR</code>,
+<code>LBXSGTSI</code>). Eligibility spans two collection settings; the
+exposure does not.</li>
+<li><em>Correction:</em> an earlier version of this deck said the
+<strong>exposure</strong> spanned two settings. It does not. Eligibility
+does.</li>
 </ul>
-<h2 id="slide-13-which-group-is-the-comparison-4-min">Slide 13 — Which
-group is the comparison? (4 min)</h2>
+<h2 id="slide-24-exposure-component-1-bmi-4-min">Slide 24 — Exposure
+component 1: BMI (4 min)</h2>
 <ul>
-<li>There is no treated and control arm. The four-category phenotype is
-the index factor, and mortality is compared <strong>across</strong> the
-categories.</li>
-<li><strong>Group I is the reference.</strong> Every hazard ratio in the
-paper is measured against it.</li>
-<li>A ratio without its referent means nothing — and it is
-counterintuitive here that the referent is an obese group.</li>
+<li>Weight and height were <strong>measured</strong> in the exam, not
+self-reported (<code>BMXBMI</code>).</li>
+<li>BMI marks overall body size — not body fat, and not where fat is
+stored.</li>
+<li>Obesity defined as <strong>BMI ≥ 30</strong>; for Asian participants
+<strong>BMI ≥ 25</strong> (<code>RIDRETH3 == 6</code>).</li>
+<li><strong>Paper reporting note:</strong> the Methods define obesity as
+BMI ≥ 30 (≥ 25 for Asian participants), but published Tables 1–2 label
+the groups as BMI ≥ 25 versus &lt; 25. Those labels conflict with the
+Methods <em>and</em> with the reported group BMI distributions, so they
+appear to be a reporting error.</li>
+<li>Ask which version they would implement, and how they would say so in
+writing. Flag <code>RIDRETH3</code> — it returns on Slide 32.</li>
 </ul>
-<h2 id="slide-14-eligibility-and-exposure-share-their-inputs-6-min">Slide 14
-— Eligibility and exposure share their inputs (6 min)</h2>
+<h2 id="slide-25-exposure-component-2-waist-to-height-ratio-2-min">Slide
+25 — Exposure component 2: waist-to-height ratio (2 min)</h2>
+<ul>
+<li>WHtR = waist (cm) / height (cm) = <code>BMXWAIST</code> /
+<code>BMXHT</code>. A person 170 cm tall with a 102 cm waist has WHtR =
+0.60 — worked on screen so the threshold stops being abstract.</li>
+<li>High central adiposity defined as <strong>WHtR ≥ 0.60</strong>; a
+simple marker of abdominal adiposity, not a CT or MRI measurement of
+visceral fat.</li>
+</ul>
+<h2 id="slide-26-the-exposure-is-the-combination-4-min">Slide 26 — The
+exposure is the combination (4 min)</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>WHtR &lt; 0.60</th>
+<th>WHtR ≥ 0.60</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Obesity by BMI</strong></td>
+<td><strong>Group I</strong> — <em>reference</em></td>
+<td><strong>Group II</strong></td>
+</tr>
+<tr>
+<td><strong>No obesity by BMI</strong></td>
+<td><strong>Group III</strong></td>
+<td><strong>Group IV</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Group IV</strong> — not obese by BMI, large waist for
+height. The study asks whether BMI alone misses this higher-risk
+phenotype.</li>
+<li>There is no treated arm and control arm: the four-category phenotype
+is the <strong>index factor</strong>, and mortality is compared
+<strong>across</strong> the categories.</li>
+<li><strong>Group I is the reference.</strong> A ratio without its
+referent means nothing — and here the referent is an
+<strong>obese</strong> group. Make them say the Group IV versus Group I
+contrast aloud.</li>
+</ul>
+<h2 id="slide-27-eligibility-and-exposure-share-their-inputs-3-min">Slide 27
+— Eligibility and exposure share their inputs (3 min)</h2>
 <table>
 <thead>
 <tr>
@@ -559,7 +1048,7 @@ counterintuitive here that the referent is an obese group.</li>
 </thead>
 <tbody>
 <tr>
-<td>Eligibility (FLI)</td>
+<td>Eligibility (FLI ≥ 60)</td>
 <td>triglycerides, GGT, <strong>BMI</strong>,
 <strong>waist</strong></td>
 </tr>
@@ -573,17 +1062,18 @@ counterintuitive here that the referent is an obese group.</li>
 <li>Being selected into the study and being placed in a phenotype group
 are <strong>not independent events</strong>. That is <strong>structural
 dependence</strong>.</li>
-<li>What it does to an estimate depends on the research goal and the
-causal structure — which is Q1’s lesson arriving with consequences. We
-name it today; <strong>M1</strong> dissects it.</li>
-<li>Takeaway for any paper: <strong>never trust a label you have not
-recomputed.</strong></li>
+<li>For a causal question, conditioning on this selected population
+could open selection or collider paths under some structures; for a
+prognostic question, it primarily defines a selected target population.
+Not automatically circularity, not automatically bias.</li>
+<li>We name it today; <strong>M1</strong> dissects it. Takeaway:
+<strong>never trust a label you have not recomputed.</strong></li>
 </ul>
 <hr />
 <h2 id="q4-what-is-the-outcome-time-zero-and-follow-up-11-minutes-across-the-slides-below">Q4
 — What is the outcome, time zero, and follow-up? · 11 minutes across the
 slides below</h2>
-<h2 id="slide-15-outcome-and-the-clock-6-min">Slide 15 — Outcome and the
+<h2 id="slide-28-outcome-and-the-clock-6-min">Slide 28 — Outcome and the
 clock (6 min)</h2>
 <ul>
 <li>Outcome: <strong>all-cause mortality</strong>
@@ -593,29 +1083,35 @@ NHANES file, a separate linked, fixed-width one.</li>
 <code>PERMTH_EXM</code> is person-months from that exam.</li>
 <li>Follow-up runs through <strong>31 December 2019</strong>, stated in
 the NCHS 2019 Linked Mortality File linkage methodology document — not
-inferred from the filename.</li>
-<li>Participants entered between 2007 and 2018, so follow-up lengths
-differ. That is why this is a survival analysis and not a risk
-difference.</li>
+inferred from the filename. That sourcing is the standard we ask of
+them.</li>
+<li>Participants entered between 2007 and 2018, so <strong>follow-up
+lengths and censoring differ</strong>. Time-to-event methods are
+appropriate — and a <strong>risk difference at a fixed horizon can still
+be estimated</strong> with methods that account for censoring.</li>
+<li><em>Correction:</em> an earlier version said differing follow-up
+meant “survival analysis, not a risk difference”. Differing follow-up
+forbids a <em>naive</em> absolute contrast, not an absolute
+contrast.</li>
 </ul>
-<h2 id="slide-16-time-zero-is-a-question-the-checklist-never-asks-5-min">Slide
-16 — Time zero is a question the checklist never asks (5 min)</h2>
+<h2 id="slide-29-time-zero-is-a-question-the-checklist-never-asks-5-min">Slide
+29 — Time zero is a question the checklist never asks (5 min)</h2>
 <ul>
 <li>“Exposure, outcome, covariates” can all be specified while time zero
 stays ambiguous, and an ambiguous time zero silently changes who is at
 risk and for how long.</li>
 <li><em>MASLD hook:</em> exposure here is measured <strong>at</strong>
-time zero, which is convenient and rare — in your own papers, ask when
-the exposure was measured relative to the clock starting.</li>
+time zero, which is convenient and rare.</li>
 <li>Ask of your M0 candidates: when does follow-up begin, and does
-everyone start together?</li>
+everyone start together? A show of hands on whether their candidates
+state it is worth the thirty seconds.</li>
 </ul>
 <hr />
-<h2 id="q5-what-other-variables-enter-and-in-what-role-14-minutes-across-the-slides-below">Q5
-— What other variables enter, and in what role? · 14 minutes across the
+<h2 id="q5-what-other-variables-enter-and-in-what-role-15-minutes-across-the-slides-below">Q5
+— What other variables enter, and in what role? · 15 minutes across the
 slides below</h2>
-<h2 id="slide-17-in-the-model-is-not-the-same-as-confounding-6-min">Slide 17
-— In the model is not the same as confounding (6 min)</h2>
+<h2 id="slide-30-in-the-model-is-not-the-same-as-confounding-4-min">Slide 30
+— In the model is not the same as confounding (4 min)</h2>
 <ul>
 <li>The paper adjusts for age, sex, and a list of comorbidities and
 medications.</li>
@@ -623,10 +1119,11 @@ medications.</li>
 what X <strong>does</strong>.</li>
 <li>The same variable can be a confounder, a mediator, a competing
 prognostic factor, or a collider — and which it is depends on the
-research goal from Q1.</li>
+research goal from Q1. Under a prognostic-factor question the adjustment
+set need not be confounders at all.</li>
 </ul>
-<h2 id="slide-18-what-a-crude-to-adjusted-change-establishes-8-min">Slide 18
-— What a crude-to-adjusted change establishes (8 min)</h2>
+<h2 id="slide-31-what-a-crude-to-adjusted-change-establishes-5-min">Slide 31
+— What a crude-to-adjusted change establishes (5 min)</h2>
 <ul>
 <li>Group IV all-cause HR ≈ <strong>15.1 crude → ≈ 2.9
 adjusted</strong>. <em>Analysis set: full reconstructed analytic file, N
@@ -637,15 +1134,66 @@ mediation removed, a collider opened — depends on the goal and on the
 causal role of those variables.</li>
 <li><strong>Week 4 does that work.</strong> Today it is enough to see
 that the size of a move is not itself an interpretation.</li>
-<li>Vote and argue: what would you need to know to call this
-confounding?</li>
+<li><strong>Vote and argue:</strong> what would you need to know to call
+this confounding? Collect answers; resist supplying one.</li>
+</ul>
+<h2 id="slide-32-five-nhanes-traps-each-of-which-has-bitten-this-project-3-min">Slide
+32 — Five NHANES traps, each of which has bitten this project (3
+min)</h2>
+<ul>
+<li><strong><code>ALQ130</code> is drinks per <em>drinking day</em>, not
+drinks per day.</strong> The paper’s “&gt;2 drinks a day” is an average
+intake — frequency × quantity. Applying the rule to <code>ALQ130</code>
+directly over-excluded roughly <strong>2,000</strong> people here.
+<strong>Week 3 owns the full demonstration.</strong></li>
+<li><strong>777 = refused, 999 = don’t know.</strong> Codes, not counts.
+Left inside a threshold rule they reclassified <strong>nine</strong>
+refusals as heavy drinkers (the exclusion moves 2,063 → 2,072).</li>
+<li>Keep those two bullets <strong>separate</strong>. An earlier version
+of this slide fused them and attached the 2,000 to the reserved codes —
+wrong by a factor of two hundred, and the sort of error this course
+exists to catch.</li>
+<li><strong><code>RIDRETH3</code> does not exist before 2011.</strong>
+It identifies Asian participants for the lower BMI threshold, so the
+first two cycles cannot apply the paper’s own rule. A definition that
+cannot be applied in a third of your cycles is a finding, not a
+nuisance.</li>
+<li><strong>Fasting labs carry their own weight:</strong>
+<code>LBXTR</code> and <code>LBXGLU</code> come from the fasting
+subsample, weighted by <code>WTSAF2YR</code>, not
+<code>WTMEC2YR</code>.</li>
+<li><strong>Blood pressure is not a row mean</strong> — next slide.</li>
+<li>These sit under Q5 rather than in a separate tips section because
+each is a variable-handling decision.</li>
+</ul>
+<h2 id="slide-33-the-blood-pressure-trap-in-full-3-min">Slide 33 — The
+blood pressure trap, in full (3 min)</h2>
+<ul>
+<li>The NHANES <strong>Blood Pressure Procedures Manual
+(s3.1.7.3)</strong> specifies the averaging: the <strong>first reading
+is excluded</strong> whenever more than one was obtained; an
+<strong>all-zero diastolic set averages to zero</strong>, because a
+diastolic 0 is a measurement and a failure to obtain a reading is coded
+separately as missing; and a <strong>zero beside a positive reading is
+omitted</strong>.</li>
+<li>Applying it changed derived SBP/DBP for <strong>5,523 of
+6,371</strong> participants and moved hypertension from 3,444 to 3,448,
+while adjusted hazard ratios shifted only in the third significant
+figure. <em>Analysis set: full reconstructed analytic file, N =
+6,371.</em></li>
+<li><strong>A coding error can be real, and worth fixing, even when the
+headline estimate survives.</strong></li>
+<li>The paper does not specify its own averaging in enough detail to
+establish that it used this algorithm, so ours is a
+documentation-informed choice, not a claim of exact computational
+reproduction.</li>
 </ul>
 <hr />
-<h2 id="q6-what-design-and-analysis-features-must-be-respected-11-minutes-across-the-slides-below">Q6
-— What design and analysis features must be respected? · 11 minutes
+<h2 id="q6-what-design-and-analysis-features-must-be-respected-10-minutes-across-the-slides-below">Q6
+— What design and analysis features must be respected? · 10 minutes
 across the slides below</h2>
-<h2 id="slide-19-nhanes-is-not-a-simple-random-sample-5-min">Slide 19 —
-NHANES is not a simple random sample (5 min)</h2>
+<h2 id="slide-34-nhanes-is-not-a-simple-random-sample-3-min">Slide 34 —
+NHANES is not a simple random sample (3 min)</h2>
 <ul>
 <li>A complex multistage probability design: <strong>weights, strata
 (<code>SDMVSTRA</code>), PSUs (<code>SDMVPSU</code>)</strong>. We
@@ -653,9 +1201,12 @@ NHANES is not a simple random sample (5 min)</h2>
 them is a choice with consequences.</li>
 <li>Fasting-subsample analyses carry their own weight,
 <strong><code>WTSAF2YR</code></strong>, not <code>WTMEC2YR</code>.</li>
+<li>Build the design on the <strong>full frame</strong>, then
+<code>subset()</code> — never on the subsample alone. The single most
+common survey-analysis error, worth planting now.</li>
 </ul>
-<h2 id="slide-20-designed-subsampling-is-not-missingness-6-min">Slide 20
-— Designed subsampling is not missingness (6 min)</h2>
+<h2 id="slide-35-designed-subsampling-is-not-missingness-4-min">Slide 35
+— Designed subsampling is not missingness (4 min)</h2>
 <ul>
 <li>The fasting subsample is <strong>statistically designed</strong>,
 not self-selected, and carries a weight built to keep it nationally
@@ -666,15 +1217,72 @@ waist</strong>. It is balanced on the very measurements this paper’s
 exposure is built from. <em>Analysis set: all NHANES adults 2007–2018, N
 = 36,580.</em></li>
 <li>So the distinction is <strong>designed subsampling ≠ ordinary
-missingness</strong> — not “the fasting subsample is a biased
-sample”.</li>
-<li><em>MASLD hook:</em> the paper’s Statistical analysis section never
-names the survey design. That is Q6 answered by omission, and it is the
-honest finding to report.</li>
+missingness</strong>. That it was <em>checked</em>, rather than assumed
+in either direction, is the transferable habit.</li>
+</ul>
+<h2 id="slide-36-survey-design-paper-versus-reproduction-3-min">Slide 36
+— Survey design: paper versus reproduction (3 min)</h2>
+<ul>
+<li>The published paper’s Statistical analysis section <strong>does not
+report</strong> using NHANES survey weights, strata or PSUs. Our
+pipeline does include them.</li>
+<li>Therefore a survey-weighted rebuild is a <strong>design-informed
+reanalysis</strong>, not a literal reproduction of every published
+analytic choice.</li>
+<li>Without the design information, estimates and standard errors should
+not be described as design-based nationally representative
+estimates.</li>
+<li><em>MASLD hook:</em> this is Q6 answered by omission — a documented
+divergence that is neither our error nor theirs, and the honest move is
+to label it as one.</li>
 </ul>
 <hr />
-<h2 id="slide-21-m0-ask-the-six-of-your-own-papers-12-min">Slide 21 —
-M0: ask the six of your own papers (12 min)</h2>
+<h2 id="closing-6-minutes-across-the-slides-below">Closing · 6 minutes
+across the slides below</h2>
+<h2 id="slide-37-pecot-and-the-question-rebuilt-2-min">Slide 37 — PECOT,
+and the question rebuilt (2 min)</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Element</th>
+<th>This study</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>P</strong> — Population</td>
+<td>Adults with MASLD by FLI ≥ 60 + ≥1 cardiometabolic criterion, in the
+fasting subsample</td>
+</tr>
+<tr>
+<td><strong>E</strong> — Exposure</td>
+<td>Four-category BMI × WHtR phenotype</td>
+</tr>
+<tr>
+<td><strong>C</strong> — Comparison</td>
+<td>Groups II, III, IV versus <strong>Group I</strong></td>
+</tr>
+<tr>
+<td><strong>O</strong> — Outcome</td>
+<td>All-cause mortality to 31 Dec 2019</td>
+</tr>
+<tr>
+<td><strong>T</strong> — Time</td>
+<td>Months from exam to death or censoring</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><em>Among adults with MASLD, are BMI/WHtR phenotypes associated with
+different subsequent risks of all-cause mortality?</em> That sentence is
+the deliverable shape for M0.</li>
+</ul>
+<h2 id="slide-38-m0-ask-the-six-of-your-own-papers-2-min">Slide 38 — M0:
+ask the six of your own papers (2 min)</h2>
 <ul>
 <li>Shortlist two or three candidate NHANES papers and answer all six
 questions for each, each answer with a pointer to where in the paper you
@@ -683,44 +1291,63 @@ found it.</li>
 paper can be perfectly specified and still be a bad M0 choice — too few
 events, no design feature worth respecting, no variable whose handling
 you could interrogate.</li>
-<li>The M0 criteria ask for exactly this: enough observations and
-events, a design feature its analysis must respect, and a missing
-variable the analysis actually uses.</li>
 <li>Where a paper leaves a question unanswered, that is not a
 disqualification — it is a candidate for the judgement you will defend
 at M1.</li>
+<li>If you are ahead of schedule, work one candidate live. It is the
+best use of spare minutes.</li>
 </ul>
-<h2 id="slide-22-bridge-to-todays-lab-l1-and-m0-5-min">Slide 22 — Bridge
-to today’s lab (L1) and M0 (5 min)</h2>
+<h2 id="slide-39-bridge-to-l1-and-m0-2-min">Slide 39 — Bridge to L1 and
+M0 (2 min)</h2>
 <ul>
-<li><strong>In L1 (Thu):</strong> download several NHANES cycles, read
-the raw topic files, and merge them on <code>SEQN</code> into one
-analytic-ready table with a cycle indicator.</li>
-<li><strong>How it becomes your project:</strong> L1’s merge is the
-substrate for the whole term — Table 1, confounding, interaction, survey
-weights and missing data all run on it.</li>
+<li><strong>Thursday (L1):</strong> the code from before the break —
+several cycles downloaded, topic files read, merged on
+<code>SEQN</code>, renamed, categorised, missingness inspected, Table 1
+built.</li>
+<li><strong>Before you go:</strong> you should be able to name the
+component file each variable on these slides comes from. Ask two or
+three at random on the way out.</li>
 <li><strong>Toward M0 (Wk3):</strong> bring six answers for each
 candidate paper, not a summary.</li>
 <li>Takeaway: reading a Methods section <em>is</em> the first act of
 reproduction.</li>
 </ul>
 <hr />
+<h2 id="if-you-are-running-behind">If you are running behind</h2>
+<p>Drop in this order. Each is a slide whose content is carried
+elsewhere in the course, so cutting it costs continuity rather than a
+concept:</p>
+<ol type="1">
+<li><strong>Slide 7</strong> (different evidence of success, 4 min) —
+Slide 8 states its one-line version.</li>
+<li><strong>Slide 25</strong> (WHtR, 2 min) — the ratio is defined again
+on Slide 26’s table header.</li>
+<li><strong>Slide 6</strong> (different analyses, 4 min) — painful, but
+Slide 5 carries the distinction.</li>
+<li><strong>Slide 33</strong> (the blood pressure trap, 3 min) — Slide
+32’s blood-pressure bullet survives alone. (Named, not numbered: the
+bullet’s position moved once already.)</li>
+<li><strong>Slide 22</strong> (what the funnel reveals, 3 min) — Week 3
+revisits the cohort arithmetic.</li>
+</ol>
+<p>Do <strong>not</strong> cut Slides 14–17. The lab preview is the
+reason this deck was rebuilt, and dropping it puts students into L1
+cold.</p>
+<hr />
 <h2 id="deliberately-deferred">Deliberately deferred</h2>
-<p>Four things the old Week 2 taught are <strong>not</strong> in the
-rebuild, and are deferred on purpose rather than squeezed under a
-question:</p>
+<p>Three things the old Week 2 taught are <strong>not</strong> here, and
+are deferred on purpose rather than squeezed under a question:</p>
 <ul>
 <li><strong>The alcohol-exclusion three-way demonstration</strong> (~23
 min including live work). It is a cohort-construction exercise and Week
-3 owns it (<code>Week3_cohort_construction_FLI.md</code>). It would have
-been the largest single block in a lecture whose job is a
-framework.</li>
+3 owns it (<code>Week3_cohort_construction_FLI.md</code>). Its residue
+survives as the <strong>two alcohol bullets</strong> on Slide 32 — the
+<code>ALQ130</code> drinks-per-drinking-day trap and the 777/999
+reserved-code trap — which name the two errors and their sizes without
+running the demonstration.</li>
 <li><strong>“Table 1 reproduces closely, therefore the variable
 definitions are recoverable.”</strong> The inference is exactly what Q5
 warns against, and Week 4 carries the careful version.</li>
-<li><strong>The reading-Methods traps checklist.</strong> Superseded:
-the six questions are the checklist. One line survives at Slide 14 —
-never trust a label you have not recomputed.</li>
 <li><strong>The four primitives</strong> (exposure / outcome /
 eligibility / variables). Kept as an idea, demoted from <em>the</em>
 framework to a reconstructability check nested inside Q2–Q5. It never
@@ -728,7 +1355,43 @@ asked what kind of question the variables were meant to answer, which is
 why a crude-to-adjusted collapse could be read as settled
 confounding.</li>
 </ul>
-<p>If a later revision wants any of these back, they belong where they
-are now owned, not retrofitted into a six-question spine.</p>
+<p>The <strong>reading-Methods traps checklist</strong> is no longer
+listed as deferred: the NHANES traps now have their own slides under Q5,
+and the six questions are the reading checklist.</p>
+<p>If a later revision wants any of the three back, they belong where
+they are now owned, not retrofitted into a six-question spine.</p>
+<hr />
+<h2 id="relationship-to-the-companion-deck">Relationship to the
+companion deck</h2>
+<p><code>lectures/bmj_open_revealjs/</code> — <em>Decomposing the Study
+Aim</em> — is the standalone deck this rebuild draws its NHANES anatomy,
+PECOT and goal-ladder material from. It remains published as a companion
+for students who want the aim-decomposition argument on its own, without
+the six-question scaffolding or the lab preview. <strong>Where the two
+disagree, this file wins.</strong></p>
+<p>Two errors were corrected during this rebuild. <strong>Neither is in
+the companion today</strong>, but they reached Week 2 by different
+routes, and the difference matters — an inherited error attributed to
+the wrong source cannot be traced:</p>
+<ul>
+<li><strong>The exposure spans one collection setting, not two</strong>
+(Slide 23). This one was never in the companion, which makes no
+collection-settings claim about the exposure at all. It was introduced
+by the previous Week 2 rewrite (<code>c782167</code>).</li>
+<li><strong>Differing follow-up permits an absolute contrast</strong>
+computed with censoring in mind, and forbids only a naive one (Slide
+28). This one <strong>was inherited from the companion</strong>, which
+carried “survival analysis and not a risk difference” in its first
+version (<code>02e50be</code>) until <code>ae5e3ef</code> corrected it.
+The previous Week 2 rebuild copied the <em>pre-correction</em> wording
+an hour and a half later — a fix that lands in one file and not in its
+copy is exactly how a corrected error comes back.</li>
+</ul>
+<p>One claim <strong>was</strong> wrong in the companion and has been
+fixed there in the same change: its funnel slide called the fasting
+subsample “the largest single exclusion”, which is false against its own
+table. It now carries the course-canonical <em>after eligibility</em>
+scoping, and its fused <code>ALQ130</code> / 777-999 trap bullet has
+been split the same way as Slide 32’s.</p>
 </body>
 </html>

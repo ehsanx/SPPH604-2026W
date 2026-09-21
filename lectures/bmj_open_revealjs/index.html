@@ -232,9 +232,10 @@
 </section>
 
 <section>
-  <h1>Four NHANES traps — each one has bitten this project</h1>
+  <h1>Five NHANES traps — each one has bitten this project</h1>
   <ul>
-    <li>777 = refused, 999 = don’t know. They are codes, not counts. Reading <code>ALQ130</code> literally over-excluded about 2,000 people here.</li>
+    <li><code>ALQ130</code> is drinks per <em>drinking day</em>, not drinks per day. Applying a “&gt;2 a day” rule to it directly over-excluded about 2,000 people here — an average intake needs frequency × quantity.</li>
+    <li>777 = refused, 999 = don’t know. They are codes, not counts. Left inside a threshold rule they reclassified nine refusals as heavy drinkers. Two traps on one variable, a factor of two hundred apart.</li>
     <li><strong>Do not automatically recode diastolic BP = 0 as missing.</strong> NHANES explicitly allows a diastolic value of 0; failure to obtain a reading is handled separately. Treating every 0 as missing would also be an error.</li>
     <li><code>RIDRETH3</code> does not exist before 2011. It is what identifies Asian participants for the lower BMI threshold, so the first two cycles cannot apply it.</li>
     <li>Fasting labs carry their own weight. <code>LBXTR</code> and <code>LBXGLU</code> come from the fasting subsample, which is weighted by <code>WTSAF2YR</code>, not <code>WTMEC2YR</code>.</li>
@@ -355,15 +356,15 @@
     <thead><tr><th>Step</th><th>N</th><th>What kind of step</th></tr></thead>
     <tbody>
       <tr><td>NHANES 2007–2018 records</td><td>59,842</td><td></td></tr>
-      <tr><td>Age ≥ 18</td><td>36,580</td><td>eligibility</td></tr>
+      <tr><td>Age ≥ 18</td><td>36,580</td><td>eligibility — drops 23,262</td></tr>
       <tr><td>In fasting subsample</td><td>14,962</td><td>design — drops 21,618</td></tr>
       <tr><td>FLI computable</td><td>14,170</td><td>missingness</td></tr>
-      <tr><td>Steatosis (FLI ≥ 60)</td><td>6,052</td><td>target population</td></tr>
+      <tr><td>Steatosis (FLI ≥ 60)</td><td>6,052</td><td>target population — drops 8,118</td></tr>
       <tr><td>MASLD (≥1 criterion)</td><td>6,050</td><td>target population</td></tr>
       <tr><td>Mortality-linked</td><td><strong>6,048</strong></td><td>outcome ascertainment</td></tr>
     </tbody>
   </table>
-  <div class="callout">The largest single exclusion in <strong>our reproduction</strong> is the fasting subsample — a design feature because the analysis uses fasting triglycerides.</div>
+  <div class="callout"><strong>After eligibility</strong>, the two largest drops in <strong>our reproduction</strong> are the fasting subsample — a design feature, because the analysis uses fasting triglycerides — and the disease definition. Neither is missing data. The age criterion removes more people than either, but that is the study's own eligibility rule.</div>
 </section>
 
 <section>

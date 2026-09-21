@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>VARIABLE MAP</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">VARIABLE MAP</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#nhanes-variable-map-the-reproductions-own-crosswalk" id="toc-nhanes-variable-map-the-reproductions-own-crosswalk">NHANES
+variable map — the reproduction’s own crosswalk</a>
+<ul>
+<li><a href="#join-key" id="toc-join-key">Join key</a></li>
+<li><a href="#eligibility" id="toc-eligibility">Eligibility</a></li>
+<li><a href="#survey-design" id="toc-survey-design">Survey
+design</a></li>
+<li><a href="#case-definition-fli" id="toc-case-definition-fli">Case
+definition (FLI)</a></li>
+<li><a href="#cardiometabolic-1-adiposity" id="toc-cardiometabolic-1-adiposity">Cardiometabolic 1
+(adiposity)</a></li>
+<li><a href="#cardiometabolic-2-glycaemia" id="toc-cardiometabolic-2-glycaemia">Cardiometabolic 2
+(glycaemia)</a></li>
+<li><a href="#cardiometabolic-3-blood-pressure" id="toc-cardiometabolic-3-blood-pressure">Cardiometabolic 3 (blood
+pressure)</a></li>
+<li><a href="#cardiometabolic-4-triglycerides" id="toc-cardiometabolic-4-triglycerides">Cardiometabolic 4
+(triglycerides)</a></li>
+<li><a href="#cardiometabolic-5-hdl" id="toc-cardiometabolic-5-hdl">Cardiometabolic 5 (HDL)</a></li>
+<li><a href="#exposure" id="toc-exposure">Exposure</a></li>
+<li><a href="#alcohol-exclusion" id="toc-alcohol-exclusion">Alcohol
+exclusion</a></li>
+<li><a href="#covariate" id="toc-covariate">Covariate</a></li>
+<li><a href="#not-every-variable-exists-in-every-cycle" id="toc-not-every-variable-exists-in-every-cycle">Not every variable
+exists in every cycle</a></li>
+<li><a href="#reserved-codes-are-not-a-property-of-nhanes.-they-are-a-property-of-the-variable." id="toc-reserved-codes-are-not-a-property-of-nhanes.-they-are-a-property-of-the-variable.">Reserved
+codes are not a property of NHANES. They are a property of the
+variable.</a></li>
+<li><a href="#the-outcome-does-not-live-in-nhanes" id="toc-the-outcome-does-not-live-in-nhanes">The outcome does not live
+in NHANES</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="nhanes-variable-map-the-reproductions-own-crosswalk">NHANES
+variable map — the reproduction’s own crosswalk</h1>
+<p><em>Generated by <code>R/07_variable_map.R</code> from the files in
+<code>data/raw/</code>. Do not edit by hand.</em> <em>Cycle
+availability, labels and missing-value conventions below were read out
+of the .xpt files, not copied from documentation.</em></p>
+<p>Every variable this reproduction touches, and for each one the four
+things students most often get wrong:</p>
+<ol type="1">
+<li><strong>Where it lives</strong> — which component file, and
+therefore which download</li>
+<li><strong>What its raw codes mean</strong> — and whether a
+<code>77</code>-looking value is a code or a measurement</li>
+<li><strong>Whether it exists in every cycle</strong> — several do
+not</li>
+<li><strong>What we did to it</strong> — the line in our pipeline that
+reads or transforms it</li>
+</ol>
+<blockquote>
+<p><strong>This page is a method, not just an answer.</strong> When you
+meet an unfamiliar NHANES variable in <em>your own</em> paper, these are
+the questions to ask of it, in this order. The loop runs: paper sentence
+→ operational concept → NHANES variable → component → <strong>that
+cycle’s</strong> codebook → raw <code>.xpt</code> → your implementation
+→ cohort consequence.</p>
+</blockquote>
+<p>Three different kinds of link, which are easy to conflate:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Link</th>
+<th>Goes to</th>
+<th>Use it when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>codebook</strong></td>
+<td>the CDC documentation page, anchored at that variable</td>
+<td>you need the official definition, the value labels, or the
+frequencies</td>
+</tr>
+<tr>
+<td><strong>.xpt</strong></td>
+<td>the raw data file for that cycle</td>
+<td>you are downloading it yourself</td>
+</tr>
+<tr>
+<td><strong>our code</strong></td>
+<td>the line in this pipeline that reads or derives it</td>
+<td>you want to see what <em>we</em> did, and disagree with it</td>
+</tr>
+</tbody>
+</table>
+<p>Cycle letters: <strong>E</strong> 2007-08 · <strong>F</strong>
+2009-10 · <strong>G</strong> 2011-12 · <strong>H</strong> 2013-14 ·
+<strong>I</strong> 2015-16 · <strong>J</strong> 2017-18. The
+<em>file</em> name carries the suffix (<code>BMX_H.xpt</code>); the
+<em>variable</em> name inside usually does not (<code>BMXBMI</code> in
+every cycle).</p>
+<hr />
+<h2 id="join-key">Join key</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Variable</th>
+<th>Component</th>
+<th>Cycles</th>
+<th>Label (from the file)</th>
+<th>Missing convention</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Respondent ID</td>
+<td><code>SEQN</code></td>
+<td><code>DEMO</code></td>
+<td>all six</td>
+<td>Respondent sequence number</td>
+<td><code>NA</code> only</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.htm#SEQN">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:48</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="eligibility">Eligibility</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Variable</th>
+<th>Component</th>
+<th>Cycles</th>
+<th>Label (from the file)</th>
+<th>Missing convention</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Age</td>
+<td><code>RIDAGEYR</code></td>
+<td><code>DEMO</code></td>
+<td>all six</td>
+<td>Age at Screening Adjudicated - Recode</td>
+<td><code>NA</code> only — <code>7</code>, <code>9</code>,
+<code>77</code> are real values (n=1282, 1258, 300): do
+<strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.htm#RIDAGEYR">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:56</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="survey-design">Survey design</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Variable</th>
+<th>Component</th>
+<th>Cycles</th>
+<th>Label (from the file)</th>
+<th>Missing convention</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MEC weight</td>
+<td><code>WTMEC2YR</code></td>
+<td><code>DEMO</code></td>
+<td>all six</td>
+<td>Full Sample 2 Year MEC Exam Weight</td>
+<td><code>NA</code> only</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.htm#WTMEC2YR">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:57</code></td>
+</tr>
+<tr>
+<td>Interview weight</td>
+<td><code>WTINT2YR</code></td>
+<td><code>DEMO</code></td>
+<td>all six</td>
+<td>Full Sample 2 Year Interview Weight</td>
+<td><code>NA</code> only</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.htm#WTINT2YR">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:57</code></td>
+</tr>
+<tr>
+<td>Cycle indicator</td>
+<td><code>SDDSRVYR</code></td>
+<td><code>DEMO</code></td>
+<td>all six</td>
+<td>Data Release Number</td>
+<td><code>NA</code> only — <code>7</code>, <code>9</code> are real
+values (n=9756, 9971): do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.htm#SDDSRVYR">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:57</code></td>
+</tr>
+<tr>
+<td>Fasting subsample weight</td>
+<td><code>WTSAF2YR</code></td>
+<td><code>TRIGLY</code></td>
+<td>all six</td>
+<td>Fasting Subsample 2 Year MEC Weight ⚠</td>
+<td><code>NA</code> only</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/TRIGLY_E.htm#WTSAF2YR">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/TRIGLY_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:61</code></td>
+</tr>
+<tr>
+<td>Stratum</td>
+<td><code>SDMVSTRA</code></td>
+<td><code>DEMO</code></td>
+<td>all six</td>
+<td>Masked Variance Pseudo-Stratum</td>
+<td><code>NA</code> only — <code>77</code>, <code>99</code> are real
+values (n=823, 682): do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.htm#SDMVSTRA">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:57</code></td>
+</tr>
+<tr>
+<td>PSU</td>
+<td><code>SDMVPSU</code></td>
+<td><code>DEMO</code></td>
+<td>all six</td>
+<td>Masked Variance Pseudo-PSU</td>
+<td><code>NA</code> only</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.htm#SDMVPSU">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:57</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠ <strong><code>WTSAF2YR</code></strong> — A <strong>design</strong>
+variable living in a laboratory file. Build the survey design on the
+full frame, then <code>subset()</code> - never on the subsample
+alone.</p>
+</blockquote>
+<h2 id="case-definition-fli">Case definition (FLI)</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Variable</th>
+<th>Component</th>
+<th>Cycles</th>
+<th>Label (from the file)</th>
+<th>Missing convention</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Triglycerides</td>
+<td><code>LBXTR</code></td>
+<td><code>TRIGLY</code></td>
+<td>all six</td>
+<td>Triglyceride (mg/dL)</td>
+<td><code>NA</code> only — <code>77</code>, <code>99</code> are real
+values (n=152, 117): do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/TRIGLY_E.htm#LBXTR">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/TRIGLY_E.xpt">.xpt</a>
+· <code>R/00_setup.R:52</code></td>
+</tr>
+<tr>
+<td>BMI</td>
+<td><code>BMXBMI</code></td>
+<td><code>BMX</code></td>
+<td>all six</td>
+<td>Body Mass Index (kg/m**2)</td>
+<td><code>NA</code> only</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BMX_E.htm#BMXBMI">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BMX_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:58</code></td>
+</tr>
+<tr>
+<td>GGT</td>
+<td><code>LBXSGTSI</code></td>
+<td><code>BIOPRO</code></td>
+<td>all six</td>
+<td>Gamma glutamyl transferase (U/L)</td>
+<td><code>NA</code> only — <code>7</code>, <code>9</code>,
+<code>77</code>, <code>99</code> are real values (n=519, 1228, 27, 14):
+do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BIOPRO_E.htm#LBXSGTSI">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BIOPRO_E.xpt">.xpt</a>
+· <code>R/00_setup.R:53</code></td>
+</tr>
+<tr>
+<td>Waist circumference</td>
+<td><code>BMXWAIST</code></td>
+<td><code>BMX</code></td>
+<td>all six</td>
+<td>Waist Circumference (cm)</td>
+<td><code>NA</code> only — <code>77</code>, <code>99</code> are real
+values (n=119, 132): do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BMX_E.htm#BMXWAIST">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BMX_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:58</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="cardiometabolic-1-adiposity">Cardiometabolic 1 (adiposity)</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Variable</th>
+<th>Component</th>
+<th>Cycles</th>
+<th>Label (from the file)</th>
+<th>Missing convention</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BMI</td>
+<td><code>BMXBMI</code></td>
+<td><code>BMX</code></td>
+<td>all six</td>
+<td>Body Mass Index (kg/m**2)</td>
+<td><code>NA</code> only</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BMX_E.htm#BMXBMI">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BMX_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:58</code></td>
+</tr>
+<tr>
+<td>Waist circumference</td>
+<td><code>BMXWAIST</code></td>
+<td><code>BMX</code></td>
+<td>all six</td>
+<td>Waist Circumference (cm)</td>
+<td><code>NA</code> only — <code>77</code>, <code>99</code> are real
+values (n=119, 132): do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BMX_E.htm#BMXWAIST">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BMX_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:58</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="cardiometabolic-2-glycaemia">Cardiometabolic 2 (glycaemia)</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Variable</th>
+<th>Component</th>
+<th>Cycles</th>
+<th>Label (from the file)</th>
+<th>Missing convention</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fasting glucose</td>
+<td><code>LBXGLU</code></td>
+<td><code>GLU</code></td>
+<td>all six</td>
+<td>Fasting Glucose (mg/dL)</td>
+<td><code>NA</code> only — <code>77</code>, <code>99</code> are real
+values (n=50, 709): do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/GLU_E.htm#LBXGLU">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/GLU_E.xpt">.xpt</a>
+· <code>R/00_setup.R:55</code></td>
+</tr>
+<tr>
+<td>HbA1c</td>
+<td><code>LBXGH</code></td>
+<td><code>GHB</code></td>
+<td>all six</td>
+<td>Glycohemoglobin (%)</td>
+<td><code>NA</code> only — <code>7</code>, <code>9</code> are real
+values (n=173, 26): do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/GHB_E.htm#LBXGH">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/GHB_E.xpt">.xpt</a>
+· <code>R/00_setup.R:54</code></td>
+</tr>
+<tr>
+<td>Diabetes diagnosis</td>
+<td><code>DIQ010</code></td>
+<td><code>DIQ</code></td>
+<td>all six</td>
+<td>Doctor told you have diabetes</td>
+<td><strong>reserved <code>7</code>, <code>9</code></strong> (n=3, 32) —
+strip before any rule</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DIQ_E.htm#DIQ010">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DIQ_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:70</code></td>
+</tr>
+<tr>
+<td>Insulin</td>
+<td><code>DIQ050</code></td>
+<td><code>DIQ</code></td>
+<td>all six</td>
+<td>Taking insulin now</td>
+<td><strong>reserved <code>7</code>, <code>9</code></strong> (n=4, 5) —
+strip before any rule</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DIQ_E.htm#DIQ050">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DIQ_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:70</code></td>
+</tr>
+<tr>
+<td>Oral hypoglycaemics</td>
+<td><code>DIQ070</code></td>
+<td><code>DIQ</code></td>
+<td><strong>FGHIJ only</strong></td>
+<td>Take diabetic pills to lower blood sugar</td>
+<td><strong>reserved <code>7</code>, <code>9</code></strong> (n=1, 10) —
+strip before any rule</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2009/DataFiles/DIQ_F.htm#DIQ070">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2009/DataFiles/DIQ_F.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:70</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="cardiometabolic-3-blood-pressure">Cardiometabolic 3 (blood
+pressure)</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Variable</th>
+<th>Component</th>
+<th>Cycles</th>
+<th>Label (from the file)</th>
+<th>Missing convention</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Systolic (reading 1 of 4)</td>
+<td><code>BPXSY1</code></td>
+<td><code>BPX</code></td>
+<td>all six</td>
+<td>Systolic: Blood pres (1st rdg) mm Hg</td>
+<td><code>NA</code> only</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BPX_E.htm#BPXSY1">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BPX_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:59</code></td>
+</tr>
+<tr>
+<td>Diastolic (reading 1 of 4)</td>
+<td><code>BPXDI1</code></td>
+<td><code>BPX</code></td>
+<td>all six</td>
+<td>Diastolic: Blood pres (1st rdg) mm Hg ⚠</td>
+<td><code>NA</code> only</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BPX_E.htm#BPXDI1">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BPX_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:60</code></td>
+</tr>
+<tr>
+<td>On BP medication</td>
+<td><code>BPQ050A</code></td>
+<td><code>BPQ</code></td>
+<td>all six</td>
+<td>Now taking prescribed medicine for HBP</td>
+<td><strong>reserved <code>9</code></strong> (n=3) — strip before any
+rule</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BPQ_E.htm#BPQ050A">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BPQ_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:69</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠ <strong><code>BPXDI1</code></strong> — A diastolic reading of
+<strong>0 is a measurement</strong>. NHANES records a failure to obtain
+a reading as <code>NA</code>, separately. Do not
+<code>na_if(., 0)</code>.</p>
+</blockquote>
+<h2 id="cardiometabolic-4-triglycerides">Cardiometabolic 4
+(triglycerides)</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Variable</th>
+<th>Component</th>
+<th>Cycles</th>
+<th>Label (from the file)</th>
+<th>Missing convention</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Triglycerides</td>
+<td><code>LBXTR</code></td>
+<td><code>TRIGLY</code></td>
+<td>all six</td>
+<td>Triglyceride (mg/dL)</td>
+<td><code>NA</code> only — <code>77</code>, <code>99</code> are real
+values (n=152, 117): do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/TRIGLY_E.htm#LBXTR">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/TRIGLY_E.xpt">.xpt</a>
+· <code>R/00_setup.R:52</code></td>
+</tr>
+<tr>
+<td>On lipid medication</td>
+<td><code>BPQ100D</code></td>
+<td><code>BPQ</code></td>
+<td>all six</td>
+<td>Now taking prescribed medicine</td>
+<td><strong>reserved <code>9</code></strong> (n=14) — strip before any
+rule</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BPQ_E.htm#BPQ100D">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BPQ_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:69</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="cardiometabolic-5-hdl">Cardiometabolic 5 (HDL)</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Variable</th>
+<th>Component</th>
+<th>Cycles</th>
+<th>Label (from the file)</th>
+<th>Missing convention</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HDL cholesterol</td>
+<td><code>LBDHDD</code></td>
+<td><code>HDL</code></td>
+<td>all six</td>
+<td>Direct HDL-Cholesterol (mg/dL)</td>
+<td><code>NA</code> only — <code>7</code>, <code>77</code>,
+<code>99</code> are real values (n=1, 255, 32): do <strong>not</strong>
+strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/HDL_E.htm#LBDHDD">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/HDL_E.xpt">.xpt</a>
+· <code>R/00_setup.R:56</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="exposure">Exposure</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Variable</th>
+<th>Component</th>
+<th>Cycles</th>
+<th>Label (from the file)</th>
+<th>Missing convention</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Height (for WHtR)</td>
+<td><code>BMXHT</code></td>
+<td><code>BMX</code></td>
+<td>all six</td>
+<td>Standing Height (cm)</td>
+<td><code>NA</code> only — <code>99</code> is a real value (n=16): do
+<strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BMX_E.htm#BMXHT">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BMX_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:58</code></td>
+</tr>
+<tr>
+<td>Race/ethnicity (Asian BMI cut)</td>
+<td><code>RIDRETH3</code></td>
+<td><code>DEMO</code></td>
+<td><strong>GHIJ only</strong></td>
+<td>Race/Hispanic origin w/ NH Asian ⚠</td>
+<td><code>NA</code> only — <code>7</code> is a real value (n=1996): do
+<strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/DEMO_G.htm#RIDRETH3">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/DEMO_G.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:56</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠ <strong><code>RIDRETH3</code></strong> — This is what identifies
+Asian participants for the paper’s lower BMI threshold - so the rule
+cannot be applied in 2007-2010 at all.</p>
+</blockquote>
+<h2 id="alcohol-exclusion">Alcohol exclusion</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Variable</th>
+<th>Component</th>
+<th>Cycles</th>
+<th>Label (from the file)</th>
+<th>Missing convention</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Drinks per drinking day</td>
+<td><code>ALQ130</code></td>
+<td><code>ALQ</code></td>
+<td>all six</td>
+<td>Avg # alcoholic drinks/day -past 12 mos ⚠</td>
+<td><strong>reserved <code>777</code>, <code>999</code></strong> (n=3,
+28) — strip before any rule, but <code>7</code>, <code>9</code> are real
+values (n=197, 47): do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/ALQ_E.htm#ALQ130">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/ALQ_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:67</code></td>
+</tr>
+<tr>
+<td>Drinking frequency (quantity)</td>
+<td><code>ALQ120Q</code></td>
+<td><code>ALQ</code></td>
+<td><strong>EFGHI only</strong></td>
+<td>How often drink alcohol over past 12 mos</td>
+<td><strong>reserved <code>777</code>, <code>999</code></strong> (n=2,
+25) — strip before any rule, but <code>7</code>, <code>9</code> are real
+values (n=1146, 17): do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/ALQ_E.htm#ALQ120Q">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/ALQ_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:67</code></td>
+</tr>
+<tr>
+<td>Drinking frequency (unit)</td>
+<td><code>ALQ120U</code></td>
+<td><code>ALQ</code></td>
+<td><strong>EFGHI only</strong></td>
+<td># days drink alcohol per wk, mo, yr</td>
+<td><code>NA</code> only</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/ALQ_E.htm#ALQ120U">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/ALQ_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:67</code></td>
+</tr>
+<tr>
+<td>Drinking frequency (2017-18 redesign)</td>
+<td><code>ALQ121</code></td>
+<td><code>ALQ</code></td>
+<td><strong>J only</strong></td>
+<td>Past 12 mo how often have alcohol drink ⚠</td>
+<td><strong>reserved <code>77</code>, <code>99</code></strong> (n=2, 2)
+— strip before any rule, but <code>7</code>, <code>9</code> are real
+values (n=351, 476): do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/ALQ_J.htm#ALQ121">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/ALQ_J.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:67</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠ <strong><code>ALQ130</code></strong> — CDC’s <strong>SAS
+Label</strong> reads <em>“Avg # alcohol drinks/day - past 12 mos”</em>.
+CDC’s <strong>English Text</strong> for the same variable reads
+<em>“During the past 12 months, on those days that {you} drank alcoholic
+beverages, on the average, how many drinks did {you} have?”</em> — that
+is drinks per <em>drinking</em> day. Applying a per-day threshold to it
+directly over-excludes ~2,000 people here; average intake needs
+frequency x quantity. <strong>The short label is not the
+question.</strong> Read the English Text, every time.</p>
+</blockquote>
+<blockquote>
+<p>⚠ <strong><code>ALQ121</code></strong> — Its reserved codes are
+<strong><code>77</code> (Refused) and <code>99</code> (Don’t
+know)</strong>, not the <code>777</code>/<code>999</code> used by
+<code>ALQ130</code> — a rule hard-coded to <code>c(777, 999)</code>
+misses them. And <code>7</code> and <code>9</code> are ordinary answers
+here: <strong>7 = “Once a month”</strong>, <strong>9 = “3 to 6 times in
+the last year”</strong>. CDC’s own Analytic Notes state <em>“ALQ120Q and
+ALQ120U became ALQ121”</em> in 2017-18, so this is an instrument change,
+not a missing column.</p>
+</blockquote>
+<h2 id="covariate">Covariate</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Variable</th>
+<th>Component</th>
+<th>Cycles</th>
+<th>Label (from the file)</th>
+<th>Missing convention</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sex</td>
+<td><code>RIAGENDR</code></td>
+<td><code>DEMO</code></td>
+<td>all six</td>
+<td>Gender</td>
+<td><code>NA</code> only</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.htm#RIAGENDR">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:56</code></td>
+</tr>
+<tr>
+<td>Race/ethnicity (all cycles)</td>
+<td><code>RIDRETH1</code></td>
+<td><code>DEMO</code></td>
+<td>all six</td>
+<td>Race/Ethnicity - Recode</td>
+<td><code>NA</code> only</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.htm#RIDRETH1">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:56</code></td>
+</tr>
+<tr>
+<td>Income-to-poverty ratio</td>
+<td><code>INDFMPIR</code></td>
+<td><code>DEMO</code></td>
+<td>all six</td>
+<td>Ratio of family income to poverty</td>
+<td><code>NA</code> only</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.htm#INDFMPIR">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/DEMO_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:57</code></td>
+</tr>
+<tr>
+<td>Ever smoked 100 cigarettes</td>
+<td><code>SMQ020</code></td>
+<td><code>SMQ</code></td>
+<td>all six</td>
+<td>Smoked at least 100 cigarettes in life</td>
+<td><strong>reserved <code>7</code>, <code>9</code></strong> (n=6, 19) —
+strip before any rule</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/SMQ_E.htm#SMQ020">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/SMQ_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:68</code></td>
+</tr>
+<tr>
+<td>Current smoking</td>
+<td><code>SMQ040</code></td>
+<td><code>SMQ</code></td>
+<td>all six</td>
+<td>Do you now smoke cigarettes</td>
+<td><strong>reserved <code>7</code></strong> (n=3) — strip before any
+rule</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/SMQ_E.htm#SMQ040">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/SMQ_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:68</code></td>
+</tr>
+<tr>
+<td>Coronary heart disease</td>
+<td><code>MCQ160C</code></td>
+<td><code>MCQ</code></td>
+<td>all six</td>
+<td>Ever told you had coronary heart disease</td>
+<td><strong>reserved <code>7</code>, <code>9</code></strong> (n=2, 136)
+— strip before any rule</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/MCQ_E.htm#MCQ160C">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/MCQ_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:71</code></td>
+</tr>
+<tr>
+<td>Heart failure</td>
+<td><code>MCQ160B</code></td>
+<td><code>MCQ</code></td>
+<td>all six</td>
+<td>Ever told had congestive heart failure</td>
+<td><strong>reserved <code>7</code>, <code>9</code></strong> (n=1, 94) —
+strip before any rule</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/MCQ_E.htm#MCQ160B">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/MCQ_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:71</code></td>
+</tr>
+<tr>
+<td>Stroke</td>
+<td><code>MCQ160F</code></td>
+<td><code>MCQ</code></td>
+<td>all six</td>
+<td>Ever told you had a stroke</td>
+<td><strong>reserved <code>7</code>, <code>9</code></strong> (n=1, 49) —
+strip before any rule</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/MCQ_E.htm#MCQ160F">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/MCQ_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:71</code></td>
+</tr>
+<tr>
+<td>Cancer</td>
+<td><code>MCQ220</code></td>
+<td><code>MCQ</code></td>
+<td>all six</td>
+<td>Ever told you had cancer or malignancy</td>
+<td><strong>reserved <code>7</code>, <code>9</code></strong> (n=1, 29) —
+strip before any rule</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/MCQ_E.htm#MCQ220">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/MCQ_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:72</code></td>
+</tr>
+<tr>
+<td>Weak/failing kidneys</td>
+<td><code>KIQ022</code></td>
+<td><code>KIQ_U</code></td>
+<td>all six</td>
+<td>Ever told you had weak/failing kidneys</td>
+<td><strong>reserved <code>7</code>, <code>9</code></strong> (n=1, 53) —
+strip before any rule</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/KIQ_U_E.htm#KIQ022">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/KIQ_U_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:73</code></td>
+</tr>
+<tr>
+<td>Serum creatinine</td>
+<td><code>LBXSCR</code></td>
+<td><code>BIOPRO</code></td>
+<td>all six</td>
+<td>Creatinine (mg/dL)</td>
+<td><code>NA</code> only</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BIOPRO_E.htm#LBXSCR">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/BIOPRO_E.xpt">.xpt</a>
+· <code>R/00_setup.R:53</code></td>
+</tr>
+<tr>
+<td>Urine albumin</td>
+<td><code>URXUMA</code></td>
+<td><code>ALB_CR</code></td>
+<td>all six</td>
+<td>Albumin, urine (ug/mL)</td>
+<td><code>NA</code> only — <code>7</code>, <code>9</code>,
+<code>77</code>, <code>99</code> are real values (n=302, 254, 4, 11): do
+<strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/ALB_CR_E.htm#URXUMA">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/ALB_CR_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:74</code></td>
+</tr>
+<tr>
+<td>Urine creatinine</td>
+<td><code>URXUCR</code></td>
+<td><code>ALB_CR</code></td>
+<td>all six</td>
+<td>Creatinine, urine (mg/dL)</td>
+<td><code>NA</code> only — <code>7</code>, <code>9</code>,
+<code>77</code>, <code>99</code> are real values (n=22, 50, 252, 228):
+do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/ALB_CR_E.htm#URXUCR">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/ALB_CR_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:74</code></td>
+</tr>
+<tr>
+<td>Albumin-creatinine ratio</td>
+<td><code>URDACT</code></td>
+<td><code>ALB_CR</code></td>
+<td><strong>FGHIJ only</strong></td>
+<td>First albumin creatinine ratio (mg/g)</td>
+<td><code>NA</code> only — <code>7</code>, <code>9</code> are real
+values (n=44, 31): do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2009/DataFiles/ALB_CR_F.htm#URDACT">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2009/DataFiles/ALB_CR_F.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:74</code></td>
+</tr>
+<tr>
+<td>Sedentary minutes</td>
+<td><code>PAD680</code></td>
+<td><code>PAQ</code></td>
+<td>all six</td>
+<td>Minutes sedentary activity</td>
+<td><strong>reserved <code>7777</code>, <code>9999</code></strong> (n=5,
+187) — strip before any rule, but <code>7</code>, <code>9</code> are
+real values (n=7, 1): do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/PAQ_E.htm#PAD680">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/PAQ_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:75</code></td>
+</tr>
+<tr>
+<td>Total cholesterol</td>
+<td><code>LBXTC</code></td>
+<td><code>TCHOL</code></td>
+<td>all six</td>
+<td>Total Cholesterol (mg/dL)</td>
+<td><code>NA</code> only — <code>77</code>, <code>99</code> are real
+values (n=1, 23): do <strong>not</strong> strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/TCHOL_E.htm#LBXTC">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/TCHOL_E.xpt">.xpt</a>
+· <code>R/00_setup.R:57</code></td>
+</tr>
+<tr>
+<td>LDL cholesterol</td>
+<td><code>LBDLDL</code></td>
+<td><code>TRIGLY</code></td>
+<td>all six</td>
+<td>LDL-cholesterol (mg/dL)</td>
+<td><code>NA</code> only — <code>9</code>, <code>77</code>,
+<code>99</code> are real values (n=1, 142, 197): do <strong>not</strong>
+strip</td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/TRIGLY_E.htm#LBDLDL">codebook</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/TRIGLY_E.xpt">.xpt</a>
+· <code>R/02_build_analytic.R:61</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="not-every-variable-exists-in-every-cycle">Not every variable
+exists in every cycle</h2>
+<p>Verified against the files, not assumed. <code>bind_rows()</code>
+will happily fill an absent column with <code>NA</code> for a third of
+your sample, and that is <strong>a changing instrument, not
+</strong>Which cycle’s codebook are you reading?** For these variables
+that is not a rhetorical question, so every applicable cycle is linked
+separately.</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Component</th>
+<th>Present in</th>
+<th><strong>Absent in</strong></th>
+<th>Codebook, by cycle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DIQ070</code></td>
+<td><code>DIQ</code></td>
+<td>FGHIJ</td>
+<td><strong>E</strong></td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2009/DataFiles/DIQ_F.htm">F</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/DIQ_G.htm">G</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2013/DataFiles/DIQ_H.htm">H</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2015/DataFiles/DIQ_I.htm">I</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DIQ_J.htm">J</a></td>
+</tr>
+<tr>
+<td><code>RIDRETH3</code></td>
+<td><code>DEMO</code></td>
+<td>GHIJ</td>
+<td><strong>EF</strong></td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/DEMO_G.htm">G</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2013/DataFiles/DEMO_H.htm">H</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2015/DataFiles/DEMO_I.htm">I</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DEMO_J.htm">J</a></td>
+</tr>
+<tr>
+<td><code>ALQ120Q</code></td>
+<td><code>ALQ</code></td>
+<td>EFGHI</td>
+<td><strong>J</strong></td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/ALQ_E.htm">E</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2009/DataFiles/ALQ_F.htm">F</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/ALQ_G.htm">G</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2013/DataFiles/ALQ_H.htm">H</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2015/DataFiles/ALQ_I.htm">I</a></td>
+</tr>
+<tr>
+<td><code>ALQ120U</code></td>
+<td><code>ALQ</code></td>
+<td>EFGHI</td>
+<td><strong>J</strong></td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/ALQ_E.htm">E</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2009/DataFiles/ALQ_F.htm">F</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/ALQ_G.htm">G</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2013/DataFiles/ALQ_H.htm">H</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2015/DataFiles/ALQ_I.htm">I</a></td>
+</tr>
+<tr>
+<td><code>ALQ121</code></td>
+<td><code>ALQ</code></td>
+<td>J</td>
+<td><strong>EFGHI</strong></td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/ALQ_J.htm">J</a></td>
+</tr>
+<tr>
+<td><code>URDACT</code></td>
+<td><code>ALB_CR</code></td>
+<td>FGHIJ</td>
+<td><strong>E</strong></td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2009/DataFiles/ALB_CR_F.htm">F</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/ALB_CR_G.htm">G</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2013/DataFiles/ALB_CR_H.htm">H</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2015/DataFiles/ALB_CR_I.htm">I</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/ALB_CR_J.htm">J</a></td>
+</tr>
+<tr>
+<td><code>ALQ130</code></td>
+<td><code>ALQ</code></td>
+<td>all six</td>
+<td><em>none — but the instrument around it changed in J</em></td>
+<td><a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2007/DataFiles/ALQ_E.htm">E</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2009/DataFiles/ALQ_F.htm">F</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/ALQ_G.htm">G</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2013/DataFiles/ALQ_H.htm">H</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2015/DataFiles/ALQ_I.htm">I</a>
+· <a href="https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/ALQ_J.htm">J</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="reserved-codes-are-not-a-property-of-nhanes.-they-are-a-property-of-the-variable.">Reserved
+codes are not a property of NHANES. They are a property of the
+variable.</h2>
+<p>The single most dangerous piece of half-learned NHANES advice is
+<em>“strip 777 and 999”</em>. Applied to a laboratory variable it
+deletes real measurements. Below, every sentinel-looking value this
+reproduction’s variables actually contain, classified by whether it sits
+outside the variable’s own legitimate range.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Reserved codes</th>
+<th>Sentinel-looking values that are <strong>real</strong></th>
+<th>Largest legitimate value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RIDAGEYR</code></td>
+<td>none</td>
+<td><code>7</code>, <code>9</code>, <code>77</code> (n=1282, 1258,
+300)</td>
+<td>80</td>
+</tr>
+<tr>
+<td><code>SDDSRVYR</code></td>
+<td>none</td>
+<td><code>7</code>, <code>9</code> (n=9756, 9971)</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>SDMVSTRA</code></td>
+<td>none</td>
+<td><code>77</code>, <code>99</code> (n=823, 682)</td>
+<td>148</td>
+</tr>
+<tr>
+<td><code>LBXTR</code></td>
+<td>none</td>
+<td><code>77</code>, <code>99</code> (n=152, 117)</td>
+<td>4,233</td>
+</tr>
+<tr>
+<td><code>LBXSGTSI</code></td>
+<td>none</td>
+<td><code>7</code>, <code>9</code>, <code>77</code>, <code>99</code>
+(n=519, 1228, 27, 14)</td>
+<td>1,510</td>
+</tr>
+<tr>
+<td><code>BMXWAIST</code></td>
+<td>none</td>
+<td><code>77</code>, <code>99</code> (n=119, 132)</td>
+<td>179</td>
+</tr>
+<tr>
+<td><code>LBXGLU</code></td>
+<td>none</td>
+<td><code>77</code>, <code>99</code> (n=50, 709)</td>
+<td>584</td>
+</tr>
+<tr>
+<td><code>LBXGH</code></td>
+<td>none</td>
+<td><code>7</code>, <code>9</code> (n=173, 26)</td>
+<td>17.8</td>
+</tr>
+<tr>
+<td><code>DIQ010</code></td>
+<td><code>7</code>, <code>9</code></td>
+<td>—</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>DIQ050</code></td>
+<td><code>7</code>, <code>9</code></td>
+<td>—</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>DIQ070</code></td>
+<td><code>7</code>, <code>9</code></td>
+<td>—</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>BPQ050A</code></td>
+<td><code>9</code></td>
+<td>—</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>BPQ100D</code></td>
+<td><code>9</code></td>
+<td>—</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>LBDHDD</code></td>
+<td>none</td>
+<td><code>7</code>, <code>77</code>, <code>99</code> (n=1, 255, 32)</td>
+<td>226</td>
+</tr>
+<tr>
+<td><code>BMXHT</code></td>
+<td>none</td>
+<td><code>99</code> (n=16)</td>
+<td>204.5</td>
+</tr>
+<tr>
+<td><code>RIDRETH3</code></td>
+<td>none</td>
+<td><code>7</code> (n=1996)</td>
+<td>6</td>
+</tr>
+<tr>
+<td><code>ALQ130</code></td>
+<td><code>777</code>, <code>999</code></td>
+<td><code>7</code>, <code>9</code> (n=197, 47)</td>
+<td>83</td>
+</tr>
+<tr>
+<td><code>ALQ120Q</code></td>
+<td><code>777</code>, <code>999</code></td>
+<td><code>7</code>, <code>9</code> (n=1146, 17)</td>
+<td>365</td>
+</tr>
+<tr>
+<td><code>ALQ121</code></td>
+<td><code>77</code>, <code>99</code></td>
+<td><code>7</code>, <code>9</code> (n=351, 476)</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>SMQ020</code></td>
+<td><code>7</code>, <code>9</code></td>
+<td>—</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>SMQ040</code></td>
+<td><code>7</code></td>
+<td>—</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>MCQ160C</code></td>
+<td><code>7</code>, <code>9</code></td>
+<td>—</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>MCQ160B</code></td>
+<td><code>7</code>, <code>9</code></td>
+<td>—</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>MCQ160F</code></td>
+<td><code>7</code>, <code>9</code></td>
+<td>—</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>MCQ220</code></td>
+<td><code>7</code>, <code>9</code></td>
+<td>—</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>KIQ022</code></td>
+<td><code>7</code>, <code>9</code></td>
+<td>—</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>URXUMA</code></td>
+<td>none</td>
+<td><code>7</code>, <code>9</code>, <code>77</code>, <code>99</code>
+(n=302, 254, 4, 11)</td>
+<td>24,440</td>
+</tr>
+<tr>
+<td><code>URXUCR</code></td>
+<td>none</td>
+<td><code>7</code>, <code>9</code>, <code>77</code>, <code>99</code>
+(n=22, 50, 252, 228)</td>
+<td>800</td>
+</tr>
+<tr>
+<td><code>URDACT</code></td>
+<td>none</td>
+<td><code>7</code>, <code>9</code> (n=44, 31)</td>
+<td>92,500</td>
+</tr>
+<tr>
+<td><code>PAD680</code></td>
+<td><code>7777</code>, <code>9999</code></td>
+<td><code>7</code>, <code>9</code> (n=7, 1)</td>
+<td>1,380</td>
+</tr>
+<tr>
+<td><code>LBXTC</code></td>
+<td>none</td>
+<td><code>77</code>, <code>99</code> (n=1, 23)</td>
+<td>813</td>
+</tr>
+<tr>
+<td><code>LBDLDL</code></td>
+<td>none</td>
+<td><code>9</code>, <code>77</code>, <code>99</code> (n=1, 142,
+197)</td>
+<td>375</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>What this table does and does not license.</strong> For the
+variables used in this reproduction, the laboratory and examination
+measurements shown above use <code>NA</code> for missing, while several
+questionnaire variables use variable-specific reserved codes. <strong>Do
+not generalise either pattern to another variable</strong> — including
+another variable in the same component, or the same variable in another
+cycle. Check its codebook.</p>
+<p>A <code>77</code> in <code>LBXTR</code> is a triglyceride of 77
+mg/dL. A <code>77</code> in <code>ALQ121</code> is a refusal. Same
+digits, opposite meaning. The point of this table is not a replacement
+rule to memorise; it is that <strong>there is no such rule</strong>, and
+the codebook decides.</p>
+</blockquote>
+<h2 id="the-outcome-does-not-live-in-nhanes">The outcome does not live
+in NHANES</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Variable</th>
+<th>Source</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vital status</td>
+<td><code>MORTSTAT</code></td>
+<td>NCHS Linked Mortality File</td>
+<td>separate fixed-width file, not an <code>.xpt</code></td>
+</tr>
+<tr>
+<td>Person-months from exam</td>
+<td><code>PERMTH_EXM</code></td>
+<td>NCHS Linked Mortality File</td>
+<td>the clock for time-to-event</td>
+</tr>
+<tr>
+<td>Linkage eligibility</td>
+<td><code>ELIGSTAT</code></td>
+<td>NCHS Linked Mortality File</td>
+<td>not everyone is eligible for linkage</td>
+</tr>
+</tbody>
+</table>
+<p>Downloaded by <code>R/01_download.R</code> from <a href="https://ftp.cdc.gov/pub/Health_Statistics/NCHS/datalinkage/linked_mortality" class="uri">https://ftp.cdc.gov/pub/Health_Statistics/NCHS/datalinkage/linked_mortality</a>.
+Follow-up ends <strong>31 December 2019</strong>, per the NCHS 2019
+linkage methodology document — not inferred from the filename.</p>
+<hr />
+<p><em>Regenerate with <code>Rscript R/07_variable_map.R</code>.
+Codebook links use the current CDC path
+<code>.../Public/&lt;year&gt;/DataFiles/&lt;COMP&gt;_&lt;suffix&gt;.htm#&lt;VARIABLE&gt;</code>;
+the older <code>wwwn.cdc.gov/Nchs/Nhanes/&lt;cycle&gt;/</code> form no
+longer resolves.</em></p>
+</body>
+</html>

@@ -86,9 +86,10 @@ Anthropometry, blood pressure and laboratory values are measured/assayed. Age, s
 
 ---
 
-# Four NHANES traps — each one has bitten this project
+# Five NHANES traps — each one has bitten this project
 
-- 777 = refused, 999 = don’t know. They are codes, not counts. Reading `ALQ130` literally over-excluded about 2,000 people here.
+- `ALQ130` is drinks per *drinking day*, not drinks per day. Applying a “>2 a day” rule to it directly over-excluded about 2,000 people here — an average intake needs frequency × quantity.
+- 777 = refused, 999 = don’t know. They are codes, not counts. Left inside a threshold rule they reclassified nine refusals as heavy drinkers. Two traps on one variable, a factor of two hundred apart.
 - **Do not automatically recode diastolic BP = 0 as missing.** NHANES explicitly allows a diastolic value of 0; failure to obtain a reading is handled separately. Treating every 0 as missing would also be an error.
 - `RIDRETH3` does not exist before 2011. It is what identifies Asian participants for the lower BMI threshold, so the first two cycles cannot apply it.
 - Fasting labs carry their own weight. `LBXTR` and `LBXGLU` come from the fasting subsample, which is weighted by `WTSAF2YR`, not `WTMEC2YR`.
@@ -223,14 +224,14 @@ There is no single “treated” group and “control” group.
 | Step | N | What kind of step |
 |---|---|---|
 | NHANES 2007–2018 records | 59,842 |  |
-| Age ≥ 18 | 36,580 | eligibility |
+| Age ≥ 18 | 36,580 | eligibility — drops 23,262 |
 | In fasting subsample | 14,962 | design — drops 21,618 |
 | FLI computable | 14,170 | missingness |
-| Steatosis (FLI ≥ 60) | 6,052 | target population |
+| Steatosis (FLI ≥ 60) | 6,052 | target population — drops 8,118 |
 | MASLD (≥1 criterion) | 6,050 | target population |
 | Mortality-linked | **6,048** | outcome ascertainment |
 
-> The largest single exclusion in **our reproduction** is the fasting subsample — a design feature because the analysis uses fasting triglycerides.
+> **After eligibility**, the two largest drops in **our reproduction** are the fasting subsample — a design feature, because the analysis uses fasting triglycerides — and the disease definition. Neither is missing data. The age criterion removes more people than either, but that is the study's own eligibility rule.
 
 ---
 

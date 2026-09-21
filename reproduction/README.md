@@ -16,6 +16,12 @@ recent open-data paper end-to-end from raw public data, then interrogate it.
 > See [`reproduction_report.md`](reproduction_report.md) for the side-by-side
 > comparison and the P1–P5 teaching map.
 
+**Looking up a variable?** [VARIABLE_MAP.md](VARIABLE_MAP.md) is the crosswalk: every
+variable this pipeline touches, which component file it lives in, which cycles actually
+contain it, whether a `77`-looking value is a reserved code or a real measurement, a link
+to the CDC codebook anchored at that variable, and the line of our code that reads it.
+Generated from the raw `.xpt` files by `R/07_variable_map.R`, so it cannot drift.
+
 **New here?** [WALKTHROUGH.md](WALKTHROUGH.md) is the tour: what each script
 decides, the sample funnel, and the two places NHANES will mislead you. This file is the
 reference.
@@ -41,6 +47,7 @@ read from `data/raw/`.
 reproduction/
 ├── README.md                    <- this file
 ├── reproduction_report.md       <- reproduced vs published, findings, P1–P5 map
+├── VARIABLE_MAP.md              <- generated crosswalk: variable -> file -> codebook -> our code
 ├── R/
 │   ├── 00_setup.R               <- paths, cycles, component list
 │   ├── 01_download.R            <- download raw NHANES + linked mortality

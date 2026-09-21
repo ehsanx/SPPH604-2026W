@@ -57,6 +57,15 @@ FAMILIES = [
 ]
 DECKS = os.path.join('lectures', 'slides')
 
+# Reference pages inside the reproduction pipeline. HTML only - lookup tables and long
+# reports, not handouts anyone prints. Named explicitly rather than globbed so that
+# reproduction/README.md stays the directory index Jekyll renders.
+REFERENCE_PAGES = [
+    os.path.join('reproduction', 'VARIABLE_MAP.md'),
+    os.path.join('reproduction', 'WALKTHROUGH.md'),
+    os.path.join('reproduction', 'reproduction_report.md'),
+]
+
 
 def sh(cmd, cwd):
     return subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=1800)
@@ -81,6 +90,10 @@ def sources():
         for f in sorted(os.listdir(deck_dir)):
             if f.endswith('.qmd'):
                 found.append((os.path.join(deck_dir, f), 'deck'))
+    for rel in REFERENCE_PAGES:
+        p = os.path.join(ROOT, rel)
+        if os.path.isfile(p):
+            found.append((p, 'ref'))
     return found
 
 
@@ -124,9 +137,13 @@ def main():
     jobs, built, failed, current = [], 0, [], 0
     for src, kind in sources():
         base = src[:-4] if kind == 'deck' else src[:-3]
-        for ext, fn in ((('.html', render_deck_html), ('.pdf', render_deck_pdf))
-                        if kind == 'deck' else
-                        (('.html', render_md_html), ('.pdf', render_md_pdf))):
+        if kind == 'deck':
+            pairs = (('.html', render_deck_html), ('.pdf', render_deck_pdf))
+        elif kind == 'ref':
+            pairs = (('.html', render_md_html),)            # HTML only, no PDF
+        else:
+            pairs = (('.html', render_md_html), ('.pdf', render_md_pdf))
+        for ext, fn in pairs:
             out = base + ext
             if args.force or stale(src, out):
                 jobs.append((src, out, fn))

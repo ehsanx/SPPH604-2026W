@@ -1,7 +1,7 @@
 ---
 title: "Week 2 — Six Questions for Reading a Methods Section"
 subtitle: "SPPH 604 · Application of Advanced Epidemiological Methods"
-author: "Running example: Kueh et al. (2026), MASLD / NHANES"
+author: "Running example: Kueh et al. (2026), MASLD / NHANES · previews L1"
 format:
   revealjs:
     theme: default
@@ -21,28 +21,32 @@ format:
 
 **Know what you are trying to rebuild, before you try to rebuild it.**
 
-- One argument, not two halves: the questions come first, NHANES arrives where a
-  question cannot be answered without it
-- Feeds **L1** (Thu) and **M0** shortlisting (due Wk3)
+- The six questions are the **spine**; the NHANES anatomy is what the answers are
+  **made of**
+- Everything named today — component files, variable names, the join key — you use on
+  **Thursday** in L1, and again for **M0** (due Wk3)
 
 ::: {.notes}
-(3 min) Timing: per-slide markers in these notes sum to 122 min including the break, against
-a 150-minute cap. The remaining ~28 minutes are questions, the two vote-and-argue moments,
-and live recomputation. The lecture plan carries the identical split — if you retime a
-slide, retime it in both files.
+(3 min) Timing: per-slide markers in these notes sum to 144 min including the break,
+against a 150-minute cap. Unlike the previous version of this deck, the markers now
+include the interactive moments — the two vote-and-argue slides and the lab preview —
+so the total is what actually happens in the room rather than content plus unbudgeted
+discussion. Roughly 6 minutes of slack. The lecture plan carries the identical split;
+if you retime a slide, retime it in both files. The plan also lists which slides to
+drop first if you are running behind.
 :::
 
 ## Why the question comes before the data
 
 - The instinct is "what did they run?" — a model family answers nothing on its own
-- A **Cox model appears under four different research goals**
+- A **Cox model appears under several different research goals**
 - Reading a Methods section *is* the first act of reproduction
 
 *By the end of today: this paper answers four of six questions clearly, one partially, and
 one not at all.*
 
 ::: {.notes}
-(4 min) Set the frame. Resist the urge to jump to the model. Tell them the scoreboard up
+(3 min) Set the frame. Resist the urge to jump to the model. Tell them the scoreboard up
 front — four clear, one partial, one unanswered — so they are listening for which is which.
 :::
 
@@ -59,7 +63,7 @@ front — four clear, one partial, one unanswered — so they are listening for 
 > the results look.**
 
 ::: {.notes}
-(6 min) Keep this slide reachable all session; every section fills one row. Stress that these
+(4 min) Keep this slide reachable all session; every section fills one row. Stress that these
 are not this paper's questions — they are the template students take to their own M0
 candidates. This replaces the old "four primitives", which asked what variables exist but
 never what question they were meant to answer.
@@ -72,109 +76,286 @@ never what question they were meant to answer.
 - **Aim 1** — the *clinical correlates* of four groups defined by BMI and waist-to-height ratio
 - **Aim 2** — the *prognostic value* of that classification for mortality
 
-Related, but not the same question: the first is cross-sectional at baseline, the second
-needs follow-up.
+|  | Clinical correlates | Mortality prognosis |
+|---|---|---|
+| **Question** | How do the four groups differ in health characteristics? | Do the four groups have different subsequent mortality? |
+| **Time structure** | Cross-sectional at baseline | Longitudinal follow-up |
+
+A single paper can carry more than one research question, and they have different clocks.
 
 ::: {.notes}
-(4 min) Read both aims off the abstract. The point is textual, not critical: one paper can
-carry more than one research question, and they have different time structures.
+(4 min) Read both aims off the abstract. The point is textual, not critical. The two rows
+have different time structures, which is why one of them needs the linked mortality file
+and the other does not.
 :::
 
 ## Five goals the same variables can serve
 
-| Goal | What it asks |
+| Research goal | Scientific target in this example |
 |---|---|
-| Description | How do the four groups differ, and what is their mortality experience? |
-| Association | Is phenotype statistically associated with subsequent mortality? |
-| Prognostic factor | Does phenotype inform mortality **over and above** other known factors? |
-| Prediction | How accurately can we predict individual risk; does WHtR improve it? |
-| Causal | What would mortality have been under a specified change in central adiposity? |
+| **Description** | What are the characteristics and mortality experience of each phenotype group? |
+| **Association** | Is phenotype statistically associated with subsequent mortality? |
+| **Prognostic factor** | Does phenotype carry information **over and above** other known prognostic factors? |
+| **Prediction** | How accurately can we predict an individual's risk, and does adding WHtR improve it? |
+| **Causal** | What would mortality have been under a specified contrast that changed central adiposity? |
 
-**The variables can be identical. The target quantity is not.**
+> The variables can be identical. **The target quantity is not.**
 
 ::: {.notes}
-(5 min) Walk the ladder. Same exposure, same outcome, same covariates — five different
+(4 min) Walk the ladder. Same exposure, same outcome, same covariates — five different
 target quantities. Ask which row a "multivariable Cox model" sits on: it sits on several.
 :::
 
-## Different goals need different evidence
+## Same variables, different analyses
 
-- An **HR with a CI** is enough for an adjusted association or a prognostic effect
-- It is **not** evidence a prediction model is good — that needs calibration and discrimination
-- And not by itself evidence a causal effect was identified
+| Goal | Typical analysis | How are other variables handled? |
+|---|---|---|
+| **Description** | Weighted means, proportions; Kaplan–Meier or standardised survival | Stratification / standardisation where useful |
+| **Association** | Cox regression, splines, group comparisons | Define a **conditional association**; no automatic causal reading |
+| **Prognostic factor** | Cox model holding established prognostic factors + the index factor | Adjust for **other prognostic factors** |
+| **Prediction** | Develop/validate a survival model; base vs base + WHtR | Chosen for predictive value; shrinkage and validation |
+| **Causal** | Target trial; standardisation, g-formula, IPW | Select **confounders** by causal knowledge; avoid mediators/colliders |
+
+> A Cox model appears in several rows. **The model family does not determine the goal.**
+
+::: {.notes}
+(4 min) This is the slide that kills "they ran a Cox model, so it is an association study".
+Point out that the third and fifth rows can produce the identical R call and mean entirely
+different things.
+:::
+
+## Same variables, different evidence of success
+
+| Goal | What would count as evidence |
+|---|---|
+| **Description** | Absolute summaries with uncertainty: means, prevalences, survival at meaningful times |
+| **Association** | An association measure such as HR + 95% CI; assumptions and functional form |
+| **Prognostic factor** | Adjusted effect; for *incremental* value, a model with vs without the factor |
+| **Prediction** | **Calibration**, **discrimination** (C-index / time-dependent AUC), **Brier score**, validation |
+| **Causal** | A prespecified contrast, positivity/balance diagnostics, sensitivity to unmeasured confounding |
+
+::: {.notes}
+(4 min) The heart of Q1. The gap between a stated goal and the supplied evidence is
+invisible unless you ask what evidence each goal would require. Do not rush this table —
+students will reuse it at M0 and M1.
+:::
+
+## HR + CI: what it is, and is not, evidence for
+
+**HR + CI** is enough to report an adjusted association, or a prognostic-factor effect.
+
+It is **not** evidence that a prediction model is good, and **not** by itself evidence
+that a causal effect has been identified.
 
 *The paper names "prognostic value" and supplies adjusted association.*
 
 ::: {.notes}
-(6 min) This is the heart of Q1. The gap is invisible unless you ask what evidence each goal
-would require. Vote and argue: which row is this paper actually on? Do not resolve it for
-them too quickly.
+(2 min) Keep this short and blunt. It is the one-line version of the previous table.
+:::
+
+## What does this paper most directly support?
+
+**It directly supports:** description of how the groups differ; association between
+phenotype and subsequent mortality; an adjusted prognostic association.
+
+**It does not, by itself, establish:** that central adiposity *causes* the difference;
+that reducing WHtR would reduce mortality; that adding WHtR improves individual prediction.
+
+::: {.notes}
+(2 min) **Vote and argue.** Which row of the ladder is this paper actually on? Take a show
+of hands before revealing the second half. Do not resolve it for them too quickly — the
+disagreement is the point, and it comes back at M1.
 :::
 
 # Q2 — Who is the population?
 
-## NHANES in one picture
+## First: how NHANES is organised
 
-- Continuous NHANES in **2-year cycles**; ~**5,000 examined persons per cycle**; six cycles
-  stacked here (2007–2018)
-- Three collection settings — **Interview** (home) · **MEC exam** (measured body size, BP) ·
+- **Six two-year cycles**, 2007–2018, each with its own file suffix: `E F G H I J`
+- Files are **`.XPT`** (SAS transport) — `haven::read_xpt()`, or `nhanesA::nhanes()`
+- Each file is **one row per participant, for one topic** — not one big table
+- Three collection settings: **Interview** (home) · **MEC exam** (measured body size, BP) ·
   **Laboratory** (triglycerides, GGT, glucose)
-- Data arrive as **many small topic files**, not one table
+
+| Family | Examples | What it holds |
+|---|---|---|
+| Demographics | `DEMO` | age, sex, race, survey design, weights |
+| Examination | `BMX`, `BPX` | measured body size, blood pressure |
+| Laboratory | `TRIGLY`, `BIOPRO`, `GLU`, `GHB`, `HDL` | blood results |
+| Questionnaire | `ALQ`, `BPQ`, `DIQ`, `SMQ` | self-reported history and medication |
+
+> Mortality is **not** an NHANES file. It is a separate linked, fixed-width file from NCHS.
 
 ::: {.notes}
-(5 min) The three settings matter in two slides' time: the exposure spans two of them, and
-some lab assays exist only in the fasting subsample.
+(5 min) Spend real time here. Everything in the rest of the lecture is a row in one of
+these families, and on Thursday they type these names. The suffix letters are the single
+most useful thing on the slide: H = 2013–2014, I = 2015–2016, J = 2017–2018.
+:::
+
+## Where the measurements and labs come from
+
+| Concept | NHANES variable | Component |
+|---|---|---|
+| Participant ID | `SEQN` | *every file — the merge key* |
+| Age, sex, race | `RIDAGEYR`, `RIAGENDR`, `RIDRETH3` | `DEMO` |
+| BMI, waist, height | `BMXBMI`, `BMXWAIST`, `BMXHT` | `BMX` |
+| Triglycerides | `LBXTR` | `TRIGLY` |
+| GGT | `LBXSGTSI` | `BIOPRO` |
+| Glucose, HbA1c | `LBXGLU`, `LBXGH` | `GLU`, `GHB` |
+| HDL cholesterol | `LBDHDD` | `HDL` |
+| Blood pressure | `BPXSY1–4`, `BPXDI1–4` | `BPX` |
+
+Anthropometry, blood pressure and laboratory values are **measured or assayed**. Age, sex
+and race/ethnicity come from the demographic file.
+
+::: {.notes}
+(4 min) Do not read the table aloud. Ask instead: which of these is the exposure built
+from, and which is eligibility built from? They will need both answers in Q3, and the fact
+that the two lists overlap is the whole of slide "Eligibility and exposure share their
+inputs".
+:::
+
+## Where the questionnaire, design and outcome come from
+
+| Concept | NHANES variable | Component |
+|---|---|---|
+| BP / lipid medication | `BPQ050A`, `BPQ100D` | `BPQ` |
+| Diabetes | `DIQ010`, `DIQ050`, `DIQ070` | `DIQ` |
+| Alcohol | `ALQ130`, `ALQ120Q`, `ALQ120U`, `ALQ121` | `ALQ` |
+| Survey design | `WTMEC2YR`, `WTSAF2YR`, `SDMVSTRA`, `SDMVPSU` | `DEMO`, `TRIGLY` |
+| Mortality | `MORTSTAT`, `PERMTH_EXM`, `ELIGSTAT` | linked mortality file |
+
+> These variables alone reach across **seven examination and laboratory components**, plus
+> demographics, plus questionnaire components, plus a separate linked mortality file.
+> **That is what L1 assembles.**
+
+::: {.notes}
+(4 min) The last row is the one to dwell on: the outcome does not live in NHANES at all.
+Students who assume one download gives them a study will lose a day to this. Note also
+that the fasting weight `WTSAF2YR` ships on `TRIGLY`, not on `DEMO` — a design variable
+living in a laboratory file.
 :::
 
 ## SEQN is the join key
 
 - Every respondent has one **`SEQN`** — the identifier CDC uses to sort and merge files
 - Analysis = pick the topic files you need, **merge on `SEQN`**, one row per person
-- SEQN does **not** repeat across cycles: all **59,842** values across 2007–2018 are
-  distinct and the per-cycle ranges do not overlap
-  — *analysis set: all NHANES 2007–2018 records, N = 59,842*
-- Keep a **cycle variable** anyway — provenance, changing definitions, per-cycle weights.
-  Not to disambiguate SEQN
+- SEQN does **not** repeat across the continuous cycles: all **59,842** values across
+  2007–2018 are distinct, and the per-cycle ranges do not overlap
+  — *Analysis set: all NHANES 2007–2018 records, N = 59,842*
+- The ranges are **not contiguous**, though — a gap of 1,640 sits between 2011–2012 and
+  2013–2014, so do not infer a cycle from an ID
+- Keep a **cycle variable** anyway: provenance, definitions that change between cycles,
+  and weights built per cycle. Not to disambiguate SEQN
 
 ::: {.notes}
-(4 min) Correct a common belief here: students are often told to add a cycle key because
-SEQN "repeats". It does not. Checked against the raw DEMO files for all six cycles: 59,842
-values, 59,842 distinct. The reproduction pipeline's joins are correct because of this.
+(5 min) Correct a common belief here: students are often told to build a composite key
+because SEQN "repeats". It does not. Checked against the raw DEMO files for all six
+cycles: 59,842 values, 59,842 distinct. But the gap matters too — someone will try to
+recover the cycle arithmetically from the ID, and that fails.
 :::
 
-## "MASLD" is a derived variable, not a diagnosis
+# Thursday, previewed: L1 builds exactly this
 
-- MASLD = hepatic steatosis **plus** ≥1 cardiometabolic criterion
-- Gold-standard steatosis is biopsy or imaging — **NHANES has neither** in this window
-- So: the **Fatty Liver Index**, thresholded at **FLI ≥ 60**, computed from
-  **triglycerides, BMI, GGT and waist**
+## L1 in one screen: two files, one key
 
-*The disease definition forces the workaround. It is a feature of the data, not a shortcut.*
+```r
+pacman::p_load(tidyverse, nhanesA, tableone, naniar)
+
+demo <- nhanes("DEMO_H", translated = TRUE)   # 2013-2014 demographics
+bmx  <- nhanes("BMX_H",  translated = TRUE)   # 2013-2014 body measures
+
+merged <- full_join(demo, bmx, by = "SEQN")
+```
+
+- `DEMO_H` and `BMX_H` are the **same** `DEMO` and `BMX` from the *"Where the measurements
+  and labs come from"* table, cycle **H**
+- `translated = TRUE` turns stored codes into labels — convenient, and it changes what a
+  value *looks* like, so recode rules written against raw codes will silently miss
+- **`full_join` keeps people measured in one file but not the other.** That is a row-set
+  decision made by a single word: `inner_join` would be a different study
 
 ::: {.notes}
-(4 min) Do not let this land as criticism. Every population study of MASLD in NHANES faces
-the same constraint. What matters is that eligibility is computed, and we will see in Q3
-what it is computed from.
+(4 min) Put the code on screen and read it aloud. The third bullet is the course's own
+rule arriving in a one-line form: the join verb defines the analysis set, and swapping it
+changes N without changing a single measurement. Ask them which verb they would want and
+why — there is no universally right answer, which is the point.
 :::
 
-## The funnel, with a type on every row
+## Then do it for every cycle
 
-| Step | N | Kind of step |
-|---|---|---|
-| NHANES 2007–2018 records | 59,842 | — |
-| Age ≥ 18 | 36,580 | eligibility |
-| In fasting subsample | 14,962 | **design** — drops 21,618 |
-| FLI computable | 14,170 | missingness |
-| Steatosis (FLI ≥ 60) | 6,052 | target population |
-| MASLD (≥1 criterion) | 6,050 | target population |
-| Mortality-linked | **6,048** | outcome ascertainment |
+```r
+cycles <- c("H", "I", "J")                     # 2013-14, 2015-16, 2017-18
 
-*Analysis set: locked mortality-linked cohort, N = 6,048.*
+all_cycles <- lapply(cycles, function(cy) {
+  d <- nhanes(paste0("DEMO_", cy), translated = TRUE)
+  b <- nhanes(paste0("BMX_",  cy), translated = TRUE)
+  full_join(d, b, by = "SEQN") %>% mutate(cycle = cy)
+})
+
+stacked <- bind_rows(all_cycles)
+```
+
+- `paste0("DEMO_", cy)` is why the **suffix table** was worth memorising
+- `bind_rows()` stacks cycles; the joins happen **within** a cycle first
+- Our reproduction does the same over **all six** cycles, `E` through `J`
 
 ::: {.notes}
-(3 min) A funnel shows N falling; the type column shows why. The largest exclusion is not
-clinical — it is design, because the FLI needs fasting labs. Note the row-set label and say
-why it is there: the full reconstructed file is 6,371, and the two are not interchangeable.
+(4 min) The loop is the step that turns one cycle into a study. Flag the thing that bites
+here and comes back in Q5: a variable that exists in later cycles may not exist in earlier
+ones, so a column can appear mid-stack and `bind_rows()` will happily fill the rest with
+NA. That is not missingness in the usual sense; it is a changing instrument.
+:::
+
+## Raw names in, analysis names out
+
+```r
+analysis <- stacked %>%
+  rename(Sex = RIAGENDR, Age = RIDAGEYR,
+         RaceEthnicity = RIDRETH3, BMI = BMXBMI) %>%
+  filter(Age >= 20) %>%
+  mutate(BMICat = cut(BMI, c(0, 18.5, 25, 30, Inf), right = FALSE,
+                      labels = c("Underweight", "Normal weight", "Overweight", "Obese")))
+```
+
+- Every rename is a **decision you have to be able to defend**, not cosmetics
+- **`right = FALSE` is not optional.** Without it `cut()` closes the intervals the other
+  way and BMI exactly 30.0 lands in *Overweight* — one argument, and the categories are
+  the mirror image of the ones you meant
+- `BMICat` here uses the standard WHO cut-points. **The paper does not**: obesity at
+  **BMI ≥ 30**, and **≥ 25** for Asian participants
+- The lab keeps **age ≥ 20**; the paper says **age > 18**; our reproduction uses **≥ 18**
+
+> Same variable, three eligibility rules, three different studies.
+
+::: {.notes}
+(3 min) This is the highest-value slide in the preview block. The same `BMXBMI` becomes a
+different analysis variable depending on the question, and the three age rules are a live
+demonstration that "adults" is not a definition. Point hard at `right = FALSE`: a boundary
+convention buried in a default argument silently reassigns everyone sitting exactly on a
+cut-point. Tell them to record which rule they used, every time.
+:::
+
+## Look at what is missing before you model it
+
+```r
+colSums(is.na(analysis))
+naniar::gg_miss_var(analysis, show_pct = TRUE)
+
+tab1_vars <- c("Age", "RaceEthnicity", "BMI", "BMICat")
+CreateTableOne(vars = tab1_vars, data = analysis, strata = "Sex",
+               addOverall = TRUE, test = FALSE)
+```
+
+- Missingness is **inspected first**, then decided about — never discovered inside a model
+- `CreateTableOne` is the Table 1 you will rebuild for the paper's cohort in **M1**
+- `test = FALSE` on purpose: a p-value comparing baseline groups answers no question anyone
+  asked
+
+::: {.notes}
+(3 min) Close the preview block by naming what Thursday produces: one merged table, a
+missingness picture, and a descriptive table. Everything in the rest of the term runs on
+that object. Week 7 is where the missingness picture turns into a method.
 :::
 
 ## BREAK {.center}
@@ -183,49 +364,199 @@ why it is there: the full reconstructed file is 6,371, and the two are not inter
 (10 min)
 :::
 
+# Q2, continued — the population this paper defines
+
+## Population: who is being studied?
+
+### Adults with MASLD in NHANES, 2007–2018
+
+**MASLD** = metabolic dysfunction-associated steatotic liver disease: excess liver fat
+together with metabolic dysfunction.
+
+> But nobody looked at a liver. **Steatosis was estimated by a formula.**
+
+The study population is **not the general population**. Everyone in the main analysis
+already meets the study's own definition of MASLD.
+
+::: {.notes}
+(3 min) The second point is the one students skate over: the population is defined by a
+computation, so it can be recomputed, and therefore it can disagree. That is the hinge
+into the next slide.
+:::
+
+## How MASLD was actually ascertained
+
+Hepatic steatosis was **estimated** with the **Fatty Liver Index** (Bedogni 2006),
+thresholded at **FLI ≥ 60**:
+
+| FLI input | NHANES variable | Component |
+|---|---|---|
+| Triglycerides | `LBXTR` | `TRIGLY` |
+| BMI | `BMXBMI` | `BMX` |
+| GGT | `LBXSGTSI` | `BIOPRO` |
+| Waist circumference | `BMXWAIST` | `BMX` |
+
+The four enter a published logistic formula — **not a product of the four.** What matters
+here is that the index is *computed*, from four variables in three component files.
+
+Plus **at least one of five cardiometabolic criteria**: adiposity; raised glucose/HbA1c or
+diabetes; raised blood pressure or treatment; raised triglycerides or treatment; low HDL.
+
+So "MASLD" here is a **derived variable, not a diagnosis** — no imaging, no biopsy.
+
+::: {.notes}
+(4 min) Do not let this land as criticism. Every population study of MASLD in NHANES this
+decade faces the same constraint. What matters is that eligibility is *computed*, from
+four named variables in three different component files — and Q3 will show two of those
+four turning up again in the exposure.
+:::
+
+## The funnel, with a type on every row
+
+| Step | N | Kind of step |
+|---|---|---|
+| NHANES 2007–2018 records | 59,842 | — |
+| Age ≥ 18 | 36,580 | eligibility — drops 23,262 |
+| In fasting subsample | 14,962 | **design** — drops 21,618 |
+| FLI computable | 14,170 | missingness |
+| Steatosis (FLI ≥ 60) | 6,052 | target population — drops 8,118 |
+| MASLD (≥1 criterion) | 6,050 | target population |
+| Mortality-linked | **6,048** | outcome ascertainment |
+
+**After eligibility**, the two largest drops are **design** and **disease definition** —
+and neither is missing data.
+
+*Analysis set: locked mortality-linked cohort, N = 6,048.*
+
+::: {.notes}
+(4 min) A funnel shows N falling; the type column shows why, and the types are not
+interchangeable. Keep the scoping exact: the age criterion removes more people than
+anything else (23,262), but that is the study's own eligibility rule. *After* eligibility,
+the two biggest drops are the fasting subsample and the disease definition — which is why
+the printed drops are on the table rather than asserted. Week 7, the M1 deck and the
+reproduction report all state it in this scoped form. Name the row-set label explicitly and
+say why it is there: the full reconstructed file is 6,371, and the two are not the same
+cohort.
+:::
+
+## What the funnel reveals
+
+**Reproducibility note.** The published paper reports **~6,300** participants with MASLD;
+this pipeline yields **6,048** mortality-linked participants.
+*Analysis set: locked mortality-linked cohort, N = 6,048.*
+
+The two numbers should not be presented as if they described the same cohort.
+
+The paper also states eligibility as **age > 18**, while this reproduction uses
+**age ≥ 18**. Small implementation differences like this are **recorded, not silently
+harmonised**.
+
+::: {.notes}
+(3 min) Tie back to the lab preview: they have just seen three different age rules on one
+slide. Here is what that costs. The discipline being taught is recording the difference,
+not resolving it — a reproduction that quietly adopts the other rule has destroyed its own
+evidence.
+:::
+
 # Q3 — Exposure and comparison
 
 ## The exposure is constructed, not measured
 
-- Obesity by **BMI ≥ 30** (Asian participants **≥ 25**) × central adiposity by **WHtR ≥ 0.60**
-- Four phenotype groups; **Group IV** = not obese by BMI, high waist-for-height
-- The exposure spans **two collection settings** — BMI and waist both from the MEC exam, so
-  a person missing either is missing the exposure
+The exposure is not one measurement. It is built in two steps:
+
+`BMXWAIST` ÷ `BMXHT` → **waist-to-height ratio** · `BMXBMI` → **obesity category**
+
+→ BMI category **×** WHtR category → **four phenotype groups**
+
+- All three inputs come from **one component, `BMX`**, in the MEC exam — so a person
+  missing the exam is missing the exposure entirely
+- Contrast that with **eligibility**, which needs `BMX` **and** the laboratory
+  (`LBXTR`, `LBXSGTSI`) — eligibility spans two settings, the exposure does not
 
 ::: {.notes}
-(5 min) Emphasise "constructed": two continuous measurements, two thresholds, one 2x2. Every
-one of those four choices is a place a replicator can diverge from the authors.
+(3 min) Emphasise "constructed": two continuous measurements, two thresholds, one 2×2.
+Every one of those four choices is a place a replicator can diverge from the authors. The
+second bullet is a correction to an earlier version of this deck, which said the exposure
+spanned two settings — it does not; eligibility does.
 :::
 
-## Which group is the comparison?
+## Exposure component 1: BMI
 
-- No treated and control arm — the four-category phenotype is the **index factor**
-- Mortality is compared **across** the categories
-- **Group I is the reference.** Every hazard ratio is measured against it
+$$ \text{BMI} = \text{weight (kg)} / \text{height}^2 \text{ (m}^2\text{)} $$
 
-*A ratio without its referent means nothing — and here the referent is an obese group.*
+- Weight and height were **measured** in the exam, not self-reported (`BMXBMI`)
+- BMI marks **overall body size** — not body fat, and not where fat is stored
+- Obesity defined as **BMI ≥ 30**; for Asian participants **BMI ≥ 25** (`RIDRETH3 == 6`)
+
+> **Paper reporting note.** The Methods define obesity as BMI ≥ 30 (≥ 25 for Asian
+> participants), but published Tables 1–2 label the groups as BMI ≥ 25 versus < 25. Those
+> labels conflict with the Methods *and* with the reported group BMI distributions, so they
+> appear to be a reporting error.
 
 ::: {.notes}
-(4 min) Students routinely read "HR 2.9" without asking "against what?". Make them say the
-comparison out loud: non-obese high-central versus obese low-central.
+(4 min) The reporting note is a live demonstration of Q3 doing work: the exposure
+definition appears twice in one paper and the two versions disagree. Ask them which one
+they would implement, and how they would say so in writing. Flag `RIDRETH3` — it returns
+in the traps slide, because it does not exist in the first two cycles.
+:::
+
+## Exposure component 2: waist-to-height ratio
+
+$$ \text{WHtR} = \text{waist (cm)} / \text{height (cm)} = \texttt{BMXWAIST} / \texttt{BMXHT} $$
+
+A person 170 cm tall with a 102 cm waist has WHtR = 102/170 = **0.60**.
+
+- High central adiposity is defined as **WHtR ≥ 0.60**
+- WHtR is a simple marker of **abdominal adiposity** — not CT or MRI visceral fat
+
+::: {.notes}
+(2 min) The worked arithmetic is there so the threshold stops being abstract. Note that
+both inputs are on the same slide as BMI's inputs — one component file, three variables,
+two derived quantities.
+:::
+
+## The exposure is the combination
+
+|  | Lower central adiposity — WHtR < 0.60 | High central adiposity — WHtR ≥ 0.60 |
+|---|---|---|
+| **Obesity by BMI** | **Group I** — *reference* | **Group II** |
+| **No obesity by BMI** | **Group III** | **Group IV** |
+
+> **Group IV** — not obese by BMI, but a large waist for their height. The study asks
+> whether BMI alone misses this higher-risk phenotype.
+
+- There is no treated arm and control arm: the **four-category phenotype is the index
+  factor**, and mortality is compared **across** the categories
+- Every hazard ratio is measured **against Group I**. A ratio without its referent means
+  nothing — and here the referent is an **obese** group
+
+::: {.notes}
+(4 min) Make them say the comparison out loud: Group IV versus Group I is "not obese with
+high central adiposity, versus obese with lower central adiposity". Students routinely
+read "HR 2.9" without asking "against what?", and this referent is counterintuitive enough
+that the habit gets built here.
 :::
 
 ## Eligibility and exposure share their inputs
 
-| | Inputs |
+|  | Inputs |
 |---|---|
-| Eligibility (FLI) | triglycerides, GGT, **BMI**, **waist** |
-| Exposure (phenotype) | **BMI**, **waist** ÷ height |
+| **Eligibility** (FLI ≥ 60) | triglycerides, GGT, **BMI**, **waist** |
+| **Exposure** (phenotype group) | **BMI**, **waist** ÷ height |
 
 > Being selected into the study and being placed in a phenotype group are **not independent
 > events**. That is **structural dependence**.
 
+For a causal question, conditioning on this selected population could open selection or
+collider paths under some structures; for a prognostic question, it primarily defines a
+selected target population. It is not automatically circularity, and not automatically bias.
+
 *Never trust a label you have not recomputed.*
 
 ::: {.notes}
-(6 min) Name it as structural dependence, not as a diagnosed bias. What it does to an
-estimate depends on the research goal and the causal structure — Q1 arriving with
-consequences. We name it today; M1 dissects it. This is deliberate seeding, not a spoiler.
+(3 min) Name it as structural dependence, not as a diagnosed bias — the paragraph is
+deliberately conditional. What it does to an estimate depends on the research goal and the
+causal structure, which is Q1 arriving with consequences. We name it today; M1 dissects it.
 :::
 
 # Q4 — Outcome, time zero, follow-up
@@ -237,17 +568,21 @@ consequences. We name it today; M1 dissects it. This is deliberate seeding, not 
 - **Time zero is the MEC examination**; `PERMTH_EXM` is person-months from that exam
 - Follow-up through **31 December 2019**, stated in the NCHS 2019 Linked Mortality File
   linkage methodology document — not inferred from the filename
-- Entry spans 2007–2018, so follow-up lengths differ → survival analysis, not a risk difference
+- Participants entered between 2007 and 2018, so **follow-up lengths and censoring differ**
+  — time-to-event methods are appropriate. A **risk difference at a fixed horizon can still
+  be estimated**, using methods that account for censoring
 
 ::: {.notes}
-(6 min) Point at the sourcing explicitly: we know the date because NCHS documents it, not
-because the filename says MORT_2019. That is the standard we are asking of them.
+(6 min) Two things to point at explicitly. First, the sourcing: we know the end date
+because NCHS documents it, not because the filename says 2019 — that is the standard we
+ask of them. Second, the last bullet is a correction: differing follow-up does not forbid
+an absolute contrast, it forbids a naive one.
 :::
 
 ## Time zero is a question the checklist never asks
 
 - "Exposure, outcome, covariates" can all be specified while **time zero stays ambiguous**
-- An ambiguous time zero silently changes who is at risk, and for how long
+- An ambiguous time zero silently changes **who is at risk, and for how long**
 - Here exposure is measured **at** time zero — convenient, and rarer than you would think
 
 *Ask of your M0 candidates: when does follow-up begin, and does everyone start together?*
@@ -255,7 +590,8 @@ because the filename says MORT_2019. That is the standard we are asking of them.
 ::: {.notes}
 (5 min) This is one of the two places the six questions beat the old four primitives
 outright. The primitives never forced this question, and it is where cohort studies most
-often go quietly wrong.
+often go quietly wrong. If you have time, ask for a show of hands on whether their
+candidate papers state it.
 :::
 
 # Q5 — Other variables, and their roles
@@ -268,8 +604,9 @@ often go quietly wrong.
   collider — and which it is depends on the **research goal from Q1**
 
 ::: {.notes}
-(6 min) Q1 pays off again. Under a prognostic-factor question the adjustment set need not be
-confounders at all; they may be other prognostic factors.
+(4 min) Q1 pays off again. Under a prognostic-factor question the adjustment set need not
+be confounders at all; they may be other prognostic factors, included precisely so the
+index factor has to earn its place beyond them.
 :::
 
 ## What a crude-to-adjusted change establishes
@@ -282,23 +619,73 @@ confounders at all; they may be other prognostic factors.
 *Analysis set: full reconstructed analytic file, N = 6,371.*
 
 ::: {.notes}
-(8 min) **Week 4 does this work.** Today it is enough that the size of a move is not itself
-an interpretation. Vote and argue: what would you need to know to call this confounding?
-Resist answering — Week 4 is where the DAG logic arrives.
+(5 min) **Week 4 does this work.** Today it is enough that the size of a move is not itself
+an interpretation. **Vote and argue:** what would you need to know to call this
+confounding? Collect answers, resist supplying one — Week 4 is where the DAG logic arrives.
+:::
+
+## Five NHANES traps — each has bitten this project
+
+- **`ALQ130` is drinks per *drinking day*, not drinks per day.** A ">2 a day" rule applied
+  to it directly over-excluded roughly **2,000** people here — average intake needs
+  frequency × quantity. **Week 3 owns this one**
+- **777 = refused, 999 = don't know — codes, not counts.** Left inside a threshold rule
+  they reclassified **nine** refusals as heavy drinkers. Two traps on one variable, a
+  factor of two hundred apart
+- **`RIDRETH3` does not exist before 2011.** It is what identifies Asian participants for
+  the lower BMI threshold — so the first two cycles cannot apply the paper's own rule
+- **Fasting labs carry their own weight.** `LBXTR` and `LBXGLU` come from the fasting
+  subsample, weighted by `WTSAF2YR`, not `WTMEC2YR`
+- **Blood pressure is not a row mean** — next slide
+
+::: {.notes}
+(3 min) Each of these cost this project real time, and each is a variable-handling
+decision, which is why they sit under Q5 rather than in a separate "tips" section. The
+first two are deliberately separated: an earlier version of this slide fused them and
+attached the 2,000 to the reserved codes, which is wrong by a factor of two hundred. The
+`RIDRETH3` one is the sharpest teaching point — a definition that cannot be applied in a
+third of your cycles is a finding about the study, not a nuisance. For the record, the
+alcohol numbers: the exclusion moves 2,063 → 2,072 when the reserved codes are left in.
+Week 3 runs the full demonstration.
+:::
+
+## The blood pressure trap, in full
+
+The NHANES **Blood Pressure Procedures Manual (s3.1.7.3)** specifies the averaging:
+
+- The **first reading is excluded** whenever more than one was obtained
+- An **all-zero diastolic set averages to zero** — a diastolic 0 is a *measurement*, and
+  NHANES codes a failure to obtain a reading separately, as missing
+- A **zero sitting beside a positive reading is omitted** from the average
+
+Applying it changed derived SBP/DBP for **5,523 of 6,371** participants and moved
+hypertension from 3,444 to 3,448 — while the adjusted hazard ratios shifted only in the
+third significant figure. *Analysis set: full reconstructed analytic file, N = 6,371.*
+
+> **A coding error can be real, and worth fixing, even when the headline estimate survives it.**
+
+::: {.notes}
+(3 min) This is the best available demonstration that "the result did not change" is not a
+defence of a wrong implementation. Note also what the paper does *not* say: it does not
+specify its own averaging in enough detail to establish that it used this algorithm, which
+is why our version is a documentation-informed choice rather than a claim of exact
+computational reproduction.
 :::
 
 # Q6 — Design and analysis features
 
 ## NHANES is not a simple random sample
 
-- Complex multistage probability design: **weights**, **strata** (`SDMVSTRA`), **PSUs**
+- A complex multistage probability design: **weights**, **strata** (`SDMVSTRA`), **PSUs**
   (`SDMVPSU`)
 - We *use* them in **Week 6**; today, note they exist and that ignoring them is a choice
 - Fasting-subsample analyses carry their own weight — **`WTSAF2YR`**, not `WTMEC2YR`
+- Build the design on the **full frame**, then `subset()` — never on the subsample alone
 
 ::: {.notes}
-(5 min) Do not teach the survey mechanics here; Week 6 owns them. The Q6 point is that a
-design feature exists and a Methods section should say how it was handled.
+(3 min) Do not teach the survey mechanics here; Week 6 owns them. The Q6 point is that a
+design feature exists and a Methods section should say how it was handled. The last bullet
+is the single most common survey-analysis error and it is worth planting now.
 :::
 
 ## Designed subsampling is not missingness
@@ -314,39 +701,93 @@ design feature exists and a Methods section should say how it was handled.
 > **Designed subsampling ≠ ordinary missingness.**
 
 ::: {.notes}
-(6 min) An earlier version of this lecture taught the fasting subsample as a preview of
-selection bias. That was wrong, and the measured balance above is why. The distinction worth
-teaching is design versus missingness. Close Q6 by noting the paper's Statistical analysis
-section never names the survey design — Q6 answered by omission.
+(4 min) An earlier version of this lecture taught the fasting subsample as a preview of
+selection bias. That was wrong, and the measured balance above is why. The distinction
+worth teaching is design versus missingness — and the fact that it was checked, rather
+than assumed in either direction, is the transferable habit.
+:::
+
+## Survey design: paper versus reproduction
+
+- The published paper's **Statistical analysis section does not report** using NHANES
+  survey weights, strata or PSUs
+- Our pipeline **does** include design variables and the fasting-subsample weight
+- Therefore a survey-weighted rebuild is a **design-informed reanalysis**, not a literal
+  reproduction of every published analytic choice
+
+> Without the design information, estimates and standard errors should not be described as
+> design-based nationally representative estimates.
+
+::: {.notes}
+(3 min) Close Q6 by naming it as the question answered by omission. This is also the
+cleanest example in the course of a difference that is neither an error by us nor an error
+by them — it is a documented divergence, and the honest move is to label it as one.
 :::
 
 # Closing
 
-## M0 — ask the six of your own papers
+## PECOT, and the question rebuilt
 
-- Shortlist two or three candidate NHANES papers; answer **all six**, each with a pointer to
-  where in the paper you found it
-- **Reconstructable is necessary, not sufficient** — a perfectly specified paper can still be
-  a poor M0 choice
-- M0 wants: enough observations and events, a design feature its analysis must respect, and a
-  missing variable the analysis actually uses
-- An unanswered question is not a disqualification — it is a candidate for the judgement you
-  defend at **M1**
+| Element | This study |
+|---|---|
+| **P** — Population | Adults with MASLD by FLI ≥ 60 + ≥1 cardiometabolic criterion, in the fasting subsample |
+| **E** — Exposure | Four-category BMI × WHtR phenotype |
+| **C** — Comparison | Groups II, III, IV versus **Group I** |
+| **O** — Outcome | All-cause mortality to 31 Dec 2019 |
+| **T** — Time | Months from exam to death or censoring |
+
+> Among adults with MASLD, are BMI/WHtR phenotypes associated with different subsequent
+> risks of all-cause mortality?
 
 ::: {.notes}
-(12 min) Work one candidate live if time allows. The six answers plus pointers are the M0
+(2 min) The wording makes population, exposure, comparison, outcome and time explicit —
+and is honest about how the population was defined. That sentence is the deliverable shape
+for M0.
+:::
+
+## M0 — ask the six of your own papers
+
+- Shortlist two or three candidate NHANES papers; answer **all six**, each with a pointer
+  to where in the paper you found it
+- **Reconstructable is necessary, not sufficient** — a perfectly specified paper can still
+  be a poor M0 choice
+- M0 wants: enough observations and events, a design feature its analysis must respect, and
+  a missing variable the analysis actually uses
+- An unanswered question is not a disqualification — it is a candidate for the judgement
+  you defend at **M1**
+
+::: {.notes}
+(2 min) If you are ahead of schedule, work one candidate live — it is the single most
+useful thing you can do with spare minutes. The six answers plus pointers are the M0
 deliverable's spine.
 :::
 
-## Bridge to the lab and M0
+## Bridge to L1 and M0
 
-- **In L1 (Thu):** download several cycles, read the raw topic files, merge on `SEQN` into
-  one analytic-ready table with a cycle indicator
-- **How it becomes your project:** L1's merge is the substrate for the whole term
+- **Thursday (L1):** the code you saw before the break — several cycles downloaded, topic
+  files read, merged on `SEQN`, renamed, categorised, missingness inspected, Table 1 built
+- **Before you go:** you should be able to name the component file each variable on these
+  slides comes from
 - **Toward M0 (Wk3):** bring six answers per candidate paper, not a summary
 
 *Reading a Methods section is the first act of reproduction.*
 
 ::: {.notes}
-(5 min) Send them to L1 knowing exactly which files they are merging and why.
+(2 min) Send them to L1 knowing exactly which files they are merging and why. The middle
+bullet is a genuine self-test — ask two or three at random on the way out.
 :::
+
+## Reference {.center visibility="uncounted"}
+
+Kueh MTW, Intaran MAU, Goh R, et al. **Body weight categories and fat distribution in
+relation to all-cause mortality among adults with metabolic dysfunction-associated
+steatotic liver disease: a population-based analysis of NHANES, 2007–2018.** *BMJ Open*.
+2026;16:e113719. doi: [10.1136/bmjopen-2025-113719](https://doi.org/10.1136/bmjopen-2025-113719)
+
+**Methods references:** Riley RD et al. *BMJ* 2019;364:k4597 (prognostic factors) ·
+Moons KGM et al. *BMJ* 2009;338:b375 and Riley RD et al. *BMJ* 2024;386:e078276
+(prediction models) · Hernán MA, Robins JM. *JECH* 2006 and Hernán MA, Dahabreh IJ.
+*Ann Intern Med* 2025 (causal estimands).
+
+Cohort counts and variable names on these slides come from this repository's own
+reproduction pipeline, not from the paper's prose.

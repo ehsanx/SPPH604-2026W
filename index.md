@@ -141,6 +141,7 @@ The worked examples and reproduction pipeline use the demonstration paper throug
 | [`paper/`](paper/) | Demonstration paper, the additional P4 paper, and licence/attribution information |
 | [`examples/`](examples/) | Worked examples for P1–P5 and M0–M4 |
 | [`reproduction/`](reproduction/) | Full R analysis pipeline behind the demonstration-paper results |
+| [NHANES variable map](reproduction/VARIABLE_MAP.html) | Every variable the pipeline uses: component file, cycle availability, reserved codes vs measurements, CDC codebook link, and the line of our code that reads it |
 | [Reproduction walkthrough — source](reproduction/WALKTHROUGH.md) | How the scripts fit together, the sample funnel, and key NHANES decisions |
 | [Reproduction report — source](reproduction/reproduction_report.md) | What reproduced, what did not, and why |
 

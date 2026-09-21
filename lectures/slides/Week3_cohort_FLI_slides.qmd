@@ -1,7 +1,7 @@
 ---
-title: "Week 3 — Building the Analytic Cohort: Case Definitions, Eligibility, and the Funnel"
+title: "Week 3 — Q2 in Depth: From Population to Analytic Cohort"
 subtitle: "SPPH 604 · Application of Advanced Epidemiological Methods"
-author: "Running example: Kueh et al. (2026), MASLD / NHANES"
+author: "Running example: Kueh et al. (2026), MASLD / NHANES · previews L2"
 format:
   revealjs:
     theme: default
@@ -15,239 +15,637 @@ format:
     smaller: true
 ---
 
-## Week 3 — Building the Analytic Cohort {.center}
+## Week 3 {.center}
 
-**Case definitions, eligibility, and the funnel**
+### Q2 in depth: from population to analytic cohort
 
-- The step that decides *who is even in the study*
-- From a clean data frame to an **analytic cohort**
-- Turning a prose methods paragraph into **executable logic**
+**A cohort is not a leftover. It is the first result.**
 
-**MASLD:** every number in the Kueh paper rides on getting *one* cohort right.
-
-::: {.notes}
-Welcome to Week 3. Last week and in L1 we produced a clean merged NHANES frame. Today we convert that frame into the actual study cohort — the most consequential and most under-scrutinized step in the whole pipeline. Set the tone: eligibility is not bookkeeping, it is analysis. (~1 min to set up.)
-:::
-
-## Learning objectives
-
-- Distinguish **target**, **source**, and **analytic** populations — and locate each in a published study.
-- Reconstruct the MASLD case definition: **steatosis (FLI ≥ 60)** + **≥ 1 cardiometabolic criterion**.
-- Convert a prose eligibility paragraph into a reproducible **inclusion/exclusion algorithm**.
-- Build and defend an **eligibility funnel** with an N at every step.
-- Explain why you **never tune the cohort to hit the paper's N**.
+- Week 2 asked *who is the population, and how is eligibility operationalised?*
+  Today we answer it all the way down to executable code
+- Everything on these slides — the funnel, the criteria table, the alcohol sentence —
+  is the shape of what you build for **your own** paper at P1
 
 ::: {.notes}
-Read these as promises for the next 2.5 hours. The through-line: prose is lossy, and eligibility decisions are load-bearing analysis choices. By the end students should be able to look at any methods section and see the cohort algorithm hiding inside it.
+(1 min) Timing: per-slide markers in these notes sum to 140 min including the break,
+against a 150-minute cap. The lecture plan carries the identical split and lists which
+slides to drop first if you are running behind. If you retime a slide, retime it in both
+files.
 :::
 
-## Continuity: where this fits
+## Q2, in depth — and this week's division of labour
 
-- **Last week (Wk 2 → L1):** merged NHANES cycles, harmonized names, fixed messy joins → a clean person-level frame.
-- **This week:** convert that frame into the **analytic cohort** the MASLD paper analyzed.
-- **M0 closes today** — your memo is due at 12 PM, and your paper locks at that deadline.
-- **Sets up:** **L2** (build the analytic dataset) and **P1** (your own eligibility funnel).
+Week 2 gave you six questions. **Today is Q2:** who is the population, and how is
+eligibility operationalised?
 
-**MASLD:** L1 gave us clean data; today we decide who counts as a subject.
+| | What it teaches | On which paper |
+|---|---|---|
+| **Tuesday (today)** | the **judgment** — turning a prose eligibility paragraph into logic you can defend | MASLD (Kueh) |
+| **Thursday (L2)** | the **mechanics** — multi-cycle download, mortality linkage, eligibility steps, analytic dataset | benzodiazepine / opioid |
+| **P1** | both, transferred | your locked paper |
+
+- Today's path: **case definition → eligibility → the funnel → Thursday**
+- Framing question: *"If two teams read the same methods paragraph, would they build the
+  same cohort?"*
+
+> Eligibility decisions are analysis choices. That is why they sit inside Q2, not in a
+> housekeeping appendix.
 
 ::: {.notes}
-Reconnect explicitly to last week's wrangling. Emphasize the M0 milestone verbally — this is a hard gate. After today there are no elective paper swaps; if a memo shows the paper cannot support the sequence, the teaching team may require a replacement. Their locked paper's eligibility paragraph becomes their specification to decode in P1.
+(4 min) Put the framing question to the room and take two answers before moving on. Most
+will say "yes, obviously" — the alcohol slide proves otherwise, and that is the hinge of
+the lecture. The table is the other load-bearing part: say out loud that Thursday's lab is
+a *different paper on purpose*, so nobody spends the week thinking the course lost its
+thread. We come back to it at the end with the actual code.
 :::
 
-## Slide 1 — Where we are in the project (M0 closing)
+## M0 — deadline today
 
-- Term arc: **Replicate → Interrogate → Improve → Defend** — we are still in *Replicate*.
-- L1 gave a clean merged NHANES frame; today we decide *who counts as a subject*.
-- **M0 closing:** memos due 12 PM today; papers are final at that deadline.
-- Get the cohort wrong and *every* downstream number is wrong.
-
-**MASLD:** the Kueh story rides on 4 phenotype groups drawn from *one* cohort.
+- Memos due **12 PM today**
+- We will get back to you soon on whether the teaching team agrees with your reading of
+  the six criteria
 
 ::: {.notes}
-(4 min.) Anchor the term-long arc on screen so students always know which phase they are in. Deliver the M0 announcement plainly and let it land — it is a commitment device. The cohort is the foundation: a cracked foundation propagates silently into HRs, splines, and every table.
+(1 min) An announcement. Say it, take any questions, move on.
 :::
 
-## Slide 2 — Today's roadmap and the one big idea
+# Part 1 — The case definition
 
-- Path: **case definition → eligibility → exclusions → funnel → feasibility**.
-- Big idea: **eligibility decisions are load-bearing** — analysis choices, not chores.
-- Framing question: *"If two teams read the same methods paragraph, would they build the same cohort?"*
+## Target, source, analytic — and what each step costs
+
+| Population | Here | Why it narrows |
+|---|---|---|
+| **Target** | adults with MASLD in the US | who we want to speak about |
+| **Source** | NHANES 2007–2018 respondents | who was sampled |
+| **Analytic** | those surviving every filter, with measurable exposure *and* outcome | who we can actually compute on |
+
+- Each narrowing step trades **generalizability** for **measurability**
+- A drop is not automatically a bias. **What it is depends on its kind** — Week 2's typed
+  funnel: `ELIGIBILITY`, `DESIGN`, `MISSINGNESS`, `TARGET POPULATION`,
+  `OUTCOME ASCERTAINMENT`
+- Only one of those five is a missing-data problem
+
+> Recall Week 2's measured check: adults in and out of the fasting subsample differ by
+> **0.2 years, 0.02 kg/m², 0.07 cm**. Designed subsampling is *not* self-selection.
 
 ::: {.notes}
-(3 min.) Put the framing question to the room and let a couple of students answer before moving on. Most will say "yes, obviously" — plant the seed that today will prove otherwise (the alcohol sentence in Slide 9). Preview the five-station roadmap so the structure is visible.
+(6 min) Draw the nested circles if you like, but the labels on the arrows matter more than
+the circles. Be careful here: an earlier version of this course taught every drop as a
+preview of selection bias, and that was wrong — the measured balance in the blockquote is
+why. The transferable habit is that the *kind* of each drop was checked rather than
+assumed. We put the real typed funnel on screen after the break.
 :::
 
-## Slide 3 — Target vs source vs analytic population
+## MASLD: a concept that has to become data operations
 
-- **Target** = adults with MASLD — who we want to speak about.
-- **Source** = NHANES 2007–2018 respondents.
-- **Analytic** = those who survive all filters *and* have measurable exposure + outcome.
-- Each narrowing step trades **generalizability** for **measurability**.
-- Every drop is a potential **selection bias**, not just a smaller N.
+**MASLD** (formerly NAFLD) = **hepatic steatosis** + **metabolic dysfunction**, other
+causes not dominant.
 
-- MASLD hook: NHANES samples the US civilian population, and the analytic cohort is the MASLD subset of the **designed fasting subsample**. Foreshadow the typed funnel: every step down has a *kind*, and only some kinds are missing data.
+| Conceptual ingredient | What NHANES can offer | What the paper does |
+|---|---|---|
+| Hepatic steatosis | no biopsy, no imaging | **Fatty Liver Index ≥ 60** |
+| Metabolic dysfunction | labs, exam, questionnaire | **≥ 1 of five** cardiometabolic criteria |
+
+- The constraint is real, not a flaw in this paper: every NHANES population study of MASLD
+  this decade faces it
+- **Nobody in this dataset was diagnosed with MASLD.** There is no column to read. Who
+  counts as a case is the output of a calculation you run yourself — four measurements,
+  one published formula, one threshold
+- So who is in the cohort depends on how you handle those inputs. Later today: one
+  triglyceride value moves a single person in or out of the case definition, and one
+  sentence of prose moves **2,063**
 
 ::: {.notes}
-(10 min.) The conceptual spine. Draw the nested circles, then label each arrow inward with its **type** — the labels matter more than the circles.
+(4 min) Note the NAFLD→MASLD renaming so they recognise both terms in the literature. The
+key move is the left-to-right one: a conceptual definition becomes a data operation, and
+everything downstream inherits the properties of that operation. Do not let this land as
+criticism. The last bullet makes two promises — the FLI boundary flip and the alcohol
+sentence — and both are cashed later in the lecture; say them as promises so the room is
+waiting for them.
 :::
 
-## Slide 4 — The MASLD case definition, unpacked
+## Steatosis: the Fatty Liver Index, and where its inputs live
 
-- MASLD (formerly **NAFLD**) = **hepatic steatosis + metabolic dysfunction**, other causes not dominant.
-- Two ingredients to operationalize: **(1) steatosis**, **(2) ≥ 1 cardiometabolic criterion**.
-- No biopsy, no imaging in NHANES → steatosis must be ascertained **non-invasively**.
+$$\mathrm{FLI} = 100 \cdot \frac{\exp(y)}{1+\exp(y)}, \qquad
+y = 0.953\ln(\mathrm{TG}) + 0.139\,\mathrm{BMI} + 0.718\ln(\mathrm{GGT}) + 0.053\,\mathrm{waist} - 15.745$$
 
-**MASLD:** the paper uses the **Fatty Liver Index (FLI)** as its steatosis proxy — a modeling choice we scrutinize all term.
+| Input | NHANES variable | Component | Fasting? |
+|---|---|---|---|
+| Triglycerides (mg/dL) | `LBXTR` | `TRIGLY` | **yes** |
+| BMI (kg/m²) | `BMXBMI` | `BMX` | no |
+| GGT (U/L) | `LBXSGTSI` | `BIOPRO` | no |
+| Waist (cm) | `BMXWAIST` | `BMX` | no |
+
+- Bedogni 2006. A published logistic score — **not** a product of the four
+- **One** input needs a fasting lab, and that one input binds the whole index to the
+  fasting subsample
+- `BMXBMI` and `BMXWAIST` also build the *exposure*. Week 2 named that **structural
+  dependence**; M1 dissects what it does to an estimate
+
+> **Where do I actually get `LBXTR`?** The reproduction site carries the full
+> **[NHANES variable map](https://ehsanx.github.io/SPPH604-2026W/reproduction/VARIABLE_MAP.html)**
+> — component, cycle availability, CDC codebook link, and the line of our code that reads
+> it. Use it for your own paper's variables too.
 
 ::: {.notes}
-(12 min.) Note the NAFLD→MASLD renaming so students recognize both terms in the literature. The key move: a *conceptual* definition (steatosis + metabolic dysfunction) has to be translated into *data operations*. NHANES has no liver imaging, which forces the FLI proxy. Everything downstream inherits the strengths and weaknesses of that proxy.
+(5 min) This table is the same one they saw in Week 2 under Q2 — say so, so it reads as a
+callback rather than new material. The fasting column is the new thing, and it is what the
+feasibility argument later in the lecture turns on. Hold the structural-dependence point
+at the level Week 2 set it: named, not diagnosed.
 :::
 
-## Slide 5 — Ascertaining steatosis: the Fatty Liver Index
+## FLI, worked: one subject
 
-- FLI = a published **logistic score** predicting fatty liver from routine measures.
-- Inputs: **triglycerides, BMI, GGT, waist circumference** — only **triglycerides** needs a fasting lab, and that one is enough to bind the whole index.
-- Output: a **0–100 score**; the paper applies the conventional **FLI ≥ 60** rule-in cut.
+A 52-year-old with **TG 150 mg/dL**, **BMI 28.5**, **GGT 30 U/L**, **waist 99 cm**:
 
-**MASLD:** FLI already contains **BMI and waist** — the same anthropometry used later to define the phenotype groups. Flag it now; it returns as the **"circularity"** threat at M1.
+| Term | Computation | Value |
+|---|---|---|
+| $0.953\ln(\mathrm{TG})$ | $0.953 \times \ln(150)$ | 4.775 |
+| $0.139\,\mathrm{BMI}$ | $0.139 \times 28.5$ | 3.962 |
+| $0.718\ln(\mathrm{GGT})$ | $0.718 \times \ln(30)$ | 2.442 |
+| $0.053\,\mathrm{waist}$ | $0.053 \times 99$ | 5.247 |
+| constant | | −15.745 |
+| | **$y$** | **0.681** |
+
+$$\mathrm{FLI} = 100 \cdot \frac{\exp(0.681)}{1+\exp(0.681)} = \mathbf{66.4} \;\Rightarrow\; \text{FLI} \ge 60 \;\Rightarrow\; \textbf{steatosis}$$
+
+- Note **TG and GGT enter on the log scale** — a doubling of GGT is worth the same as a
+  doubling of TG times 0.75, not twice the raw units
 
 ::: {.notes}
-(12 min.) Have students memorize the four inputs. Plant the circularity flag *explicitly* and out loud: the disease gate (FLI) and the exposure groups (BMI × WHtR) share BMI and waist. This is not a bug we can code around — it is a structural feature we will interrogate. Foreshadow M1 so they know it is coming.
+(6 min) Do the arithmetic on screen rather than describing it. Ask them which term is
+doing the most work before you reveal the column — most will guess BMI, and it is waist.
+The log terms are the reason the index is not a simple weighted sum of the four
+measurements, and the reason you cannot eyeball who is over the cut.
 :::
 
-## Slide 6 — The FLI formula, worked
+## The same subject, one lab value later
 
-- Shape: a logistic function of
-  `0.953·ln(TG) + 0.139·BMI + 0.718·ln(GGT) + 0.053·waist − 15.745`, mapped to **0–100**.
-- Walk one hypothetical subject through it live — note **TG and GGT enter on the log scale**.
-- A **cut** on a continuous score creates a hard boundary: small measurement error near 60 **flips case status**.
+Change **only** the triglycerides — everything else identical:
 
-**MASLD:** FLI ≥ 60 is both the **disease gate** and — because it needs fasting TG — the **reason the cohort shrinks** to the fasting subsample.
+| | TG | $y$ | FLI | Case? |
+|---|---|---|---|---|
+| Visit A | 150 mg/dL | 0.681 | **66.4** | **yes** |
+| Visit B | 110 mg/dL | 0.385 | **59.5** | no |
+
+**The cut flips at TG = 112.4 mg/dL**, holding BMI, GGT and waist fixed.
+
+- **40 mg/dL of triglycerides is the entire difference between "case" and "not a case"** —
+  nothing else about these two rows differs
+- So the one input that forced the cohort into the fasting subsample is also the one that
+  decides case status at the margin
+- A **cut on a continuous score** manufactures a hard boundary. The same issue returns at
+  the **BMI × WHtR 2×2**
 
 ::: {.notes}
-(10 min.) Do the arithmetic live for one invented subject so the log terms feel concrete. The pedagogical point is the fragility of a dichotomized continuous score: subjects at 59 vs 61 are essentially identical but land on opposite sides of "disease." This dichotomization theme recurs when we discuss the BMI × WHtR grouping. Tie the fasting-TG requirement to the cohort shrinkage we quantify at Slide 14.
+(6 min) This is the slide that makes dichotomisation concrete rather than a slogan. Ask
+what they would do about it — the honest answers are a sensitivity analysis at 55 and 65,
+or keeping FLI continuous where the question allows. Neither is available to us here,
+because the case definition is the paper's, not ours; that constraint is itself worth
+naming. Flag that the 2×2 exposure has exactly the same property. **Sourcing note:** this
+slide deliberately does *not* claim that fasting triglycerides vary by 40 mg/dL within a
+person between visits. That is very likely true and it is not established by anything on
+these slides — if you want to make it in the room, bring a citation, because "assert it
+and move on" is precisely what we mark students down for.
 :::
 
-## Slide 7 — The cardiometabolic criteria (the "M" in MASLD)
+## Metabolic dysfunction: five criteria, and ≥ 1 is required
 
-- Require **≥ 1** of: elevated **BMI/waist**, **hyperglycemia/diabetes**, **hypertension**, **dyslipidemia** (low HDL / high TG or treatment).
-- Each is itself an operationalization: **which threshold? treated vs untreated? which NHANES variable?**
-- Document every criterion's variable and cut in a **codebook before coding**.
+| # | Criterion | Operationalised as | Variables |
+|---|---|---|---|
+| 1 | Adiposity | BMI ≥ 25, **or** waist > 94 cm (M) / > 80 cm (F) | `BMXBMI`, `BMXWAIST` |
+| 2 | Glycaemia | glucose ≥ 100, **or** HbA1c ≥ 5.7, **or** diabetes dx, **or** on treatment | `LBXGLU`, `LBXGH`, `DIQ010`, `DIQ050`, `DIQ070` |
+| 3 | Blood pressure | SBP ≥ 130, **or** DBP ≥ 85, **or** on treatment | `BPXSY1–4`, `BPXDI1–4`, `BPQ050A` |
+| 4 | Triglycerides | TG ≥ 150, **or** on lipid treatment | `LBXTR`, `BPQ100D` |
+| 5 | HDL | ≤ 40 mg/dL (M) / < 50 (F) | `LBDHDD` |
 
-**MASLD:** in this cohort ≥ 1 criterion is almost always met, so it rarely moves N — but you must still report it, because *your* paper's population may differ.
+- **Five separate criteria, not four.** 4 and 5 are both lipids but they are coded,
+  thresholded and sexed separately — collapsing them into "dyslipidaemia" is the wrong
+  level of abstraction for something you have to write as code
+- Every row hides a decision: *which threshold? treated counts as met? which variable?*
+- In this cohort ≥ 1 is almost always met — it drops **2 people, 6,052 → 6,050**. Report
+  it anyway; your paper's population may differ
+
+*Analysis set: locked mortality-linked cohort, N = 6,048.*
 
 ::: {.notes}
-(10 min.) Each bullet under the first point is a coding decision with defensible alternatives. The "almost always met" point is reassuring for this cohort but dangerous as a habit — students must not skip reporting a filter just because it happened to be non-binding here. The codebook-before-coding discipline is what makes P1 reproducible.
+(8 min) Give this the time. This table is the codebook-before-coding discipline in its
+finished form, and it is what P1 asks them to produce for their own paper. The "five not
+four" point is worth saying out loud: a student who codes from a bullet that says
+"dyslipidaemia" writes one indicator where the definition needs two with different cuts
+and different sex rules. The 6,052 → 6,050 number is reassuring here and dangerous as a
+habit — a non-binding filter is still a reported filter.
 :::
 
-## Slide 8 — Eligibility and exclusions are design, not chores
+# Part 2 — Eligibility as executable logic
 
-- Typical filters: **adults** (age ≥ 18/20), **non-pregnant**, **valid mortality linkage**, **non-missing key measures**, disease-specific exclusions.
-- Each filter answers a scientific question — *"who is this study about?"* — so each needs a stated **rationale**.
-- Rule: write exclusions as **executable logic** with a comment citing the paper's sentence.
+## Exclusions are scientific claims
 
-**MASLD:** the paper's exclusions include competing liver-disease causes and — critically — **heavy alcohol use**, our worked example next.
+- Every filter answers *"who is this study about?"* — so every filter needs a **stated
+  rationale**, not just a line of code
+- The reproducibility contract, in one rule:
+
+```r
+# Paper, Methods: eligibility stated as "aged > 18 years"
+d <- filter(d, age >= 18)          # NOT what the sentence says — deliberate, see below
+```
+
+- A comment naming **the sentence you are implementing** lets an auditor trace every
+  `filter()` back to the paper
+- It also makes a **divergence visible instead of invisible**. NHANES age is an integer, so
+  `> 18` means 19 and over; we keep everyone aged exactly 18
+- Week 2 put **three** age rules on one slide — the lab's `>= 20`, the paper's `> 18`, our
+  `>= 18`. Same variable, three studies
+- The discipline is not to pick the right one. It is to **record which one you used**, so a
+  reader can undo it. A reproduction that quietly adopts the other rule has destroyed its
+  own evidence
 
 ::: {.notes}
-(10 min.) Reframe "exclusion criteria" from a chore list into a set of scientific claims. The comment-citing-the-sentence rule is the reproducibility contract in miniature: anyone auditing your code can trace each `filter()` back to a specific sentence in the paper. This sets up the alcohol example, where that traceability breaks down.
+(6 min) Reframe "exclusion criteria" from a chore list into a set of claims. Then use the
+age rule as the smallest possible worked example of the comment rule: the sentence and the
+code **disagree**, the comment is what makes that checkable, and the divergence is recorded
+rather than harmonised. Do not let anyone leave thinking `>= 18` is a typo — it is a choice
+we wrote down. The alcohol criterion two slides on is the same situation with no defensible
+resolution available.
 :::
 
-## Slide 9 — Worked example: the alcohol ambiguity (one sentence, three cohorts)
+## The sentence
 
-- The paper states its alcohol exclusion in a **single sentence** readable three ways: *which* drinks question, *which* threshold, *missing = drop or keep*.
-- Coded three defensible ways, the same sentence yields:
+The paper's Methods exclude significant alcohol consumption:
+
+> ### "> 2 drinks/day (men), > 1 (women)"
+
+Three things it does not say:
+
+| | The question it leaves open |
+|---|---|
+| **Which variable?** | `ALQ130` (drinks per *drinking day*) or `ALQ120Q × ALQ120U` (frequency × quantity)? |
+| **Per what?** | per drinking day, or averaged over all days? |
+| **And the missing?** | people who did not answer — dropped, or kept? |
+
+- `ALQ130` is **drinks on days you drink**. Applying a "per day" rule to it directly is a
+  different rule from the one the sentence appears to state
+
+::: {.notes}
+(4 min) Read the criterion aloud, then sit in the silence for a second. Almost everyone
+hears it as unambiguous on first pass — that reaction is the lesson. Take the three rows
+one at a time and ask the room to answer each before you move on. If you have the paper
+open, put its full Methods paragraph on screen alongside; the criterion above is the
+operative clause as recorded in `reproduction_report.md` §2.
+:::
+
+## One sentence, three cohorts
+
+| Reading | Implemented as | Removes | Analytic N | vs the paper's ≈ 6,300 |
+|---|---|---|---|---|
+| **Crude** — `ALQ130` applied flatly | `ALQ130 > 2` (M) / `> 1` (F) | **2,063** | **4,308** | −1,992 |
+| **Frequency-weighted** — average drinks/day | quantity × frequency ÷ reference period | **427** | **5,944** | −356 |
+| **No effective exclusion** | — | **0** | **6,371** | **+71** |
 
 ::: {.incremental}
-- **N ≈ 4,308** — strictest reading
-- **N ≈ 5,944** — middle reading
-- **N ≈ 6,371** — most inclusive reading
-- A swing of **~2,000 people** from *one sentence*.
+- A swing of **2,063 people** — a third of the cohort — from one sentence
+- The published N and death count are **far more compatible with the third row** than with
+  either of the others. We are not claiming 6,371 *is* 6,300 — the residual +71 is the gap
+  we account for two slides from now
+- So the results are most consistent with the exclusion **not having been applied as we can
+  operationalise it**. The Methods state it; the numbers do not show it
 :::
 
-**MASLD:** this is why the reported N never quite pins down — publish your *own* coding decision explicitly rather than guess the authors' intent.
+*Analysis set: full reconstructed analytic file, N = 6,371.*
 
 ::: {.notes}
-(15 min.) This is the emotional core of the lecture — spend the time. Show the actual sentence if available. Have students vote on which reading they'd defend before revealing the three N's. The lesson: the ambiguity is invisible until you try to *run* it. Prose is lossy. This directly motivates why matching the paper's N proves nothing (Slide 12).
+(10 min) The centre of the lecture — spend the time. Vote before revealing: which reading
+would you defend? Take a count on each row. Then reveal the third row and let the
+implication land: the ambiguity is invisible until you try to *run* it, and running it here
+turned up something stronger than ambiguity. Resist supplying the resolution; there isn't
+one available from the paper. This is the slide that motivates "never tune to hit the N".
 :::
 
-## Slide 10 — BREAK (10 min)
+## The trap inside the trap: reserved codes
 
-**Restart prompt:** *"Which of the three alcohol codings would* you *defend, and why?"*
+`ALQ130` uses NHANES **reserved codes**, not measurements:
+
+| Code | Means |
+|---|---|
+| `777` | refused |
+| `999` | don't know |
+
+```r
+qty <- ifelse(ALQ130 %in% c(777, 999), NA, ALQ130)   # strip BEFORE any threshold
+```
+
+- Left in, `ALQ130 > 2` silently reclassifies every refusal as a heavy drinker
+- Here that is **nine people**: the crude exclusion moves **2,063 → 2,072**
+- Two traps live on one variable and they are **two hundred times apart in size**. Do not
+  fuse them in your notes
+
+> A reserved code is not a quantity. Strip them before every threshold rule, in every
+> increment.
 
 ::: {.notes}
-(10 min.) Leave the restart prompt on screen. This keeps the alcohol example live in their heads and primes the second half, which is all about defending choices rather than hiding them. Encourage informal debate during the break.
+(5 min) Small numbers, large principle. The nine people do not change any estimate, and
+that is exactly why this is worth teaching: it is a wrong implementation that survives the
+result-didn't-move defence. Say explicitly that the 2,000 belongs to the drinks-per-
+drinking-day trap and the nine belongs to the reserved codes — an earlier version of this
+course fused them and was wrong by a factor of two hundred.
 :::
 
-## Slide 11 — The eligibility funnel: report N at every step
+## What we did, and why we are telling you
 
-- Build top-to-bottom: **source N → adults → MASLD (FLI ≥ 60 + criterion) → alcohol/other exclusions → mortality linkage → analytic N**.
-- Report the count **removed** *and* **remaining** at *every* line.
-- The deliverable is a **CONSORT-style diagram** — a reproducibility contract a reader can re-derive.
+**Our choice:** no effective alcohol exclusion. It reproduces the published cohort and is
+the most transparent about the discrepancy.
 
-**MASLD:** the paper reports **N ≈ 6,300**, groups **386 / 4,541 / 769 / 604**, **585 deaths**; our **full analytic file** is **6,371**, groups **391 / 4,585 / 787 / 608**, **586 deaths** — and the **locked domain** is **6,048**. The gap is the finding, and none of it is interpretable without the funnel that produced it.
+```r
+## 02_build_analytic.R:40
+APPLY_ALCOHOL_EXCL <- FALSE
+```
+
+- It is a **switch**, not a hidden default: the funnel prints
+  `Alcohol exclusion applied = FALSE` as a row, so the setting is in the artifact
+- We carry the alcohol question forward as an **open finding**, not a solved step
+- The discipline, stated once: **choose a priori, record the choice where a reader will
+  find it, and report what the alternatives would have given**
+
+> We are not telling you which reading is right. We are showing you what it costs to
+> pretend the question did not arise.
 
 ::: {.notes}
-(14 min.) The funnel is the single most important deliverable of P1. Emphasize that a lone final N is meaningless — it is the *sequence* of drops that makes it reproducible. Walk the four phenotype-group counts in two columns, the paper's and ours (Group I obese/low-central: paper 386, ours 391; II obese/high-central: 4,541 vs 4,585; III non-obese/low-central: 769 vs 787; IV non-obese/high-central: 604 vs 608), and the deaths the same way (585 vs 586), so they recognize these anchors when they appear in later weeks' survival analyses — and so they never hear our numbers as the paper's.
+(8 min) This is the slide the previous version of the deck was missing, and it is the one
+that makes the previous three honest: we asked them to publish their coding decision, so
+here is ours, in the code, with the alternatives quantified. Point out that the switch
+appears as a row in the funnel — a decision recorded in the artifact cannot be forgotten by
+the next person to run it. Ask what their own paper's equivalent switch is going to be.
 :::
 
-## Slide 12 — Why you never tune the cohort to hit the paper's N
+## BREAK {.center}
 
-- Temptation: quietly flip a threshold until your N matches the abstract.
-- That is **fitting the process to the answer** — a *garden of forking paths*.
-- Correct stance: pick the **most defensible** coding a priori, report your N, and *explain* any gap.
-- A **matched N with hidden tuning** is worse than an **honest mismatch you can account for**.
-
-**MASLD:** the alcohol sentence alone spans ~2,000 people — "matching" the paper's N proves nothing; it may just mean you guessed their ambiguity.
+**On the board for the restart:** *which of the three alcohol codings would* you *defend,
+and what would you write in the paper?*
 
 ::: {.notes}
-(10 min.) This is the ethical and methodological heart of the reproduction philosophy. Connect explicitly to the alcohol example: if one sentence can move N by 2,000, then hitting the exact reported N is as likely to reflect a lucky guess as a correct method. Reframe success: a documented, defensible N *is* the win, even if it differs from the paper.
+(10 min) Leave the prompt up. It keeps the example live and primes the second half, which
+is about defending choices in public rather than resolving them in private.
 :::
 
-## Slide 13 — Peer-review principles for eligibility
+# Part 3 — The funnel
 
-- Reviewer checklist:
-  - Is the **case definition** operational?
-  - Is **every exclusion** executable?
-  - Does the funnel's **arithmetic close**?
-  - Is the **analytic N** stated and reproducible?
-- Distinguish an *honest, documented* choice from an *undocumented, load-bearing* one.
-- **Charity + rigor:** assume competence, but demand the numbers reconcile.
+## The funnel, with a type on every row
 
-**MASLD:** apply the checklist to the alcohol sentence *and* the **mislabeled BMI header** (a table reads "< 25" where the cut is actually 30) — small text discrepancies, real consequences for a reader rebuilding the cohort.
+| Step | Criterion | N | Dropped | Kind |
+|---|---|---|---|---|
+| 0 | NHANES 2007–2018 records | 59,842 | — | — |
+| 1 | Age ≥ 18 | 36,580 | 23,262 | `ELIGIBILITY` |
+| 2 | In fasting subsample | 14,962 | 21,618 | `DESIGN` |
+| 3 | FLI computable | 14,170 | 792 | `MISSINGNESS` |
+| 4 | Steatosis (FLI ≥ 60) | 6,052 | 8,118 | `TARGET POPULATION` |
+| 5 | MASLD (≥ 1 criterion) | 6,050 | 2 | `TARGET POPULATION` |
+| 6 | Phenotype group assignable | 6,050 | 0 | `MISSINGNESS` |
+| 7 | Mortality-eligible and linked | **6,048** | 2 | `OUTCOME ASCERTAINMENT` |
+
+- This is not a picture of the funnel. It **is** the funnel — emitted by
+  `02_build_analytic.R` to `logs/sample_funnel.csv`, and re-derivable by anyone
+- Report **removed *and* remaining** on every line. A lone final N is not reproducible
+
+*Analysis set: locked mortality-linked cohort, N = 6,048.*
 
 ::: {.notes}
-(12 min.) Frame this as the mindset students bring to their own oral defense and to reviewing peers. The mislabeled BMI header is a real, concrete example of how a tiny mismatch between a table label and the Methods text can send a reproducer down the wrong path — reinforcing why executable, commented logic beats trusting prose or table headers. Model the charity-plus-rigor stance explicitly.
+(9 min) Put this on screen and leave it there. Walk the type column, not the N column —
+the Ns are arithmetic, the types are the analysis. Row 2 is the one to dwell on: the second
+largest drop in the whole table is a *design* feature with a documented fix
+(`WTSAF2YR`), not missing data to impute away. Row 3 is the genuine missingness, and it is
+792 people, not 21,618. This is the artifact P1 asks them to produce.
 :::
 
-## Slide 14 — Feasibility: can you even measure the exposure?
+## Two row sets, and they are not interchangeable
 
-- FLI needs **fasting labs** → only the **fasting subsample (WTSAF)** qualifies.
-- Within the **fasting subsample**, FLI is computable for **94.7%** of adults — the 5.3% who lack it are genuine item nonresponse.
-- The far larger reduction, from all adults to the fasting subsample, is **designed subsampling** — `WTSAF2YR` exists for it.
-- Feasibility check *before* committing: is the exposure computable for enough of your target population?
+| | Locked domain | Full analytic file |
+|---|---|---|
+| Fasting subsample enforced as its own step | **yes** (row 2) | fused into "FLI computable" |
+| Final N | **6,048** | **6,371** |
+| What it is for | every design-aware analysis; carries `WTSAF2YR` | matching the paper's reported cohort |
+| Phenotype groups | — | 391 / 4,585 / 787 / 608 |
+| Deaths | — | 586 |
 
-**MASLD:** make the funnel **typed** — DESIGN / ELIGIBILITY / TARGET POPULATION / OUTCOME ASCERTAINMENT / MISSINGNESS — and note that only the last one is a missing-data problem.
+- The paper reports **≈ 6,300**, groups **386 / 4,541 / 769 / 604**, **585 deaths** —
+  those are *theirs*, and ours are the row above
+- Quoting an N without naming its row set is the error this course exists to catch
+
+> Two numbers that differ by 323 people are not a discrepancy if they are answers to
+> different questions. They are a discrepancy if you never say which question.
 
 ::: {.notes}
-(10 min.) Close the loop on Slide 3. The point: designed subsampling is not "missing data to be imputed away" — it has a documented fix. The genuine missingness is the 5.3% *inside* the subsample.
+(7 min) Read the two columns as two different objects, not as a right answer and a near
+miss. Then read the paper's row separately, and say the group counts out loud in pairs
+(386/391, 4,541/4,585, 769/787, 604/608) so that when these anchors reappear in the
+survival weeks nobody hears ours as theirs. The habit being built is the row-set label,
+which every quantitative slide in this course carries.
 :::
 
-## Slide 15 — From paper to protocol (recap, M0 closing)
+## What the funnel reveals
 
-- We converted a prose methods section into an explicit cohort algorithm: **definition → exclusions → funnel → analytic N**.
-- Every decision is **documented, defensible, and re-runnable** — the standard your P1 must meet.
-- Once **M0 closes** at 12 PM today, your paper's eligibility paragraph is *your* specification to decode.
+- The single largest drop is **age ≥ 18** — 23,262 people. That is the study's own
+  eligibility rule working as intended
+- **After eligibility**, the two largest drops are the **fasting subsample** (21,618,
+  `DESIGN`) and the **disease definition** (8,118, `TARGET POPULATION`)
+- **Neither of those is missing data.** The genuine missingness in this table is 792 + 0
+- Within the fasting subsample, FLI is computable for **94.7%** of adults
+
+> Feasibility, before you commit: *is the exposure computable for enough of your target
+> population?* Here the answer arrives as a design fact, not a data-quality problem.
 
 ::: {.notes}
-(6 min.) Tie the five stations back together into a single reproducible pipeline. Restate the standard for P1 in one breath: documented, defensible, re-runnable. Remind them the memo is due at 12 PM — once that deadline passes their paper is fixed, and its eligibility paragraph is the object of study for Thursday.
+(5 min) Keep the scoping exact — "after eligibility" — because the unscoped version of
+this sentence is false against the table directly above it, and the printed drops are there
+so a student can check rather than trust. This is also the answer to the feasibility
+question they should be asking of their own locked paper today.
 :::
 
-## Slide 16 — Bridge to today's lab (L2 / P1)
+## Why you never tune the cohort to hit the paper's N
 
-- **In L2 (Thu):** using **EpiMethods** (ehsanx.github.io/EpiMethods), build the MASLD analytic dataset from the L1 frame — code the **FLI**, apply **FLI ≥ 60** + **≥ 1 cardiometabolic criterion**, implement **one defensible alcohol coding**, and output a **funnel with N at every step**. **Do not aim it at a number:** the paper reports **~6,300**, our full analytic file lands on **6,371**, and yours is wherever your documented steps take you.
-- **P1 (your increment):** repeat the funnel for *your own* locked paper — write each inclusion/exclusion as **executable logic**, report **N at each step**, and **flag one ambiguous eligibility sentence** you had to adjudicate.
-- **Stance:** a documented N you can defend beats a matched N you cannot. P1 is **optional and ungraded** — no separate deadline and nothing to submit; keep the funnel and its **one hardest judgment call** in your group GitHub repo, and be ready to defend that call.
+- The temptation: quietly flip a threshold until N matches the abstract
+- That is **fitting the process to the answer** — you have chosen your method using the
+  result, and the method no longer carries evidence
+- One sentence in this paper moves N by **2,063**. So an exact match is roughly as likely
+  to mean *you guessed their ambiguity correctly* as *you implemented it correctly*
+
+| | What it demonstrates |
+|---|---|
+| Matched N, undocumented coding | nothing — the match is unattributable |
+| Mismatched N, traced to a named step | the reproduction worked |
+
+> A documented N you can defend beats a matched N you cannot.
 
 ::: {.notes}
-(6 min.) Make the L2 → P1 handoff crisp. L2 is the guided reproduction on the MASLD paper; P1 is the same skill transferred to their own locked paper. The deliverable emphasis: the funnel *and* the single hardest adjudication — that judgment call is what they will have to defend orally. Point them to EpiMethods for the code patterns.
+(7 min) The methodological heart of the reproduction philosophy, and it follows directly
+from the alcohol slide rather than being asserted. Reframe success explicitly: at M1, a
+gap you can trace to a specific decision scores above a match you cannot explain. The
+grading criteria say so.
 :::
+
+## Reviewing someone else's eligibility
+
+| Ask | On this paper |
+|---|---|
+| Is the case definition **operational**? | mostly — FLI ≥ 60 is exact; "≥ 1 criterion" needs the five spelled out |
+| Is every exclusion **executable** as written? | **no** — the alcohol criterion is not |
+| Does the funnel's arithmetic **close**? | not reported; we had to rebuild it |
+| Is the analytic N **stated and reproducible**? | stated; reproducible only up to the above |
+
+- Also check the tables against the Methods: here the Table 1–2 headers read **"BMI < 25"**
+  while the Methods define obesity at **≥ 30**, and the non-obese groups have BMI medians
+  of **27.6** and **28.8** — so the headers appear to be a labelling error
+- **Charity and rigour together:** assume competence, and still require that the numbers
+  reconcile
+
+::: {.notes}
+(6 min) This is the stance they bring to M2 and to their own defence at M3. The BMI header
+is the cleanest small example in the course of a typographic slip with real consequences —
+a reproducer who codes to 25 does not reproduce the groups. Note the hedge "appear to be":
+we report what we can check, and we do not diagnose intent.
+:::
+
+# Part 4 — Thursday
+
+## L2 assembles the same object from a different paper
+
+EpiMethods [`accessingE2`](https://ehsanx.github.io/EpiMethods/accessingE2.html) —
+**benzodiazepine / opioid use and all-cause mortality**, NHANES 1999–2014.
+
+```r
+dat.mort   <- rbind(dat.mortality99, dat.mortality01, ..., dat.mortality13)
+dat.nhanes <- rbind(dat.nhanes99,    dat.nhanes01,    ..., dat.nhanes13)
+
+dat <- merge(dat.mort, dat.nhanes, by = "SEQN", all = TRUE)
+```
+
+- **Eight cycles stacked, then merged on `SEQN`** — the same key and the same pattern L1
+  used with `full_join(demo, bmx, by = "SEQN")`
+- `all = TRUE` is the `full_join` decision again, made with a different word. Week 2's
+  rule stands: **the join verb defines the analysis set**
+- Mortality is a **separate linked file** here too — it is not an NHANES component
+
+::: {.notes}
+(5 min) Open with the fact that the lab is a different paper, so nobody is waiting for
+MASLD to appear. Then show that the first move is identical to L1's and ask them what
+`all = TRUE` does to the row set — they answered this exact question in Week 2 about
+`full_join` versus `inner_join`.
+:::
+
+## And L2 writes a funnel — it just does not know it yet
+
+```r
+dat1 <- subset(dat,  RIDAGEYR >= 20)                            # N = 43,793
+dat2 <- subset(dat1, RIDSTATR == "int + mec exam")              # N = 41,659
+dat3 <- subset(dat2, TAKERX_INLASTMONTH %in% c("No", "Yes"))    # N = 41,614
+dat4 <- dat3[complete.cases(dat3$BPQ020), ]                     # N not recorded
+dat5 <- subset(dat4, mortstat == 0 | (mortstat == 1 & permth_int > 12))  # N = 31,591
+dat6 <- subset(dat5, benzodiazepines == "Yes" | ssris == "Yes" | opioids == "Yes")  # N = 4,049
+```
+
+- Six eligibility steps, **N after each one** — that is a funnel, written as comments
+- Now type it, the way we typed ours:
+
+| | `dat1` | `dat2` | `dat3` | `dat4` | `dat5` | `dat6` |
+|---|---|---|---|---|---|---|
+| kind | `ELIGIBILITY` | `DESIGN` | `MISSINGNESS` | `MISSINGNESS` | `ELIGIBILITY` | `TARGET POPULATION` |
+
+- **`dat4` prints no N.** The complete-case steps are the ones that go uncounted — in this
+  lab and in most papers
+
+::: {.notes}
+(7 min) The payoff slide for the whole lecture. They are looking at a real funnel in the
+wild, in the crudest possible form: a numbered chain with N in comments. Ask the room to
+supply the type row before you reveal it — arguing about whether `dat2` is design or
+missingness is exactly the right argument. Then point at `dat4`: the step with no number is
+the complete-case step, which is the one most likely to be doing quiet work. That is the
+habit P1 is testing.
+:::
+
+## One more thing to notice on Thursday
+
+L2's exposure has four levels, and the reference category is **"Neither"**:
+
+```r
+dat6 <- subset(dat5, benzodiazepines == "Yes" | ssris == "Yes" | opioids == "Yes")
+dat6$exposure <- relevel(dat6$exposure, ref = "Neither")
+```
+
+- Eligibility required **at least one** of three drug classes. So "Neither" means *neither
+  benzodiazepines nor opioids* — **everyone in it is an SSRI user**
+- The reference group is an **active comparator**, not an unexposed population
+- Exactly the shape of our Group I: every hazard ratio in the MASLD paper is measured
+  against a group that is **obese**
+
+> A ratio without its referent means nothing — and in both studies the referent is not
+> "healthy".
+
+::: {.notes}
+(4 min) This is the best transfer point in the two studies and it is easy to miss in the
+lab, so plant it now. The eligibility rule and the reference category are the *same
+decision* seen twice: who you let into the cohort determines what your comparison can
+mean. Week 2 made this point about Group I; here it is again in a completely different
+paper, which is the evidence that it is a general property rather than a quirk.
+:::
+
+## P1 — the same two things, on your paper
+
+- **Rebuild the cohort** from raw source files: list every file and cycle, name the merge
+  key, write each inclusion and exclusion as **executable logic with a comment citing the
+  sentence**
+- **Produce the funnel**: N removed and N remaining at every step, typed
+- **Flag one ambiguous eligibility sentence** you had to adjudicate — and say what the
+  alternatives would have given
+- Look variables up in the
+  **[NHANES variable map](https://ehsanx.github.io/SPPH604-2026W/reproduction/VARIABLE_MAP.html)**
+  rather than guessing: it says which cycles a variable exists in, and whether `77` is a
+  code or a measurement
+- **Do not aim at a number.** The paper reports ≈ 6,300; our full analytic file lands on
+  6,371; yours is wherever your documented steps take you
+- P1 is **optional and ungraded** — no deadline, nothing to submit. Keep the script, the
+  flow table and `P1_notes.md` in your group repo. It is assembled into **M1**
+
+> Be ready for: *"show me one person who is in your cohort but not the paper's — and tell
+> me why."*
+
+::: {.notes}
+(4 min) Make the handoff crisp. L2 is the guided mechanics on a neutral paper; P1 is the
+same mechanics plus today's judgment, on theirs. The M3 question in the blockquote is the
+real standard — it cannot be answered from a final N, only from a funnel.
+:::
+
+## Where we landed
+
+- Q2 answered all the way down: a **conceptual** case definition became an **operational**
+  one, and the operations turned out to be **contestable**
+- A cut on a continuous score decides case status at the margin; a five-criterion
+  definition hides five threshold choices; one prose sentence yields **three cohorts**
+- The funnel with a type on every row is what makes any of it checkable
+- **Thursday:** the same assembly, a different paper. If you can only do it on MASLD, you
+  have not learned it
+
+*Reading a Methods section is the first act of reproduction. Building the cohort is the
+second.*
+
+::: {.notes}
+(2 min) Close on the transfer claim, not on MASLD. Ask on the way out: what is the one
+sentence in your own locked paper that you already suspect will not survive being written
+as code?
+:::
+
+## Reference {.center visibility="uncounted"}
+
+Kueh MTW, Intaran MAU, Goh R, et al. **Body weight categories and fat distribution in
+relation to all-cause mortality among adults with metabolic dysfunction-associated
+steatotic liver disease: a population-based analysis of NHANES, 2007–2018.** *BMJ Open*.
+2026;16:e113719. doi: [10.1136/bmjopen-2025-113719](https://doi.org/10.1136/bmjopen-2025-113719)
+
+Bedogni G, Bellentani S, Miglioli L, et al. **The Fatty Liver Index: a simple and accurate
+predictor of hepatic steatosis in the general population.** *BMC Gastroenterol*. 2006;6:33.
+
+Lab exercise: EpiMethods,
+[Accessing & preparing NHANES–mortality data](https://ehsanx.github.io/EpiMethods/accessingE2.html).
+
+Cohort counts, funnel types and the three alcohol codings on these slides come from this
+repository's own reproduction pipeline (`reproduction/logs/sample_funnel.csv`,
+`examples/_results/P1.json`), not from the paper's prose. The worked FLI values are
+computed from the Bedogni formula as implemented at `02_build_analytic.R:140`.
