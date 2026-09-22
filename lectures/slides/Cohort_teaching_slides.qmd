@@ -29,6 +29,10 @@ format:
         </style>
   beamer:
     fontsize: 9pt
+    # Quarto draws callout icons with FontAwesome, which embeds a non-Latin-Modern
+    # font subset into the PDF and fails the publication gate's licensed-font check.
+    # The HTML keeps its icons; only the static PDF drops them.
+    callout-icon: false
     header-includes: |
       \usepackage{newunicodechar}
       \newunicodechar{≥}{\ensuremath{\geq}}
