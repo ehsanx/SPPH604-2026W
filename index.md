@@ -124,6 +124,8 @@ scientific-review story rather than four independent model answers.
 | Deck | What it covers |
 |---|---|
 | [Decomposing the study aim](https://ehsanx.github.io/SPPH604-2026W/lectures/bmj_open_revealjs/) | Turning the paper’s published aim into a PECOT research question, and the NHANES variables and component files each piece rests on. [Source](https://github.com/ehsanx/SPPH604-2026W/blob/main/lectures/bmj_open_revealjs/BMJ_Open_RevealJS_slides.md) |
+| [From a Methods section to an analytic cohort](lectures/slides/Cohort_teaching_slides.html) | How one published Methods section becomes a dataset — the ambiguities it leaves, the decision each one forces, and what each decision costs in people. [PDF](lectures/slides/Cohort_teaching_slides.pdf) · [Source](https://github.com/ehsanx/SPPH604-2026W/blob/main/lectures/slides/Cohort_teaching_slides.qmd) |
+| [The same sequence, audited](lectures/slides/Cohort_recipe_slides.html) | The reference version of the deck above: every count carrying the file and line that produced it, closing with a ledger of every decision and its cost. [PDF](lectures/slides/Cohort_recipe_slides.pdf) · [Source](https://github.com/ehsanx/SPPH604-2026W/blob/main/lectures/slides/Cohort_recipe_slides.qmd) |
 
 **Work through this before L1.** It names every NHANES variable the demonstration paper uses and the component file each one comes from, so the merge in the lab is not the first time you meet them.
 
@@ -141,12 +143,13 @@ The worked examples and reproduction pipeline use the demonstration paper throug
 | [`paper/`](paper/) | Demonstration paper, the additional P4 paper, and licence/attribution information |
 | [`examples/`](examples/) | Worked examples for P1–P5 and M0–M4 |
 | [`reproduction/`](reproduction/) | Full R analysis pipeline behind the demonstration-paper results |
+| [Building the analytic dataset — step by step](reproduction/COHORT_BUILD_STEPS.html) | The recipe. For each of the eight steps: the paper’s own sentence, the NHANES component and variables that sentence forces you to read, the decision we had to make and why, and the N afterwards |
 | [NHANES variable map](reproduction/VARIABLE_MAP.html) | Every variable the pipeline uses: component file, cycle availability, reserved codes vs measurements, CDC codebook link, and the line of our code that reads it |
-| [Reproduction walkthrough — source](reproduction/WALKTHROUGH.md) | How the scripts fit together, the sample funnel, and key NHANES decisions |
-| [Reproduction report — source](reproduction/reproduction_report.md) | What reproduced, what did not, and why |
+| [Reproduction walkthrough](reproduction/WALKTHROUGH.html) | How the scripts fit together, the sample funnel, and key NHANES decisions |
+| [Reproduction report](reproduction/reproduction_report.html) | What reproduced, what did not, and why |
 
-Where a reference document has no compiled HTML version, the link is explicitly labelled
-**source** rather than being presented as a browser-rendered course page.
+Read them in that order: the **recipe** for how the cohort was built, the **variable map**
+to look a variable up, and the **report** for what reproduced and what did not.
 
 ---
 
