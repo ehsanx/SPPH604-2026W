@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>COHORT BUILD STEPS</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">COHORT BUILD STEPS</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#building-the-analytic-dataset-step-by-step" id="toc-building-the-analytic-dataset-step-by-step">Building the
+analytic dataset — step by step</a>
+<ul>
+<li><a href="#step-0-what-you-download-and-what-each-file-is-for" id="toc-step-0-what-you-download-and-what-each-file-is-for">Step 0 —
+What you download, and what each file is for</a></li>
+<li><a href="#step-1-age-eligibility" id="toc-step-1-age-eligibility">Step 1 — Age eligibility</a></li>
+<li><a href="#step-2-hepatic-steatosis-via-the-fatty-liver-index" id="toc-step-2-hepatic-steatosis-via-the-fatty-liver-index">Step 2 —
+Hepatic steatosis via the Fatty Liver Index</a></li>
+<li><a href="#step-3-masld-steatosis-plus-1-cardiometabolic-criterion" id="toc-step-3-masld-steatosis-plus-1-cardiometabolic-criterion">Step 3
+— MASLD: steatosis plus ≥ 1 cardiometabolic criterion</a></li>
+<li><a href="#step-4-alcohol-exclusion-built-shipped-not-applied" id="toc-step-4-alcohol-exclusion-built-shipped-not-applied">Step 4 —
+Alcohol exclusion: built, shipped, not applied</a></li>
+<li><a href="#step-5-the-four-phenotype-groups" id="toc-step-5-the-four-phenotype-groups">Step 5 — The four phenotype
+groups</a></li>
+<li><a href="#step-6-covariates-for-table-1-and-the-cox-models" id="toc-step-6-covariates-for-table-1-and-the-cox-models">Step 6 —
+Covariates for Table 1 and the Cox models</a></li>
+<li><a href="#step-7-linking-the-outcome" id="toc-step-7-linking-the-outcome">Step 7 — Linking the
+outcome</a></li>
+<li><a href="#step-8-save-and-count-what-you-lost" id="toc-step-8-save-and-count-what-you-lost">Step 8 — Save, and count
+what you lost</a></li>
+<li><a href="#the-decisions-ledger" id="toc-the-decisions-ledger">The
+decisions ledger</a></li>
+<li><a href="#how-to-use-this-page-in-p1" id="toc-how-to-use-this-page-in-p1">How to use this page in P1</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="building-the-analytic-dataset-step-by-step">Building the
+analytic dataset — step by step</h1>
+<p><em>How the paper’s Methods section becomes
+<code>data/derived/masld_analytic.rds</code>, one decision at a
+time.</em></p>
+<p>This page answers a different question from the other three in this
+folder:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Page</th>
+<th>Answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="README.md"><code>README.md</code></a></td>
+<td>How do I run it, and what lives where?</td>
+</tr>
+<tr>
+<td><a href="VARIABLE_MAP.md"><code>VARIABLE_MAP.md</code></a></td>
+<td>What <em>is</em> this variable — codebook, cycles, reserved
+codes?</td>
+</tr>
+<tr>
+<td><a href="reproduction_report.md"><code>reproduction_report.md</code></a></td>
+<td>Did it reproduce, and what did we find?</td>
+</tr>
+<tr>
+<td><strong>this page</strong></td>
+<td><strong>What are the steps, in order — and why was each one decided
+that way?</strong></td>
+</tr>
+</tbody>
+</table>
+<p><code>VARIABLE_MAP.md</code> is a dictionary: look a variable up in
+it. This page is the <strong>recipe</strong>: read it top to bottom.
+Each step gives you the paper’s own sentence, the NHANES component and
+variables that sentence forces you to download, the judgment call we had
+to make because the sentence did not fully determine an answer, and the
+number of rows left afterwards.</p>
+<blockquote>
+<p><strong>The one habit this page is teaching.</strong> A Methods
+sentence is not code. Between the sentence and the code there is always
+a decision, and the decision is usually invisible in the published
+paper. Your job in P1 is not to guess the authors’ decision — it is to
+<strong>make your own, write down why, and count what it cost
+you.</strong> Every “Decision” box below is an instance of that, and the
+ones marked ⚠ are where we and the paper may genuinely differ.</p>
+</blockquote>
+<hr />
+<h2 id="step-0-what-you-download-and-what-each-file-is-for">Step 0 —
+What you download, and what each file is for</h2>
+<p><code>R/00_setup.R</code> declares six NHANES cycles and 18 component
+names; <code>R/01_download.R</code> fetches them. Nothing analytic
+happens in either file.</p>
+<p>Cycle letters, used throughout: <strong>E</strong> 2007-08 ·
+<strong>F</strong> 2009-10 · <strong>G</strong> 2011-12 ·
+<strong>H</strong> 2013-14 · <strong>I</strong> 2015-16 ·
+<strong>J</strong> 2017-18. The <em>file</em> carries the suffix
+(<code>BMX_H.xpt</code>); the <em>variable</em> inside usually does not
+(<code>BMXBMI</code> in all six).</p>
+<h3 id="the-three-downloads">The three downloads</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>What</th>
+<th>From</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>18 components × 6 cycles</td>
+<td><code>wwwn.cdc.gov/Nchs/Data/Nhanes/Public/&lt;year&gt;/DataFiles/&lt;COMP&gt;_&lt;suffix&gt;.xpt</code></td>
+<td>108 files</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Multum drug lexicon <code>RXQ_DRUG.xpt</code></td>
+<td>same host, tried at 2015 / 2017 / 2013</td>
+<td><strong>0 — all three 404</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Linked mortality</td>
+<td><code>ftp.cdc.gov/pub/Health_Statistics/NCHS/datalinkage/linked_mortality/NHANES_&lt;cycle&gt;_MORT_2019_PUBLIC.dat</code></td>
+<td>6 files</td>
+</tr>
+</tbody>
+</table>
+<p>About 204 MB in total. Every URL, byte size and status is recorded in
+<code>data/raw/_download_manifest.csv</code> — check it before you debug
+anything else.</p>
+<h3 id="which-component-supplies-what">Which component supplies
+what</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Component</th>
+<th>Variables we keep</th>
+<th>Feeds which step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DEMO</code></td>
+<td><code>RIDAGEYR</code> <code>RIAGENDR</code> <code>RIDRETH1</code>
+<code>RIDRETH3</code> <code>INDFMPIR</code> <code>WTINT2YR</code>
+<code>WTMEC2YR</code> <code>SDMVPSU</code> <code>SDMVSTRA</code>
+<code>SDDSRVYR</code></td>
+<td>1 (age), 5 (Asian cut-point), 6 (PIR); design vars carried but
+unused</td>
+</tr>
+<tr>
+<td><code>BMX</code></td>
+<td><code>BMXBMI</code> <code>BMXWAIST</code> <code>BMXHT</code></td>
+<td>2 (FLI), 3 (adiposity criterion), 5 (both group axes)</td>
+</tr>
+<tr>
+<td><code>TRIGLY</code></td>
+<td><code>LBXTR</code> <code>LBDLDL</code>
+<strong><code>WTSAF2YR</code></strong></td>
+<td>2 (FLI), 3 (triglyceride criterion), 6 (dyslipidaemia);
+<code>WTSAF2YR</code> marks the fasting subsample</td>
+</tr>
+<tr>
+<td><code>BIOPRO</code></td>
+<td><code>LBXSGTSI</code> <code>LBXSCR</code></td>
+<td>2 (FLI — GGT), 6 (eGFR)</td>
+</tr>
+<tr>
+<td><code>GLU</code></td>
+<td><code>LBXGLU</code></td>
+<td>3 (glycaemia criterion)</td>
+</tr>
+<tr>
+<td><code>GHB</code></td>
+<td><code>LBXGH</code></td>
+<td>3 (glycaemia), 6 (T2DM)</td>
+</tr>
+<tr>
+<td><code>HDL</code></td>
+<td><code>LBDHDD</code></td>
+<td>3 (HDL criterion)</td>
+</tr>
+<tr>
+<td><code>BPX</code></td>
+<td><code>BPXSY1</code>–<code>4</code>
+<code>BPXDI1</code>–<code>4</code></td>
+<td>3 (blood-pressure criterion), 6 (hypertension)</td>
+</tr>
+<tr>
+<td><code>BPQ</code></td>
+<td><code>BPQ020</code> <code>BPQ040A</code> <code>BPQ050A</code>
+<code>BPQ080</code> <code>BPQ090D</code> <code>BPQ100D</code></td>
+<td>3 (antihypertensive / lipid-lowering “treatment” arms), 6</td>
+</tr>
+<tr>
+<td><code>DIQ</code></td>
+<td><code>DIQ010</code> <code>DIQ050</code> <code>DIQ070</code></td>
+<td>3 (antidiabetic arm), 6 (T2DM)</td>
+</tr>
+<tr>
+<td><code>ALQ</code></td>
+<td><code>ALQ130</code> <code>ALQ120Q</code> <code>ALQ120U</code>
+<code>ALQ121</code> <code>ALQ101</code> <code>ALQ110</code>
+<code>ALQ111</code></td>
+<td>4 (alcohol exclusion)</td>
+</tr>
+<tr>
+<td><code>SMQ</code></td>
+<td><code>SMQ020</code> <code>SMQ040</code></td>
+<td>6 (smoking; Cox Model 2)</td>
+</tr>
+<tr>
+<td><code>MCQ</code></td>
+<td><code>MCQ160B</code> <code>C</code> <code>D</code> <code>E</code>
+<code>F</code> <code>G</code> <code>K</code> <code>O</code>
+<code>MCQ220</code> <code>MCQ300A</code></td>
+<td>6 (comorbidities)</td>
+</tr>
+<tr>
+<td><code>ALB_CR</code></td>
+<td><code>URXUMA</code> <code>URXUCR</code> <code>URDACT</code></td>
+<td>6 (CKD via albumin:creatinine)</td>
+</tr>
+<tr>
+<td><code>KIQ_U</code></td>
+<td><code>KIQ022</code></td>
+<td>6 (kidney self-report)</td>
+</tr>
+<tr>
+<td><code>PAQ</code></td>
+<td><code>PAD680</code></td>
+<td>6 (sedentary minutes; Cox Model 2)</td>
+</tr>
+<tr>
+<td><code>TCHOL</code></td>
+<td><code>LBXTC</code></td>
+<td>6 (lipid panel, descriptive)</td>
+</tr>
+<tr>
+<td><code>RXQ_RX</code></td>
+<td>—</td>
+<td><strong>nothing.</strong> Downloaded and never read by
+<code>02_build_analytic.R</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Decision — we download more than we use.</strong>
+<code>RXQ_RX</code> and the Multum lexicon were intended to classify
+medications by therapeutic class (SGLT2i, GLP-1). The lexicon 404s, so
+the medication covariates fall back to questionnaire self-report
+(<code>BPQ</code>, <code>DIQ</code>) instead. <strong>Why we left the
+download in:</strong> deleting it would hide the gap. The manifest
+showing three <code>MISSING</code> rows is the honest record that a
+planned covariate was not built. <code>KIQ022</code>,
+<code>LBXTC</code>, <code>MCQ160D/G/K</code> and
+<code>BPQ040A/090D</code> are likewise read into the frame and never
+used — kept because removing them would silently change what a future
+analyst can reach for without re-downloading.</p>
+</blockquote>
+<h3 id="then-stack-and-merge">Then: stack and merge</h3>
+<p><code>read_component()</code>
+(<code>R/02_build_analytic.R:43-53</code>) reads one component across
+all six cycles, keeps <code>SEQN</code> plus the requested variables,
+and <strong>pads any variable absent from a cycle with
+<code>NA</code></strong>. The 16 domain frames are then
+<code>left_join</code>ed onto <code>DEMO</code> by <code>SEQN</code>
+(<code>R/02_build_analytic.R:79-87</code>).</p>
+<p><strong>N after merge: 59,842.</strong></p>
+<blockquote>
+<p><strong>Why this is safe here, and when it would not be.</strong>
+<code>SEQN</code> is unique across all six cycles (verified: zero
+duplicates), and every component joined holds at most one row per
+person, so no join multiplies rows. <code>RXQ_RX</code> — one row
+<em>per prescription</em> — would have fanned the frame out badly, which
+is a second reason it is not joined.</p>
+</blockquote>
+<blockquote>
+<p>⚠ <strong>The NA-padding trap.</strong> When a variable does not
+exist in a cycle, padding makes “this question was never asked” look
+identical to “this person did not answer”. Nine variables we use are
+affected:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Variable</th>
+<th>What it measures — the label inside the <code>.xpt</code></th>
+<th>Present in</th>
+<th>Consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RIDRETH3</code></td>
+<td>“Race/Hispanic origin <strong>w/ NH Asian</strong>” — the only
+ethnicity variable with a separate non-Hispanic Asian category</td>
+<td><strong>G H I J</strong> only</td>
+<td>Asian status unknowable for 2007-2010 — see Step 5 ⚠</td>
+</tr>
+<tr>
+<td><code>DIQ070</code></td>
+<td>“Take diabetic <strong>pills</strong> to lower blood sugar”</td>
+<td><strong>F G H I J</strong></td>
+<td>in E, antidiabetic treatment rests on <code>DIQ050</code> (insulin)
+alone</td>
+</tr>
+<tr>
+<td><code>MCQ160O</code></td>
+<td>“Ever told you had <strong>COPD</strong>?”</td>
+<td><strong>H I J</strong> only</td>
+<td>the COPD prevalence has a different denominator from every other row
+of Table 1</td>
+</tr>
+<tr>
+<td><code>URDACT</code></td>
+<td>“First <strong>albumin creatinine ratio</strong> (mg/g)”</td>
+<td><strong>F G H I J</strong></td>
+<td>in E, ACR falls back to <code>URXUMA/URXUCR*100</code></td>
+</tr>
+<tr>
+<td><code>ALQ120Q</code></td>
+<td>“How <strong>often</strong> drink alcohol over past 12 mos” — a
+count</td>
+<td><strong>E F G H I</strong></td>
+<td>retired in the 2017-18 ALQ redesign</td>
+</tr>
+<tr>
+<td><code>ALQ120U</code></td>
+<td>“# days drink alcohol <strong>per wk, mo, yr</strong>” — the unit
+that count is in</td>
+<td><strong>E F G H I</strong></td>
+<td>without it <code>ALQ120Q</code> is a bare number with no time
+base</td>
+</tr>
+<tr>
+<td><code>ALQ101</code></td>
+<td>“Had at least <strong>12 alcohol drinks/1 yr</strong>?”</td>
+<td><strong>E F G H I</strong></td>
+<td>downloaded, never used — see Step 4</td>
+</tr>
+<tr>
+<td><code>ALQ121</code></td>
+<td>“Past 12 mo <strong>how often</strong> have alcohol drink” —
+frequency and unit fused into one coded item</td>
+<td><strong>J</strong> only</td>
+<td>replaces <code>ALQ120Q</code>+<code>ALQ120U</code>; different
+coding, must be harmonised</td>
+</tr>
+<tr>
+<td><code>ALQ111</code></td>
+<td>“<strong>Ever</strong> had a drink of any kind of alcohol”</td>
+<td><strong>J</strong> only</td>
+<td>replaces <code>ALQ101</code>; downloaded, never used</td>
+</tr>
+</tbody>
+</table>
+<p>Nothing in the code <em>fails</em> when this happens. That is exactly
+the problem, and it is why <code>VARIABLE_MAP.md</code> prints a
+cycle-availability column for every variable.</p>
+</blockquote>
+<hr />
+<h2 id="step-1-age-eligibility">Step 1 — Age eligibility</h2>
+<blockquote>
+<p><strong>Paper:</strong> “The study inclusion criteria were
+participants aged&gt;18 years with evidence of MASLD.”</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr>
+<td><strong>Component → variable</strong></td>
+<td><code>DEMO</code> → <code>RIDAGEYR</code></td>
+</tr>
+<tr>
+<td><strong>Code</strong></td>
+<td><code>R/02_build_analytic.R:114</code>
+(<code>age &lt;- RIDAGEYR</code>), filter at <code>:315</code></td>
+</tr>
+<tr>
+<td><strong>Rule applied</strong></td>
+<td><code>age &gt;= 18</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>N: 59,842 → 36,580</strong> (ELIGIBILITY; 23,262 dropped)</p>
+<blockquote>
+<p>⚠ <strong>Decision — we used <code>&gt;= 18</code>; the paper says
+<code>&gt; 18</code>.</strong> These differ by exactly <strong>70
+people</strong>, and the difference is not a typesetting artefact: the
+published PDF contains 24 correctly encoded <code>≥</code> characters
+(<code>BMI≥30</code>, <code>WHtR≥0.6</code>, <code>FLI≥60</code>,
+<code>1≤PIR≤4</code>), so where the authors meant “at least” they wrote
+it. At the age criterion they wrote a plain <code>&gt;</code>, meaning
+19 and older.</p>
+<p>This matters more than 70 rows suggests, because it is the best
+available explanation of our N gap:</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 22%" />
+<col style="width: 22%" />
+<col style="width: 16%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr>
+<th>Rule</th>
+<th style="text-align: right;">N</th>
+<th style="text-align: right;">Deaths</th>
+<th>Groups I/II/III/IV</th>
+<th style="text-align: right;">Total abs. deviation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Paper</td>
+<td style="text-align: right;">6,300</td>
+<td style="text-align: right;">585</td>
+<td>386 / 4,541 / 769 / 604</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td><code>age &gt;= 18</code> (ours)</td>
+<td style="text-align: right;">6,371</td>
+<td style="text-align: right;">586</td>
+<td>391 / 4,585 / 787 / 608</td>
+<td style="text-align: right;">71</td>
+</tr>
+<tr>
+<td><code>age &gt; 18</code> (paper’s words)</td>
+<td style="text-align: right;"><strong>6,301</strong></td>
+<td style="text-align: right;"><strong>585</strong></td>
+<td>379 / 4,534 / 781 / 607</td>
+<td style="text-align: right;"><strong>29</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Strict <code>&gt;18</code> lands one row off the published N and
+reproduces the death count exactly. <strong>The
+counter-evidence:</strong> the paper’s Table 1 mean age is 51.0 (16.6),
+which is what the <code>&gt;= 18</code> cohort gives; strict
+<code>&gt;18</code> gives 51.4 (16.3). So this is a strong lead, not a
+settled answer — which makes it an unusually good classroom exercise.
+Run both, and say which you would defend.</p>
+</blockquote>
+<hr />
+<h2 id="step-2-hepatic-steatosis-via-the-fatty-liver-index">Step 2 —
+Hepatic steatosis via the Fatty Liver Index</h2>
+<blockquote>
+<p><strong>Paper:</strong> “The FLI was used to determine the presence
+of hepatic steatosis… A threshold of FLI≥60 was used to determine the
+presence of hepatic steatosis.”</p>
+</blockquote>
+<pre><code>       exp(L)
+FLI = -------- × 100,
+      1 + exp(L)
+
+L = 0.953·ln(TG) + 0.139·BMI + 0.718·ln(GGT) + 0.053·WC − 15.745</code></pre>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Input</th>
+<th>Component → variable</th>
+<th>Units the formula requires</th>
+<th>Units NHANES gives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Triglycerides</td>
+<td><code>TRIGLY</code> → <code>LBXTR</code></td>
+<td>mg/dL</td>
+<td>mg/dL ✓</td>
+</tr>
+<tr>
+<td>BMI</td>
+<td><code>BMX</code> → <code>BMXBMI</code></td>
+<td>kg/m²</td>
+<td>kg/m² ✓</td>
+</tr>
+<tr>
+<td>GGT</td>
+<td><code>BIOPRO</code> → <code>LBXSGTSI</code></td>
+<td>U/L</td>
+<td>U/L ✓</td>
+</tr>
+<tr>
+<td>Waist circumference</td>
+<td><code>BMX</code> → <code>BMXWAIST</code></td>
+<td>cm</td>
+<td>cm ✓</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Code:</strong>
+<code>R/02_build_analytic.R:140-142</code>.</p>
+<p><strong>N: 36,580 → 14,989</strong> (FLI computable) <strong>→
+6,376</strong> (FLI ≥ 60)</p>
+<p>Median FLI in the final cohort is 85.5 (IQR 73.7–94.7) — this cohort
+sits well above the threshold, not clustered at it.</p>
+<blockquote>
+<p><strong>Decision — no unit conversion, and no reserved-code
+stripping.</strong> All four inputs already arrive in the units
+Bedogni’s equation expects, so the formula is transcribed verbatim. And
+<strong><code>LBXTR</code> and <code>LBXSGTSI</code> have no reserved
+codes</strong> — a <code>77</code> in <code>LBXTR</code> is a
+triglyceride of 77 mg/dL, not a refusal. Stripping
+<code>77</code>/<code>99</code> “to be safe” would delete real
+measurements. Contrast Step 4, where the same digits <em>are</em>
+refusals. No input is ever zero or negative in these files, so
+<code>log()</code> never fails.</p>
+</blockquote>
+<blockquote>
+<p>⚠ <strong>Decision — we did NOT restrict to the fasting
+subsample.</strong> Triglycerides come from the fasting subsample, which
+carries its own weight <code>WTSAF2YR</code>. The paper never says
+whether it restricted to that subsample. Two defensible row sets follow,
+and this pipeline keeps <strong>both</strong>, permanently:</p>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr>
+<th>Row set</th>
+<th style="text-align: right;">FLI step</th>
+<th style="text-align: right;">Final N</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Full analytic file</strong></td>
+<td style="text-align: right;">14,989</td>
+<td style="text-align: right;"><strong>6,371</strong></td>
+<td>every adult with all four FLI inputs, fasting weight or not. Saved
+as <code>masld_analytic.rds</code>; the steps below and every table in
+<code>output/</code> use it</td>
+</tr>
+<tr>
+<td><strong>Locked domain</strong></td>
+<td style="text-align: right;">14,170</td>
+<td style="text-align: right;">6,048</td>
+<td>its subset carrying a valid <code>WTSAF2YR</code></td>
+</tr>
+</tbody>
+</table>
+<p>They differ because <strong>819 adults have all four FLI inputs
+without a valid fasting weight</strong>, of whom 323 survive to the end.
+<strong>Why the full file is primary:</strong> the paper does not report
+using survey weights, so 6,371 is the row set that reproduces it.
+<strong>Why the locked domain exists anyway:</strong> it is the only set
+on which a design-aware estimate is possible, and that is P4’s job.
+6,048 is a different denominator, not a correction to 6,371. Quote which
+one you mean, every time.</p>
+</blockquote>
+<blockquote>
+<p><strong>Decision — the fasting subsample is DESIGN, not missing
+data.</strong> This is the single most-mistyped row in any NHANES
+funnel. <strong>21,618 of the 36,580 adults are outside the
+fasting-weight frame</strong> — most were never sampled for it, and
+<code>WTSAF2YR</code> exists to account for that selection stage — while
+only <strong>792</strong> are inside the frame and still lack an FLI
+input. The first number is answered by a weight and a sentence naming
+your population; the second is answered by P5’s missing-data analysis.
+Adding them together and calling the sum “attrition” is the error the
+typed funnel in <code>logs/sample_funnel.csv</code> exists to
+prevent.</p>
+<p><strong>Say “outside the frame”, not “never asked to fast”.</strong>
+A missing or zero <code>WTSAF2YR</code> conflates at least three states,
+and the weight cannot tell them apart:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: right;">Adults</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No positive fasting weight</td>
+<td style="text-align: right;">21,618</td>
+</tr>
+<tr>
+<td>…of whom carry a weight of <strong>exactly 0</strong></td>
+<td style="text-align: right;">2,031</td>
+</tr>
+<tr>
+<td>…of whom have a triglyceride value anyway</td>
+<td style="text-align: right;">966</td>
+</tr>
+<tr>
+<td>…of whom have <strong>all four</strong> FLI inputs</td>
+<td style="text-align: right;">819</td>
+</tr>
+</tbody>
+</table>
+<p>Those last 819 were demonstrably measured fasting and still carry no
+usable weight. The variable marks <em>the analysable fasting
+domain</em>; it does not certify who was asked to fast. The funnel row
+is still correctly typed DESIGN — it is the <em>sentence describing
+it</em> that has to be careful.</p>
+<p>Check the arithmetic yourself, because it does not simply subtract:
+the full analytic file loses 21,591 rows at this step, not 21,618 − 792.
+The 819 adults who have all four FLI inputs <em>without</em> a valid
+fasting weight are kept, so 21,618 − 819 + 792 = 21,591. The locked
+domain, which drops them, is where the two numbers appear as separate
+rows.</p>
+</blockquote>
+<hr />
+<h2 id="step-3-masld-steatosis-plus-1-cardiometabolic-criterion">Step 3
+— MASLD: steatosis plus ≥ 1 cardiometabolic criterion</h2>
+<blockquote>
+<p><strong>Paper:</strong> “MASLD was defined as the presence of hepatic
+steatosis, accompanied by at least one of the following cardiometabolic
+criteria…”</p>
+</blockquote>
+<p><strong>Code:</strong> <code>R/02_build_analytic.R:163-175</code>.
+<strong>N: 6,376 → 6,374</strong> (2 dropped)</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>Paper’s criterion</th>
+<th>Component → variables</th>
+<th>Our rule</th>
+<th>Line</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i</td>
+<td>“BMI≥25 kg/m2 or waist circumference&gt;94cm in men and&gt;80cm in
+women”</td>
+<td><code>BMX</code> → <code>BMXBMI</code> <code>BMXWAIST</code>;
+<code>DEMO</code> → <code>RIAGENDR</code></td>
+<td><code>bmi &gt;= 25</code> OR <code>male &amp; waist &gt; 94</code>
+OR <code>female &amp; waist &gt; 80</code></td>
+<td><code>:164</code></td>
+</tr>
+<tr>
+<td>ii</td>
+<td>“fasting plasma glucose≥5.6 mmol/L or HbA1c≥5.7% or the use of
+antidiabetic medications”</td>
+<td><code>GLU</code> → <code>LBXGLU</code>; <code>GHB</code> →
+<code>LBXGH</code>; <code>DIQ</code> → <code>DIQ010</code>
+<code>DIQ050</code> <code>DIQ070</code></td>
+<td><code>LBXGLU &gt;= 100</code> OR <code>LBXGH &gt;= 5.7</code> OR
+<code>dm_dx</code> OR <code>dm_tx</code></td>
+<td><code>:169</code></td>
+</tr>
+<tr>
+<td>iii</td>
+<td>“average blood pressure≥130/85 mm Hg or on antihypertensive
+treatment”</td>
+<td><code>BPX</code> → <code>BPXSY1-4</code> <code>BPXDI1-4</code>;
+<code>BPQ</code> → <code>BPQ050A</code></td>
+<td><code>sbp &gt;= 130</code> OR <code>dbp &gt;= 85</code> OR
+<code>htn_tx</code></td>
+<td><code>:170</code></td>
+</tr>
+<tr>
+<td>iv</td>
+<td>“plasma triglycerides≥150 mg/dL or lipid-lowering therapy”</td>
+<td><code>TRIGLY</code> → <code>LBXTR</code>; <code>BPQ</code> →
+<code>BPQ100D</code></td>
+<td><code>LBXTR &gt;= 150</code> OR <code>lipid_tx</code></td>
+<td><code>:171</code></td>
+</tr>
+<tr>
+<td>v</td>
+<td>“HDL cholesterol≤40 mg/dL for men or&lt;50mg/dL for women or
+specific treatment targeting HDL”</td>
+<td><code>HDL</code> → <code>LBDHDD</code>; <code>DEMO</code> →
+<code>RIAGENDR</code></td>
+<td><code>male &amp; LBDHDD &lt;= 40</code> OR
+<code>female &amp; LBDHDD &lt; 50</code></td>
+<td><code>:172</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Decision — glucose in mg/dL, not mmol/L.</strong> The paper
+states criterion (ii) in mmol/L; <code>LBXGLU</code> is in mg/dL, so
+someone has to convert, and the paper never shows the converted number.
+5.6 mmol/L × 18.016 = <strong>100.9 mg/dL</strong>; we threshold at
+<strong>100</strong>, the conventional rounding. <strong>212 people have
+a glucose between 100 and 100.9</strong>, so our rule counts them as
+meeting the criterion where a strict reading would not. We therefore
+re-ran MASLD at ≥ 100.9 and counted who falls out: <strong>0
+people</strong>. Keep 100 — and say you checked. <em>“It is only 0.9
+mg/dL, it cannot matter” is a guess; “0 people change status” is a
+finding, and it cost one line of code.</em></p>
+</blockquote>
+<blockquote>
+<p><strong>Decision — the asymmetric HDL operators are the paper’s, not
+ours.</strong> <code>≤40</code> for men and <code>&lt;50</code> for
+women reads like a slip, but it is what the published text says, so we
+transcribed it. We did <strong>not</strong> implement “specific
+treatment targeting HDL cholesterol” — NHANES has no such variable. That
+is an unimplementable clause, and naming it is more honest than quietly
+folding it into <code>BPQ100D</code>.</p>
+</blockquote>
+<blockquote>
+<p><strong>Decision — blood pressure follows the NHANES averaging
+protocol, not <code>rowMeans</code>.</strong> Per the Blood Pressure
+Procedures Manual §3.1.7.3: if more than one reading was obtained,
+<strong>the first is always excluded</strong>; an all-zero diastolic set
+averages to zero; a zero sitting alongside a positive diastolic reading
+is dropped. The helper at <code>R/02_build_analytic.R:97-112</code>
+implements exactly that, and <code>:150-160</code> asserts the all-zero
+records survive. <strong>Why the care:</strong> two earlier versions
+were wrong in opposite directions — <code>na_if(BPXDI*, 0)</code>
+deleted 277 measured zeros, and a plain <code>rowMeans</code> averaged
+zeros in alongside real readings <em>and</em> kept the first reading.
+The paper does not say what it did, so this is a documentation-informed
+choice, not a claim of computational identity.</p>
+</blockquote>
+<blockquote>
+<p><strong>Decision — a missing criterion counts as <em>not met</em>,
+not as <em>unknown</em>.</strong> <code>n_crit</code>
+(<code>:173</code>) uses <code>rowSums(..., na.rm = TRUE)</code>, so an
+<code>NA</code> criterion contributes 0. That is the conservative
+direction: it can only keep someone <strong>out</strong> of MASLD, never
+let someone in.</p>
+<p>It also turns out to barely matter, and the reason is worth more than
+the rule:</p>
+<table>
+<tbody>
+<tr>
+<td>Meet criterion (i), adiposity</td>
+<td style="text-align: right;"><strong>6,329 of 6,371</strong></td>
+</tr>
+<tr>
+<td>Meet <em>exactly one</em> criterion</td>
+<td style="text-align: right;">354</td>
+</tr>
+<tr>
+<td>…of whom, that one criterion is adiposity</td>
+<td style="text-align: right;"><strong>352</strong></td>
+</tr>
+<tr>
+<td>Dropped by this whole step</td>
+<td style="text-align: right;"><strong>2 of 6,376</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why.</strong> FLI is built from BMI and waist, and criterion
+(i) <em>tests</em> BMI and waist, so selecting on FLI ≥ 60 strongly
+<strong>enriches</strong> the cohort for criterion (i). It does not
+<em>require</em> it — <strong>89</strong> cohort members have FLI ≥ 60
+with a BMI under 25 (the minimum is 21.5), and 42 fail criterion (i)
+outright. Near-automatic by enrichment, not by construction, which is
+why the other four criteria rarely decide anything.</p>
+<p><strong>Report a filter by its effect, not its definition.</strong>
+“MASLD required at least one cardiometabolic criterion” sounds like
+work; on this cohort it excluded <strong>2 people</strong>. Both
+sentences are true, and only the second is informative. The definition
+itself is the standard one — it is not wrong, it just does almost
+nothing once you have conditioned on the FLI.</p>
+</blockquote>
+<hr />
+<h2 id="step-4-alcohol-exclusion-built-shipped-not-applied">Step 4 —
+Alcohol exclusion: built, shipped, not applied</h2>
+<blockquote>
+<p><strong>Paper:</strong> “Individuals with significant alcohol
+consumption—defined as more than two drinks per day for men and more
+than one drink per day for women—were excluded from the analysis.”</p>
+</blockquote>
+<p><strong>Read this step in two halves, because they are different
+decisions.</strong> First we <em>build</em> the rule the paper describes
+— that is a measurement problem, and there are two ways to get it wrong.
+Then we decide whether to <em>apply</em> it — that is a judgment call,
+and we decide not to.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr>
+<td><strong>Component → variables</strong></td>
+<td><code>ALQ</code> → <code>ALQ130</code> (drinks per drinking-day),
+<code>ALQ120Q</code> + <code>ALQ120U</code> (frequency, cycles E–I),
+<code>ALQ121</code> (frequency, cycle J)</td>
+</tr>
+<tr>
+<td><strong>Code</strong></td>
+<td><code>R/02_build_analytic.R:182-197</code>; the switch is
+<code>APPLY_ALCOHOL_EXCL</code> at <code>:40</code></td>
+</tr>
+<tr>
+<td><strong>Built</strong></td>
+<td><code>sig_alcohol</code>, a per-person flag. <strong>427
+people</strong> in the cohort exceed the paper’s threshold</td>
+</tr>
+<tr>
+<td><strong>Applied?</strong></td>
+<td><strong>No</strong> —
+<code>APPLY_ALCOHOL_EXCL &lt;- FALSE</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>N: 6,371 → 6,371</strong> — no rows dropped.</p>
+<blockquote>
+<p><strong>“Computed but never used” is not quite right.</strong>
+<code>sig_alcohol</code> is computed, saved as a column in
+<code>masld_analytic.rds</code>, and the setting is written into
+<code>logs/sample_funnel.csv</code> as its closing row. What is
+<em>not</em> done is the <code>filter()</code>. The distinction matters:
+the exclusion is one flag away from being on, anyone can subset on the
+column themselves, and the funnel records which way it was set rather
+than leaving a reader to infer it. <strong>A decision you can see and
+reverse is not the same as a decision never made.</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>Decision — “drinks per day” means frequency × quantity, not
+<code>ALQ130</code>.</strong> <code>ALQ130</code> is drinks per
+<em>drinking day</em>. Someone who has three drinks every Saturday
+reports <code>ALQ130 = 3</code> but averages 0.4 drinks/day. Using
+<code>ALQ130</code> alone over-excludes roughly 2,000 people. We
+reconstruct average daily intake as
+<code>(ALQ130 × days_per_year) / 365</code>, converting
+<code>ALQ120Q</code>/<code>ALQ120U</code> (per week / month / year → ×52
+/ ×12 / ×1) and mapping the redesigned <code>ALQ121</code> categories to
+days per year for 2017-18.</p>
+</blockquote>
+<blockquote>
+<p><strong>Decision — strip <code>777</code> and <code>999</code>
+first.</strong> Both <code>ALQ130</code> and <code>ALQ120Q</code> use
+them for <em>refused</em> and <em>don’t know</em>. <strong>9
+refusals</strong> in this cohort would otherwise become people reporting
+777 drinks a day, and every one of them would be reclassified as a heavy
+drinker. Compare Step 2, where identical-looking digits in
+<code>LBXTR</code> are real measurements. <strong>There is no global
+NHANES missing-value rule; the codebook decides, variable by
+variable.</strong></p>
+</blockquote>
+<blockquote>
+<p>⚠ <strong>Decision — the exclusion is off, and the published
+justification for that is wrong.</strong> The switch exists because
+applying the exclusion moves us <em>away</em> from the paper. But
+<code>reproduction_report.md</code> §6 currently says the +71 row gap is
+“almost entirely the alcohol-exclusion ambiguity”, and the numbers do
+not support that:</p>
+<table>
+<thead>
+<tr>
+<th>Cohort</th>
+<th style="text-align: right;">N</th>
+<th style="text-align: right;">Deaths</th>
+<th style="text-align: right;">Total abs. group deviation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Paper</td>
+<td style="text-align: right;">6,300</td>
+<td style="text-align: right;">585</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td>Ours, exclusion <strong>off</strong></td>
+<td style="text-align: right;">6,371</td>
+<td style="text-align: right;">586</td>
+<td style="text-align: right;">71</td>
+</tr>
+<tr>
+<td>Ours, exclusion <strong>on</strong> (427 dropped)</td>
+<td style="text-align: right;"><strong>5,944</strong></td>
+<td style="text-align: right;">546</td>
+<td style="text-align: right;"><strong>356</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Turning the exclusion on overshoots by 356 rows and loses 39 deaths.
+It cannot be what separates us from 6,300 — <strong>Step 1’s age rule is
+the better candidate.</strong> Keeping the exclusion off remains the
+right call; the <em>reason</em> given for it in the report needs
+rewriting.</p>
+</blockquote>
+<blockquote>
+<p><strong>Known soft spot, if you switch it on.</strong>
+<code>avg_drinks_day</code> is forced to 0 whenever frequency is missing
+(2,246 people) or when someone reports drinking days but no quantity (5
+people). Missing intake therefore reads as abstinence — defensible when
+the exclusion is off, load-bearing the moment it is on.
+<code>ALQ101</code>/<code>ALQ110</code>/<code>ALQ111</code> (lifetime
+abstainer status) are downloaded and would let you separate genuine
+zeros from unknowns; nothing currently uses them.</p>
+</blockquote>
+<hr />
+<h2 id="step-5-the-four-phenotype-groups">Step 5 — The four phenotype
+groups</h2>
+<blockquote>
+<p><strong>Paper:</strong> “Obesity was defined as BMI≥30kg/m² (≥25
+kg/m² for Asians). High central adiposity was defined as a WHtR≥0.6.
+Group I included participants with obesity but low central adiposity;
+group II… obesity and high central adiposity; group III… non-obesity and
+low central adiposity; and group IV… non-obesity but high central
+adiposity.”</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr>
+<td><strong>Component → variables</strong></td>
+<td><code>BMX</code> → <code>BMXBMI</code> <code>BMXWAIST</code>
+<code>BMXHT</code>; <code>DEMO</code> → <code>RIDRETH3</code></td>
+</tr>
+<tr>
+<td><strong>Code</strong></td>
+<td><code>whtr</code> at <code>:121</code>,
+<code>obese</code>/<code>central</code> at <code>:201-202</code>,
+<code>group</code> at <code>:203-208</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>WHtR &lt; 0.6</th>
+<th>WHtR ≥ 0.6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Obese</strong></td>
+<td><strong>I</strong> (391)</td>
+<td><strong>II</strong> (4,585)</td>
+</tr>
+<tr>
+<td><strong>Non-obese</strong></td>
+<td><strong>III</strong> (787)</td>
+<td><strong>IV</strong> (608)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>N: 6,374 → 6,374</strong> (nobody lost; BMI and waist are
+already required by the FLI step)</p>
+<blockquote>
+<p><strong>Sanity check that this is right.</strong> Our per-group BMI
+medians are <strong>30.9 / 35.2 / 27.6 / 28.8</strong> — identical to
+all four published values. That is strong evidence the group
+construction matches, independent of the N gap.</p>
+</blockquote>
+<blockquote>
+<p><strong>Decision — <code>WHtR = BMXWAIST / BMXHT</code>, both in
+cm.</strong> A ratio of two lengths, so the units cancel and there is
+nothing to convert. Five people sit exactly on 0.6 and are classified as
+high central adiposity, matching <code>≥</code>.</p>
+</blockquote>
+<blockquote>
+<p>⚠ <strong>Decision — the Asian cut-point cannot be applied to a third
+of the cohort.</strong> <code>asian</code> is derived from
+<code>RIDRETH3 == 6</code>, and <strong><code>RIDRETH3</code> does not
+exist in 2007-08 or 2009-10</strong>. Line <code>:117</code> then
+recodes the resulting <code>NA</code> to 0, i.e. <em>not Asian</em>, for
+<strong>2,322 of 6,371 rows (36%)</strong>. This is not hypothetical:
+where the variable does exist, the Asian rule moves <strong>121 of
+250</strong> Asian participants from the non-obese arm to the obese
+arm.</p>
+<p><strong>Why the fallback is nevertheless bounded.</strong> In
+2007-2010 the only usable ethnicity variable is <code>RIDRETH1</code>,
+whose category 5 is “Other Race — Including Multi-Racial”, which
+<em>contains</em> Asians but cannot isolate them. Just 71 cohort members
+fall in it, and only <strong>17</strong> of those have BMI in [25, 30) —
+the window where the Asian rule would change anything (11 now in group
+III, 6 in group IV). So at most 17 of 6,371 are misgrouped.</p>
+<p><strong>Say it out loud in your write-up.</strong> The paper states
+one rule for 2007-2018; the data can only support it for 2011-2018. A
+small consequence is still an undocumented deviation, and “we checked,
+and it is bounded at 17” is a much better sentence than silence.</p>
+</blockquote>
+<blockquote>
+<p><strong>On the paper’s own table headers.</strong> Table 1 and Table
+2 label the columns <code>BMI≥25 kg/m²</code> /
+<code>BMI&lt;25 kg/m²</code>, contradicting the Methods text. The
+Methods are right and the headers are a typo: the paper’s own group III
+and IV BMI medians (27.6 and 28.8) are impossible under a 25 cut. Coding
+to 30 reproduces them exactly; coding to 25 does not. <strong>Finding an
+internal contradiction like this, and resolving it against the data
+rather than picking one, is exactly what M2 asks for.</strong></p>
+</blockquote>
+<hr />
+<h2 id="step-6-covariates-for-table-1-and-the-cox-models">Step 6 —
+Covariates for Table 1 and the Cox models</h2>
+<blockquote>
+<p><strong>Paper:</strong> “The definitions of comorbidities in the
+NHANES study have been previously described.” — and that is the entire
+specification.</p>
+</blockquote>
+<p><strong>Code:</strong>
+<code>R/02_build_analytic.R:216-244</code>.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Derived</th>
+<th>Component → variables</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>htn</code></td>
+<td><code>BPQ</code> → <code>BPQ020</code>; <code>BPX</code> →
+<code>BPXSY*</code> <code>BPXDI*</code></td>
+<td>self-report <strong>or</strong> SBP ≥ 140 <strong>or</strong> DBP ≥
+90</td>
+</tr>
+<tr>
+<td><code>t2dm</code></td>
+<td><code>DIQ</code> → <code>DIQ010</code>; <code>GHB</code> →
+<code>LBXGH</code></td>
+<td>self-report <strong>or</strong> HbA1c ≥ 6.5</td>
+</tr>
+<tr>
+<td><code>dyslip</code></td>
+<td><code>BPQ</code> → <code>BPQ080</code> <code>BPQ100D</code>;
+<code>TRIGLY</code> → <code>LBDLDL</code></td>
+<td>self-report <strong>or</strong> lipid meds <strong>or</strong> LDL ≥
+130</td>
+</tr>
+<tr>
+<td><code>ckd</code></td>
+<td><code>BIOPRO</code> → <code>LBXSCR</code>; <code>ALB_CR</code> →
+<code>URDACT</code> <code>URXUMA</code> <code>URXUCR</code></td>
+<td>eGFR &lt; 60 (CKD-EPI 2021, race-free) <strong>or</strong> ACR ≥
+30</td>
+</tr>
+<tr>
+<td><code>mi</code></td>
+<td><code>MCQ</code> → <code>MCQ160E</code> <code>MCQ160C</code></td>
+<td>heart attack <strong>or</strong> coronary heart disease</td>
+</tr>
+<tr>
+<td><code>stroke</code> <code>hf</code> <code>copd</code>
+<code>cancer</code></td>
+<td><code>MCQ</code> → <code>MCQ160F</code> <code>MCQ160B</code>
+<code>MCQ160O</code> <code>MCQ220</code></td>
+<td>self-report</td>
+</tr>
+<tr>
+<td><code>pir_cat</code></td>
+<td><code>DEMO</code> → <code>INDFMPIR</code></td>
+<td>&lt; 1 Low · 1–4 Middle · &gt; 4 High</td>
+</tr>
+<tr>
+<td><code>current_smoke</code></td>
+<td><code>SMQ</code> → <code>SMQ020</code> <code>SMQ040</code></td>
+<td>current smoker <strong>among ever-smokers</strong></td>
+</tr>
+<tr>
+<td><code>sedentary_min</code></td>
+<td><code>PAQ</code> → <code>PAD680</code></td>
+<td>minutes, with <code>7777</code>/<code>9999</code> stripped</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Decision — composites, not pure self-report.</strong>
+Self-report alone badly under-counts hypertension, diabetes and
+dyslipidaemia relative to the paper’s Table 1. The paper cites two prior
+studies instead of stating its definitions, so we could not copy
+them.</p>
+</blockquote>
+<blockquote>
+<p>⚠ <strong>Be honest about what “calibrated” means.</strong> The
+comment at <code>:212</code> says these definitions are “calibrated to
+reproduce the paper’s Table 1 prevalences.” That is fitting a definition
+to a target number, which is circular, and it is why HTN, T2DM,
+dyslipidaemia and CKD still sit 1–3 points off. <strong>Do not present a
+calibrated definition as a reproduction of the paper’s
+definition.</strong> Present it as: the paper did not specify, we chose
+X, here is the residual gap.</p>
+</blockquote>
+<blockquote>
+<p><strong>Decision — <code>NA</code> becomes “does not have
+it”.</strong> The <code>cf()</code> helper at <code>:215</code> maps
+missing to <code>FALSE</code> inside every composite. Combined with the
+cycle gaps from Step 0 (<code>MCQ160O</code> in H–J only,
+<code>DIQ070</code> absent in E), this means some prevalences carry a
+different denominator from the rest of the row. The COPD figure is the
+clearest case.</p>
+</blockquote>
+<blockquote>
+<p><strong><code>current_smoke</code> has a denominator you must
+state.</strong> It is defined only among ever-smokers, so “40.6% current
+smoking” means 40.6% <em>of ever-smokers</em>, not of the cohort. That
+is what reproduces the paper’s number — but it also makes the variable
+<code>NA</code> for never-smokers, which silently shrinks the
+complete-case N of Cox Model 2.</p>
+</blockquote>
+<blockquote>
+<p><strong>eGFR is CKD-EPI 2021, verified.</strong> Constants at
+<code>:229-231</code> (142, κ 0.7/0.9, α −0.241/−0.302, exponent −1.200,
+0.9938^age, ×1.012 female) match the published race-free equation;
+recomputing by hand agrees to two decimals. Note the epidemiology
+anyway: <strong>one creatinine and one ACR cannot establish
+<em>chronic</em> kidney disease</strong>, which needs ≥ 3 months. Every
+NHANES “CKD” prevalence in the literature carries this caveat.</p>
+</blockquote>
+<hr />
+<h2 id="step-7-linking-the-outcome">Step 7 — Linking the outcome</h2>
+<blockquote>
+<p><strong>Paper:</strong> “Mortality status was determined through
+linkage with the National Death Index, with follow-up censored on 31
+December 2019, and cause of death classified using ICD-10 codes.”</p>
+</blockquote>
+<p>The outcome is <strong>not in NHANES</strong>. It is six fixed-width
+<code>.dat</code> files, parsed at
+<code>R/02_build_analytic.R:253-266</code> and joined by
+<code>SEQN</code>.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Field</th>
+<th>Columns</th>
+<th>Used for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SEQN</code></td>
+<td>1–6</td>
+<td>the join key</td>
+</tr>
+<tr>
+<td><code>ELIGSTAT</code></td>
+<td>15</td>
+<td>1 = eligible for linkage</td>
+</tr>
+<tr>
+<td><code>MORTSTAT</code></td>
+<td>16</td>
+<td>0 = alive at censoring, 1 = dead</td>
+</tr>
+<tr>
+<td><code>UCOD_LEADING</code></td>
+<td>17–19</td>
+<td>leading cause recode (<code>001</code> diseases of heart …
+<code>005</code> cerebrovascular)</td>
+</tr>
+<tr>
+<td><code>PERMTH_INT</code></td>
+<td>43–45</td>
+<td>person-months from <strong>interview</strong></td>
+</tr>
+<tr>
+<td><code>PERMTH_EXM</code></td>
+<td>46–48</td>
+<td>person-months from <strong>MEC exam</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>N: 6,374 → 6,371</strong> (3 dropped: not linkage-eligible,
+or no follow-up time)</p>
+<blockquote>
+<p><strong>Decision — <code>PERMTH_EXM</code> is the clock.</strong>
+<code>time_yr = permth_exm / 12</code> (<code>:272</code>).
+<strong>Why:</strong> the exposure (BMI, waist, the labs behind FLI) is
+measured at the MEC exam, not at the household interview, so follow-up
+should start when the exposure was measured. The paper does not say
+which it used. For the record: <code>PERMTH_EXM</code> gives mean
+follow-up 6.76 (SD 3.49) years and <code>PERMTH_INT</code> gives 6.83
+(3.49), against the paper’s 6.9 (3.5) — neither reproduces it
+exactly.</p>
+</blockquote>
+<blockquote>
+<p><strong>Verify the column positions before you trust
+anything.</strong> A one-column offset here corrupts every downstream
+result silently. The check: after parsing, <code>ELIGSTAT</code> should
+be in {1, 2, 3}, <code>MORTSTAT</code> in {0, 1},
+<code>UCOD_LEADING</code> in 1–10, <code>PERMTH_EXM</code> non-negative,
+and <code>SEQN</code> inside the cycle’s known range. All five hold
+here.</p>
+</blockquote>
+<blockquote>
+<p>⚠ <strong>Decision — and a live inconsistency in this
+repository.</strong> The paper’s secondary outcome is cardiovascular
+mortality. <code>cv_death</code> at <code>:273</code> is
+<code>ucod_leading %in% c(1, 5)</code> — heart <strong>plus</strong>
+cerebrovascular — which gives <strong>185</strong> deaths. But the paper
+reports <strong>158</strong>, <code>README.md</code> says
+“diseases-of-heart”, and <code>reproduction_report.md</code> finding #3
+says heart-only is the definition that matches.
+<code>R/04_table2_cox.R:42</code> quietly defines its own
+<code>cv_heart</code> and uses that, so the published Table 2 is correct
+(1 / 112 / 19 / 26 by group).</p>
+<p><strong>The saved <code>masld_analytic.rds</code> therefore ships a
+<code>cv_death</code> column that three other documents
+contradict.</strong> If you read the analytic file and use
+<code>cv_death</code>, you will get 185 CV deaths and disagree with
+every table in this repository. Use
+<code>mortstat == 1 &amp; ucod_leading == 1</code> until this is
+fixed.</p>
+</blockquote>
+<hr />
+<h2 id="step-8-save-and-count-what-you-lost">Step 8 — Save, and count
+what you lost</h2>
+<p><code>R/02_build_analytic.R:314-321</code> applies the chain and
+<code>:362-363</code> writes both files.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>s0 <span class="ot">&lt;-</span> dat                                                     <span class="co"># 59,842</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>s1 <span class="ot">&lt;-</span> <span class="fu">filter</span>(s0, age <span class="sc">&gt;=</span> <span class="dv">18</span>)                                   <span class="co"># 36,580   ELIGIBILITY</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>s2 <span class="ot">&lt;-</span> <span class="fu">filter</span>(s1, <span class="sc">!</span><span class="fu">is.na</span>(fli))                                 <span class="co"># 14,989   DESIGN + MISSINGNESS</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>s3 <span class="ot">&lt;-</span> <span class="fu">filter</span>(s2, steatosis <span class="sc">==</span> <span class="dv">1</span>)                              <span class="co">#  6,376   TARGET POPULATION</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>s4 <span class="ot">&lt;-</span> <span class="fu">filter</span>(s3, masld <span class="sc">==</span> <span class="dv">1</span>)                                  <span class="co">#  6,374   TARGET POPULATION</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>s5 <span class="ot">&lt;-</span> <span class="fu">filter</span>(s4, <span class="sc">!</span><span class="fu">is.na</span>(group))                               <span class="co">#  6,374   MISSINGNESS</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>s6 <span class="ot">&lt;-</span> <span class="fu">filter</span>(s5, eligstat <span class="sc">==</span> <span class="dv">1</span>, <span class="sc">!</span><span class="fu">is.na</span>(mortstat), <span class="sc">!</span><span class="fu">is.na</span>(time_yr))  <span class="co"># 6,371  OUTCOME</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>s7 <span class="ot">&lt;-</span> <span class="cf">if</span> (APPLY_ALCOHOL_EXCL) <span class="fu">filter</span>(s6, sig_alcohol <span class="sc">==</span> <span class="dv">0</span>) <span class="cf">else</span> s6  <span class="co"># 6,371  (switch)</span></span></code></pre></div>
+<p>Two files are written: <code>data/derived/masld_analytic.rds</code>
+(the 6,371-row cohort) and <code>data/derived/merged_all.rds</code> (all
+59,842 rows, pre-filter, so you can re-derive any step without
+re-reading the <code>.xpt</code> files). The typed funnel — both row
+sets, every step labelled — goes to
+<code>logs/sample_funnel.csv</code>.</p>
+<blockquote>
+<p><strong>Every funnel row carries a type, and the types are not
+interchangeable.</strong> ELIGIBILITY · DESIGN · MISSINGNESS · TARGET
+POPULATION · OUTCOME ASCERTAINMENT. A funnel shows N falling; it does
+not show <em>why</em>, and the remedy differs for each. The 21,618
+people outside the fasting subsample are a DESIGN fact answered by a
+weight; the 792 with a missing input are MISSINGNESS answered by P5; the
+people without steatosis are simply not who the paper is about. Summing
+them into one “attrition” number is the most common error in a first P1,
+and it is wrong three different ways at once.</p>
+</blockquote>
+<hr />
+<h2 id="the-decisions-ledger">The decisions ledger</h2>
+<p>Every judgment call above, in one place. ⚠ marks a place where we may
+genuinely differ from the paper.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>Decision</th>
+<th>Why</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>⚠ Age <code>&gt;= 18</code>, though the paper writes
+<code>&gt; 18</code></td>
+<td>consistency with the reported mean age</td>
+<td>70 rows; best single explanation of the N gap</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Keep both the full file (6,371) and the locked domain (6,048)</td>
+<td>paper reports no weights → 6,371 reproduces it; only 6,048 supports
+a design-aware estimate</td>
+<td>323 rows differ; both are logged</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Fasting subsample typed as DESIGN, not missingness</td>
+<td>NHANES sampled it deliberately and supplies
+<code>WTSAF2YR</code></td>
+<td>none — it changes the <em>interpretation</em>, not the N</td>
+</tr>
+<tr>
+<td>4</td>
+<td>FLI transcribed verbatim; no unit conversion</td>
+<td>NHANES already supplies mg/dL, U/L, cm, kg/m²</td>
+<td>none</td>
+</tr>
+<tr>
+<td>5</td>
+<td>No reserved-code stripping in
+<code>LBXTR</code>/<code>LBXSGTSI</code></td>
+<td><code>77</code> there is a measurement, not a refusal</td>
+<td>would have deleted real values</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Strip <code>777</code>/<code>999</code> in
+<code>ALQ130</code>/<code>ALQ120Q</code></td>
+<td>there they <em>are</em> refusals</td>
+<td>9 refusals saved from becoming heavy drinkers</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Alcohol = frequency × quantity, not <code>ALQ130</code></td>
+<td><code>ALQ130</code> is per drinking-day, not per day</td>
+<td>using <code>ALQ130</code> alone over-excludes ~2,000</td>
+</tr>
+<tr>
+<td>8</td>
+<td>⚠ Alcohol exclusion switched <strong>off</strong></td>
+<td>applying it gives 5,944 vs the paper’s 6,300</td>
+<td>427 rows if switched on; report §6’s stated reason is wrong</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Glucose threshold 100 mg/dL for 5.6 mmol/L</td>
+<td>the conventional equivalent</td>
+<td>212 people in the gap, zero reclassified</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Missing criterion counts as absent (<code>na.rm = TRUE</code>)</td>
+<td>conservative; can only fail to admit</td>
+<td>negligible — 6,329/6,371 already meet criterion (i)</td>
+</tr>
+<tr>
+<td>11</td>
+<td>NHANES BP averaging protocol, not <code>rowMeans</code></td>
+<td>documented CDC rule; two prior versions were wrong</td>
+<td>changed SBP/DBP for 5,523 people; HRs moved in the 3rd s.f.</td>
+</tr>
+<tr>
+<td>12</td>
+<td>⚠ Asian BMI cut applied only where <code>RIDRETH3</code> exists</td>
+<td>it does not exist in E or F</td>
+<td>≤ 17 of 6,371 possibly misgrouped</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Composite comorbidity definitions</td>
+<td>paper cites prior work instead of specifying</td>
+<td>1–3 pt residual gaps; the calibration is circular</td>
+</tr>
+<tr>
+<td>14</td>
+<td><code>current_smoke</code> denominator = ever-smokers</td>
+<td>reproduces the paper’s 40.6%</td>
+<td><code>NA</code> for never-smokers shrinks Model 2’s N</td>
+</tr>
+<tr>
+<td>15</td>
+<td><code>PERMTH_EXM</code> as the clock</td>
+<td>exposure is measured at the MEC exam</td>
+<td>6.76 y vs the paper’s 6.9 y</td>
+</tr>
+<tr>
+<td>16</td>
+<td>⚠ <code>cv_death</code> = heart + cerebrovascular in the saved
+file</td>
+<td>—</td>
+<td><strong>185 vs the paper’s 158; three other documents disagree with
+it</strong></td>
+</tr>
+<tr>
+<td>17</td>
+<td>Unweighted throughout</td>
+<td>the paper reports no weights, strata or PSUs; reproducing ≠
+endorsing</td>
+<td>the design-aware estimate is P4’s job</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="how-to-use-this-page-in-p1">How to use this page in P1</h2>
+<ol type="1">
+<li><strong>Work the loop, in this order:</strong> paper sentence →
+operational concept → NHANES variable → component → <em>that
+cycle’s</em> codebook → raw <code>.xpt</code> → your code → cohort
+consequence. Every step above is one turn of it.</li>
+<li><strong>For each of your own steps, write the four lines</strong>
+this page writes: the quoted sentence, the component and variables, the
+decision and its reason, the N afterwards.</li>
+<li><strong>Type every funnel row.</strong> If you cannot name a row’s
+type, you do not yet know what the row means.</li>
+<li><strong>Two of the decisions above are still open</strong> (#1 and
+#8). Reproducing a number is not the goal; being able to say
+<em>why</em> your number differs is. An unexplained exact match is worth
+less than a discrepancy you can account for.</li>
+</ol>
+<hr />
+<p><em>Numbers on this page were measured against <code>data/raw/</code>
+and <code>data/derived/</code> on the 2019 linked-mortality release, not
+copied from the other documents. Regenerate the variable-level detail
+with <code>Rscript R/07_variable_map.R</code>; regenerate the cohort
+with <code>source(&quot;R/run_all.R&quot;)</code>.</em></p>
+</body>
+</html>

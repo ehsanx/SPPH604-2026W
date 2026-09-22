@@ -1,12 +1,5 @@
 # MASLD × BMI/WHtR — Reproduction (NHANES 2007–2018)
 
-> **Scope note.** These materials document a teaching reproduction of published
-> analyses using the specified public data and course implementation. Differences
-> from published results are reproducibility findings, not allegations of research
-> misconduct, and may reflect analytic, implementation, or data-version differences.
-> The findings below stand as recorded; this note frames how to read them, not
-> whether they hold.
-
 Fully reproducible re-analysis of **Kueh MTW et al., BMJ Open 2026;16:e113719**
 ("Body weight categories and fat distribution in relation to all-cause mortality
 among adults with MASLD"). Built as the worked **SPPH 604** example: replicate a
@@ -21,6 +14,11 @@ variable this pipeline touches, which component file it lives in, which cycles a
 contain it, whether a `77`-looking value is a reserved code or a real measurement, a link
 to the CDC codebook anchored at that variable, and the line of our code that reads it.
 Generated from the raw `.xpt` files by `R/07_variable_map.R`, so it cannot drift.
+
+**Building a cohort from a paper?** [COHORT_BUILD_STEPS.md](COHORT_BUILD_STEPS.md) is the
+recipe: every step from download to `masld_analytic.rds`, and for each one the paper's own
+sentence, the component and variables it forces you to read, the judgment call we had to
+make, and the N it cost. Read it before P1.
 
 **New here?** [WALKTHROUGH.md](WALKTHROUGH.md) is the tour: what each script
 decides, the sample funnel, and the two places NHANES will mislead you. This file is the
@@ -44,9 +42,10 @@ read from `data/raw/`.
 ## Folder layout
 
 ```
-reproduction/
+repro/
 ├── README.md                    <- this file
 ├── reproduction_report.md       <- reproduced vs published, findings, P1–P5 map
+├── COHORT_BUILD_STEPS.md         <- step-by-step recipe: paper sentence -> variables -> decision -> N
 ├── VARIABLE_MAP.md              <- generated crosswalk: variable -> file -> codebook -> our code
 ├── R/
 │   ├── 00_setup.R               <- paths, cycles, component list
@@ -57,7 +56,7 @@ reproduction/
 │   ├── 05_figure1_km.R          <- Figure 1 (Kaplan–Meier)
 │   ├── 06_figure2_rcs.R         <- Figure 2 (restricted cubic splines)
 │   └── run_all.R                <- run everything in order
-├── data/                        <- not in this repository; 01_download.R creates it
+├── data/
 │   ├── raw/                     <- untouched downloads (saved for auditability)
 │   │   ├── 2007-2008/ … 2017-2018/   (18 XPT components per cycle)
 │   │   ├── mortality/           (6 public-use linked-mortality .dat files)
@@ -104,6 +103,6 @@ reproduction/
   paper is unweighted, so 6,371 is what reproduces it; 6,048 is a different (correct)
   denominator, not a correction to the first. The typed sample funnel is in
   [WALKTHROUGH.md](WALKTHROUGH.md).
-- The paper's stated alcohol exclusion does not reconcile with its reported N under any
-  coding of the public alcohol variables we implemented; the primary cohort here matches
-  the paper (exclusion off) and the exclusion is a documented switch. See report §5.
+- The paper's stated alcohol exclusion does not reconcile with its reported N; the
+  primary cohort here matches the paper (exclusion off) and the exclusion is a
+  documented switch. See report §5.

@@ -13,24 +13,39 @@ format:
     height: 720
     fig-align: center
     smaller: true
+  beamer:
+    fontsize: 9pt
+    # The default beamer font has no glyph for >= / <=, which this deck uses throughout for
+    # the paper's own thresholds. Without these the static PDF prints them as tofu. Mapping
+    # to symbols every LaTeX install already has avoids depending on a font being present
+    # on whatever machine renders the release.
+    header-includes: |
+      \usepackage{newunicodechar}
+      \newunicodechar{≥}{\ensuremath{\geq}}
+      \newunicodechar{≤}{\ensuremath{\leq}}
+      \newunicodechar{×}{\ensuremath{\times}}
+      \newunicodechar{·}{\textperiodcentered}
+      \newunicodechar{≠}{\ensuremath{\neq}}
+      \newunicodechar{✓}{\ensuremath{\checkmark}}
+      \newunicodechar{⚠}{\textbf{[!]}}
 ---
 
 ## Week 3 {.center}
 
 ### Q2 in depth: from population to analytic cohort
 
-**A cohort is not a leftover. It is the first result.**
+**A cohort is the first result of an analysis.**
 
-- Week 2 asked *who is the population, and how is eligibility operationalised?*
-  Today we answer it all the way down to executable code
-- Everything on these slides — the funnel, the criteria table, the alcohol sentence —
-  is the shape of what you build for **your own** paper at P1
+Today we follow one study from a Methods paragraph to a dataset that can be analysed.
 
 ::: {.notes}
-(1 min) Timing: per-slide markers in these notes sum to 140 min including the break,
-against a 150-minute cap. The lecture plan carries the identical split and lists which
-slides to drop first if you are running behind. If you retime a slide, retime it in both
-files.
+(2 min) TIMING: per-slide markers now sum to more than a single 150-minute slot, because
+five slides were restored from the previous version. Treat the markers as relative
+weights and select: the appendix slides, "Reviewing someone else's eligibility" and the
+covariates preview are the first to drop. The audience knows epidemiology but may be new
+to NHANES and data implementation.
+Define every acronym when it first appears. Keep the focus on decisions and consequences,
+not on memorising variable names.
 :::
 
 ## Q2, in depth — and this week's division of labour
@@ -44,7 +59,6 @@ eligibility operationalised?
 | **Thursday (L2)** | the **mechanics** — multi-cycle download, mortality linkage, eligibility steps, analytic dataset | benzodiazepine / opioid |
 | **P1** | both, transferred | your locked paper |
 
-- Today's path: **case definition → eligibility → the funnel → Thursday**
 - Framing question: *"If two teams read the same methods paragraph, would they build the
   same cohort?"*
 
@@ -59,17 +73,40 @@ a *different paper on purpose*, so nobody spends the week thinking the course lo
 thread. We come back to it at the end with the actual code.
 :::
 
-## M0 — deadline today
+## What you should be able to do by the end
 
-- Memos due **12 PM today**
-- We will get back to you soon on whether the teaching team agrees with your reading of
-  the six criteria
+Given a published Methods section, you should be able to:
+
+1. identify the files and variables needed to build the cohort
+2. translate each inclusion rule into executable logic
+3. classify every reduction in N by its cause
+4. document ambiguities and show what alternative decisions would change
+
+**The standard is a defensible audit trail, not an unexplained match to the paper.**
 
 ::: {.notes}
-(1 min) An announcement. Say it, take any questions, move on.
+(4 min) Connect to Week 2: target, source and analytic populations. Thursday's L2 repeats
+the mechanics using a different paper. P1 transfers both the judgment and the mechanics
+to the students' locked paper.
 :::
 
-# Part 1 — The case definition
+## The complete cohort-building sequence
+
+| Step | Question |
+|---:|---|
+| 0 | Which cycles, files and variables are needed? |
+| 1 | Who meets the age rule? |
+| 2 | Who has a computable Fatty Liver Index? |
+| 3 | Who meets the metabolic dysfunction definition? |
+| 4 | How is the alcohol exclusion implemented? |
+| 5 | How are the four BMI and waist phenotypes defined? |
+| 6 | How are covariates constructed? |
+| 7–8 | How are mortality data linked, checked and saved? |
+
+::: {.notes}
+(4 min) This slide is the map. Return to it at each section change. Students should know
+where they are in the sequence even when the variable details become unfamiliar.
+:::
 
 ## Target, source, analytic — and what each step costs
 
@@ -77,167 +114,134 @@ thread. We come back to it at the end with the actual code.
 |---|---|---|
 | **Target** | adults with MASLD in the US | who we want to speak about |
 | **Source** | NHANES 2007–2018 respondents | who was sampled |
-| **Analytic** | those surviving every filter, with measurable exposure *and* outcome | who we can actually compute on |
+| **Analytic** | survivors of every filter, with exposure *and* outcome measurable | who we can compute on |
 
 - Each narrowing step trades **generalizability** for **measurability**
-- A drop is not automatically a bias. **What it is depends on its kind** — Week 2's typed
-  funnel: `ELIGIBILITY`, `DESIGN`, `MISSINGNESS`, `TARGET POPULATION`,
-  `OUTCOME ASCERTAINMENT`
-- Only one of those five is a missing-data problem
+- A drop is not automatically a bias. **What it is depends on its kind** — Week 2's five
+  types, of which **only one is a missing-data problem**
 
-> Recall Week 2's measured check: adults in and out of the fasting subsample differ by
-> **0.2 years, 0.02 kg/m², 0.07 cm**. Designed subsampling is *not* self-selection.
 
 ::: {.notes}
-(6 min) Draw the nested circles if you like, but the labels on the arrows matter more than
-the circles. Be careful here: an earlier version of this course taught every drop as a
+(6 min) SAY THIS, it is the evidence for the arrow labels: Week 2's measured check found
+adults in and out of the fasting subsample differ by 0.2 years, 0.02 kg/m2 and 0.07 cm.
+Assignment to the subsample is design-based; fasting compliance can still add
+nonresponse, which the subsample weight is there to address. Draw the nested circles if
+you like, but the labels on the arrows matter more than the circles. Be careful here: an earlier version of this course taught every drop as a
 preview of selection bias, and that was wrong — the measured balance in the blockquote is
 why. The transferable habit is that the *kind* of each drop was checked rather than
 assumed. We put the real typed funnel on screen after the break.
 :::
 
-## MASLD: a concept that has to become data operations
+# Part 1: From NHANES files to people
 
-**MASLD** (formerly NAFLD) = **hepatic steatosis** + **metabolic dysfunction**, other
-causes not dominant.
+## A five-minute NHANES mental model
 
-| Conceptual ingredient | What NHANES can offer | What the paper does |
-|---|---|---|
-| Hepatic steatosis | no biopsy, no imaging | **Fatty Liver Index ≥ 60** |
-| Metabolic dysfunction | labs, exam, questionnaire | **≥ 1 of five** cardiometabolic criteria |
+**Cycle**  
+One two-year survey wave, such as 2011–2012
 
-- The constraint is real, not a flaw in this paper: every NHANES population study of MASLD
-  this decade faces it
-- **Nobody in this dataset was diagnosed with MASLD.** There is no column to read. Who
-  counts as a case is the output of a calculation you run yourself — four measurements,
-  one published formula, one threshold
-- So who is in the cohort depends on how you handle those inputs. Later today: one
-  triglyceride value moves a single person in or out of the case definition, and one
-  sentence of prose moves **2,063**
+**Component**  
+A topic-specific file, such as demographics, body measurements or laboratory tests
 
-::: {.notes}
-(4 min) Note the NAFLD→MASLD renaming so they recognise both terms in the literature. The
-key move is the left-to-right one: a conceptual definition becomes a data operation, and
-everything downstream inherits the properties of that operation. Do not let this land as
-criticism. The last bullet makes two promises — the FLI boundary flip and the alcohol
-sentence — and both are cashed later in the lecture; say them as promises so the room is
-waiting for them.
-:::
+**Variable**  
+A column inside a component, such as age or waist circumference
 
-## Steatosis: the Fatty Liver Index, and where its inputs live
+**`SEQN`**  
+The participant identifier used to join files
 
-$$\mathrm{FLI} = 100 \cdot \frac{\exp(y)}{1+\exp(y)}, \qquad
-y = 0.953\ln(\mathrm{TG}) + 0.139\,\mathrm{BMI} + 0.718\ln(\mathrm{GGT}) + 0.053\,\mathrm{waist} - 15.745$$
-
-| Input | NHANES variable | Component | Fasting? |
-|---|---|---|---|
-| Triglycerides (mg/dL) | `LBXTR` | `TRIGLY` | **yes** |
-| BMI (kg/m²) | `BMXBMI` | `BMX` | no |
-| GGT (U/L) | `LBXSGTSI` | `BIOPRO` | no |
-| Waist (cm) | `BMXWAIST` | `BMX` | no |
-
-- Bedogni 2006. A published logistic score — **not** a product of the four
-- **One** input needs a fasting lab, and that one input binds the whole index to the
-  fasting subsample
-- `BMXBMI` and `BMXWAIST` also build the *exposure*. Week 2 named that **structural
-  dependence**; M1 dissects what it does to an estimate
-
-> **Where do I actually get `LBXTR`?** The reproduction site carries the full
-> **[NHANES variable map](https://ehsanx.github.io/SPPH604-2026W/reproduction/VARIABLE_MAP.html)**
-> — component, cycle availability, CDC codebook link, and the line of our code that reads
-> it. Use it for your own paper's variables too.
+This reproduction combines six cycles from 2007–2008 through 2017–2018.
 
 ::: {.notes}
-(5 min) This table is the same one they saw in Week 2 under Q2 — say so, so it reads as a
-callback rather than new material. The fasting column is the new thing, and it is what the
-feasibility argument later in the lecture turns on. Hold the structural-dependence point
-at the level Week 2 set it: named, not diagnosed.
+(5 min) Students need only these four terms for the rest of the lecture. Cycle suffixes
+E through J belong in the appendix, not in working memory. Point out that a participant
+appears in several component files but has one SEQN.
 :::
 
-## FLI, worked: one subject
+## Stack cycles first, then join components
 
-A 52-year-old with **TG 150 mg/dL**, **BMI 28.5**, **GGT 30 U/L**, **waist 99 cm**:
+For each component:
 
-| Term | Computation | Value |
-|---|---|---|
-| $0.953\ln(\mathrm{TG})$ | $0.953 \times \ln(150)$ | 4.775 |
-| $0.139\,\mathrm{BMI}$ | $0.139 \times 28.5$ | 3.962 |
-| $0.718\ln(\mathrm{GGT})$ | $0.718 \times \ln(30)$ | 2.442 |
-| $0.053\,\mathrm{waist}$ | $0.053 \times 99$ | 5.247 |
-| constant | | −15.745 |
-| | **$y$** | **0.681** |
+1. read the same variables from all six cycles
+2. stack the cycles into one long file
+3. join components by `SEQN`
 
-$$\mathrm{FLI} = 100 \cdot \frac{\exp(0.681)}{1+\exp(0.681)} = \mathbf{66.4} \;\Rightarrow\; \text{FLI} \ge 60 \;\Rightarrow\; \textbf{steatosis}$$
+```r
+demo_all <- bind_rows(demo_E, demo_F, demo_G, demo_H, demo_I, demo_J)
+dat <- left_join(demo_all, bmx_all, by = "SEQN")
+```
 
-- Note **TG and GGT enter on the log scale** — a doubling of GGT is worth the same as a
-  doubling of TG times 0.75, not twice the raw units
+**The join choice defines which people can remain in the analysis.**
 
 ::: {.notes}
-(6 min) Do the arithmetic on screen rather than describing it. Ask them which term is
-doing the most work before you reveal the column — most will guess BMI, and it is waist.
-The log terms are the reason the index is not a simple weighted sum of the four
-measurements, and the reason you cannot eyeball who is over the cut.
+(5 min) Connect to Week 2, where `full_join` vs `inner_join` was contrasted ("`inner_join`
+would be a different study"), and to L1, where students implemented that merge. The
+new complication is cycle availability: a column can be absent from a whole cycle. The
+stacking helper pads absent variables with NA so the files can be combined.
 :::
 
-## The same subject, one lab value later
+## An absent variable can look like nonresponse
 
-Change **only** the triglycerides — everything else identical:
+Padding an unavailable variable with `NA` allows the code to run, but two situations then
+look identical:
 
-| | TG | $y$ | FLI | Case? |
-|---|---|---|---|---|
-| Visit A | 150 mg/dL | 0.681 | **66.4** | **yes** |
-| Visit B | 110 mg/dL | 0.385 | **59.5** | no |
+- the question did not exist in that cycle
+- the question existed and the participant has no value
 
-**The cut flips at TG = 112.4 mg/dL**, holding BMI, GGT and waist fixed.
+Example: `RIDRETH3`, which identifies non-Hispanic Asian participants, begins in
+2011–2012. Earlier cycles cannot supply the same classification.
 
-- **40 mg/dL of triglycerides is the entire difference between "case" and "not a case"** —
-  nothing else about these two rows differs
-- So the one input that forced the cohort into the fasting subsample is also the one that
-  decides case status at the margin
-- A **cut on a continuous score** manufactures a hard boundary. The same issue returns at
-  the **BMI × WHtR 2×2**
+**Check variable availability by cycle before interpreting an `NA`.**
 
 ::: {.notes}
-(6 min) This is the slide that makes dichotomisation concrete rather than a slogan. Ask
-what they would do about it — the honest answers are a sensitivity analysis at 55 and 65,
-or keeping FLI continuous where the question allows. Neither is available to us here,
-because the case definition is the paper's, not ours; that constraint is itself worth
-naming. Flag that the 2×2 exposure has exactly the same property. **Sourcing note:** this
-slide deliberately does *not* claim that fasting triglycerides vary by 40 mg/dL within a
-person between visits. That is very likely true and it is not established by anything on
-these slides — if you want to make it in the room, bring a citation, because "assert it
-and move on" is precisely what we mark students down for.
+(5 min) This is the first major NHANES lesson. Connect to P1: the variable map must record
+component, cycle availability, codes and transformations. Do not ask students to memorise
+the variable code. Ask what the missingness means.
 :::
 
-## Metabolic dysfunction: five criteria, and ≥ 1 is required
+# Part 2: Eligibility as executable logic
 
-| # | Criterion | Operationalised as | Variables |
-|---|---|---|---|
-| 1 | Adiposity | BMI ≥ 25, **or** waist > 94 cm (M) / > 80 cm (F) | `BMXBMI`, `BMXWAIST` |
-| 2 | Glycaemia | glucose ≥ 100, **or** HbA1c ≥ 5.7, **or** diabetes dx, **or** on treatment | `LBXGLU`, `LBXGH`, `DIQ010`, `DIQ050`, `DIQ070` |
-| 3 | Blood pressure | SBP ≥ 130, **or** DBP ≥ 85, **or** on treatment | `BPXSY1–4`, `BPXDI1–4`, `BPQ050A` |
-| 4 | Triglycerides | TG ≥ 150, **or** on lipid treatment | `LBXTR`, `BPQ100D` |
-| 5 | HDL | ≤ 40 mg/dL (M) / < 50 (F) | `LBDHDD` |
+## The age sentence leaves a real decision
 
-- **Five separate criteria, not four.** 4 and 5 are both lipids but they are coded,
-  thresholded and sexed separately — collapsing them into "dyslipidaemia" is the wrong
-  level of abstraction for something you have to write as code
-- Every row hides a decision: *which threshold? treated counts as met? which variable?*
-- In this cohort ≥ 1 is almost always met — it drops **2 people, 6,052 → 6,050**. Report
-  it anyway; your paper's population may differ
+The paper states:
 
-*Analysis set: locked mortality-linked cohort, N = 6,048.*
+> “The study inclusion criteria were participants aged >18 years with evidence of MASLD.”
+
+The reproduction uses:
+
+```r
+filter(age >= 18)
+```
+
+Because NHANES age is recorded in whole years:
+
+- `age > 18` means age 19 and older
+- `age >= 18` includes people aged exactly 18
 
 ::: {.notes}
-(8 min) Give this the time. This table is the codebook-before-coding discipline in its
-finished form, and it is what P1 asks them to produce for their own paper. The "five not
-four" point is worth saying out loud: a student who codes from a bullet that says
-"dyslipidaemia" writes one indicator where the definition needs two with different cuts
-and different sex rules. The 6,052 → 6,050 number is reassuring here and dangerous as a
-habit — a non-binding filter is still a reported filter.
+(5 min) MASLD means metabolic dysfunction-associated steatotic liver disease. Ask the
+room which rule they would use before showing the sensitivity results. The point is not
+to guess the authors' intent. The point is to expose and test the decision.
 :::
 
-# Part 2 — Eligibility as executable logic
+## The age sensitivity gives conflicting evidence
+
+| Rule | Final N | Deaths | Mean age, SD |
+|---|---:|---:|---:|
+| Published paper | 6,300 | 585 | 51.0, 16.6 |
+| Reproduction with age ≥18 | 6,371 | 586 | **51.0, 16.6** |
+| Reproduction with age >18 | **6,301** | **585** | 51.4, 16.3 |
+
+Seventy reproduced participants are exactly 18 years old.
+
+<small>All reproduction rows are the **full reconstruction** row set (not the fasting-weight domain).</small>
+
+**The strict rule matches N and deaths. The inclusive rule matches the age distribution.**
+
+::: {.notes}
+(7 min) This is the cleanest example of conflicting validation targets. Do not present
+one rule as settled. A defensible report names the ambiguity and shows both analyses.
+These counts come from the reproduction pipeline; the paper supplies the published row.
+:::
+
 
 ## Exclusions are scientific claims
 
@@ -247,218 +251,417 @@ habit — a non-binding filter is still a reported filter.
 
 ```r
 # Paper, Methods: eligibility stated as "aged > 18 years"
-d <- filter(d, age >= 18)          # NOT what the sentence says — deliberate, see below
+d <- filter(d, age >= 18)     # NOT what the sentence says — deliberate, and recorded
 ```
 
 - A comment naming **the sentence you are implementing** lets an auditor trace every
-  `filter()` back to the paper
-- It also makes a **divergence visible instead of invisible**. NHANES age is an integer, so
-  `> 18` means 19 and over; we keep everyone aged exactly 18
-- Week 2 put **three** age rules on one slide — the lab's `>= 20`, the paper's `> 18`, our
-  `>= 18`. Same variable, three studies
-- The discipline is not to pick the right one. It is to **record which one you used**, so a
-  reader can undo it. A reproduction that quietly adopts the other rule has destroyed its
-  own evidence
+  `filter()` back to the paper, and makes a **divergence visible instead of invisible**
 
 ::: {.notes}
-(6 min) Reframe "exclusion criteria" from a chore list into a set of claims. Then use the
-age rule as the smallest possible worked example of the comment rule: the sentence and the
-code **disagree**, the comment is what makes that checkable, and the divergence is recorded
-rather than harmonised. Do not let anyone leave thinking `>= 18` is a typo — it is a choice
-we wrote down. The alcohol criterion two slides on is the same situation with no defensible
-resolution available.
+(5 min) Reframe "exclusion criteria" from a chore list into a set of claims. The age rule
+is the smallest possible worked example of the comment rule: the sentence and the code
+disagree, and the comment is what makes that checkable. Do not let anyone leave thinking
+`>= 18` is a typo - it is a choice we wrote down. The next slide shows the three rules.
 :::
 
-## The sentence
+## Same variable, three studies
 
-The paper's Methods exclude significant alcohol consumption:
+Week 2 put **three** age rules on one slide:
 
-> ### "> 2 drinks/day (men), > 1 (women)"
+| Study | Rule | Means |
+|---|---|---|
+| Thursday's lab (L2) | `>= 20` | 20 and over |
+| This paper, as printed | `> 18` | 19 and over |
+| Our reproduction | `>= 18` | 18 and over |
 
-Three things it does not say:
+NHANES age is an integer, so one variable yields three different studies.
 
-| | The question it leaves open |
+> The discipline is not to pick the right one. It is to **record which one you used**, so
+> a reader can undo it. A reproduction that quietly adopts a different rule has destroyed
+> its own evidence.
+
+::: {.notes}
+(3 min) Split from the previous slide so the comment rule and the three-rule comparison
+each get room. Ask which they would defend. There is no single right answer, which is the
+point - the alcohol criterion later is the same situation with no resolution available.
+:::
+
+# Part 3: Turning MASLD into data
+
+## The paper constructs MASLD from measurements
+
+In this study, a participant must have:
+
+1. **hepatic steatosis**, defined using a Fatty Liver Index (FLI) of at least 60
+2. **metabolic dysfunction**, defined by at least one of five criteria
+
+NHANES does not provide one MASLD diagnosis column for these six cycles. The analyst
+constructs the case definition.
+
+2017–2018 includes liver transient elastography, but no comparable liver-imaging measure
+spans all six cycles used by this paper.
+
+::: {.notes}
+(4 min) Avoid saying that NHANES has no liver imaging. It does in later cycles. The
+problem is comparability across 2007–2018. Source for 2017–2018 imaging: CDC LUX_J
+documentation. The paper chose FLI for a harmonised six-cycle definition.
+:::
+
+## The Fatty Liver Index uses four inputs
+
+$$
+\mathrm{FLI}=100\frac{\exp(L)}{1+\exp(L)}
+$$
+
+$$
+L=0.953\ln(TG)+0.139(BMI)+0.718\ln(GGT)+0.053(waist)-15.745
+$$
+
+| Input | NHANES variable | Unit |
+|---|---|---|
+| Triglycerides (TG) | `LBXTR` | mg/dL |
+| Body mass index (BMI) | `BMXBMI` | kg/m² |
+| Gamma-glutamyl transferase (GGT) | `LBXSGTSI` | U/L |
+| Waist circumference | `BMXWAIST` | cm |
+
+::: {.notes}
+(6 min) Check the units before calculating. The formula uses natural logarithms for TG
+and GGT. BMI and waist also help define the later exposure groups, which creates the
+structural-dependence question examined in M1.
+:::
+
+## One participant can sit on either side of the FLI threshold
+
+Hold BMI at 28.5 kg/m², GGT at 30 U/L and waist at 99 cm:
+
+| Triglycerides | FLI | Steatosis by this rule? |
+|---:|---:|:---:|
+| 150 mg/dL | 66.4 | Yes |
+| 110 mg/dL | 59.5 | No |
+
+The cut occurs at approximately **112.4 mg/dL** for this profile.
+
+**A continuous score becomes a hard inclusion boundary.**
+
+::: {.notes}
+(6 min) This is a hypothetical sensitivity demonstration, not a claim about within-person
+triglyceride variability. Ask students what changes at the boundary: the measurements do
+not become categorically different, but cohort membership does.
+:::
+
+## Fasting design and item missingness are different
+
+Triglycerides come from a fasting laboratory subsample with its own weight, `WTSAF2YR`.
+
+| Stage after age eligibility | N | Meaning |
+|---|---:|---|
+| Positive fasting subsample weight | 14,962 | Design-valid fasting domain |
+| All four FLI inputs available | 14,170 | 792 additional records lack an input |
+
+Assignment to the fasting subsample is design-based. Participation, fasting compliance
+and laboratory nonresponse can still affect who has a positive weight and complete data.
+
+::: {.notes}
+(6 min) CDC states that the fasting weight applies to participants sampled to fast who
+actually fasted for the required duration. Do not say that everyone without a positive
+weight was never asked to fast. Connect the design restriction to P4 and the 792 missing
+inputs to P5.
+:::
+
+## Two analytic row sets answer different questions
+
+| | Full reconstruction | Fasting-weight domain |
+|---|---:|---:|
+| FLI computable | 14,989 | 14,170 |
+| Final mortality-linked N | **6,371** | **6,048** |
+| Main use | Reproduce the paper-like analysis | Design-aware population analysis |
+
+The 323-person difference is not an arithmetic error.
+
+**Every reported N should name its row set.**
+
+::: {.notes}
+(5 min) The paper does not report applying weights, strata or primary sampling units.
+The full reconstruction best reproduces its tables. The 6,048-person domain is the
+appropriate starting point when using the fasting subsample weight in P4.
+:::
+
+## Metabolic dysfunction requires at least one of five criteria
+
+| Criterion | Operational rule |
 |---|---|
-| **Which variable?** | `ALQ130` (drinks per *drinking day*) or `ALQ120Q × ALQ120U` (frequency × quantity)? |
-| **Per what?** | per drinking day, or averaged over all days? |
-| **And the missing?** | people who did not answer — dropped, or kept? |
+| Adiposity | BMI ≥25, or waist >94 cm in men or >80 cm in women |
+| Glycaemia | glucose ≥100, HbA1c ≥5.7%, diabetes diagnosis or treatment |
+| Blood pressure | SBP ≥130, DBP ≥85 or treatment |
+| Triglycerides | TG ≥150 or lipid-lowering treatment |
+| HDL cholesterol | ≤40 in men or <50 in women |
 
-- `ALQ130` is **drinks on days you drink**. Applying a "per day" rule to it directly is a
-  different rule from the one the sentence appears to state
-
-::: {.notes}
-(4 min) Read the criterion aloud, then sit in the silence for a second. Almost everyone
-hears it as unambiguous on first pass — that reaction is the lesson. Take the three rows
-one at a time and ask the room to answer each before you move on. If you have the paper
-open, put its full Methods paragraph on screen alongside; the criterion above is the
-operative clause as recorded in `reproduction_report.md` §2.
-:::
-
-## One sentence, three cohorts
-
-| Reading | Implemented as | Removes | Analytic N | vs the paper's ≈ 6,300 |
-|---|---|---|---|---|
-| **Crude** — `ALQ130` applied flatly | `ALQ130 > 2` (M) / `> 1` (F) | **2,063** | **4,308** | −1,992 |
-| **Frequency-weighted** — average drinks/day | quantity × frequency ÷ reference period | **427** | **5,944** | −356 |
-| **No effective exclusion** | — | **0** | **6,371** | **+71** |
-
-::: {.incremental}
-- A swing of **2,063 people** — a third of the cohort — from one sentence
-- The published N and death count are **far more compatible with the third row** than with
-  either of the others. We are not claiming 6,371 *is* 6,300 — the residual +71 is the gap
-  we account for two slides from now
-- So the results are most consistent with the exclusion **not having been applied as we can
-  operationalise it**. The Methods state it; the numbers do not show it
-:::
-
-*Analysis set: full reconstructed analytic file, N = 6,371.*
+The paper also mentions treatment targeting HDL. The supplied implementation has no
+separate variable for that clause.
 
 ::: {.notes}
-(10 min) The centre of the lecture — spend the time. Vote before revealing: which reading
-would you defend? Take a count on each row. Then reveal the third row and let the
-implication land: the ambiguity is invisible until you try to *run* it, and running it here
-turned up something stronger than ambiguity. Resist supplying the resolution; there isn't
-one available from the paper. This is the slide that motivates "never tune to hit the N".
+(8 min) SBP means systolic blood pressure; DBP means diastolic blood pressure; HDL means
+high-density lipoprotein cholesterol. Five criteria must remain five indicators in code.
+The code uses 100 mg/dL as the conventional equivalent of 5.6 mmol/L. A sensitivity cut
+at 100.9 mg/dL changes no final classifications.
 :::
 
-## The trap inside the trap: reserved codes
+## Two participants meet none of the five criteria
 
-`ALQ130` uses NHANES **reserved codes**, not measurements:
+Both have FLI-defined steatosis, but no operational cardiometabolic criterion:
 
-| Code | Means |
-|---|---|
-| `777` | refused |
-| `999` | don't know |
+| SEQN | BMI, waist | Glucose, HbA1c | BP | TG, HDL |
+|---:|---|---|---|---|
+| 58194 | 22.2, 87.2 cm | 94, 5.6% | 120/67 | 108, 141 |
+| 71217 | 24.9, 93.3 cm | 99, 5.0% | 109/62 | 135, 47 |
+
+Therefore, the MASLD step changes **6,376 to 6,374** in the full reconstruction.
+
+An unresolved criterion contributes no positive count. Check whether each `NA` is a
+structural skip, cycle absence, refusal or genuine missingness before interpreting it.
+
+::: {.notes}
+(6 min) These are the two people excluded by the MASLD criterion, not the two people lost
+at mortality linkage in the fasting-weight funnel. SEQN 58194 is age 46 in 2009–2010;
+SEQN 71217 is age 28 in 2011–2012. Say “none of the five operational criteria,” not “no
+metabolic abnormality.”
+:::
+
+# Part 4: A Methods sentence can produce several cohorts
+
+## The alcohol sentence is not executable as written
+
+The paper excludes consumption above two drinks per day for men and one for women.
+
+The sentence leaves three questions:
+
+- Does “per day” mean per drinking day or an average over all days?
+- Which variables supply frequency and quantity?
+- What should happen when an alcohol response is missing?
+
+`ALQ130` records drinks **on drinking days**, not average drinks per calendar day.
+
+::: {.notes}
+(5 min) Ask the class to propose code before showing the alternatives. Three drinks every
+Saturday means ALQ130 equals 3, but average consumption is about 0.4 drinks per day.
+:::
+
+## Three implementations produce three cohorts
+
+| Implementation | Removed | Final N |
+|---|---:|---:|
+| Threshold `ALQ130` directly | 2,063 | 4,308 |
+| Frequency × quantity averaged per day | 427 | 5,944 |
+| Alcohol exclusion switched off | 0 | **6,371** |
+| Published paper |  | **6,300** |
+
+<small>Counts are the **full reconstruction** row set.</small>
+
+Among the tested alcohol implementations, switching the exclusion off comes closest to
+the published cohort. It does not prove what the authors implemented.
+
+The age >18 sensitivity, not the alcohol rule, explains most of the remaining 71-person gap.
+
+::: {.notes}
+(8 min) Keep the conclusion cautious. The paper does not publish operational code for
+alcohol. The frequency-weighted rule is plausible, but missing responses are set to zero
+in the supplied implementation, so it remains a documented analytic choice.
+:::
+
+## Reserved codes can look like extreme measurements
+
+For `ALQ130`:
+
+| Code | Meaning |
+|---:|---|
+| 777 | Refused |
+| 999 | Do not know |
 
 ```r
-qty <- ifelse(ALQ130 %in% c(777, 999), NA, ALQ130)   # strip BEFORE any threshold
+qty <- ifelse(ALQ130 %in% c(777, 999), NA, ALQ130)
 ```
 
-- Left in, `ALQ130 > 2` silently reclassifies every refusal as a heavy drinker
-- Here that is **nine people**: the crude exclusion moves **2,063 → 2,072**
-- Two traps live on one variable and they are **two hundred times apart in size**. Do not
-  fuse them in your notes
+Leaving these codes in reclassifies nine refusals as extremely heavy drinkers.
 
-> A reserved code is not a quantity. Strip them before every threshold rule, in every
-> increment.
+**Missing-value codes are variable-specific. Always check the codebook.**
 
 ::: {.notes}
-(5 min) Small numbers, large principle. The nine people do not change any estimate, and
-that is exactly why this is worth teaching: it is a wrong implementation that survives the
-result-didn't-move defence. Say explicitly that the 2,000 belongs to the drinks-per-
-drinking-day trap and the nine belongs to the reserved codes — an earlier version of this
-course fused them and was wrong by a factor of two hundred.
+(5 min) Contrast with a laboratory value: triglycerides of 77 mg/dL are real. There is
+no global NHANES rule that 7, 77 or 777 always means missing.
 :::
 
-## What we did, and why we are telling you
-
-**Our choice:** no effective alcohol exclusion. It reproduces the published cohort and is
-the most transparent about the discrepancy.
+## The analysis switch records the decision
 
 ```r
-## 02_build_analytic.R:40
 APPLY_ALCOHOL_EXCL <- FALSE
 ```
 
-- It is a **switch**, not a hidden default: the funnel prints
-  `Alcohol exclusion applied = FALSE` as a row, so the setting is in the artifact
-- We carry the alcohol question forward as an **open finding**, not a solved step
-- The discipline, stated once: **choose a priori, record the choice where a reader will
-  find it, and report what the alternatives would have given**
+The pipeline still:
 
-> We are not telling you which reading is right. We are showing you what it costs to
-> pretend the question did not arise.
+- constructs the alcohol variable
+- saves the heavy-drinking flag
+- reports the alternative cohort size
+- writes the switch setting into the funnel
+
+**A visible switch preserves the unresolved question for the next analyst.**
 
 ::: {.notes}
-(8 min) This is the slide the previous version of the deck was missing, and it is the one
-that makes the previous three honest: we asked them to publish their coding decision, so
-here is ours, in the code, with the alternatives quantified. Point out that the switch
-appears as a row in the funnel — a decision recorded in the artifact cannot be forgotten by
-the next person to run it. Ask what their own paper's equivalent switch is going to be.
+(4 min) This is better than silently deleting the exclusion or quietly changing its
+meaning. Connect to P1: one ambiguous sentence, the chosen implementation, the reason and
+the alternative consequence belong in the student's decision ledger.
 :::
 
 ## BREAK {.center}
 
-**On the board for the restart:** *which of the three alcohol codings would* you *defend,
-and what would you write in the paper?*
+### Restart question
+
+Which alcohol implementation would you defend, and what would you write in the Methods?
 
 ::: {.notes}
-(10 min) Leave the prompt up. It keeps the example live and primes the second half, which
-is about defending choices in public rather than resolving them in private.
+(10 min) Leave this prompt visible. Invite two different defensible answers after the
+break. The learning objective is transparent justification, not unanimity.
 :::
 
-# Part 3 — The funnel
+# Part 5: Exposure, covariates and outcome
 
-## The funnel, with a type on every row
+## The exposure has four BMI and waist phenotypes
 
-| Step | Criterion | N | Dropped | Kind |
-|---|---|---|---|---|
-| 0 | NHANES 2007–2018 records | 59,842 | — | — |
-| 1 | Age ≥ 18 | 36,580 | 23,262 | `ELIGIBILITY` |
-| 2 | In fasting subsample | 14,962 | 21,618 | `DESIGN` |
-| 3 | FLI computable | 14,170 | 792 | `MISSINGNESS` |
-| 4 | Steatosis (FLI ≥ 60) | 6,052 | 8,118 | `TARGET POPULATION` |
-| 5 | MASLD (≥ 1 criterion) | 6,050 | 2 | `TARGET POPULATION` |
-| 6 | Phenotype group assignable | 6,050 | 0 | `MISSINGNESS` |
-| 7 | Mortality-eligible and linked | **6,048** | 2 | `OUTCOME ASCERTAINMENT` |
+Obesity means BMI ≥30 kg/m², or ≥25 kg/m² for Asian participants. High central adiposity
+means waist-to-height ratio (WHtR) ≥0.6.
 
-- This is not a picture of the funnel. It **is** the funnel — emitted by
-  `02_build_analytic.R` to `logs/sample_funnel.csv`, and re-derivable by anyone
-- Report **removed *and* remaining** on every line. A lone final N is not reproducible
+| | WHtR <0.6 | WHtR ≥0.6 |
+|---|---:|---:|
+| Obesity | Group I: 391 | Group II: 4,585 |
+| No obesity | Group III: 787 | Group IV: 608 |
 
-*Analysis set: locked mortality-linked cohort, N = 6,048.*
+The exposure shares BMI and waist inputs with FLI. M1 asks what that structural dependence
+does to interpretation.
 
 ::: {.notes}
-(9 min) Put this on screen and leave it there. Walk the type column, not the N column —
-the Ns are arithmetic, the types are the analysis. Row 2 is the one to dwell on: the second
-largest drop in the whole table is a *design* feature with a documented fix
-(`WTSAF2YR`), not missing data to impute away. Row 3 is the genuine missingness, and it is
-792 people, not 21,618. This is the artifact P1 asks them to produce.
+(6 min) WHtR equals waist circumference divided by height, both in centimetres. The group
+counts use the full 6,371-person reconstruction. Group I is the reference group in the
+paper's Cox models; it is not a “healthy” or unexposed population.
 :::
 
-## Two row sets, and they are not interchangeable
+## Asian status is unavailable in the first two cycles
 
-| | Locked domain | Full analytic file |
-|---|---|---|
-| Fasting subsample enforced as its own step | **yes** (row 2) | fused into "FLI computable" |
-| Final N | **6,048** | **6,371** |
-| What it is for | every design-aware analysis; carries `WTSAF2YR` | matching the paper's reported cohort |
-| Phenotype groups | — | 391 / 4,585 / 787 / 608 |
-| Deaths | — | 586 |
+`RIDRETH3` supplies a separate non-Hispanic Asian category only from 2011–2012 onward.
 
-- The paper reports **≈ 6,300**, groups **386 / 4,541 / 769 / 604**, **585 deaths** —
-  those are *theirs*, and ours are the row above
-- Quoting an N without naming its row set is the error this course exists to catch
+In 2007–2010:
 
-> Two numbers that differ by 323 people are not a discrepancy if they are answers to
-> different questions. They are a discrepancy if you never say which question.
+- the available race variable combines “other race” and multiracial participants
+- Asian participants cannot be isolated reliably
+- the supplied code treats missing Asian status as “not Asian”
+
+Seventeen early-cycle participants lie in the BMI range where Asian status could change
+their phenotype. **Seventeen is an upper bound, not a known error count.**
 
 ::: {.notes}
-(7 min) Read the two columns as two different objects, not as a right answer and a near
-miss. Then read the paper's row separately, and say the group counts out loud in pairs
-(386/391, 4,541/4,585, 769/787, 604/608) so that when these anchors reappear in the
-survival weeks nobody hears ours as theirs. The habit being built is the row-set label,
-which every quantitative slide in this course carries.
+(5 min) This is the payoff from the earlier cycle-availability slide. The general rule is
+not “drop early cycles.” It is “state what the data cannot identify, bound the possible
+consequence, and test sensitivity when possible.”
 :::
 
-## What the funnel reveals
+## The paper's BMI labels conflict with its Methods
 
-- The single largest drop is **age ≥ 18** — 23,262 people. That is the study's own
-  eligibility rule working as intended
-- **After eligibility**, the two largest drops are the **fasting subsample** (21,618,
-  `DESIGN`) and the **disease definition** (8,118, `TARGET POPULATION`)
-- **Neither of those is missing data.** The genuine missingness in this table is 792 + 0
-- Within the fasting subsample, FLI is computable for **94.7%** of adults
+**Methods:** obesity uses BMI ≥30 kg/m², with the Asian-specific cut at 25.
 
-> Feasibility, before you commit: *is the exposure computable for enough of your target
-> population?* Here the answer arrives as a design fact, not a data-quality problem.
+**Table headers:** groups are labelled BMI ≥25 and BMI <25.
+
+**Published non-obesity medians:** 27.6 and 28.8 kg/m².
+
+Those medians cannot belong to groups defined entirely by BMI <25. Coding the general cut
+at 30 reproduces all four published group medians.
+
+**The table labels appear to be wrong; the Methods and reproduced distributions agree.**
 
 ::: {.notes}
-(5 min) Keep the scoping exact — "after eligibility" — because the unscoped version of
-this sentence is false against the table directly above it, and the printed drops are there
-so a student can check rather than trust. This is also the answer to the feasibility
-question they should be asking of their own locked paper today.
+(5 min) Connect to M2: use internal evidence to adjudicate a discrepancy, but avoid claims
+about author intent. Contrast with the age rule, where different published statistics
+support different interpretations and the ambiguity remains unresolved.
 :::
+
+## Cohort construction exposes under-specified covariates
+
+The paper says that comorbidity definitions were “previously described,” without giving
+the full operational rules in this article.
+
+The reproduction must choose definitions for hypertension, diabetes, dyslipidaemia,
+chronic kidney disease and medication use.
+
+**Do not choose a definition because it makes Table 1 match.** Record the rule first, then
+report the residual difference.
+
+This problem returns in **P2**, when Table 1 and confounding variables are constructed.
+
+::: {.notes}
+(5 min) The supplied code comments say some composites were calibrated to published
+prevalences. Treat that as a disclosed limitation, not a model for good practice. The
+full technical definitions belong in the appendix or P2 lecture.
+:::
+
+## Mortality comes from a separate linked file
+
+The NCHS linked mortality files supply:
+
+- mortality status
+- underlying cause category
+- follow-up time through 31 December 2019
+
+The reproduction uses `PERMTH_EXM`, months from the mobile examination centre visit,
+because BMI and waist were measured at that examination.
+
+The paper does not state whether it used examination-based or interview-based follow-up.
+
+::: {.notes}
+(6 min) NCHS means National Center for Health Statistics. Connect to L2, which uses
+`PERMTH_INT` in one eligibility rule. Time zero should align with when the exposure was
+measured. Mention, without dwelling on it, that the saved `cv_death` variable combines
+heart and cerebrovascular causes while the Table 2 reproduction uses heart-only deaths.
+:::
+
+# Part 6: The funnel is an analytic result
+
+## The fasting-weight funnel names the cause of every reduction
+
+| Step | Criterion | N | Kind |
+|---:|---|---:|---|
+| 0 | NHANES 2007–2018 | 59,842 | Source frame |
+| 1 | Age ≥18 | 36,580 | Eligibility |
+| 2 | Positive fasting weight | 14,962 | Design domain |
+| 3 | FLI computable | 14,170 | Item missingness |
+| 4 | FLI ≥60 | 6,052 | Target population |
+| 5 | At least one criterion | 6,050 | Target population |
+| 6 | Phenotype assigned | 6,050 | Classification check |
+| 7 | Mortality linked | **6,048** | Outcome ascertainment |
+
+::: {.notes}
+(8 min) Walk the kind column rather than the N column. The two people lost at mortality
+linkage here are not the two people excluded by the MASLD criterion. A funnel reports who
+left and why; those reasons determine whether the response belongs to P4, P5 or the study
+population definition.
+:::
+
+## The full reconstruction follows a different path
+
+| Stage | N |
+|---|---:|
+| Age ≥18 | 36,580 |
+| FLI computable | 14,989 |
+| FLI ≥60 | 6,376 |
+| At least one criterion | 6,374 |
+| Phenotype assigned | 6,374 |
+| Mortality linked | **6,371** |
+
+This path best reproduces the paper's ordinary analyses. It fuses fasting design and data
+availability at the FLI step, so it should not replace the design-aware funnel.
+
+::: {.notes}
+(5 min) The paper reports N=6,300. The reproduction has 6,371. The purpose of this slide
+is not to call 6,371 correct. It is to show which sequence produces the analysis file
+used for the reproduced tables and figures.
+:::
+
 
 ## Why you never tune the cohort to hit the paper's N
 
@@ -482,56 +685,157 @@ gap you can trace to a specific decision scores above a match you cannot explain
 grading criteria say so.
 :::
 
-## Reviewing someone else's eligibility
+## A short decisions ledger preserves the audit trail
 
-| Ask | On this paper |
+| Decision or limitation | Consequence |
 |---|---|
-| Is the case definition **operational**? | mostly — FLI ≥ 60 is exact; "≥ 1 criterion" needs the five spelled out |
-| Is every exclusion **executable** as written? | **no** — the alcohol criterion is not |
-| Does the funnel's arithmetic **close**? | not reported; we had to rebuild it |
-| Is the analytic N **stated and reproducible**? | stated; reproducible only up to the above |
+| Age ≥18 versus >18 | 70 participants; different published targets match |
+| Alcohol exclusion switched off | 427 would leave under the frequency-weighted rule |
+| Asian status unavailable in early cycles | At most 17 phenotype assignments could change |
+| Full versus fasting-weight row set | 6,371 versus 6,048 |
+| Examination versus interview clock | Paper does not specify the choice |
 
-- Also check the tables against the Methods: here the Table 1–2 headers read **"BMI < 25"**
-  while the Methods define obesity at **≥ 30**, and the non-obese groups have BMI medians
-  of **27.6** and **28.8** — so the headers appear to be a labelling error
-- **Charity and rigour together:** assume competence, and still require that the numbers
-  reconcile
+**A decision without a quantified consequence is not fully documented.**
 
 ::: {.notes}
-(6 min) This is the stance they bring to M2 and to their own defence at M3. The BMI header
-is the cleanest small example in the course of a typographic slip with real consequences —
-a reproducer who codes to 25 does not reproduce the groups. Note the hedge "appear to be":
-we report what we can check, and we do not diagnose intent.
+(5 min) Ask students to classify the rows: ambiguity, data limitation, analysis setting
+or outcome definition. This becomes material for the limitations section rather than a
+private coding note.
 :::
 
-# Part 4 — Thursday
+# Part 7: Transfer to the rest of the course
 
-## L2 assembles the same object from a different paper
+## Thursday's L2 builds the same object from another paper
 
-EpiMethods [`accessingE2`](https://ehsanx.github.io/EpiMethods/accessingE2.html) —
-**benzodiazepine / opioid use and all-cause mortality**, NHANES 1999–2014.
+The benzodiazepine, opioid and mortality lab repeats the same mechanics:
 
 ```r
-dat.mort   <- rbind(dat.mortality99, dat.mortality01, ..., dat.mortality13)
-dat.nhanes <- rbind(dat.nhanes99,    dat.nhanes01,    ..., dat.nhanes13)
-
+dat.mort   <- rbind(mortality_cycles)
+dat.nhanes <- rbind(nhanes_cycles)
 dat <- merge(dat.mort, dat.nhanes, by = "SEQN", all = TRUE)
 ```
 
-- **Eight cycles stacked, then merged on `SEQN`** — the same key and the same pattern L1
-  used with `full_join(demo, bmx, by = "SEQN")`
-- `all = TRUE` is the `full_join` decision again, made with a different word. Week 2's
-  rule stands: **the join verb defines the analysis set**
-- Mortality is a **separate linked file** here too — it is not an NHANES component
+Then it applies a numbered chain of eligibility rules.
+
+**Your task in L2:** write N remaining, N removed and the reason for every step.
+
+> If you can only do it on MASLD, you have not learned it.
 
 ::: {.notes}
-(5 min) Open with the fact that the lab is a different paper, so nobody is waiting for
-MASLD to appear. Then show that the first move is identical to L1's and ask them what
-`all = TRUE` does to the row set — they answered this exact question in Week 2 about
-`full_join` versus `inner_join`.
+(6 min) Connect `all=TRUE` to Week 2's `full_join`. The lab is intentionally a different
+paper. Transfer across papers is evidence that students learned a method rather than one
+set of MASLD variable names.
 :::
 
-## And L2 writes a funnel — it just does not know it yet
+
+## One more thing to notice on Thursday
+
+L2's exposure has four levels, and the reference category is **"Neither"**:
+
+```r
+dat6 <- subset(dat5, benzodiazepines == "Yes" | ssris == "Yes" | opioids == "Yes")
+dat6$exposure <- relevel(dat6$exposure, ref = "Neither")
+```
+
+- Eligibility required **at least one** of three drug classes. So "Neither" means *neither
+  benzodiazepines nor opioids* — **everyone in it is an SSRI user**
+- The reference group is an **active comparator**, not an unexposed population
+- Exactly the shape of our Group I: every hazard ratio in the MASLD paper is measured
+  against a group that is **obese**
+
+> A ratio without its referent means nothing — and in both studies the referent is not
+> "healthy".
+
+::: {.notes}
+(4 min) This is the best transfer point in the two studies and it is easy to miss in the
+lab, so plant it now. The eligibility rule and the reference category are the *same
+decision* seen twice: who you let into the cohort determines what your comparison can
+mean. Week 2 made this point about Group I; here it is again in a completely different
+paper, which is the evidence that it is a general property rather than a quirk.
+:::
+
+## The same cohort work returns in P1 through P5
+
+| Increment | What this lecture contributes |
+|---|---|
+| P1 | Cohort code, decision ledger and typed funnel |
+| P2 | Operational covariates and Table 1 |
+| P3 | An interaction analysis not present in this reproduction |
+| P4 | Fasting subsample weight, strata and primary sampling units |
+| P5 | The 792 missing FLI inputs and later complete-case losses |
+
+M1 asks which threat matters most. M2 asks what reproduced and what did not. M3 asks you
+to defend the decisions person by person.
+
+::: {.notes}
+(6 min) Do not imply that this pipeline already completes P3. It does not. P3 is the
+student's extension. P4 uses the 6,048-person fasting-weight mortality-linked domain.
+P5 addresses genuine missingness, not the deliberate fasting-domain restriction.
+:::
+
+## What to take into P1
+
+For each cohort step, write four lines:
+
+1. **Paper:** the exact statement or definition
+2. **Problem:** the ambiguity or data limitation
+3. **Decision:** the implemented rule and rationale
+4. **Consequence:** the change in N, classification or estimate
+
+Then label the consequence: eligibility, design, item missingness, target population or
+outcome ascertainment.
+
+> Be ready to show one person who enters or leaves because of your decision.
+
+::: {.notes}
+(4 min) Close by asking students to identify one sentence in their locked paper that may
+not survive translation into code. Remind them that P1 is the reusable foundation for
+later increments, not a disposable data-cleaning exercise.
+:::
+
+## Reference {.center visibility="uncounted"}
+
+Kueh MTW, Intaran MAU, Goh R, et al. **Body weight categories and fat distribution in
+relation to all-cause mortality among adults with metabolic dysfunction-associated
+steatotic liver disease: a population-based analysis of NHANES, 2007–2018.** *BMJ Open*.
+2026;16:e113719. <https://doi.org/10.1136/bmjopen-2025-113719>
+
+Bedogni G, Bellentani S, Miglioli L, et al. **The Fatty Liver Index: a simple and accurate
+predictor of hepatic steatosis in the general population.** *BMC Gastroenterology*.
+2006;6:33.
+
+CDC/NCHS documentation:
+
+- [2017–2018 liver ultrasound transient elastography](https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/LUX_J.htm)
+- [2017–2018 triglycerides and fasting weight](https://wwwn.cdc.gov/nchs/data/nhanes/public/2017/datafiles/TRIGLY_J.htm)
+- [NHANES weighting tutorial](https://wwwn.cdc.gov/nchs/nhanes/tutorials/weighting.aspx)
+
+## Appendix: component map {visibility="uncounted"}
+
+| Component | Main contribution |
+|---|---|
+| `DEMO` | age, sex, race and ethnicity, poverty-income ratio, survey design |
+| `BMX` | BMI, waist and height |
+| `TRIGLY` and `BIOPRO` | triglycerides and GGT for FLI |
+| `GLU`, `GHB`, `HDL` | metabolic criteria |
+| `BPX`, `BPQ`, `DIQ` | blood pressure and treatment criteria |
+| `ALQ` | alcohol sensitivity analysis |
+| NCHS mortality files | status, cause and follow-up time |
+
+## Appendix: cardiovascular outcome check {visibility="uncounted"}
+
+| Definition | Cardiovascular deaths |
+|---|---:|
+| Heart plus cerebrovascular causes | 185 |
+| Heart causes only | **158** |
+| Published Table 2 | **158** |
+
+The saved analytic variable combines heart and cerebrovascular causes. The Table 2 script
+creates a separate heart-only outcome, which reproduces the published event total.
+
+**Do not reuse a derived outcome variable without checking its definition.**
+
+## Appendix: And L2 writes a funnel — it just does not know it yet {visibility="uncounted"}
 
 ```r
 dat1 <- subset(dat,  RIDAGEYR >= 20)                            # N = 43,793
@@ -561,91 +865,36 @@ the complete-case step, which is the one most likely to be doing quiet work. Tha
 habit P1 is testing.
 :::
 
-## One more thing to notice on Thursday
+## Appendix: Reviewing someone else's eligibility {visibility="uncounted"}
 
-L2's exposure has four levels, and the reference category is **"Neither"**:
+| Ask | On this paper |
+|---|---|
+| Is the case definition **operational**? | mostly — FLI ≥ 60 is exact; "≥ 1 criterion" needs the five spelled out |
+| Is every exclusion **executable** as written? | **no** — the alcohol criterion is not |
+| Does the funnel's arithmetic **close**? | not reported; we had to rebuild it |
+| Is the analytic N **stated and reproducible**? | stated; reproducible only up to the above |
 
-```r
-dat6 <- subset(dat5, benzodiazepines == "Yes" | ssris == "Yes" | opioids == "Yes")
-dat6$exposure <- relevel(dat6$exposure, ref = "Neither")
-```
-
-- Eligibility required **at least one** of three drug classes. So "Neither" means *neither
-  benzodiazepines nor opioids* — **everyone in it is an SSRI user**
-- The reference group is an **active comparator**, not an unexposed population
-- Exactly the shape of our Group I: every hazard ratio in the MASLD paper is measured
-  against a group that is **obese**
-
-> A ratio without its referent means nothing — and in both studies the referent is not
-> "healthy".
+- Also check the tables against the Methods: here the Table 1–2 headers read **"BMI < 25"**
+  while the Methods define obesity at **≥ 30**, and the non-obese groups have BMI medians
+  of **27.6** and **28.8** — so the headers appear to be a labelling error
+- **Charity and rigour together:** assume competence, and still require that the numbers
+  reconcile
 
 ::: {.notes}
-(4 min) This is the best transfer point in the two studies and it is easy to miss in the
-lab, so plant it now. The eligibility rule and the reference category are the *same
-decision* seen twice: who you let into the cohort determines what your comparison can
-mean. Week 2 made this point about Group I; here it is again in a completely different
-paper, which is the evidence that it is a general property rather than a quirk.
+(6 min) This is the stance they bring to M2 and to their own defence at M3. The BMI header
+is the cleanest small example in the course of a typographic slip with real consequences —
+a reproducer who codes to 25 does not reproduce the groups. Note the hedge "appear to be":
+we report what we can check, and we do not diagnose intent.
 :::
 
-## P1 — the same two things, on your paper
+## Appendix: course resources {visibility="uncounted"}
 
-- **Rebuild the cohort** from raw source files: list every file and cycle, name the merge
-  key, write each inclusion and exclusion as **executable logic with a comment citing the
-  sentence**
-- **Produce the funnel**: N removed and N remaining at every step, typed
-- **Flag one ambiguous eligibility sentence** you had to adjudicate — and say what the
-  alternatives would have given
-- Look variables up in the
-  **[NHANES variable map](https://ehsanx.github.io/SPPH604-2026W/reproduction/VARIABLE_MAP.html)**
-  rather than guessing: it says which cycles a variable exists in, and whether `77` is a
-  code or a measurement
-- **Do not aim at a number.** The paper reports ≈ 6,300; our full analytic file lands on
-  6,371; yours is wherever your documented steps take you
-- P1 is **optional and ungraded** — no deadline, nothing to submit. Keep the script, the
-  flow table and `P1_notes.md` in your group repo. It is assembled into **M1**
+- Detailed recipe: `COHORT_BUILD_STEPS.md`
+- Variable crosswalk: `VARIABLE_MAP.md`
+- Cohort code: `02_build_analytic.R`
+- Table 1 code: `03_table1.R`
+- Cox model code: `04_table2_cox.R`
+- Thursday lab: [Accessing and preparing NHANES mortality data](https://ehsanx.github.io/EpiMethods/accessingE2.html)
 
-> Be ready for: *"show me one person who is in your cohort but not the paper's — and tell
-> me why."*
-
-::: {.notes}
-(4 min) Make the handoff crisp. L2 is the guided mechanics on a neutral paper; P1 is the
-same mechanics plus today's judgment, on theirs. The M3 question in the blockquote is the
-real standard — it cannot be answered from a final N, only from a funnel.
-:::
-
-## Where we landed
-
-- Q2 answered all the way down: a **conceptual** case definition became an **operational**
-  one, and the operations turned out to be **contestable**
-- A cut on a continuous score decides case status at the margin; a five-criterion
-  definition hides five threshold choices; one prose sentence yields **three cohorts**
-- The funnel with a type on every row is what makes any of it checkable
-- **Thursday:** the same assembly, a different paper. If you can only do it on MASLD, you
-  have not learned it
-
-*Reading a Methods section is the first act of reproduction. Building the cohort is the
-second.*
-
-::: {.notes}
-(2 min) Close on the transfer claim, not on MASLD. Ask on the way out: what is the one
-sentence in your own locked paper that you already suspect will not survive being written
-as code?
-:::
-
-## Reference {.center visibility="uncounted"}
-
-Kueh MTW, Intaran MAU, Goh R, et al. **Body weight categories and fat distribution in
-relation to all-cause mortality among adults with metabolic dysfunction-associated
-steatotic liver disease: a population-based analysis of NHANES, 2007–2018.** *BMJ Open*.
-2026;16:e113719. doi: [10.1136/bmjopen-2025-113719](https://doi.org/10.1136/bmjopen-2025-113719)
-
-Bedogni G, Bellentani S, Miglioli L, et al. **The Fatty Liver Index: a simple and accurate
-predictor of hepatic steatosis in the general population.** *BMC Gastroenterol*. 2006;6:33.
-
-Lab exercise: EpiMethods,
-[Accessing & preparing NHANES–mortality data](https://ehsanx.github.io/EpiMethods/accessingE2.html).
-
-Cohort counts, funnel types and the three alcohol codings on these slides come from this
-repository's own reproduction pipeline (`reproduction/logs/sample_funnel.csv`,
-`examples/_results/P1.json`), not from the paper's prose. The worked FLI values are
-computed from the Bedogni formula as implemented at `02_build_analytic.R:140`.
+The cohort counts in this deck come from the supplied reproduction pipeline. They are
+reproduction results, not numbers reported by the paper unless explicitly labelled.

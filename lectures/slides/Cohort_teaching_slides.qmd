@@ -1,0 +1,539 @@
+---
+title: "From a Methods Section to an Analytic Cohort"
+subtitle: "SPPH 604 · a worked NHANES reproduction"
+author: "Kueh et al., BMJ Open 2026;16:e113719 · NHANES 2007–2018 + linked mortality"
+format:
+  revealjs:
+    theme: default
+    slide-number: c/t
+    progress: true
+    incremental: false
+    embed-resources: true
+    width: 1280
+    height: 720
+    fig-align: center
+    smaller: true
+    include-in-header:
+      text: |
+        <style>
+        /* One visual grammar, used everywhere:
+           .ppdc  - the Paper / Problem / Decision / Consequence block
+           .dense - reference tables that would otherwise clip (appendix mostly) */
+        .reveal .ppdc { font-size: 0.95em; line-height: 1.35; }
+        .reveal .ppdc strong { color: #9b3a25; }
+        .reveal .dense table { font-size: 0.76em; line-height: 1.18; }
+        .reveal .dense table th, .reveal .dense table td { padding: .12em .34em; }
+        .reveal .big { font-size: 1.9em; font-weight: 700; color: #123b5d;
+                       text-align: center; line-height: 1.2; margin: .3em 0; }
+        .reveal blockquote { font-size: 0.95em; }
+        </style>
+  beamer:
+    fontsize: 9pt
+    header-includes: |
+      \usepackage{newunicodechar}
+      \newunicodechar{≥}{\ensuremath{\geq}}
+      \newunicodechar{≤}{\ensuremath{\leq}}
+      \newunicodechar{×}{\ensuremath{\times}}
+      \newunicodechar{·}{\textperiodcentered}
+      \newunicodechar{⚠}{\textbf{[!]}}
+      \newunicodechar{✓}{\ensuremath{\checkmark}}
+      \newunicodechar{◆}{\ensuremath{\blacklozenge}}
+      \newunicodechar{≠}{\ensuremath{\neq}}
+---
+
+## {.center}
+
+::: {.big}
+A Methods sentence is not an analysis rule.
+:::
+
+**Someone has to decide what it means. That someone is you.**
+
+Today: one published paper, one public dataset, and every decision in between.
+
+::: {.notes}
+(1 min) Timing: about 50 minutes for the 17 main slides, leaving the appendix for questions
+or for students to read later. Open cold on this sentence - do not introduce NHANES yet.
+The whole first act is designed so students feel the problem before meeting any vocabulary.
+:::
+
+## Start with four words from the Methods
+
+> "The study inclusion criteria were participants **aged >18 years** with evidence of
+> MASLD."
+>
+> — Kueh et al., *BMJ Open* 2026
+
+**Before you write any code: who exactly qualifies?**
+
+- `>18` means **19 and older**
+- `≥18` means **18 and older**
+
+There is no third reading. One of them is what the authors did, and the paper does not
+tell you which.
+
+::: {.notes}
+(3 min) Put the question to the room and wait. Most will say "obviously they meant 18 and
+over" - that is the instinct to interrogate, not to trust. Do not reveal the counts yet.
+:::
+
+## One character moves 70 people
+
+::: {.big}
+70 participants are exactly 18
+:::
+
+| Age rule | Final N | Deaths |
+|---|---:|---:|
+| **Published paper** | 6,300 | 585 |
+| Our reproduction, `≥ 18` | 6,371 | 586 |
+| Our reproduction, `> 18` | **6,301** | **585** |
+
+The strict reading — the one the paper literally prints — lands one row from the published
+N and reproduces the death count exactly.
+
+::: {.notes}
+(4 min) Let the table land before commenting. The lesson is not "use > 18". It is that a
+question you could have waved away is worth 70 people and was answerable in one line of
+code. Ask: how would you have found this if you had not been looking for it?
+:::
+
+## But the evidence does not settle it
+
+| Evidence | Points to |
+|---|---|
+| The printed Methods text says `>18` | **`> 18`** |
+| N = 6,301 and 585 deaths vs published 6,300 / 585 | **`> 18`** |
+| Published mean age 51.0 (SD 16.6); ours is 51.0 (16.6) under `≥18`, 51.4 (16.3) under `>18` | **`≥ 18`** |
+
+**So we cannot resolve it — and saying so is the finding.**
+
+Report the ambiguity, show both, and let the reader see what turns on it. Typography is
+evidence of what was printed, not proof of what was intended.
+
+::: {.notes}
+(4 min) This is the most valuable slide in the deck, because the answer is genuinely
+unresolved. Students expect exercises to have answers. Real reproduction produces
+documented uncertainty, and a defensible "we could not tell, here is both" is a stronger
+result than a confident guess.
+:::
+
+## That was the whole method
+
+::: {.ppdc}
+**Paper** — what does the article actually say?
+
+**Problem** — what is ambiguous, missing, or unmeasurable in the data?
+
+**Decision** — what rule did we implement, and why?
+
+**Consequence** — who entered or left, and what *kind* of change was it?
+:::
+
+Every decision gets one of three marks:
+
+| | |
+|---|---|
+| **✓** | direct translation — the paper determines the answer |
+| **◆** | judgment call — the paper leaves it open, we chose |
+| **⚠** | unresolved conflict — the evidence disagrees with itself |
+
+::: {.notes}
+(3 min) Keep this framework on the board for the rest of the session. Students should be
+able to produce these four lines for any step of their own paper by P1. The three marks
+matter because they license different sentences in a write-up: a judgment call needs a
+rationale, an unresolved conflict needs a sensitivity analysis.
+:::
+
+## What NHANES is, in one slide
+
+**Cycle** — one two-year survey wave. We use six: 2007–08 through 2017–18.
+
+**Component** — a topic file inside a cycle: demographics, body measurements, blood
+pressure, laboratory panels, questionnaires.
+
+**Variable** — a column inside a component: age, waist circumference, triglycerides.
+
+**`SEQN`** — the participant ID that joins components for the same person.
+
+::: {.callout-important}
+NHANES is a **repeated cross-sectional survey**. Each cycle samples new people. Mortality
+is added afterwards by linkage, which gives prospective follow-up — but never a second
+measurement of anybody.
+:::
+
+::: {.notes}
+(4 min) This is all the vocabulary needed for the next 40 minutes. Resist naming component
+files - DEMO, BMX, TRIGLY mean nothing yet and the variable map exists for that. The
+callout pre-empts the commonest misconception: students treat NHANES as a cohort study.
+:::
+
+## The journey: 59,842 people to 6,371
+
+::: {.big}
+59,842 → 36,580 → 6,371
+:::
+
+| | |
+|---|---|
+| **59,842** | everyone in six NHANES cycles |
+| **36,580** | after age eligibility |
+| **6,371** | after the disease definition, the exposure, and mortality linkage |
+
+The paper reports **6,300**.
+
+**Three numbers now. The reasons behind them are the next six slides — and the reasons
+matter more than the arithmetic.**
+
+::: {.notes}
+(2 min) Deliberately withholding the step-by-step funnel. Novices cannot tell which of
+eight rows matters; they can hold three numbers. The full typed funnel is in the appendix
+and in COHORT_BUILD_STEPS.md for anyone reconstructing the work.
+:::
+
+## Not everything that leaves is missing data
+
+Triglycerides are measured only in NHANES's **fasting laboratory subsample**, which
+carries its own weight (`WTSAF2YR`).
+
+| What happened | How many adults | What kind of loss |
+|---|---:|---|
+| Outside the fasting-weight frame | 21,618 | **design** |
+| Inside it, but missing an input we need | 792 | **item missingness** |
+
+::: {.callout-important}
+**These need opposite responses.** A design restriction is answered by the right weight and
+a sentence naming the population you are left with. Item nonresponse is answered by a
+missing-data analysis. Adding them together and calling the total "attrition" is wrong
+three ways at once.
+:::
+
+::: {.notes}
+(5 min) The single most transferable epidemiologic idea in the deck, and the one this
+audience already has machinery for. Be careful with the first row: "outside the
+fasting-weight frame" is the defensible phrase. It is NOT the same as "never asked to
+fast" - 2,031 adults carry a weight of exactly zero, and 819 have all four inputs with no
+valid weight at all. See the appendix slide.
+:::
+
+## A code means what *its own* codebook says
+
+::: {.columns}
+::: {.column width="50%"}
+**Triglycerides** (`LBXTR`)
+
+`77` is a triglyceride of **77 mg/dL**.
+
+A real measurement.
+:::
+::: {.column width="50%"}
+**Drinks per drinking day** (`ALQ130`)
+
+`777` means **refused**.
+`999` means **don't know**.
+
+Not measurements at all.
+:::
+:::
+
+::: {.callout-warning}
+Apply one global missing-value rule and you either delete valid laboratory values or
+convert **9 refusals** into people drinking 777 drinks a day. There is no NHANES-wide
+rule. The codebook for *that variable*, in *that cycle*, decides.
+:::
+
+::: {.notes}
+(3 min) Nine misclassified refusals would not have changed this paper's conclusion. Say
+that - and then say that "it did not matter this time" is not a method. They found it by
+checking.
+:::
+
+## Defining the disease takes four measurements
+
+**MASLD** = fatty liver + at least one cardiometabolic feature. No liver-imaging measure
+spans all six cycles (2017–18 added elastography, the earlier five have none), so the
+paper uses a **Fatty Liver Index** built from four routine measurements:
+
+triglycerides · **BMI** · liver enzyme (GGT) · **waist circumference**
+
+Threshold: FLI ≥ 60. That leaves **6,376** people with fatty liver.
+
+::: {.callout-warning}
+## ◆ Notice what just happened
+The exposure in this study is **BMI crossed with waist-to-height ratio**. Two of the four
+inputs to the *disease* definition are BMI and waist. **The disease definition and the
+exposure share their ingredients** — keep that in mind for M1.
+:::
+
+::: {.notes}
+(4 min) The circularity is the most important methodological thread in the whole paper,
+and it is planted here rather than argued. The paper's own TyG-index sensitivity analysis
+is its attempt to address it. Equation and units are in the appendix; nobody needs the
+coefficients on a slide.
+:::
+
+## A criterion can sound decisive and do nothing
+
+The paper requires fatty liver **plus at least one** of five cardiometabolic criteria.
+
+::: {.big}
+It excluded 2 people
+:::
+
+6,376 with fatty liver → **6,374** with MASLD.
+
+**Why.** The first criterion is essentially "high BMI or high waist", and FLI is *built
+from* BMI and waist — so selecting on FLI ≥ 60 heavily **enriches** the cohort for that
+criterion. It does not guarantee it: **89** people here have FLI ≥ 60 with a BMI under 25,
+and 42 fail criterion (i) outright.
+
+> **Report a filter by its effect, not its definition.** "MASLD required at least one
+> cardiometabolic criterion" sounds like work; here it removed two people.
+
+::: {.notes}
+(4 min) Students describe filters by their definitions; readers judge them by their
+effect. Both sentences are true and only one is informative. This is also the circularity
+from the previous slide showing up in a second place.
+:::
+
+## ⚠ A vague exclusion has to be made precise
+
+> "Individuals with significant alcohol consumption — more than two drinks per day for
+> men and more than one for women — were excluded."
+
+**Problem.** NHANES has no "drinks per day" variable. It has *drinks per drinking day*
+and, separately, *how often you drink*. Three drinks every Saturday is `ALQ130 = 3` —
+but **0.4 drinks/day**.
+
+**Decision.** Rebuild average intake as frequency × quantity. That flags **427 people**.
+
+**Consequence.** Applying it takes us to **5,944** — *further* from the paper's 6,300 than
+leaving it off (6,371). So we build it, ship it, log the setting, and do not apply it.
+
+::: {.notes}
+(4 min) Be explicit that we implemented the exclusion and chose not to run it - the flag
+is computed and saved, and one line turns it on. "Implemented" and "applied" are different
+things. Also be fair to the authors: the paper never publishes its operational coding, so
+this is one plausible implementation disagreeing with their N, not proof they skipped it.
+:::
+
+## The exposure is a 2 × 2 you have to build
+
+Obesity = BMI ≥ 30 (≥ 25 for Asian participants). High central adiposity = waist-to-height
+ratio ≥ 0.6.
+
+| | WHtR < 0.6 | WHtR ≥ 0.6 |
+|---|---|---|
+| **Obesity** | Group I — 391 | Group II — 4,585 |
+| **No obesity** | Group III — 787 | Group IV — 608 |
+
+::: {.callout-tip}
+## ✓ How we know the construction is right
+Our four group BMI medians are **30.9 / 35.2 / 27.6 / 28.8** — identical to all four
+published values. That check is independent of the N disagreement, so it isolates the
+group logic from everything else.
+:::
+
+::: {.notes}
+(3 min) Teach the move, not the result: when one number disagrees, find a statistic that
+tests only the piece you are worried about. The paper's own table headers contradict its
+Methods on the BMI cut-point - appendix slide - and the medians settle it.
+:::
+
+## ⚠ The variable you need may not exist in every cycle
+
+**Why we care.** Asian participants get a different BMI cut-point (25, not 30).
+
+**Problem.** NHANES did not identify Asian participants separately until **2011–2012**.
+For 2007–2010 they are inside a combined "other race" category.
+
+**Decision.** Apply the Asian cut-point only where Asian ethnicity can actually be
+identified — and say so.
+
+**Consequence.** **At most 17** participants could be grouped differently. An upper bound,
+not a count of known errors.
+
+<small>Ethnicity variable: `RIDRETH3`, available 2011–2018 only</small>
+
+::: {.notes}
+(4 min) Note the shape: the consequence is a bound, because the data cannot produce a
+point estimate of the error. Bounding an unmeasurable limitation is a perfectly publishable
+move and much better than silence. Where the variable does exist the rule moves 121 of 250
+Asian participants, so it is not a negligible rule - just an unapplicable one.
+:::
+
+## The outcome lives in a different dataset
+
+NHANES measures the exposure. It does **not** record who died.
+
+Mortality comes from **NCHS linked mortality files** — separate downloads, joined on
+`SEQN`, giving vital status, cause category, and follow-up through **31 Dec 2019**.
+
+**◆ Decision: when does the clock start?** We use time from the **examination**, because
+that is when BMI, waist and the blood work were measured. The paper does not say which it
+used.
+
+::: {.callout-warning}
+A one-column error when reading these fixed-width files corrupts every result **silently** —
+every model still runs. Sanity-check the parsed values before trusting anything.
+:::
+
+::: {.notes}
+(3 min) "Outcome ascertainment is an analytic decision, not a clerical merge." The clock
+choice is a genuine judgment call the paper leaves open; ours moves mean follow-up by
+about 0.07 years, so it is defensible either way - but it should be stated.
+:::
+
+## Most of it reproduces — that is not the interesting part
+
+| | Reproduced | Published |
+|---|---:|---:|
+| Analytic N | 6,371 | 6,300 |
+| Deaths | 586 | 585 |
+| Group IV HR, unadjusted | 15.14 | 15.13 |
+| Group IV HR, adjusted | 2.91 | 2.89 |
+
+**The interesting part is what the numbers support.** Adjusted, Group III is 3.03 and
+Group IV is 2.89, both against Group I.
+
+> Both groups have higher adjusted mortality than Group I. **Whether Group IV is worse
+> than Group III is a contrast the paper never reports** — and similar point estimates are
+> not evidence of equivalence.
+
+::: {.notes}
+(4 min) The reproduction succeeds and the disagreement is about interpretation, not
+arithmetic. That distinction - reproducible but over-claimed - is the M2 genre in one
+slide. Do not let students leave thinking a successful replication endorses the paper's
+conclusion.
+:::
+
+## What to take to P1
+
+For every step of your own paper, write four lines:
+
+::: {.ppdc}
+**Paper** — the exact sentence · **Problem** — what it fails to determine ·
+**Decision** — your rule and why · **Consequence** — the change, and its type
+:::
+
+Then label each consequence: **eligibility · design · item missingness · target
+population · outcome ascertainment**.
+
+::: {.callout-tip}
+An unexplained exact match is worth less than a discrepancy you can account for. Aim for a
+**defensible audit trail**, not a matching number.
+:::
+
+**Where things live:** these slides = the reasoning · `COHORT_BUILD_STEPS.md` = exactly
+what we did · `VARIABLE_MAP.md` = where each variable lives · the `R/` scripts = proof.
+
+::: {.notes}
+(3 min) Close here. The three-layer sentence matters: students should know which document
+answers which kind of question, so they stop trying to get implementation detail off a
+slide.
+:::
+
+# Appendix {background-color="#f0f0f0"}
+
+## Appendix — the full analytic funnel {.dense}
+
+| Step | Criterion | N | Type |
+|---|---|---:|---|
+| 0 | All NHANES 2007–2018 records | 59,842 | — |
+| 1 | Age ≥ 18 | 36,580 | eligibility |
+| 2 | FLI computable | 14,989 | design + missingness, fused |
+| 3 | Fatty liver (FLI ≥ 60) | 6,376 | target population |
+| 4 | MASLD (≥ 1 cardiometabolic criterion) | 6,374 | target population |
+| 5 | Phenotype group assignable | 6,374 | missingness |
+| 6 | Mortality-eligible and linked | **6,371** | outcome ascertainment |
+| 7 | Alcohol exclusion applied = FALSE | 6,371 | analysis setting |
+
+## Appendix — the fasting-weight domain {.dense}
+
+| Step | Criterion | N | Type |
+|---|---|---:|---|
+| 1 | Age ≥ 18 | 36,580 | eligibility |
+| 2 | Positive `WTSAF2YR` | 14,962 | design restriction |
+| 3 | FLI computable | 14,170 | item missingness |
+| 4 | Fatty liver (FLI ≥ 60) | 6,052 | target population |
+| 5 | MASLD | 6,050 | target population |
+| 7 | Mortality-eligible and linked | **6,048** | outcome ascertainment |
+
+**6,371 and 6,048 answer different questions.** The paper does not report using survey
+weights, so 6,371 is what reproduces it; 6,048 is the only set on which a design-aware
+estimate can be computed.
+
+## Appendix — "outside the frame" ≠ "never asked to fast" {.dense}
+
+A missing or zero `WTSAF2YR` conflates at least three different states:
+
+| | Adults |
+|---|---:|
+| No positive fasting weight | 21,618 |
+| …of whom carry a weight of **exactly 0** | 2,031 |
+| …of whom have a triglyceride value anyway | 966 |
+| …of whom have **all four** FLI inputs | 819 |
+
+So the weight marks *the analysable fasting domain*. It does not certify who was or was
+not asked to fast — 819 people have the fasting measurement and no usable weight.
+
+## Appendix — the Fatty Liver Index
+
+```
+       exp(L)
+FLI = -------- × 100
+      1 + exp(L)
+
+L = 0.953·ln(TG) + 0.139·BMI + 0.718·ln(GGT) + 0.053·waist − 15.745
+```
+
+| Input | NHANES variable | Unit |
+|---|---|---|
+| Triglycerides | `LBXTR` | mg/dL |
+| BMI | `BMXBMI` | kg/m² |
+| GGT | `LBXSGTSI` | U/L |
+| Waist circumference | `BMXWAIST` | cm |
+
+All four arrive in the units the equation expects, so nothing is converted. Steatosis:
+**FLI ≥ 60**.
+
+## Appendix — the five cardiometabolic criteria {.dense}
+
+At least one must accompany fatty liver:
+
+1. BMI ≥ 25, or waist > 94 cm (men) / > 80 cm (women)
+2. Fasting glucose ≥ 5.6 mmol/L, HbA1c ≥ 5.7%, or antidiabetic treatment
+3. Blood pressure ≥ 130/85 mm Hg, or antihypertensive treatment
+4. Triglycerides ≥ 150 mg/dL, or lipid-lowering treatment
+5. HDL ≤ 40 mg/dL (men) / < 50 mg/dL (women), or HDL-targeted treatment
+
+**Glucose note.** 5.6 mmol/L is 100.9 mg/dL; we coded ≥ 100. 212 people sit in that gap,
+and re-running MASLD at ≥ 100.9 changes **0** classifications.
+
+**Criterion 5 note.** NHANES has no variable for HDL-targeted treatment, so that clause is
+not implementable.
+
+## Appendix — the decisions ledger {.dense}
+
+| | Decision or limitation | Consequence |
+|---|---|---|
+| ⚠ | Age `≥ 18` vs `> 18` | 70 people; evidence points both ways |
+| ⚠ | Alcohol exclusion built but not applied | 427 people if switched on |
+| ⚠ | `cv_death` in the saved file = heart + cerebrovascular | 185 events vs the paper's 158 (heart only) |
+| ◆ | Asian cut-point only where ethnicity is identifiable | ≤ 17 grouped differently |
+| ◆ | Full file (6,371) vs fasting-weight domain (6,048) | 323 records |
+| ◆ | Follow-up clock from examination, not interview | mean 6.76 y vs 6.83 y |
+| ◆ | Composite comorbidity definitions | 1–3 percentage-point gaps vs Table 1 |
+| ◆ | No survey weights, matching what the paper reports | the design-aware estimate is P4 |
+
+## Appendix — where each layer lives
+
+| Layer | Document | Answers |
+|---|---|---|
+| **Reasoning** | these slides | what problem are we solving, and why does the choice matter? |
+| **Implementation** | `COHORT_BUILD_STEPS.md` | exactly what did we do, step by step, with every number? |
+| **Lookup** | `VARIABLE_MAP.md` | where does this variable live, which cycles have it, what do its codes mean? |
+| **Proof** | `R/00`–`07` | run it yourself |
+
+The full audit version of this deck — every line reference, every count — is
+`Cohort_recipe_slides.qmd`.

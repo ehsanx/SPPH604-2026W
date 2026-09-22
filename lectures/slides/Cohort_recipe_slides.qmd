@@ -1,0 +1,785 @@
+---
+title: "From the Paper's Methods to an Analytic Dataset"
+subtitle: "SPPH 604 · Application of Advanced Epidemiological Methods"
+author: "Companion to reproduction/COHORT_BUILD_STEPS.md · Kueh et al. (2026), BMJ Open 16:e113719"
+format:
+  revealjs:
+    theme: default
+    slide-number: c/t
+    progress: true
+    incremental: false
+    embed-resources: true
+    width: 1280
+    height: 720
+    fig-align: center
+    smaller: true
+    include-in-header:
+      text: |
+        <style>
+        /* Dense table slides. Measured in the browser, not eyeballed: without this
+           seven slides run 34-144px past the 720px slide box and the last table row
+           is clipped behind the slide number on a projector. */
+        .reveal .dense table { font-size: 0.76em; line-height: 1.18; }
+        .reveal .dense table th, .reveal .dense table td { padding: .12em .34em; }
+        .reveal .dense .callout { font-size: 0.94em; }
+        </style>
+  beamer:
+    fontsize: 9pt
+    # The default beamer font has no glyph for the characters this deck is ABOUT -
+    # the paper's own >= and <=, and the warning sign marking a possible deviation -
+    # so the static PDF printed them as tofu and the age slide read "the paper says >,
+    # the code says [box]", destroying its point. Mapping them to symbols every LaTeX
+    # install already has fixes it WITHOUT depending on a font being present on the
+    # rendering machine, which a \setmainfont would.
+    header-includes: |
+      \usepackage{newunicodechar}
+      \newunicodechar{≥}{\ensuremath{\geq}}
+      \newunicodechar{≤}{\ensuremath{\leq}}
+      \newunicodechar{×}{\ensuremath{\times}}
+      \newunicodechar{∈}{\ensuremath{\in}}
+      \newunicodechar{Σ}{\ensuremath{\Sigma}}
+      \newunicodechar{·}{\textperiodcentered}
+      \newunicodechar{⚠}{\textbf{[!]}}
+      \newunicodechar{✓}{\ensuremath{\checkmark}}
+---
+
+## This deck {.center}
+
+### Eight steps, from a CDC download to `masld_analytic.rds`
+
+**Every step answers the same four questions.** That repetition is the point.
+
+::: {.notes}
+(1 min) Timing: per-slide markers sum to about 55 minutes, so this fits a single seminar
+slot with room for questions. It is a companion to `reproduction/COHORT_BUILD_STEPS.md` —
+the page has more detail on every slide here, and students should read it after, not
+during. If you are short on time, the droppable slides are the component table, the
+covariates step, and the second half of the ledger.
+:::
+
+## The question this deck answers
+
+You have a published Methods section. You have CDC's website. **How do you get from one
+to the other, and how do you defend every choice you made on the way?**
+
+- The paper: Kueh MTW et al., *BMJ Open* 2026;16:e113719 — body weight phenotypes and
+  mortality in MASLD, NHANES 2007–2018
+- The code: `reproduction/R/00_setup.R` → `01_download.R` → `02_build_analytic.R`
+- The destination: **6,371 rows**, against a published **6,300**
+
+> The gap is not a failure. **Being able to say why it exists is the skill.**
+
+::: {.notes}
+(2 min) Say the last line twice. Students arrive believing a replication succeeds when
+the numbers match. Set the opposite expectation now: an unexplained exact match is worth
+less than a traced discrepancy, because the exact match might be luck and you would never
+know.
+:::
+
+## The one habit
+
+A Methods sentence is **not** code. Between the sentence and the code there is always a
+decision — and in a published paper the decision is almost always invisible.
+
+::: {.callout-important}
+Your job at P1 is not to guess the authors' decision.
+It is to **make your own, write down why, and count what it cost.**
+:::
+
+Every step in this deck has the same four lines:
+
+1. **What the paper says** — quoted, verbatim
+2. **Component → variables** — what that sentence forces you to download
+3. **The decision** — and *why*, because the sentence did not fully determine it
+4. **N afterwards** — and the *type* of the loss
+
+::: {.notes}
+(3 min) This slide is the spine of the whole session. Tell them the four-line shape will
+repeat eight times and that they should be able to produce it for their own paper by P1.
+The word "cost" matters: a decision with no counted consequence has not been made
+carefully.
+:::
+
+## Three scripts, one of which matters
+
+| Script | What it decides | Writes |
+|---|---|---|
+| `00_setup.R` | 6 cycles, 18 component names, folder paths. **No analysis switch.** | nothing |
+| `01_download.R` | nothing analytic — fetches raw files, records a manifest | `data/raw/`, `_download_manifest.csv` |
+| **`02_build_analytic.R`** | **everything**: merge → FLI → MASLD → groups → mortality → funnel | `masld_analytic.rds`, `sample_funnel.csv` |
+
+- Cycle letters used throughout: **E** 07-08 · **F** 09-10 · **G** 11-12 · **H** 13-14 ·
+  **I** 15-16 · **J** 17-18
+- The *file* carries the suffix (`BMX_H.xpt`); the *variable* usually does not (`BMXBMI`
+  in all six)
+
+::: {.notes}
+(2 min) The asymmetry is worth naming out loud: two of the three scripts are plumbing.
+When a number disagrees with the paper, `02_build_analytic.R` is where you look, and
+almost always in the filter chain rather than in the arithmetic.
+:::
+
+## Where we are going: the funnel {.dense}
+
+| Step | Criterion | N | Type |
+|---|---|---:|---|
+| 0 | All NHANES 2007–2018 records | 59,842 | — |
+| 1 | Age ≥ 18 | 36,580 | ELIGIBILITY |
+| 2 | FLI computable | 14,989 | DESIGN + MISSINGNESS |
+| 3 | Hepatic steatosis (FLI ≥ 60) | 6,376 | TARGET POPULATION |
+| 4 | MASLD (≥ 1 cardiometabolic criterion) | 6,374 | TARGET POPULATION |
+| 5 | Phenotype group assignable | 6,374 | MISSINGNESS |
+| 6 | Mortality-eligible and linked | **6,371** | OUTCOME ASCERTAINMENT |
+| 7 | Alcohol exclusion applied = FALSE | 6,371 | SWITCH |
+
+**Every row carries a type.** A funnel shows N falling; it does not show *why*.
+
+::: {.notes}
+(3 min) Show the destination before the journey so nobody is lost in the middle. Then ask
+the room: which of these rows is missing data? Most will say "all the ones after step 1".
+The answer is: step 2 partly, step 5, and step 6 — and the biggest drops are not missing
+data at all. Hold the answer until the DESIGN slide.
+:::
+
+# Step 0 — What you download {background-color="#f0f0f0"}
+
+## Three downloads
+
+| # | What | Count |
+|---|---|---|
+| 1 | 18 components × 6 cycles, from `wwwn.cdc.gov/.../DataFiles/<COMP>_<suffix>.xpt` | 108 files |
+| 2 | Multum drug lexicon `RXQ_DRUG.xpt` — tried at 2015, 2017, 2013 | **0 — all three 404** |
+| 3 | Linked mortality, `ftp.cdc.gov/.../NHANES_<cycle>_MORT_2019_PUBLIC.dat` | 6 files |
+
+About **204 MB**. Every URL, byte size and status is in `data/raw/_download_manifest.csv`.
+
+::: {.callout-note}
+**Why keep a download that 404s?** The lexicon was meant to classify medications by
+therapeutic class. It is gone, so the medication covariates fall back to questionnaire
+self-report. Deleting the failed download would hide that. **Three `MISSING` rows in the
+manifest are the honest record that a planned covariate was never built.**
+:::
+
+::: {.notes}
+(3 min) The manifest is the first thing to check when a number moves unexpectedly between
+runs. The callout is a reproducibility lesson students under-rate: a pipeline that records
+its own failures is worth more than one that silently succeeds with less data.
+:::
+
+## Which component supplies what {.dense}
+
+| Component | Key variables | Feeds |
+|---|---|---|
+| `DEMO` | `RIDAGEYR` `RIAGENDR` `RIDRETH3` `INDFMPIR` `WTINT2YR` `SDMVPSU` `SDMVSTRA` | age, Asian cut, PIR |
+| `BMX` | `BMXBMI` `BMXWAIST` `BMXHT` | FLI, adiposity, **both group axes** |
+| `TRIGLY` | `LBXTR` `LBDLDL` **`WTSAF2YR`** | FLI, TG criterion, fasting frame |
+| `BIOPRO` | `LBXSGTSI` (GGT) `LBXSCR` | FLI, eGFR |
+| `GLU` `GHB` `HDL` | `LBXGLU` `LBXGH` `LBDHDD` | glycaemia + HDL criteria |
+| `BPX` `BPQ` `DIQ` | `BPXSY1-4` `BPXDI1-4`, `BPQ050A` `BPQ100D`, `DIQ010/050/070` | BP criterion, "treatment" arms |
+| `ALQ` | `ALQ130` `ALQ120Q` `ALQ120U` `ALQ121` | alcohol exclusion |
+| `MCQ` `ALB_CR` `SMQ` `PAQ` | `MCQ160*` `URDACT` `SMQ020/040` `PAD680` | comorbidities, CKD, Model 2 |
+| `RXQ_RX` | — | **nothing. Downloaded, never read.** |
+
+::: {.notes}
+(2 min) Droppable if short on time. The one line to say aloud is the last row: the
+pipeline downloads a file it never opens, and that is documented rather than tidied away.
+Point at `BMX` too — three variables from one component drive the FLI *and* both axes of
+the exposure, which is the circularity problem that comes back in M1.
+:::
+
+## The merge, and the trap inside it
+
+`read_component()` stacks a component across all six cycles and **pads any variable
+absent from a cycle with `NA`**. Then 16 `left_join`s onto `DEMO` by `SEQN`.
+
+**N after merge: 59,842.** Safe here: `SEQN` is unique across all six cycles (verified,
+zero duplicates), and no joined component has more than one row per person.
+
+::: {.callout-warning}
+## Padding makes "never asked" look identical to "did not answer"
+| Variable | What it measures (CDC label) | In | So what |
+|---|---|---|---|
+| `RIDRETH3` | race/ethnicity **with a non-Hispanic Asian category** | G–J | Asian status unknowable for 2007–2010 → Step 5 |
+| `DIQ070` | takes diabetic **pills** to lower blood sugar | F–J | in E, "antidiabetic" collapses to insulin (`DIQ050`) alone |
+| `MCQ160O` | ever told you had **COPD** | H–J | its % has a different denominator from every other Table 1 row |
+| `URDACT` | **albumin:creatinine ratio**, mg/g | F–J | in E, ACR falls back to `URXUMA/URXUCR×100` |
+| `ALQ120Q` `ALQ120U` `ALQ101` | how **often** you drink · the **unit** that is counted in · "≥12 drinks in a year?" | E–I | retired in the 2017-18 ALQ redesign |
+| `ALQ121` `ALQ111` | the same frequency as **one coded item** · "ever had a drink?" | J | the replacements — different coding, must be harmonised |
+:::
+
+::: {.notes}
+(4 min) This is the first of the two big NHANES traps. Nothing errors when a variable is
+absent — the code runs and gives you a column of NA that looks exactly like nonresponse.
+Ask: how would you *detect* this in your own pipeline? Answer: a cycle-availability check
+before you trust any prevalence, which is what `VARIABLE_MAP.md` prints.
+:::
+
+# Step 1 — Age eligibility {background-color="#f0f0f0"}
+
+## Step 1 — the four lines
+
+> **Paper:** "The study inclusion criteria were participants **aged>18 years** with
+> evidence of MASLD."
+
+| | |
+|---|---|
+| **Component → variable** | `DEMO` → `RIDAGEYR` |
+| **Code** | `02_build_analytic.R:114`, filter at `:315` |
+| **Decision** | `age >= 18` |
+| **N** | 59,842 → **36,580** · ELIGIBILITY · 23,262 dropped |
+
+::: {.notes}
+(2 min) Read the paper's sentence out loud exactly as printed, including the ">". Let the
+room notice it before you do. Someone usually says "that's just a typo for ≥" — which is
+the right instinct and, here, the wrong answer. Next slide.
+:::
+
+## ⚠ The paper says `>`, the code says `≥`
+
+That is **70 people** — and it is not a PDF artefact. The published PDF contains **24
+correctly encoded `≥` characters** (`BMI≥30`, `WHtR≥0.6`, `FLI≥60`, `1≤PIR≤4`). Where the
+authors meant "at least", they wrote it. At the age criterion they wrote a plain `>`.
+
+| Rule | N | Deaths | Groups I/II/III/IV | Σ\|dev\| |
+|---|---:|---:|---|---:|
+| **Paper** | 6,300 | 585 | 386 / 4,541 / 769 / 604 | — |
+| `age >= 18` (ours) | 6,371 | 586 | 391 / 4,585 / 787 / 608 | 71 |
+| `age > 18` (paper's words) | **6,301** | **585** | 379 / 4,534 / 781 / 607 | **29** |
+
+**Counter-evidence:** the paper's Table 1 mean age is 51.0 (16.6) — which is what `≥ 18`
+gives. Strict `> 18` gives 51.4 (16.3). **This is a strong lead, not a settled answer.**
+
+::: {.notes}
+(5 min) Spend time here; it is the best worked example in the deck. Three teaching points.
+One: a single character in a Methods sentence moved 70 people. Two: the way to test a
+reading is to run both and compare against *several* published numbers, not one. Three —
+and this is the hard one — the evidence genuinely conflicts, and the honest write-up says
+so rather than picking the flattering number. Ask the room which they would defend in a
+paper, and make them give a reason.
+:::
+
+# Step 2 — Steatosis via the FLI {background-color="#f0f0f0"}
+
+## Step 2 — the Fatty Liver Index
+
+> **Paper:** "A threshold of **FLI≥60** was used to determine the presence of hepatic
+> steatosis."
+
+```
+       exp(L)
+FLI = -------- × 100,   L = 0.953·ln(TG) + 0.139·BMI + 0.718·ln(GGT) + 0.053·WC − 15.745
+      1 + exp(L)
+```
+
+| Input | Component → variable | Formula wants | NHANES gives |
+|---|---|---|---|
+| Triglycerides | `TRIGLY` → `LBXTR` | mg/dL | mg/dL ✓ |
+| BMI | `BMX` → `BMXBMI` | kg/m² | kg/m² ✓ |
+| GGT | `BIOPRO` → `LBXSGTSI` | U/L | U/L ✓ |
+| Waist | `BMX` → `BMXWAIST` | cm | cm ✓ |
+
+**N:** 36,580 → **14,989** (computable) → **6,376** (FLI ≥ 60). Median FLI 85.5 (73.7–94.7).
+
+::: {.notes}
+(3 min) Check the units every time, even when they match — that check is 30 seconds and
+its absence is a silent factor-of-18 error waiting to happen. Note the cohort sits well
+above 60, not bunched at the threshold, so the steatosis cut is not knife-edge here.
+:::
+
+## Reserved codes: there is no global rule
+
+::: {.columns}
+::: {.column width="50%"}
+**`LBXTR` — a lab measurement**
+
+`77` is a triglyceride of 77 mg/dL.
+
+Stripping `77`/`99` "to be safe" deletes
+**real data**.
+:::
+::: {.column width="50%"}
+**`ALQ130` — a questionnaire item**
+
+`777` is *refused*, `999` is *don't know*.
+
+Leaving them in turns 9 refusals into
+people drinking **777 drinks a day**.
+:::
+:::
+
+::: {.callout-important}
+Same-looking digits, opposite meanings — in the same dataset, in the same pipeline.
+**The codebook decides, variable by variable.** Check it before you compare a variable
+to a number.
+:::
+
+::: {.notes}
+(3 min) The second big NHANES trap, and the one most likely to appear in a student's own
+paper. Nine misclassified refusals would not change this paper's conclusion — say that —
+and then say that "it did not matter this time" is not a method. They found it because
+they looked.
+:::
+
+## ⚠ DESIGN is not missing data
+
+Triglycerides come from the **fasting subsample**, which carries its own weight
+`WTSAF2YR`. The paper never says whether it restricted to that subsample.
+
+- **21,618** of the 36,580 adults fall **outside the fasting-weight frame** — most were
+  never sampled for it. That is **DESIGN**.
+- **792** are inside the frame and still lack an input. That is **MISSINGNESS**.
+
+::: {.callout-warning}
+Say "outside the frame", not "never asked to fast" — the weight cannot certify that.
+**2,031** carry a weight of exactly 0, and **819** have all four FLI inputs with no valid
+weight at all, so they demonstrably *were* measured fasting.
+:::
+
+Different problems, different remedies: a **weight and a population sentence** for the
+first; **P5's missing-data analysis** for the second. Never their sum.
+
+::: {.callout-note}
+The arithmetic does not simply subtract: the full file loses **21,591** here, because the
+**819** adults with all four FLI inputs but no fasting weight are kept.
+21,618 − 819 + 792 = 21,591.
+:::
+
+::: {.notes}
+(4 min) Return to the question you asked at the funnel slide. Reading every
+post-eligibility drop as attrition gives you a number like 30,532 and a completely wrong
+story about data quality. The remedy differs by type, which is why typing the row is not
+bookkeeping — it determines what you do next.
+:::
+
+## Two row sets, kept apart {.dense}
+
+| Row set | FLI step | Final N | What it is |
+|---|---:|---:|---|
+| **Full analytic file** | 14,989 | **6,371** | every adult with all four FLI inputs. Saved as `masld_analytic.rds`; every table in `output/` uses it |
+| **Locked domain** | 14,170 | 6,048 | its subset carrying a valid `WTSAF2YR` |
+
+They differ by **323** records, and **neither is an error**.
+
+- The paper does not report using survey weights → **6,371 is what reproduces it**
+- A design-aware estimate is only possible on **6,048** → that is **P4's** job
+- 6,048 is a *different denominator*, not a correction to 6,371
+
+::: {.callout-warning}
+**Quote which row set you mean, every single time you state an N.**
+:::
+
+::: {.notes}
+(3 min) This is where students lose marks in P1 and P4 — they compute on one row set and
+report the other's N. Insist on the habit: the number never travels without its row set.
+:::
+
+# Step 3 — MASLD criteria {background-color="#f0f0f0"}
+
+## Step 3 — five criteria, at least one required {.dense}
+
+> **Paper:** "MASLD was defined as the presence of hepatic steatosis, accompanied by at
+> least one of the following cardiometabolic criteria…"
+
+| # | Paper | Variables | Our rule |
+|---|---|---|---|
+| i | BMI≥25 **or** waist >94 (M) / >80 (F) | `BMXBMI` `BMXWAIST` | `bmi>=25` OR waist rule |
+| ii | FPG≥5.6 mmol/L **or** HbA1c≥5.7% **or** antidiabetic meds | `LBXGLU` `LBXGH` `DIQ010/050/070` | `LBXGLU>=100` OR `LBXGH>=5.7` OR dx OR tx |
+| iii | BP≥130/85 **or** antihypertensive | `BPXSY*` `BPXDI*` `BPQ050A` | `sbp>=130` OR `dbp>=85` OR tx |
+| iv | TG≥150 mg/dL **or** lipid-lowering | `LBXTR` `BPQ100D` | `LBXTR>=150` OR tx |
+| v | HDL ≤40 (M) / <50 (F) **or** HDL-targeted treatment | `LBDHDD` | `<=40` M, `<50` F — **treatment arm not implementable** |
+
+**N:** 6,376 → **6,374**. Two people.
+
+::: {.notes}
+(4 min) Walk criterion (v) specifically: the asymmetric ≤/< is the paper's own wording,
+transcribed rather than "fixed", and the HDL-treatment clause has no NHANES variable at
+all. Naming an unimplementable clause beats quietly folding it into something else.
+:::
+
+## Judgment call 1 — is the glucose cut 100 or 100.9?
+
+The paper sets criterion (ii) in **mmol/L**. NHANES `LBXGLU` is in **mg/dL**. Someone has
+to convert, and the paper never shows the converted number.
+
+1. Paper: fasting glucose **≥ 5.6 mmol/L**
+2. Converted: 5.6 × 18.016 = **100.9 mg/dL**
+3. We coded **≥ 100** — the conventional rounding
+4. **212 people** have a glucose between 100 and 100.9. Our rule counts them as meeting
+   criterion (ii); a strict reading would not
+5. So we re-ran MASLD with **≥ 100.9** and counted who falls out: **0 people**
+
+::: {.callout-tip}
+## The habit, not the answer
+"It's only 0.9 mg/dL, it can't matter" is a **guess**. "I re-ran it and 0 people change
+status" is a **finding**. Same decision — but only one of them you can defend to a
+reviewer. Quantify first, *then* decide to leave it alone.
+:::
+
+::: {.notes}
+(3 min) Students routinely wave away unit conversions. The point is not that 100 vs 100.9
+matters — it demonstrably does not here — but that the only way to know that was to run
+it, and running it took one line. Ask them how they would have worded this in a Methods
+section. "Fasting glucose >= 100 mg/dL (5.6 mmol/L)" is honest; silently using 100 and
+citing 5.6 is not.
+:::
+
+## Judgment call 2 — and what Step 3 really did {.dense}
+
+**A missing criterion counts as *not met*, not as *unknown*.** `n_crit` uses
+`rowSums(..., na.rm = TRUE)`, so an `NA` contributes 0 — conservative: it can only keep
+someone **out** of MASLD, never let someone in. It also barely matters here:
+
+| | |
+|---|---:|
+| Meet criterion (i), adiposity | **6,329 of 6,371** |
+| Meet *exactly one* criterion | 354 |
+| …of whom, that one criterion is adiposity | **352** |
+| Dropped by this whole step | **2 of 6,376** |
+
+**Why.** FLI is built from BMI and waist, and criterion (i) *tests* BMI and waist — so
+selecting on FLI ≥ 60 strongly **enriches** for criterion (i) without requiring it.
+(**89** people here have FLI ≥ 60 with BMI < 25; 42 fail criterion (i) outright.) It is
+near-automatic by enrichment, so the other four rarely decide anything.
+
+> **Report a filter by its effect, not its definition.** "MASLD required at least one
+> cardiometabolic criterion" sounds like work; here it excluded **2 people**.
+
+::: {.notes}
+(4 min) The most transferable idea in the deck. Students describe filters by their
+definitions; readers judge them by their effect, and the two can be wildly different.
+Then connect it forward to M1: the exposure (BMI x WHtR) and the case definition (FLI)
+share BMI and waist, so this near-automatic criterion is the same circularity showing up
+in a different place. If a student asks "is the paper wrong here?" - no. The definition
+is the standard one. It just does almost nothing once you have conditioned on FLI.
+:::
+
+# Step 4 — Alcohol {background-color="#f0f0f0"}
+
+## Step 4 — building the alcohol exclusion
+
+> **Paper:** "Individuals with significant alcohol consumption — defined as more than two
+> drinks per day for men and more than one drink per day for women — were excluded."
+
+**The paper says it removed these people, so we built the rule.** Getting it right needs
+two codebook checks that are easy to skip.
+
+**1 — "Drinks per day" is frequency × quantity, not `ALQ130`.** `ALQ130` is drinks per
+*drinking day*. Three drinks every Saturday gives `ALQ130 = 3` but an average of
+**0.4/day**. Thresholding `ALQ130` on its own over-excludes about **2,000** people. So we
+rebuild it: **`(ALQ130 × days_per_year) / 365`**, with `ALQ120Q`/`ALQ120U` supplying the
+frequency (×52 / ×12 / ×1), and `ALQ121` replacing that pair in 2017-18.
+
+**2 — Strip `777` and `999` before comparing to any number.** They mean *refused* and
+*don't know*. Left in, **9 people** here become 777-drinks-a-day heavy drinkers.
+
+That yields a per-person flag, `sig_alcohol`. **427 people in the cohort exceed the
+paper's threshold.** Whether we then *drop* them is the next slide.
+
+::: {.notes}
+(3 min) Two lessons live in this one variable: the wrong-variable error (`ALQ130` alone)
+and the reserved-code error (777). Both are only recoverable by reading the codebook,
+which is the habit being drilled. Stress that we are still just *building* here - nothing
+has been excluded yet. Students conflate "I implemented the criterion" with "I applied
+it", and this step separates them on purpose.
+:::
+
+## ⚠ We built it — and then did not apply it {.dense}
+
+`APPLY_ALCOHOL_EXCL <- FALSE`, so **no rows are dropped: 6,371 → 6,371.** The flag is
+still computed, still saved into `masld_analytic.rds`, and the funnel still logs the
+setting — so the choice is *recorded*, not hidden, and flipping one line turns it on.
+
+**Why off: applying the paper's own stated exclusion moves us further from the paper.**
+
+| Cohort | N | Deaths | Σ\|group dev\| |
+|---|---:|---:|---:|
+| **Paper** | 6,300 | 585 | — |
+| Ours, exclusion **off** | 6,371 | 586 | 71 |
+| Ours, exclusion **on** (427 dropped) | **5,944** | 546 | **356** |
+
+- `reproduction_report.md` §6 says the +71 gap is "almost entirely the alcohol-exclusion
+  ambiguity". **The numbers do not support that** — Step 1's age rule fits far better
+- So the paper's Methods and its own reported N **disagree with each other**. We cannot
+  resolve that; we can document it, and default to the cohort that reproduces the tables
+
+::: {.notes}
+(4 min) The shape to teach: implement what the paper says, test it, and when the test
+fails, keep BOTH the implementation and the finding rather than quietly dropping either.
+Also be explicit that the bullet about §6 is a correction to our own repository, found by
+re-running numbers rather than re-reading prose. Students who catch an error in the course
+materials should be rewarded, and saying so here makes that credible.
+:::
+
+# Step 5 — The four phenotypes {background-color="#f0f0f0"}
+
+## Step 5 — obesity × central adiposity
+
+> **Paper:** "Obesity was defined as **BMI≥30kg/m²** (≥25 for Asians). High central
+> adiposity was defined as a **WHtR≥0.6**."
+
+|  | WHtR < 0.6 | WHtR ≥ 0.6 |
+|---|---|---|
+| **Obese** | **I** — 391 | **II** — 4,585 |
+| **Non-obese** | **III** — 787 | **IV** — 608 |
+
+`whtr = BMXWAIST / BMXHT` — both in cm, so the units cancel. Five people sit exactly on
+0.6 and count as high, matching `≥`.
+
+::: {.callout-tip}
+## The check that proves the construction is right
+Our per-group BMI medians: **30.9 / 35.2 / 27.6 / 28.8** — identical to all four published
+values. That holds *independently* of the N gap.
+:::
+
+::: {.notes}
+(3 min) Teach the move, not the result: when your N disagrees, find a statistic that
+isolates the piece you want to test. Group BMI medians test the group construction without
+being sensitive to who is in the cohort. That is how you localise a discrepancy instead of
+guessing at it.
+:::
+
+## ⚠ A cut-point you cannot apply to a third of the cohort
+
+`asian` comes from `RIDRETH3 == 6` — and **`RIDRETH3` does not exist in 2007-08 or
+2009-10**. The code recodes the resulting `NA` to 0, i.e. *not Asian*, for **2,322 of
+6,371 rows (36%)**.
+
+- Where the variable *does* exist, the Asian rule moves **121 of 250** Asian participants
+  into the obese arm. **This rule has real bite.**
+- In 2007–2010 the only ethnicity variable is `RIDRETH1`, whose category 5 is "Other Race
+  — Including Multi-Racial": it *contains* Asians but cannot isolate them
+- 71 cohort members fall in it; only **17** have BMI in [25, 30) — the window where the
+  rule changes anything
+
+**So: at most 17 of 6,371 are misgrouped.** The paper states one rule for 2007–2018; the
+data support it only for 2011–2018.
+
+::: {.notes}
+(4 min) The point is not the 17. It is that "we checked, and it is bounded at 17" is a
+publishable sentence and silence is not. Ask how they would have found this — the answer
+is the cycle-availability check from Step 0, which is why that slide is not housekeeping.
+:::
+
+## The paper contradicts itself, and the data settle it
+
+- **Methods text:** obesity = BMI ≥ 30
+- **Table 1 and Table 2 column headers:** `BMI≥25 kg/m²` / `BMI<25 kg/m²`
+
+The headers are wrong, and you can prove it without asking the authors: the paper's own
+group III and IV BMI medians are **27.6** and **28.8**, sitting in columns labelled
+"BMI < 25". Impossible.
+
+Coding to **30** reproduces those medians exactly. Coding to 25 does not.
+
+> Finding an internal contradiction and **resolving it against the data** — rather than
+> picking whichever reading you prefer — is exactly what M2 asks for.
+
+::: {.notes}
+(3 min) A good confidence-builder late in the session: published papers contain errors,
+and a careful reader with the data can adjudicate them. Distinguish this from the age
+discrepancy, where the evidence conflicts and honest reporting means saying it is
+unresolved. Two different situations, two different write-ups.
+:::
+
+# Steps 6–8 {background-color="#f0f0f0"}
+
+## Step 6 — covariates, where the paper says almost nothing {.dense}
+
+> **Paper:** "The definitions of comorbidities in the NHANES study have been previously
+> described." — that is the *entire* specification.
+
+| Derived | Variables | Rule |
+|---|---|---|
+| `htn` | `BPQ020`, `BPXSY*` `BPXDI*` | self-report **or** ≥140/90 |
+| `t2dm` | `DIQ010`, `LBXGH` | self-report **or** HbA1c ≥ 6.5 |
+| `dyslip` | `BPQ080` `BPQ100D`, `LBDLDL` | self-report **or** meds **or** LDL ≥ 130 |
+| `ckd` | `LBXSCR`, `URDACT`/`URXUMA`/`URXUCR` | eGFR < 60 (CKD-EPI 2021) **or** ACR ≥ 30 |
+| `pir_cat` | `INDFMPIR` | <1 Low · 1–4 Middle · >4 High |
+| `current_smoke` | `SMQ020` `SMQ040` | current **among ever-smokers** |
+
+::: {.callout-warning}
+The code comment says these are "**calibrated to reproduce the paper's Table 1
+prevalences**". That is fitting a definition to a target — **circular**. Report it as:
+*the paper did not specify, we chose X, here is the residual gap* (1–3 points).
+:::
+
+::: {.notes}
+(3 min) Droppable. If you keep it, the callout is the reason: this is the least defensible
+thing in the pipeline, it is disclosed rather than hidden, and students should be able to
+recognise the same move in papers they read. Also flag that `current_smoke` is NA for
+never-smokers, which silently shrinks Model 2's complete-case N.
+:::
+
+## Step 7 — the outcome is not in NHANES
+
+Six fixed-width `.dat` files from NCHS, joined by `SEQN`.
+
+| Field | Columns | Used for |
+|---|---|---|
+| `SEQN` | 1–6 | join key |
+| `ELIGSTAT` | 15 | 1 = eligible for linkage |
+| `MORTSTAT` | 16 | 0 alive / 1 dead |
+| `UCOD_LEADING` | 17–19 | `001` heart … `005` cerebrovascular |
+| `PERMTH_EXM` | 46–48 | **the clock** — months from the MEC exam |
+
+**Decision: `PERMTH_EXM`, not `PERMTH_INT`** — the exposure is measured at the MEC exam,
+so follow-up starts when the exposure was measured. The paper does not say which it used.
+
+::: {.callout-important}
+**Verify the column positions before trusting anything.** A one-column offset corrupts
+everything silently. Check: `ELIGSTAT` ∈ {1,2,3}, `MORTSTAT` ∈ {0,1}, `UCOD_LEADING` ∈
+1–10, `PERMTH_EXM` ≥ 0, `SEQN` in the cycle's range.
+:::
+
+::: {.notes}
+(3 min) The fixed-width parse is the step with the worst failure mode in the whole
+pipeline: wrong by one column and every model still runs, every table still prints, and
+every number is wrong. Give them the five-way sanity check as a habit.
+:::
+
+## ⚠ A trap inside our own saved dataset
+
+| Definition | CV deaths |
+|---|---:|
+| `cv_death` in `masld_analytic.rds` — `ucod_leading ∈ {1, 5}` | **185** |
+| Heart only — `ucod_leading == 1` | **158** |
+| **The paper** | **158** |
+
+- `README.md` says "diseases-of-heart"; `reproduction_report.md` finding #3 says heart-only
+- `04_table2_cox.R:42` quietly defines its own `cv_heart` and uses that, so the published
+  Table 2 **is** correct
+
+**If you read the analytic file and use `cv_death`, you will disagree with every table in
+this repository.** Use `mortstat == 1 & ucod_leading == 1` until it is fixed.
+
+::: {.notes}
+(2 min) Say plainly that this is a live defect in the course materials, not a teaching
+device. It is also a good illustration of why a derived column in a saved dataset is more
+dangerous than a line of analysis code: the analysis is read, the column is trusted.
+:::
+
+## Step 8 — save, and count what you lost
+
+```r
+s0 <- dat                                                    # 59,842
+s1 <- filter(s0, age >= 18)                                  # 36,580  ELIGIBILITY
+s2 <- filter(s1, !is.na(fli))                                # 14,989  DESIGN + MISSINGNESS
+s3 <- filter(s2, steatosis == 1)                             #  6,376  TARGET POPULATION
+s4 <- filter(s3, masld == 1)                                 #  6,374  TARGET POPULATION
+s5 <- filter(s4, !is.na(group))                              #  6,374  MISSINGNESS
+s6 <- filter(s5, eligstat == 1, !is.na(mortstat), !is.na(time_yr))   # 6,371  OUTCOME
+s7 <- if (APPLY_ALCOHOL_EXCL) filter(s6, sig_alcohol == 0) else s6   # 6,371  SWITCH
+```
+
+Two files: `masld_analytic.rds` (6,371 rows) and `merged_all.rds` (all 59,842, pre-filter,
+so any step can be re-derived without re-reading the `.xpt` files).
+
+> **ELIGIBILITY · DESIGN · MISSINGNESS · TARGET POPULATION · OUTCOME ASCERTAINMENT** —
+> if you cannot name a row's type, you do not yet know what the row means.
+
+::: {.notes}
+(2 min) Point at `merged_all.rds`: keeping the pre-filter frame is what lets you answer
+"what if we had used > 18?" in one line instead of a 20-minute re-run. Cheap insurance,
+and it is why every number in this deck could be checked.
+:::
+
+# What it all cost {background-color="#f0f0f0"}
+
+## The decisions ledger — where we may differ from the paper {.dense}
+
+| Decision | Why | Cost |
+|---|---|---|
+| ⚠ Age `>= 18`, paper writes `> 18` | matches the reported mean age | 70 rows; best explanation of the N gap |
+| ⚠ Alcohol exclusion **off** | applying it gives 5,944 vs 6,300 | 427 rows; report §6's reason is wrong |
+| ⚠ Asian cut only where `RIDRETH3` exists | absent in cycles E, F | ≤ 17 of 6,371 misgrouped |
+| ⚠ `cv_death` = heart + cerebrovascular | — | 185 vs the paper's 158 |
+| Both row sets kept (6,371 / 6,048) | unweighted paper vs design-aware estimate | 323 rows differ |
+| `PERMTH_EXM` as the clock | exposure measured at the MEC exam | 6.76 y vs the paper's 6.9 y |
+| Unweighted throughout | the paper reports no weights, strata or PSUs | the design-aware estimate is P4 |
+
+::: {.notes}
+(3 min) Four ⚠ rows, and they are not the same kind of thing: two are unresolved readings
+of the paper, one is a data limitation, one is a defect on our side. Make students
+classify them — that classification is what a Limitations paragraph is actually made of.
+:::
+
+## The ledger — decisions the paper left to us {.dense}
+
+| Decision | Why | Cost |
+|---|---|---|
+| FLI transcribed verbatim, no unit conversion | NHANES already supplies mg/dL, U/L, cm | none |
+| No code-stripping in `LBXTR`/`LBXSGTSI` | `77` there is a measurement | would delete real values |
+| Strip `777`/`999` in `ALQ130`/`ALQ120Q` | there they *are* refusals | 9 refusals saved |
+| Alcohol = frequency × quantity | `ALQ130` is per drinking-day | `ALQ130` alone over-excludes ~2,000 |
+| Glucose 100 mg/dL for 5.6 mmol/L | conventional equivalent | 212 in the gap, 0 reclassified |
+| Missing criterion = absent | conservative | negligible — 6,329/6,371 already meet (i) |
+| NHANES BP averaging, not `rowMeans` | documented CDC rule | 5,523 people's SBP/DBP changed |
+| Composite comorbidities | paper cites prior work instead of specifying | 1–3 pt gaps; calibration is circular |
+
+::: {.notes}
+(2 min) Droppable. If you keep it, the BP row is the one to dwell on: correcting it moved
+5,523 people's blood pressure and the hazard ratios only in the third significant figure.
+A coding error can be real, worth fixing, and immaterial to the headline — all at once.
+:::
+
+## Did it reproduce?
+
+| | Reproduced | Published |
+|---|---|---|
+| Analytic N | 6,371 | ~6,300 |
+| Groups I/II/III/IV | 391 / 4,585 / 787 / 608 | 386 / 4,541 / 769 / 604 |
+| Deaths | 586 | 585 |
+| Group BMI medians | 30.9 / 35.2 / 27.6 / 28.8 | **identical** |
+| Group IV HR, unadjusted → adjusted | 15.14 → 2.91 | 15.13 → 2.89 |
+
+**Yes — and the residual gap is traceable, not mysterious.**
+
+> Read crudely, Group IV has the poorest survival, and the paper reports that. Read
+> adjusted, Groups III and IV are indistinguishable (2.99 vs 2.91). The replication
+> succeeds; the disagreement is about **which contrast supports the conclusion**.
+
+::: {.notes}
+(3 min) End the analytic content here. The blockquote is the most important sentence in
+the whole reproduction: the arithmetic is fine and the interpretation is the problem.
+That distinction — reproducible but over-claimed — is the M2 genre in one line.
+:::
+
+## For P1
+
+1. **Work the loop, in order:** paper sentence → operational concept → NHANES variable →
+   component → *that cycle's* codebook → raw `.xpt` → your code → cohort consequence
+2. **Write four lines per step:** the quoted sentence, the component and variables, the
+   decision and its reason, the N afterwards
+3. **Type every funnel row.** DESIGN, MISSINGNESS and TARGET POPULATION are not
+   interchangeable and do not add up
+4. **Two decisions here are still open** (age, alcohol). Reproducing a number is not the
+   goal — being able to say *why* yours differs is
+
+::: {.callout-tip}
+Full detail, with every number and line reference:
+**`reproduction/COHORT_BUILD_STEPS.md`**
+:::
+
+::: {.notes}
+(2 min) Close on item 4. An unexplained exact match is worth less than a discrepancy you
+can account for — the same line you opened with. Point them at the page and stop.
+:::
+
+## One exercise
+
+Open `data/derived/merged_all.rds` and answer, with code:
+
+1. How many participants are **exactly 18**? What happens to N, deaths, and the four group
+   sizes if you use `age > 18`?
+2. How many people would the **alcohol exclusion** remove? Does applying it move you
+   toward or away from the paper's 6,300?
+3. Pick **one** variable from Step 0's availability table. Which cycles is it missing
+   from, and what does the NA-padding do to the statistic it feeds?
+
+Write four lines for each: **what the paper says · what you did · why · what it cost.**
+
+::: {.notes}
+(2 min) All three are answerable in a few lines against the saved frame, and all three
+have answers given in this deck — so students can self-check. Question 3 is the one that
+transfers to their own paper, because the specific variable does not matter.
+:::
