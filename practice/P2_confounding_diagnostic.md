@@ -39,15 +39,18 @@ about the variables it describes.
    difference (the group gap in pooled SD units), which does not move with N.
 2. **State the primary contrast** (which two groups, which exposure–outcome
    association) in one sentence.
-3. **Classify the important variables** by role — **confounder / mediator / collider
-   / effect modifier** — using temporal and causal reasoning (a small DAG helps).
-   Prespecify a defensible confounder set.
+3. **Classify the important variables** by role — **confounder / proxy / mediator /
+   collider (including a pre-exposure collider) / instrument / outcome-only cause** —
+   using temporal and causal reasoning (a small DAG helps). Prespecify a defensible
+   confounder set. Note any candidate effect modifier separately: that is P3's question,
+   not a role in the DAG.
 4. **Compare crude vs adjusted.** Fit an unadjusted association and one adjusted for
    your prespecified set, on the **same rows**, so any difference is attributable to
    adjustment. Report the move as what your adjustment set produces, and say what the
    comparison can and cannot establish: adjustment can remove confounding, but it can
    also remove real effect through a mediator or add bias through a collider, and this
-   comparison cannot tell you which happened.
+   comparison cannot tell you which happened. If your measure is an odds or hazard
+   ratio, it also moves through non-collapsibility, even with no confounding at all.
 
 ## Deliverable
 - Reproduced Table 1 (CSV + rendered) → your M1 **Table 1 slide**.

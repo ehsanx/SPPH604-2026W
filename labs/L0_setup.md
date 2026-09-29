@@ -61,7 +61,8 @@ install.packages(c(
 ))
 ```
 
-Two more are needed for Lab 4 only, and you can leave them until then:
+Two more are needed later — `Publish` from Lab 3, `interactionR` from Lab 4 — and you can
+install them now:
 
 ```r
 install.packages(c("interactionR", "Publish"))   # note the capital P

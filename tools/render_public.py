@@ -61,6 +61,7 @@ DECKS = os.path.join('lectures', 'slides')
 # reports, not handouts anyone prints. Named explicitly rather than globbed so that
 # reproduction/README.md stays the directory index Jekyll renders.
 REFERENCE_PAGES = [
+    os.path.join('reproduction', 'COHORT_BUILD_STEPS.md'),
     os.path.join('reproduction', 'VARIABLE_MAP.md'),
     os.path.join('reproduction', 'WALKTHROUGH.md'),
     os.path.join('reproduction', 'reproduction_report.md'),

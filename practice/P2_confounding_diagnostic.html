@@ -236,9 +236,11 @@ pooled SD units), which does not move with N.</li>
 <li><strong>State the primary contrast</strong> (which two groups, which
 exposure–outcome association) in one sentence.</li>
 <li><strong>Classify the important variables</strong> by role —
-<strong>confounder / mediator / collider / effect modifier</strong> —
+<strong>confounder / proxy / mediator / collider (including a
+pre-exposure collider) / instrument / outcome-only cause</strong> —
 using temporal and causal reasoning (a small DAG helps). Prespecify a
-defensible confounder set.</li>
+defensible confounder set. Note any candidate effect modifier
+separately: that is P3’s question, not a role in the DAG.</li>
 <li><strong>Compare crude vs adjusted.</strong> Fit an unadjusted
 association and one adjusted for your prespecified set, on the
 <strong>same rows</strong>, so any difference is attributable to
@@ -246,7 +248,8 @@ adjustment. Report the move as what your adjustment set produces, and
 say what the comparison can and cannot establish: adjustment can remove
 confounding, but it can also remove real effect through a mediator or
 add bias through a collider, and this comparison cannot tell you which
-happened.</li>
+happened. If your measure is an odds or hazard ratio, it also moves
+through non-collapsibility, even with no confounding at all.</li>
 </ol>
 <h2 id="deliverable">Deliverable</h2>
 <ul>

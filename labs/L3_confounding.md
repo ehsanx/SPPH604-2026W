@@ -17,6 +17,20 @@ This is the workflow you will reuse in **P2** on your own locked paper.
 - **Exercise instructions:** [Confounding](https://ehsanx.github.io/EpiMethods/confoundingE.html)
 - **Worked solution:** [The R codes](https://ehsanx.github.io/EpiMethods/confoundingEsolution.html)
 
+**Before you come to lab**, install the package every model chunk uses:
+
+```r
+install.packages("Publish")   # capital P; the function you call is lowercase publish()
+```
+
+Three things to know about the downloaded exercise file:
+
+- **Uncomment the `read.csv` line** in the first chunk. The data are in the zip's `Data/`
+  folder, and nothing else runs until `df` exists.
+- It says the RHC data were used in "Lab Assignment #1". That was another course. The
+  wrangling code is given in full, and you are not expected to have seen these data.
+- Ignore its percentage grade weights. This lab is graded Complete / Incomplete (below).
+
 ## Your task
 
 1. Follow along as the TA explains the worked solution.
@@ -49,7 +63,7 @@ This lab is one step in a weekly chain: Tuesday’s lecture sets up the method, 
 
 | | Document | How this lab connects |
 |---|---|---|
-| **This week’s lecture** | [Week 4 — Confounding and DAGs; Table 1; variable roles](https://ehsanx.github.io/SPPH604-2026W/lectures/Week4_confounding_and_table1.html) | Tuesday moved from a frozen cohort to estimates — what Table 1 is for, how to decide an adjustment set from causal and temporal reasoning, and why what you leave out (mediators, colliders) matters as much as what you put in. This lab runs that sequence and watches crude, conditional and marginal estimates behave differently. |
+| **This week’s lecture** | [Week 4 — Confounding and DAGs; Table 1; variable roles](https://ehsanx.github.io/SPPH604-2026W/lectures/Week4_confounding_and_table1.html) | Tuesday used the MASLD paper to decide what to adjust for — DAGs, the empirical criteria, why change-in-estimate and stepwise selection fail — and showed why an odds or hazard ratio moves on adjustment even without confounding. This lab runs the mechanics on a different dataset (RHC): crude, conditional and marginal odds ratios, risk ratios and risk differences, and standardisation. |
 | **Slide deck** | [Week 4 deck](https://ehsanx.github.io/SPPH604-2026W/lectures/slides/Week4_confounding_slides.html) | The same material as slides, with speaker notes. Press `S` for notes, `F` for fullscreen. |
 | **Your increment** | [P2 — Confounding diagnostic](https://ehsanx.github.io/SPPH604-2026W/practice/P2_confounding_diagnostic.html) | Produce your own Table 1 plus a written adjustment rationale — which variables you adjust for, which you deliberately do not, and why. |
 | **Worked example** | [P2 example](https://ehsanx.github.io/SPPH604-2026W/examples/P2_confounding/P2_confounding_submission.html) — [its code](https://ehsanx.github.io/SPPH604-2026W/examples/P2_confounding/P2_code.html) | A completed P2: the Table 1, and the adjustment rationale written out. Read the rationale first — it is the part that carries the marks. |

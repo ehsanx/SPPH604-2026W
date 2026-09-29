@@ -170,6 +170,71 @@ margin: 0 0.8em 0.2em -1.6em;
 vertical-align: middle;
 }
 .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 </head>
 <body>
@@ -211,6 +276,20 @@ own locked paper.</p>
 <li><strong>Exercise instructions:</strong> <a href="https://ehsanx.github.io/EpiMethods/confoundingE.html">Confounding</a></li>
 <li><strong>Worked solution:</strong> <a href="https://ehsanx.github.io/EpiMethods/confoundingEsolution.html">The
 R codes</a></li>
+</ul>
+<p><strong>Before you come to lab</strong>, install the package every
+model chunk uses:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;Publish&quot;</span>)   <span class="co"># capital P; the function you call is lowercase publish()</span></span></code></pre></div>
+<p>Three things to know about the downloaded exercise file:</p>
+<ul>
+<li><strong>Uncomment the <code>read.csv</code> line</strong> in the
+first chunk. The data are in the zip’s <code>Data/</code> folder, and
+nothing else runs until <code>df</code> exists.</li>
+<li>It says the RHC data were used in “Lab Assignment #1”. That was
+another course. The wrangling code is given in full, and you are not
+expected to have seen these data.</li>
+<li>Ignore its percentage grade weights. This lab is graded Complete /
+Incomplete (below).</li>
 </ul>
 <h2 id="your-task">Your task</h2>
 <ol type="1">
@@ -259,11 +338,12 @@ increment applies it to the paper your group locked at M0.</p>
 <td><strong>This week’s lecture</strong></td>
 <td><a href="https://ehsanx.github.io/SPPH604-2026W/lectures/Week4_confounding_and_table1.html">Week
 4 — Confounding and DAGs; Table 1; variable roles</a></td>
-<td>Tuesday moved from a frozen cohort to estimates — what Table 1 is
-for, how to decide an adjustment set from causal and temporal reasoning,
-and why what you leave out (mediators, colliders) matters as much as
-what you put in. This lab runs that sequence and watches crude,
-conditional and marginal estimates behave differently.</td>
+<td>Tuesday used the MASLD paper to decide what to adjust for — DAGs,
+the empirical criteria, why change-in-estimate and stepwise selection
+fail — and showed why an odds or hazard ratio moves on adjustment even
+without confounding. This lab runs the mechanics on a different dataset
+(RHC): crude, conditional and marginal odds ratios, risk ratios and risk
+differences, and standardisation.</td>
 </tr>
 <tr>
 <td><strong>Slide deck</strong></td>
