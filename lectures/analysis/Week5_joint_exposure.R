@@ -222,6 +222,19 @@ facts <- c(facts, list(
   reri_risk        = mn(sprintf("%.2f", pt6[["ic"]] / pt6[["jt_I"]])),
   n_boot           = as.character(B)))
 
+## ---------------------------------------------------------------- 4b. a modifier the exposure may cause
+## The deck's appendix: diabetes is commoner with high waist fat, and splitting waist fat's
+## effect by it gives two HRs neither of which is a clean subgroup effect.
+dmhr <- function(v) {
+  f <- coxph(as.formula(paste("Surv(time_yr, dead) ~ central + obese +", pre)),
+             data = d[d$t2dm == v, ])
+  f2(exp(coef(f)[["central"]]))
+}
+facts <- c(facts, list(
+  hr_waist_nodm = dmhr(0), hr_waist_dm = dmhr(1),
+  pct_dm_lowwaist  = sprintf("%.0f%%", 100 * mean(d$t2dm[d$central == 0])),
+  pct_dm_highwaist = sprintf("%.0f%%", 100 * mean(d$t2dm[d$central == 1]))))
+
 ## ---------------------------------------------------------------- 5. sex, for the locked contrast
 ## P3 tests sex as a modifier of IV vs III with the paper's Model 1 set (P3.json). Here:
 ## the same 1-df question with Week 4's pre-exposure set, on these rows.

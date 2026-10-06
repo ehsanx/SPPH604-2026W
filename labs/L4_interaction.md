@@ -40,7 +40,7 @@ Things to know about the exercise before you read its output:
   `No RHC` and `No`"; the code does the reverse (both indicators are 1 for "No"), so the
   reference cell is RHC with a DNR order.
 - **S (the synergy index) is an additive-scale measure,** like RERI and AP: S = 1 means no
-  *additive* interaction. The exercise text calls it multiplicative; go with Tuesday.
+  *additive* interaction. The exercise text calls it multiplicative; it is not.
 - **A negative RERI means "less than additive",** not that the exposures are protective
   when combined.
 - **Death is common here (about 40%),** so odds ratios overstate risk ratios, and an RERI
@@ -91,7 +91,7 @@ This lab is one step in a weekly chain: Tuesday’s lecture sets up the method, 
 
 | | Document | How this lab connects |
 |---|---|---|
-| **This week’s lecture** | [Week 5 — Interaction and effect modification](https://ehsanx.github.io/SPPH604-2026W/lectures/Week5_interaction_effect_modification.html) | Tuesday used the paper's four groups (obesity × waist fat) to separate effect modification from interaction — each with its own adjustment set — and the multiplicative scale from the additive one. Its rule was to count every cell first. This lab does both questions on a binary outcome, where logistic regression is the right tool: Problem 1 is effect modification (RHC's confounders only), Problem 2 is interaction (the confounders of both). |
+| **This week’s lecture** | [Week 5 — Interaction and effect modification](https://ehsanx.github.io/SPPH604-2026W/lectures/Week5_interaction_effect_modification.html) | Tuesday separated effect modification from interaction on a clean smoking × income example, then stress-tested both on the paper's four groups (obesity × waist fat): each question has its own adjustment set, each scale its own answer, and every cell gets counted first. This lab does both questions on a binary outcome, where logistic regression is the right tool: Problem 1 is effect modification (RHC's confounders only), Problem 2 is interaction (the confounders of both). |
 | **Slide deck** | [Week 5 deck](https://ehsanx.github.io/SPPH604-2026W/lectures/slides/Week5_interaction_slides.html) | The same material as slides, with speaker notes. Press `S` for notes, `F` for fullscreen. |
 | **Your increment** | [P3 — Effect modification](https://ehsanx.github.io/SPPH604-2026W/practice/P3_effect_modification.html) | Run **one pre-specified** effect-modification test on your own paper’s exposure, and state the verdict as evidence rather than as a mechanism: what the data show at the precision you have, and what the interval leaves open. |
 | **Worked example** | [P3 example](https://ehsanx.github.io/SPPH604-2026W/examples/P3_effect_modification/P3_effect_modification_submission.html) — [its code](https://ehsanx.github.io/SPPH604-2026W/examples/P3_effect_modification/P3_code.html) | A completed P3, including how the verdict is worded when the interval is wide. That wording is the hard part, not the arithmetic. |

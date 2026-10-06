@@ -35,8 +35,8 @@ number actually hides two, i.e. whether some group carries the effect.
    that began before the exposure. Being recorded at the same visit is not enough — ask
    whether your exposure could have caused it. A variable your exposure can change, such as
    a disease it causes, turns the question into mediation, not modification: stratifying on
-   it removes part of the effect and compares unlike people (Week 5, "The exposure must not
-   change the modifier").
+   it removes part of the effect and compares unlike people (Week 5, "The modifier must
+   survive the 'could A change it?' test").
    Say which question you are asking: **effect modification** (your exposure's effect,
    by M — adjust for your exposure's confounders) or **interaction** (two exposures —
    adjust for the confounders of both).

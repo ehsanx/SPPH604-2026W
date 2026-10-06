@@ -21,8 +21,11 @@ format:
                             margin-top: 0.7em; padding-top: 0.3em; line-height: 1.35; }
         .reveal .plain { background: #eef4fa; border-left: 6px solid #0072B2;
                          padding: 0.35em 0.8em; margin: 0.5em 0; }
+        .reveal .question { background: #f7f7f7; border-left: 6px solid #555;
+                            padding: 0.35em 0.8em; margin: 0.5em 0; }
         .reveal .part { color: #555; font-size: 0.8em; }
         .reveal .foot { font-size: 0.66em; color: #555; }
+        .reveal .smallish { font-size: 0.84em; }
         .reveal div.sourceCode pre code, .reveal pre code { max-height: none !important;
                          font-size: 19px !important; line-height: 1.3 !important; }
         </style>
@@ -45,548 +48,474 @@ format:
       \newunicodechar{✗}{\ensuremath{\times}}
 ---
 
-## Does waist fat matter more for some people?
+<!--
+REVISED WEEK 5 CORE
+Pedagogical change: teach the clean 2x2 idea first; use MASLD as the causal/empirical stress test.
+R code is kept next to the concept it illustrates; causal assumptions, target populations, and contrasts are stated explicitly.
+-->
 
-The paper's exposure is not one variable but **two crossed**: obesity and waist fat.
+## Two questions hiding in the same 2 × 2 table
 
 | Group | Obese? | Waist fat (WHtR) | People | Deaths |
 |---|---|---|---|---|
 | I | yes | lower (< 0.6) | 355 | **4** (1.1%) |
-| II | yes | high (≥ 0.6) | 4,265 | 362 (8.5%) |
+| II | yes | high (>= 0.6) | 4,265 | 362 (8.5%) |
 | III | no | lower | 732 | 67 (9.2%) |
 | IV | no | high | 559 | 101 (18.1%) |
 
+::: {.question}
+**Question 1 — effect modification:** does **waist fat's effect** differ by obesity?  
+**Question 2 — interaction:** what do **obesity and waist fat together** do, compared with each alone?
+:::
+
+::: {.plain}
+Same table. **Different causal question.** Today we will learn the clean distinction first,
+then see why the real MASLD example is harder.
+:::
+
 [Same 5,911 people as Week 4. WHtR = waist-to-height ratio.]{.foot}
 
-::: {.plain}
-Week 4 asked about **obesity alone**. Today: does **waist fat's** effect depend on obesity —
-and what do the two do **together**? Two questions that sound alike, and are not.
-:::
-
 ::: {.notes}
-Plan Slide 1 (4 min). Every number comes from lectures/analysis/Week5_joint_exposure.R
-(written to Week5_joint_exposure.json). Rows: Week 4's — the locked domain restricted to the
-5,911 complete on every covariate. Point at Group I's 4 deaths now; the whole lecture comes
-back to it. Visual language for every DAG is Week 4's: colour = role, dashed outline = not
-measured, square = conditioned on, grey arrow with ? = the effect we want.
+Opening (4 min). Point at Group I's four deaths, but do not unpack the causal problems yet.
+Tell students: "First I want you to know exactly what question the 2x2 table can answer. Then
+we will audit whether these data can answer it." This reverses the old order.
 :::
 
-## Our running example
+## The map for today
 
-- **Who:** the Week 4 cohort — US adults with MASLD (NHANES 2007–2018), **5,911** with
-  complete data
-- **Exposure (A):** **high waist fat**, WHtR ≥ 0.6. **Second variable (M):** **obesity**,
-  BMI ≥ 30 (≥ 25 for Asian participants). **Outcome (Y):** death from any cause
-- **L** = Week 4's **pre-exposure set**: age, sex, race/ethnicity, smoking, sedentary time.
-  Every new model today adjusts for L — not for the paper's Model 1 conditions, some of
-  which Week 4 showed may be mediators
-- **Potential outcomes:** Y(a) when only A is set; Y(a, m) when both are set
+By the end of today, you should be able to answer **five questions in order**:
+
+1. Am I changing **one exposure** or imagining **two exposures jointly**?
+2. What is my modifier M, and could **A change M**?
+3. On what **scale** am I comparing effects — additive or multiplicative?
+4. What do the **four cells** actually contain?
+5. What should I **report**, with uncertainty, without over-interpreting it?
 
 ::: {.plain}
-The paper compares every group with Group I and never asks either of today's questions.
-**Today's numbers are our own analysis of the paper's data.**
-:::
-
-::: {.readmore}
-**Read more** · Week 4 deck, "Reading the moves with the DAG" · EpiMethods
-[Notation and glossary](https://ehsanx.github.io/EpiMethods/notation.html#variables-and-symbols)
-· our code: `lectures/analysis/Week5_joint_exposure.R`
+A model term such as `A * M` comes **after** these questions. It does not define the
+scientific question for you.
 :::
 
 ::: {.notes}
-Plan Slide 2 (3 min). Groups I + II = obese, Groups II + IV = high waist fat. The
-pre-exposure set is the one Week 4 reported as "the closest measured set to the DAG's";
-Week 4 got HR 0.95 for obesity with it. Week 4's L also listed income; it is missing for
-516 of the 5,911, so adding it would change the rows (Plan Slide 8). Slides 22–23 also
-show P3's crude and Model 1 fits, labelled as such.
+2 min. This is the lecture's recurring algorithm. Return to it at the end.
 :::
 
-## By the end of today you can…
+# Part 1 · Learn the distinction on a clean example {background-color="#eef4fa"}
 
-1. Tell **effect modification** from **interaction**, and say which one your analysis answers
-2. Choose the **adjustment set** each question needs — Week 4's DAGs, one step further
-3. Name the **scale** (additive or multiplicative), and explain why the answer can differ
-4. **Count** the people and deaths in every cell before trusting an interaction measure
-5. Use **time-to-event tools**: a Cox product term, and standardised risks for the additive
-   scale
-6. Report a **subgroup finding** without over-reading it
+[Same 2 × 2 table, two different questions.]{.part}
 
-::: {.readmore}
-**Read more** · EpiMethods *Concepts*, "Unpacking Effect Heterogeneity: Interaction vs.
-Effect Modification": [ehsanx.github.io/EpiMethods/confounding0.html](https://ehsanx.github.io/EpiMethods/confounding0.html#formal-definitions)
-:::
+## Start with smoking, income, and hypertension
 
-::: {.notes}
-Plan Slide 3 (2 min).
-:::
+Imagine a **fixed follow-up** study:
 
-# Part 1 · Two questions that sound alike {background-color="#eef4fa"}
+- **A = smoking** during the exposure window
+- **M = low income**, measured before that exposure window
+- **Y = incident hypertension** by the end of follow-up
 
-[EpiMethods *Concepts*: "Unpacking Effect Heterogeneity" · "Formal Definitions"]{.part}
-
-## Effect modification: one exposure
-
-- **One exposure, A.** A second variable, M, only sorts people into groups. Is A's effect
-  the **same in every group**?
-- Within M = m, compare the two potential outcomes:
-  RD~m~ = P[Y(1) = 1 | M = m] − P[Y(0) = 1 | M = m], and RR~m~ the same as a ratio.
-  Effect modification on the additive scale if RD~1~ ≠ RD~0~; multiplicative if RR~1~ ≠ RR~0~
-- **MASLD:** does high waist fat's effect on death **differ between the obese and the not
-  obese**? We imagine changing waist fat only; obesity just sorts people
+| Risk of hypertension | Higher income (M = 0) | Low income (M = 1) |
+|---|---:|---:|
+| **Not smoking (A = 0)** | 5% | 15% |
+| **Smoking (A = 1)** | 10% | 30% |
 
 ::: {.plain}
-M's **own** effect needs no causal story: sex can modify an effect though nobody can set it.
-But M must be something **A cannot change** (Part 2 shows why).
+For this teaching example, assume income is established **before** the smoking exposure window,
+so smoking cannot move someone between the income strata.
 :::
 
-::: {.readmore}
-**Read more** · EpiMethods *Concepts*, ["Formal Definitions"](https://ehsanx.github.io/EpiMethods/confounding0.html#formal-definitions)
-· [video](https://youtu.be/cxfwqBD1M1c) · VanderWeele, *Epidemiology* 2009 · Karim,
-*Effect modification in non-randomized studies*, ch. 8, §8.4
-:::
+Before any model, read the table in **two ways**: smoking's effect **within income groups**, or the
+joint pattern across **all four cells**.
 
 ::: {.notes}
-Plan Slide 4 (5 min). The definition conditions on M; it does not intervene on it. That is
-why the exposure needs exchangeability, positivity and consistency (Week 4) but the modifier
-does not (Karim ch. 8, §8.4.1). Ask: "Could sex modify an effect? Could anyone set your sex?"
+3 min. This is deliberately a fixed-follow-up binary-outcome example. Define the time order out loud:
+income is measured before the smoking exposure window; hypertension occurs later. That makes income
+a plausible modifier for the teaching example without claiming that income is immutable in real life.
 :::
 
-## Interaction: two exposures, one joint effect
+## Question 1: effect modification
 
-- **Two exposures, A and M.** Each person now has **four** potential outcomes:
-  Y(0, 0), Y(1, 0), Y(0, 1), Y(1, 1)
-- Is the effect of **both together** different from what each does alone — more (synergy)
-  or less (antagonism)?
-- **MASLD:** what would happen to deaths if we could set **both** obesity and waist fat?
-  All four groups are compared with **one** reference
+**One exposure: smoking. Income defines the groups.** Ask whether smoking's effect on hypertension
+is the same in each income stratum.
+
+| | Higher income | Low income |
+|---|---:|---:|
+| Risk if not smoking | 5% | 15% |
+| Risk if smoking | 10% | 30% |
+| **Risk difference for smoking** | **+5 points** | **+15 points** |
+| **Risk ratio for smoking** | **2.0** | **2.0** |
+
+- Additive scale: **yes**, smoking's effect differs (+5 vs +15 points)
+- Multiplicative scale: **no**, the smoking RR is 2 in both income groups
 
 ::: {.plain}
-**Same 2 × 2 table, different question.** Effect modification imagines changing **one**
-variable; interaction imagines changing **two**.
-:::
-
-::: {.readmore}
-**Read more** · EpiMethods *Concepts*, ["Formal Definitions"](https://ehsanx.github.io/EpiMethods/confounding0.html#formal-definitions)
-· Bours, *J Clin Epidemiol* 2021 · Karim, ch. 8, §8.5
+Effect modification is really **effect-measure modification**: the answer can depend on the scale.
 :::
 
 ::: {.notes}
-Plan Slide 5 (5 min). Same letter M, new role: in interaction M is a second exposure we
-imagine setting (Karim ch. 8 keeps M for both; EpiMethods writes B). Interaction is
-symmetric — it does not matter which exposure you call A. Effect modification is not:
-"waist fat's effect, by obesity" and "obesity's effect, by waist fat" are different
-questions (Plan Slide 9).
+4 min. Keep saying "one exposure: smoking". Income defines the strata; we are not yet trying to
+estimate a causal effect of income.
 :::
 
-## Confounding, modification, interaction
+## In R: read smoking's effect within each income group
 
-| | What it is | What you do with it |
+<!-- code: smoke_em -->
+```r
+toy <- data.frame(
+  income = c("Higher", "Low"),
+  risk_nonsmoke = c(0.05, 0.15),
+  risk_smoke    = c(0.10, 0.30)
+)
+
+toy$RD <- toy$risk_smoke - toy$risk_nonsmoke
+toy$RR <- toy$risk_smoke / toy$risk_nonsmoke
+toy
+#>   income risk_nonsmoke risk_smoke   RD RR
+#> 1 Higher          0.05        0.1 0.05  2
+#> 2    Low          0.15        0.3 0.15  2
+```
+
+::: {.plain}
+The code does exactly what the table did: compare **smoking vs not smoking within each income group**.
+:::
+
+::: {.notes}
+3 min. This is intentionally simple R. The point is to connect the estimand to code immediately,
+not to introduce a model before students can see the contrasts.
+:::
+
+## Question 2: interaction
+
+Now make a **stronger move**: treat smoking and low income as **two exposures** and use the
+higher-income, non-smoking cell as the reference.
+
+- RR for smoking alone = 10% / 5% = **2**
+- RR for low income alone = 15% / 5% = **3**
+- RR for both = 30% / 5% = **6**
+
+**Multiplicative:** 6 = 2 × 3 → **no multiplicative interaction**
+
+**Additive interaction contrast (IC):** compare the smoking risk difference across income groups:
+
+$$
+IC=(R_{11}-R_{01})-(R_{10}-R_{00})
+   =R_{11}-R_{10}-R_{01}+R_{00}.
+$$
+
+Here, IC = (30 − 15) − (10 − 5) = **+10 percentage points**. The additive null is **IC = 0**.
+
+::: {.question .smallish}
+The arithmetic is valid, but the **causal interpretation is stronger**. Treating income as a second
+exposure asks what it means to intervene on income; that may represent several different social
+interventions. As a modifier, income only had to define a defensible pre-exposure subgroup.
+:::
+
+::: {.notes}
+5 min. Define IC here, at first use. First read it as "difference of risk differences"; only then show
+the compact four-cell formula. Say explicitly that "setting income" is less well-defined than simply
+using baseline income to define strata.
+:::
+
+## In R: interaction on two scales
+
+<!-- code: smoke_int -->
+```r
+r00 <- 0.05  # higher income, not smoking
+r10 <- 0.10  # higher income, smoking
+r01 <- 0.15  # low income, not smoking
+r11 <- 0.30  # low income, smoking
+
+rr10 <- r10 / r00
+rr01 <- r01 / r00
+rr11 <- r11 / r00
+
+mult_ratio <- rr11 / (rr10 * rr01)
+IC <- r11 - r10 - r01 + r00
+round(c(mult_ratio = mult_ratio, IC = IC), 2)
+#> mult_ratio         IC
+#>        1.0        0.1
+```
+
+::: {.plain}
+`mult_ratio = 1` is the multiplicative null. `IC = 0.10` means the smoking risk difference is
+**10 percentage points larger in the low-income group** than in the higher-income group.
+:::
+
+::: {.notes}
+3 min. Keep the code paired with the arithmetic. Do not introduce RERI/AP/S here; the risk-scale
+interaction contrast is enough to establish the idea.
+:::
+
+## Same table, different question
+
+| | Effect modification | Interaction |
 |---|---|---|
-| **Confounding** | a common cause that biases **one** estimate | **remove** it — adjust |
-| **Effect modification** | A's effect differs across levels of M | **report** it — one estimate per level |
-| **Interaction** | A and M together differ from A and M apart | **report** all four combinations |
-| **A product term** (A × M) | a term in a **model** | a tool for both questions, on that model's scale only |
+| What changes? | **Smoking (A) only** | **Smoking and low income** |
+| Role of income (M) | defines pre-exposure groups | second exposure |
+| Main comparison | smoking's effect within each income group | all four joint exposure states |
+| Causal demand | identify smoking → hypertension within income strata | identify joint effects of smoking and income |
+| Scale | additive **or** multiplicative | additive **or** multiplicative |
 
 ::: {.plain}
-One product-term model can serve either question **if it has that question's adjustment
-set**. What differs is the set (next) and how you **read** the output.
-:::
-
-::: {.notes}
-Plan Slide 6 (4 min). The same variable can be a confounder and a modifier at once: obesity
-confounds waist fat → death (Week 4, Table 2 Q2) and is today's modifier. A confounder is
-something to fix; a modifier is a result to describe.
-:::
-
-# Part 2 · What to adjust for {background-color="#eef4fa"}
-
-[EpiMethods *Concepts*: "Implications for Confounding Control"]{.part}
-
-## Each question has its own adjustment set
-
-- **Effect modification of A by M:** adjust for the confounders of **A → Y**. M needs none
-- **Interaction of A and M:** adjust for the confounders of **A → Y and of M → Y** — a
-  bigger demand
-- Week 4's rule, one step further: **the adjustment set follows the question**
-
-::: {.plain}
-Same two variables, same data: one question can need far more than the other. In MASLD,
-that decides which question we can even attempt.
+**Effect modification imagines changing one variable; interaction imagines changing two.**
 :::
 
 ::: {.readmore}
-**Read more** · EpiMethods *Concepts*, ["Implications for Confounding Control"](https://ehsanx.github.io/EpiMethods/confounding0.html#implications-for-confounding-control)
-· effect-modification [slides](https://docs.google.com/presentation/d/1q-RTYkiQV8tCbn71BGL3V11jjlGgq1oBfZwavLuWOks/edit?usp=sharing)
-(smoking, income and education) · Karim, ch. 8, Fig. 8.1
+**Read more** · EpiMethods *Concepts*, ["Formal Definitions"](https://ehsanx.github.io/EpiMethods/confounding0.html#formal-definitions)
+· VanderWeele, *Epidemiology* 2009 · Bours, *J Clin Epidemiol* 2021
 :::
 
 ::: {.notes}
-Plan Slide 7 (4 min). The EpiMethods slides run the classic example. Income as a modifier
-of smoking → hypertension: {age, gender}. Income as a second exposure: add diet or
-education, and the slides ask "but how?" — income has no arrow into hypertension, so is it
-a real exposure or a proxy for education? Their "true" interaction is education as the
-second exposure, needing only {age, gender}. The same question returns today: is obesity a
-second exposure, or only a sorter?
+3 min. This is the anchor slide. Point back to the smoking-income example if the MASLD example
+becomes complicated later.
 :::
 
-## In MASLD, one question needs less
+## Confounding is a third idea
 
-![](../img/w5_two_questions.png){fig-align="center" width="94%"}
-
-::: {.notes}
-Plan Slide 8 (10 min across this and the next slide). DO NOT DROP. Panel A: the back door
-waist ← obese ← U → death passes through obesity, so stratifying on obesity blocks it —
-{L, obesity} is the one minimal set ON THIS DAG. Panel B: obesity is now an exposure, and
-obese ← U → death is open; no measured set closes it. With U measured, {L, U} would do. U
-merges Week 4's two latent nodes (serious illness; disease that came before obesity) —
-Week 4's appendix needed {Before, Ill, L} for the same reason. dagitty confirms all of this
-(appendix code).
-:::
-
-## What Panel A's ✓ assumes
-
-- **Obesity comes before waist fat** (Week 4's Table 2 DAG). If waist fat drives BMI
-  instead, the exposure changes obesity, so obesity cannot be the modifier (two slides on)
-- **U reaches waist fat only by moving people across BMI 30.** Adjusting for BMI itself
-  barely moves today's estimates: 2.80 and 1.07, against 2.99 and 1.09
-- **Nothing unmeasured causes both obesity and waist fat** (a fat-distribution gene, say):
-  obesity is a collider of U and that cause, so stratifying on it would open a path
-- **L is complete.** Week 4's L also had income, missing for 516 of the 5,911
+| | What it means | What you do |
+|---|---|---|
+| **Confounding** | a common cause biases an estimate | **control** it |
+| **Effect modification** | A's effect differs across M | **describe** stratum-specific effects |
+| **Interaction** | the joint effect of A and M departs from a chosen scale | **describe** all four exposure states |
+| **Product term A × M** | a model parameter | use it as a **tool**, on that model's scale |
 
 ::: {.plain}
-Under all of this sits the **FLI ≥ 60 selection**: FLI is computed from BMI **and waist**, so
-the cohort is selected on a child of both exposures (Week 4). That biases even Panel A —
-for IV vs III, downward. Interaction fails **before** any of these.
+A product term is not synonymous with either "effect modification" or "interaction".
+The **question and estimand come first**.
 :::
 
 ::: {.notes}
-Plan Slide 8, continued. Each bullet is dagitty-checked: flip obese → waist; add a latent
-G → obese, G → waist; add waist → FLI ← TG → death with FLI selected — each removes Panel A's
-set. Panel B has no set even without them. Week 4's plan gave the FLI direction for IV vs
-III: the not obese with low waist fat reach FLI ≥ 60 with higher triglycerides and GGT.
-The honest summary: modification is answerable only under strong, stated assumptions;
-interaction is not answerable even under those.
+3 min. Connect to Week 4: confounding is a problem to control; modification is often the
+result you want to report.
 :::
 
-## Which way round? Choosing the modifier
+# Part 2 · A practical workflow for effect modification {background-color="#eef4fa"}
 
-![](../img/w4_table2_panels_a.png){fig-align="center" width="86%"}
+[This is the main skill for P3.]{.part}
+
+## A five-step workflow
+
+1. **Choose A and M.** Give a substantive reason for M.
+2. Check that **A cannot cause M**.
+3. **Count** people and outcomes in A × M before modelling.
+4. Estimate A's effect within each M on a **named scale**.
+5. Report the two effects, their **contrast and uncertainty**, and what you adjusted for.
 
 ::: {.plain}
-**Waist fat by obesity:** obesity is a confounder (Q2), so stratifying on it helps.
-**Obesity by waist fat:** waist fat is on obesity's path (Q1), so stratifying on it removes
-part of obesity's effect — and this Week 4 figure leaves out U, which also blocks obesity's
-own effect. Which variable comes first decides which reading works: the DAG, not the data.
+Do this before asking whether a p-value crossed 0.05.
 :::
 
 ::: {.notes}
-Plan Slide 9 (3 min). This is Week 4's Table 2 figure, Q1 and Q2, reused on purpose; it was
-drawn without U. A modifier caused by the exposure is a mediator (or a collider) in
-subgroup form: Week 4's problems come back. Age, sex and race/ethnicity are before waist
-fat; obesity is, only under the arrow we drew; diabetes and medicines are not.
+3 min. This is the workflow students should use in P3. Emphasize pre-specification and cell counts.
 :::
 
-## The exposure must not change the modifier
+## The modifier must survive the "could A change it?" test
 
 ![](../img/w5_modifier_timing.png){fig-align="center" width="70%"}
 
 ::: {.plain}
-"Waist fat's effect among people with M = m" makes sense only if waist fat cannot move people
-into or out of that group. So the modifier must be something **the exposure cannot change**.
-The safe check is time — sex, age, genes, a condition that began **before** the exposure.
-*Recorded at the same visit* is not enough: waist fat could have caused the diabetes found at
-the NHANES exam. Our modifier, obesity, passes only if it came before the waist fat.
+"A's effect among people with M = m" is cleanest when **A cannot move people into or out of M**.
+Sex, age, genes, or a condition established before A are natural candidates. A condition measured
+at the same visit may not be.
+:::
+
+::: {.question}
+If A could cause M, stratifying on M may block part of A's effect or induce selection/collider bias.
+That is no longer a simple subgroup effect. In the smoking example, this is why we explicitly defined
+**income before the smoking exposure window**.
 :::
 
 ::: {.notes}
-Plan Slide 9a (5 min). Two things go wrong at once in panel B. (1) Part of waist fat's
-effect runs through diabetes, and holding diabetes fixed cuts that route out. (2) The
-strata stop holding comparable people: among people with diabetes, those with high waist
-fat often got it from the waist fat, while those with lower waist fat got it some other
-way — genes, illness — which also raises the risk of death. That is collider bias, Week 4's
-FLI lesson in subgroup form. What is still allowed: a modifier that causes the exposure, a
-confounder, or a marker nobody can change. A variable that arises after the exposure but is
-not affected by it (calendar time, say) is also fine — timing is the safe check, "cannot be
-changed by the exposure" is the rule. If the downstream variable is what interests you,
-the question becomes mediation: the effect with diabetes held fixed (a controlled direct
-effect, which needs diabetes' own confounders measured), or the effect among people whose
-diabetes would not change with waist fat — not a subgroup you can see in the data. The
-"obesity paradox" has panel B's shape in heart disease (Banack & Kaufman 2014) and in
-diabetes (Lajous et al. 2014); whether collider bias explains all of it is debated. Obesity
-passes only under the arrow obese → waist fat (the first assumption under Panel A's ✓).
-Thursday's DNR order is a timing question of the same kind.
+5 min. Timing is a practical check, not the definition. The formal rule is that M should not
+be affected by A for the usual subgroup causal interpretation.
 :::
 
-## In R: could waist fat cause the modifier?
+## What do we adjust for?
 
-<!-- code: diabetes_tab -->
-```r
-tab <- table(diabetes = d$t2dm, high_waist = d$central)
-tab                                    # people
-#>         high_waist
-#> diabetes    0    1
-#>        0  947 3482
-#>        1  140 1342
-round(100 * prop.table(tab, 2))        # % in each waist group
-#>         high_waist
-#> diabetes  0  1
-#>        0 87 72
-#>        1 13 28
-```
+### Effect modification of A by M
+
+We need to identify the **effect of A on Y within levels of M**.
+
+- Control the confounding of **A → Y** appropriate to that question
+- We do **not** need to identify the causal effect of M itself
+- But conditioning on M still has to be **causally defensible**
+
+### Interaction of A and M
+
+To interpret both as exposures, we need to identify the **joint effects of A and M** — a stronger requirement.
 
 ::: {.plain}
-Diabetes is twice as common with high waist fat (28% vs 13%). That does not prove waist fat
-causes it, but it is plausible — so diabetes fails the rule and is a risky modifier.
+The adjustment set follows the **causal question**, not the presence of `A * M` in software.
 :::
 
-[`d`: Week 4's 5,911 people, one row each. `t2dm`: 1 = diabetes at the exam; `central`: 1 =
-high waist fat. The "In R" slides are one R session, run in order:
-`lectures/analysis/Week5_code_outputs.R`.]{.foot}
+::: {.readmore}
+**Read more** · EpiMethods *Concepts*, ["Implications for Confounding Control"](https://ehsanx.github.io/EpiMethods/confounding0.html#implications-for-confounding-control)
+· Karim, ch. 8
+:::
 
 ::: {.notes}
-Plan Slide 9b (2 min). `prop.table(tab, 2)` gives column percentages: of the people with
-lower waist fat, 13% have diabetes; of those with high waist fat, 28%.
+5 min. This wording replaces the too-easy-to-misread "M needs none". Say: "I don't need the
+causal effect of M, but I still need the subgroup comparison to make causal sense."
 :::
 
-## In R: what splitting by diabetes does
+## Name the scale before saying "no modification"
 
-<!-- code: diabetes -->
-```r
-f_no  <- coxph(Surv(time_yr, dead) ~ central + obese + age + female +
-                 race + smk_current + sed, data = subset(d, t2dm == 0))
-f_yes <- coxph(Surv(time_yr, dead) ~ central + obese + age + female +
-                 race + smk_current + sed, data = subset(d, t2dm == 1))
-round(summary(f_no)$conf.int["central", c(1, 3, 4)], 2)   # HR, lower, upper
-#> exp(coef) lower .95 upper .95
-#>      1.23      0.85      1.78
-round(summary(f_yes)$conf.int["central", c(1, 3, 4)], 2)
-#> exp(coef) lower .95 upper .95
-#>      0.93      0.56      1.54
-```
+*Week 4's made-up table, now read for effect modification.*
 
-::: {.plain}
-Without diabetes the HR is **1.23 (0.85–1.78)**; with it, **0.93 (0.56–1.54)** — a gap well
-within noise. And **neither** is waist fat's effect in a fixed group: waist fat moves people
-into one stratum and out of the other, so both cut the diabetes route and may compare unlike
-people (panel B).
-:::
+| Age group | Risk, exposed | Risk, unexposed | OR | RR | RD |
+|---|---:|---:|---:|---:|---:|
+| 60 or older | 0.80 | 0.50 | 4.00 | **1.60** | 0.30 |
+| Under 60 | 0.50 | 0.20 | 4.00 | **2.50** | 0.30 |
 
-[`time_yr`: years followed; `dead`: 1 = died; `obese`: 1 = obese. L = `age`, `female`, `race`,
-`smk_current`, `sed` (sedentary time, standardised). `c(1, 3, 4)` picks the HR and its
-interval.]{.foot}
-
-::: {.notes}
-Plan Slide 9c (2 min). One model per diabetes stratum — the stratified approach of Karim
-ch. 8, §8.4.3.2. Whether the gap is collider bias, a real difference or noise, the data
-cannot say; a product term for the two strata gives p ≈ 0.2. The point is that neither
-number can be read as modification. That 1.23 is close to Week 4's 1.24 does not rescue it.
-:::
-
-# Part 3 · Which scale? {background-color="#eef4fa"}
-
-[EpiMethods *Concepts*: "The Role of the Scale: Effect Measure Modification"]{.part}
-
-## Last week's table, read for modification
-
-*Week 4's made-up collapsibility table: half of each age group exposed.*
-
-| Age group (people) | Risk, exposed | Risk, unexposed | OR | RR | RD |
-|---|---|---|---|---|---|
-| 60 or older (200) | 0.80 | 0.50 | 4.00 | **1.60** | 0.30 |
-| Under 60 (200) | 0.50 | 0.20 | 4.00 | **2.50** | 0.30 |
-
-- Does age **modify** the exposure's effect? **RR: yes** (1.60 vs 2.50). **OR: no** (4.00
-  in both). **RD: no** (0.30 in both)
-- Same data, three answers. That is why the careful name is **effect-measure
-  modification**
+- RR: **modified** by age (1.60 vs 2.50)
+- OR: **not modified** (4.00 vs 4.00)
+- RD: **not modified** (0.30 vs 0.30)
 
 ::: {.plain}
 Never write "there is no effect modification" without naming the **scale**.
 :::
 
-::: {.readmore}
-**Read more** · EpiMethods *Concepts*, ["The Role of the Scale"](https://ehsanx.github.io/EpiMethods/confounding0.html#the-role-of-the-scale-effect-measure-modification)
-· Week 4 deck, "Collapsibility: ORs move without confounding"
-:::
-
 ::: {.notes}
-Plan Slide 10 (3 min). Week 4's notes promised this: the same table, read the other way.
-Constant OR and constant RD together is a constructed coincidence; real data usually differ
-on every scale.
+4 min. This is the bridge from Week 4's collapsibility material.
 :::
 
-## In R: the same table, three scales
-
-<!-- code: scale_toy -->
-```r
-toy <- data.frame(age = c("60+", "<60"),
-                  risk1 = c(0.80, 0.50), risk0 = c(0.50, 0.20))
-toy$RD <- toy$risk1 - toy$risk0                    # risk difference
-toy$RR <- toy$risk1 / toy$risk0                    # risk ratio
-toy$OR <- (toy$risk1 / (1 - toy$risk1)) /
-          (toy$risk0 / (1 - toy$risk0))            # odds ratio
-toy
-#>   age risk1 risk0  RD  RR OR
-#> 1 60+   0.8   0.5 0.3 1.6  4
-#> 2 <60   0.5   0.2 0.3 2.5  4
-```
-
-::: {.plain}
-One line per measure. The **RR** differs by age (1.6 vs 2.5); the **OR** (4) and the **RD**
-(0.3) do not. Same data, three answers — so name the scale.
-:::
-
-::: {.notes}
-Plan Slide 10a (2 min). Week 4's made-up table, typed into a data frame.
-:::
-
-## Two scales, two questions
-
-*R~am~ = risk with A = a and M = m (11 = both, 00 = neither); RR~am~ = R~am~ ÷ R~00~.*
+## Two scales are enough for the core lecture
 
 :::: {.columns}
 ::: {.column width="50%"}
-**Multiplicative** — do the **ratios** differ?
+### Multiplicative
 
-- **ratio of HRs** = HR for A among M = 1 ÷ HR for A among M = 0
-- in a Cox or logistic model: exp(product-term coefficient)
-- **1** = none
+Compare the **relative effects** of A across M.
+
+For a Cox model:
+
+**ratio of HRs** = HR(A | M=1) ÷ HR(A | M=0)
+
+No multiplicative modification → **ratio = 1**
 :::
 ::: {.column width="50%"}
-**Additive** — do the **differences** differ?
+### Additive
 
-- RD~M=1~ − RD~M=0~; for two exposures, the **interaction contrast**
-  IC = R~11~ − R~10~ − R~01~ + R~00~
-- **RERI** (relative excess risk due to interaction) = RR~11~ − RR~10~ − RR~01~ + 1
-- **0** = none
+Compare the **absolute effects** of A across M.
+
+**difference of RDs** = RD(A | M=1) − RD(A | M=0)
+
+No additive modification → **difference = 0**
 :::
 ::::
 
-- Two more: **AP** (attributable proportion) = RERI ÷ RR~11~, 0 = none; **S** (synergy index)
-  = (RR~11~ − 1) ÷ [(RR~10~ − 1) + (RR~01~ − 1)], 1 = none. RERI, AP and S are all
-  **additive-scale** measures
-- The additive scale counts **deaths you could prevent, and in whom**
-
-::: {.readmore}
-**Read more** · VanderWeele & Knol, "A tutorial on interaction", *Epidemiol Methods* 2014
-· [Interaction tutorial](https://ehsanx.github.io/interaction/) (oral cancer, alcohol and
-smoking: OR, RR and RD versions)
+::: {.plain}
+For public-health interpretation, the additive scale often answers the concrete question:
+**how many extra events are associated with the exposure in each subgroup?**
 :::
 
 ::: {.notes}
-Plan Slide 11 (6 min). RERI uses ratios relative to R~00~, so it needs that reference to be
-the LOWEST-risk cell; if an exposure is protective, recode it first (Knol et al. 2011).
-Thursday's lab does exactly that recoding. RERI and AP can be negative, with no lower
-bound. The lab's text calls S a multiplicative measure: it is additive.
+4 min. Keep RERI/AP/S out of the core. They are in the appendix and lab. For survival data,
+use standardised risks at a fixed time for the additive scale.
 :::
 
-## Same data, two answers
+# Part 3 · Now stress-test the idea with MASLD {background-color="#eef4fa"}
 
-| Risk of the outcome | M absent | M present |
-|---|---|---|
-| **A absent** | 5% | 15% |
-| **A present** | 10% | 30% |
+[The paper is prognostic; our causal re-reading is harder.]{.part}
 
-- **Multiplicative:** RR 2 for A alone, 3 for M alone, 6 for both = 2 × 3 → **no
-  interaction**
-- **Additive:** RERI = 6 − 2 − 3 + 1 = **2**; IC = 30 − 10 − 15 + 5 = **+10 points** →
-  **positive interaction**
+## The MASLD question we will try to answer
+
+- **A:** high waist fat, WHtR >= 0.6
+- **M:** obesity
+- **Y:** all-cause death
+- **L:** age, sex, race/ethnicity, smoking, sedentary time
+
+::: {.question}
+**Primary Week 5 question:** does the effect of high waist fat on death differ between people
+with and without obesity?
+:::
 
 ::: {.plain}
-When both exposures **raise** risk, no multiplicative interaction **means** positive additive
-interaction: RERI = (RR~10~ − 1)(RR~01~ − 1) > 0. Neither scale is "right": **report both**,
-and say which scale each verdict refers to.
+That is an **effect-modification** question: one exposure changes; obesity defines the strata.
+The paper itself asked a **prognostic phenotype** question; this causal re-reading is ours.
 :::
 
 ::: {.notes}
-Plan Slide 12 (3 min). Made-up numbers. Same arithmetic as baselines differing: an equal
-ratio on a higher baseline is a bigger difference. The reverse also exists (additive null,
-multiplicative non-null); say so in one line.
+2 min. Only now introduce the running example formally. Be explicit that the paper was designed to
+compare prognosis across BMI/WHtR phenotypes, not to identify the causal effect of changing waist fat.
 :::
 
-## In R: RERI, AP, S and IC from four risks
+## Why the MASLD example becomes causally difficult
 
-<!-- code: measures_toy -->
-```r
-r00 <- 0.05; r10 <- 0.10; r01 <- 0.15; r11 <- 0.30   # risk, A = a, M = m
-rr10 <- r10 / r00; rr01 <- r01 / r00; rr11 <- r11 / r00
-RERI <- rr11 - rr10 - rr01 + 1
-round(c(ratio = rr11 / (rr10 * rr01),          # multiplicative: 1 = none
-        RERI  = RERI,                          # additive: 0 = none
-        AP    = RERI / rr11,                   # additive: 0 = none
-        S     = (rr11 - 1) / ((rr10 - 1) + (rr01 - 1)),   # additive: 1 = none
-        IC    = r11 - r10 - r01 + r00), 3)     # additive, in risk: 0 = none
-#> ratio  RERI    AP     S    IC
-#> 1.000 2.000 0.333 1.667 0.100
-```
+The paper's phenotype analysis is reasonable for **risk stratification**. Extra problems appear when
+we reuse the same data for a causal effect-modification question:
+
+- BMI/obesity and WHtR/waist were measured at the **same examination**; the data do not establish which came first
+- both are related measures of adiposity, so treating obesity as clearly upstream of waist fat is a **substantive assumption**
+- the cohort is restricted to people with **MASLD**; MASLD ascertainment depends partly on BMI and waist-related information
+- one important cell is sparse: the paper had **5 deaths** in Group I; our complete-case analysis has **4**
 
 ::: {.plain}
-**ratio = 1:** no multiplicative interaction. **RERI = 2, AP = 0.33, S = 1.67, IC = +0.10**
-(ten points): positive additive interaction. Same four risks, two verdicts.
+Nothing here makes the paper "wrong." These complications arise because **we are asking a different,
+more causal question than the paper was designed to answer**.
 :::
 
 ::: {.notes}
-Plan Slide 12a (3 min). The made-up risks from the last slide. AP = 0.33: a third of the
-risk in the doubly exposed group is due to the interaction. Part 4 uses exactly these
-formulas, with hazard ratios and standardised risks in place of the four risks.
+4 min. Distinguish the paper's goal from our teaching goal. The paper describes four phenotypes and
+mortality prognosis. We are deliberately stress-testing those data with an effect-modification estimand.
 :::
 
-## What to report: one table, both scales
+## Causal audit: can obesity really be the modifier?
 
-::: {style="font-size: 0.9em"}
-| Report | Effect modification | Interaction |
-|---|---|---|
-| People **and** outcomes in every cell | yes | yes |
-| Every combination vs **one** reference (the lowest-risk cell) | yes | yes |
-| A's effect within each level of M | yes | yes |
-| M's effect within each level of A | — | yes |
-| Measures on **both** scales, with intervals | yes | yes |
-| What was adjusted for | A's confounders | **both** exposures' confounders |
-:::
+![](../img/w5_two_questions.png){fig-align="center" width="94%"}
 
-::: {.readmore}
-**Read more** · Knol & VanderWeele, *Int J Epidemiol* 2012 · EpiMethods *Concepts*,
-["Reporting guideline"](https://ehsanx.github.io/EpiMethods/confounding0.html#reporting-guideline)
-· Karim, ch. 8, §8.7
+::: {.plain}
+Panel A can represent effect modification only under strong assumptions, including that obesity
+comes **before** waist fat. Panel B treats obesity as a second exposure and exposes an unmeasured
+confounding problem for obesity → death.
 :::
 
 ::: {.notes}
-Plan Slide 13 (2 min). The rest of the lecture fills this table in for MASLD. BREAK after
-this slide (Plan Slide 14, 10 min).
+7 min. Panel A: waist fat is the exposure and obesity is conditioned on. Panel B: obesity
+becomes an exposure; U confounds its effect on death. Make the conceptual transition explicit:
+"The question changed, so the identification problem changed."
 :::
 
-# Part 4 · The four groups, analysed {background-color="#eef4fa"}
+## What the effect-modification interpretation assumes
 
-[EpiMethods: "Interaction" — a joint-exposure analysis on NHANES]{.part}
+For the obese/not-obese strata to be interpretable as modifiers of waist fat's effect, we need:
+
+- a time-ordering story in which obesity is established **before** the waist-fat exposure of interest
+- no important unmeasured common cause of obesity and waist fat that becomes problematic when we stratify on obesity
+- L to be adequate for confounding of waist fat → death within each obesity stratum
+- conditioning on MASLD **not to induce important selection bias** in the within-stratum waist-fat comparison
+
+::: {.plain}
+The last assumption is not testable here. FLI, used to identify steatosis, includes **BMI and waist
+circumference** (plus triglycerides and GGT), so restricting to MASLD can in principle distort the
+association between adiposity measures and death.
+:::
+
+::: {.notes}
+5 min. Do not say selection bias is definitely large; say it is a causal identification concern we
+cannot rule out. Likewise, the data do not prove that obesity precedes waist fat because both were
+measured at one examination.
+:::
 
 ## Count first
 
 | | Lower waist fat | High waist fat |
 |---|---|---|
-| **Obese** | Group I: 355 people, **4** deaths | Group II: 4,265 people, 362 deaths |
+| **Obese** | Group I: 355 people, **4 deaths** | Group II: 4,265 people, 362 deaths |
 | **Not obese** | Group III: 732 people, 67 deaths | Group IV: 559 people, 101 deaths |
 
-- Every comparison **with Group I** divides by **4 deaths** — and Group I is the
-  **lowest-risk** cell, the reference the additive measures need
-- **Week 4's positivity check, for the new exposure:** of 2,432 obese women, only **57**
-  have lower waist fat; among the obese, the chance of high waist fat given L runs from
-  27%–99.7%
+- Group I anchors the obese waist-fat comparison **II vs I** and several phenotype contrasts; it contains only **4 deaths**
+- Among 2,432 obese women, only **57** have lower waist fat: limited support for that exposure level
 
 ::: {.plain}
-The cell the method needs most is the one the data fill least. **Print these counts** in
-every interaction table.
+A model can still produce a coefficient, but the empirical information comes from these cells.
+**Report the cell counts beside the effect estimates.**
 :::
-
-[5,911 rows, as Week 4.]{.foot}
 
 ::: {.notes}
-Plan Slide 15 (3 min). Group I: 57 women, 2 of the 4 deaths. Among the not obese the
-chance of high waist fat runs 3%–95%. In the bootstrap that follows, 10 of 500 resamples
-drew none of Group I's deaths at all; they are kept, since they are what the data allow.
-For obese women, the obese-stratum risks lean on the model more than on data.
+3 min. Avoid saying one cell is mathematically "needed most." The precise point is that several key
+contrasts lean on a cell with only four events, so the resulting estimates are unstable.
 :::
 
-## In R: count first
+## In R: count before you model
 
 <!-- code: counts -->
 ```r
@@ -597,7 +526,8 @@ table(group = d$group, died = d$dead)
 #>   II  3903  362
 #>   III  665   67
 #>   IV   458  101
-with(subset(d, obese == 1 & female == 1),     # obese women only
+
+with(subset(d, obese == 1 & female == 1),
      table(high_waist = central))
 #> high_waist
 #>    0    1
@@ -605,312 +535,363 @@ with(subset(d, obese == 1 & female == 1),     # obese women only
 ```
 
 ::: {.plain}
-Two lines of code, before any model: **4** deaths in Group I, and only **57** of 2,432 obese
-women with lower waist fat.
+Two lines of code reveal the problem before the Cox model does: **4 deaths in Group I** and
+very little lower-waist support among obese women.
 :::
-
-[5,911 rows. `dead`: 1 = died during follow-up. `central`: 1 = high waist fat.]{.foot}
 
 ::: {.notes}
-Plan Slide 15a (2 min). Knol & VanderWeele ask for exactly these counts in the reporting
-table.
+3 min. This is code students can reuse directly in P3: always print the A × M × outcome counts first.
 :::
 
-## One model, two ways to write it
+## One product-term model, two stratum-specific HRs
 
-<!-- code: twoways -->
+<!-- code: fit_model -->
 ```r
-fit_joint <- coxph(Surv(time_yr, dead) ~ group +
-                     age + female + race + smk_current + sed, data = d)
-fit_prod  <- coxph(Surv(time_yr, dead) ~ obese * central +
-                     age + female + race + smk_current + sed, data = d)
-all.equal(fit_joint$loglik, fit_prod$loglik)     # the same fit?
-#> [1] TRUE
-round(exp(coef(fit_prod))[c("obese", "central", "obese:central")], 2)
-#>         obese       central obese:central
-#>          0.34          1.09          2.74
+fit <- coxph(Surv(time_yr, dead) ~ obese * central +
+               age + female + race + smk_current + sed, data = d)
 ```
 
-- **The same fit** (`TRUE`): the 4-group factor and the product term are two ways of
-  writing one model. Both adjust for L = age, sex, race/ethnicity, smoking, sedentary time
-- `obese` (0.34) is obesity's HR among those with **lower** waist fat; `central` (1.09) is
-  waist fat's HR among the **not obese** only; `obese:central` (2.74) is the **ratio** of
-  waist fat's HR in the obese to that in the not obese
-- Reading `central` as "the effect of waist fat" is the **Table 2 fallacy** again
+- Among the **not obese**: HR for high vs lower waist fat = **1.09 (0.79–1.50)**
+- Among the **obese**: HR = **2.99 (1.11–8.09)**
+- Ratio of HRs = **2.74 (0.97–7.71)**
+- Likelihood-ratio test for allowing the HR to differ: **p = 0.03**
 
-::: {.readmore}
-**Read more** · EpiMethods ["Interaction" — joint variable and product-term models](https://ehsanx.github.io/EpiMethods/confounding9.html#model-1.-joint-variable-model)
-· Westreich & Greenland, *Am J Epidemiol* 2013 ("…confounder and modifier coefficients")
+$$
+\exp(\beta_{A\times M})
+=\frac{ HR_\text{waist, obese} }{ HR_\text{waist, not obese} }
+=\frac{2.99}{1.09}=2.74.
+$$
+
+::: {.plain}
+The product term **re-parameterises the same four cells**. It compares the two HRs; it does not
+create information where Group I has only four deaths.
 :::
 
 ::: {.notes}
-Plan Slide 16 (4 min). `obese` and `central` are 0/1; `group` is I–IV. obese = 0.34 is
-1 ÷ 2.95: Group I vs Group III. `Publish::publish()`
-prints the stratum-specific estimates for you (Thursday); `interactionR`'s effect-modification
-table treats the FIRST exposure named as the modifier, so check which way round it prints.
+4 min. The coefficient of central is the waist-fat HR in the reference obesity stratum. The product
+term tells us how much that HR changes in the other stratum. Re-coding or using a four-level factor
+would not solve the sparse-cell problem.
 :::
 
-## In R: which hazard ratio is which
+## In R: recover both HRs and test the product term
 
-<!-- code: strata -->
+<!-- code: recover -->
 ```r
-b <- coef(fit_prod)
-round(exp(b[["central"]]), 2)                 # not obese: IV vs III
+b <- coef(fit)
+
+round(exp(b[["central"]]), 2)                      # not obese: IV vs III
 #> [1] 1.09
+
 round(exp(b[["central"]] + b[["obese:central"]]), 2)   # obese: II vs I
 #> [1] 2.99
-d$notobese <- 1 - d$obese      # flip: the obese become the reference
-fit_flip <- coxph(Surv(time_yr, dead) ~ notobese * central +
+
+fit_main <- coxph(Surv(time_yr, dead) ~ obese + central +
                     age + female + race + smk_current + sed, data = d)
-round(summary(fit_flip)$conf.int["central", c(1, 3, 4)], 2)   # HR, lower, upper
-#> exp(coef) lower .95 upper .95
-#>      2.99      1.11      8.09
+round(anova(fit_main, fit)$`Pr(>|Chi|)`[2], 3)     # likelihood-ratio p
+#> [1] 0.029
 ```
 
 ::: {.plain}
-Add coefficients to get each stratum's HR. For its confidence interval, **flip the coding**
-so the other stratum is the reference: then `central` is waist fat's HR among the obese,
-**2.99 (1.11–8.09)**.
+The stratum-specific effects are the scientific results; the product-term test is a **contrast between them**.
 :::
 
 ::: {.notes}
-Plan Slide 16a (3 min). The flip is the "re-run with a different reference group" of Karim
-ch. 8, §8.4.3.1. `Publish::publish()` and `interactionR` do the same arithmetic for you.
+4 min. This is a good place to remind students that a product-term coefficient by itself is not
+"the interaction effect" on every scale; here it is the multiplicative contrast in the Cox model.
 :::
 
-## In R: does the product term matter?
+## Why compute standardised six-year risks?
 
-<!-- code: lrt -->
-```r
-# fit_prod: from "One model, two ways"
-fit_main <- coxph(Surv(time_yr, dead) ~ obese + central +   # no product
-                    age + female + race + smk_current + sed, data = d)
-round(exp(coef(fit_main))[["central"]], 2)    # one HR for all: Week 4's
-#> [1] 1.24
-lr <- anova(fit_main, fit_prod)       # likelihood-ratio test, product term
-round(c(chisq = lr$Chisq[2], p = lr$`Pr(>|Chi|)`[2]), 3)
-#> chisq     p
-#> 4.754 0.029
-```
+This is **our re-analysis, not a result reported by the paper**. The paper reports Kaplan-Meier curves
+and Cox hazard ratios. We add standardised risks because effect modification can also be asked on an
+**absolute, additive scale**.
+
+For a survival outcome we must choose a time horizon. At **6 years**, within each obesity stratum:
+
+1. take the **same people** with their observed age, sex, race/ethnicity, smoking, and sedentary time
+2. set everyone's waist-fat exposure to **lower**, predict risk by 6 years, and average
+3. set those same people's waist-fat exposure to **high**, predict again, and average
+4. subtract the two average risks
 
 ::: {.plain}
-Without the product term, waist fat gets **one** HR for everyone — Week 4's **1.24**. Letting
-it differ by obesity improves the fit: likelihood-ratio **p = 0.03**. Borderline, and resting
-on Group I's 4 deaths.
+A six-year risk is \(1-S(6)\). Standardisation averages those model-predicted risks over the
+covariate distribution of the people in that obesity stratum.
 :::
 
 ::: {.notes}
-Plan Slide 16b (2 min). `fit_main` is Week 4's Table 2 "Q2" model: waist fat adjusted for
-obesity and L. The Wald p for the product term is 0.06; with only 4 deaths in the reference
-cell, the likelihood-ratio test is the better guide.
+4 min. This is Week 4's g-computation idea with a survival model. Stress that standardisation is not
+a criticism of the paper; it is the tool we need to put the Week 5 question on an additive scale.
 :::
 
-## In R: standardised six-year risks
+## Additive scale: the standardised six-year results
 
-<!-- code: std -->
+| Obesity stratum | If everyone had lower waist fat | If everyone had high waist fat | Risk difference |
+|---|---:|---:|---:|
+| **Obese** | 2.3% | 6.4% | **+4.1 points** |
+| **Not obese** | 9.1% | 9.8% | **+0.7 points** |
+
+Difference of risk differences = **+3.4 percentage points**  
+Bootstrap 95% CI: **−0.1 to +6.6 points**
+
+::: {.plain}
+Interpretation: by 6 years, the model predicts about **4.1 extra deaths per 100** with high versus
+lower waist fat among the obese, versus about **0.7 per 100** among the not obese.
+:::
+
+::: {.foot}
+The displayed R code on the next slide calculates the point estimates. The interval comes from a
+nonparametric bootstrap that refits the model in each resample.
+:::
+
+::: {.notes}
+3 min. Keep the interpretation in absolute units. Do not describe these as observed six-year death
+proportions; they are model-standardised risks.
+:::
+
+## In R: use the same people twice, changing only waist fat
+
+<!-- code: risk6_em -->
 ```r
-risk6 <- function(people, g) {   # fit_joint: from "One model, two ways"
-  people$group <- factor(g, levels = levels(d$group))   # set everyone to g
-  1 - mean(summary(survfit(fit_joint, newdata = people), times = 6)$surv)
+# fit is the Cox model from the preceding slides
+risk6 <- function(people, waist) {
+  nd <- people                 # same people, same L values
+  nd$central <- waist          # change only high-waist exposure
+  s6 <- summary(survfit(fit, newdata = nd), times = 6)$surv
+  mean(1 - s6)                 # average predicted 6-year risk
 }
-ob <- subset(d, obese == 1); notob <- subset(d, obese == 0)
-r_within <- c(I = risk6(ob, "I"), II = risk6(ob, "II"),           # obese
-              III = risk6(notob, "III"), IV = risk6(notob, "IV"))  # not obese
-round(100 * r_within, 1)                  # standardised 6-year risk, %
-#>   I  II III  IV
-#> 2.3 6.4 9.1 9.8
-rd <- 100 * c(obese = r_within[["II"]] - r_within[["I"]],
-              not_obese = r_within[["IV"]] - r_within[["III"]])
-round(c(rd, difference = rd[["obese"]] - rd[["not_obese"]]), 1)   # points
-#>      obese  not_obese difference
-#>        4.1        0.7        3.4
+
+ob    <- subset(d, obese == 1)
+notob <- subset(d, obese == 0)
+
+r <- c(
+  obese_low     = risk6(ob,    0),
+  obese_high    = risk6(ob,    1),
+  notobese_low  = risk6(notob, 0),
+  notobese_high = risk6(notob, 1)
+)
+round(100 * r, 1)
+#>     obese_low    obese_high  notobese_low notobese_high
+#>           2.3           6.4           9.1           9.8
+```
+
+::: {.notes}
+4 min. Walk line-by-line: copy the stratum, change only central, obtain each person's predicted
+survival at 6 years, convert to risk, and average. The next slide takes the differences.
+:::
+
+## In R: turn the four predictions into risk differences
+
+<!-- code: rd -->
+```r
+rd <- 100 * c(
+  obese     = r[["obese_high"]]    - r[["obese_low"]],
+  not_obese = r[["notobese_high"]] - r[["notobese_low"]]
+)
+round(rd, 1)
+#>     obese not_obese
+#>       4.1       0.7
+
+round(rd[["obese"]] - rd[["not_obese"]], 1)   # difference of risk differences
+#> [1] 3.4
 ```
 
 ::: {.plain}
-Week 4's g-computation with a survival curve: set everyone in a stratum to each waist level,
-predict six-year survival, average. Waist fat adds **4.1** points among the obese and **0.7**
-among the not obese: a difference of **3.4** points.
+The code mirrors the estimand: **high minus lower waist fat within each obesity stratum**, then
+compare those two risk differences.
 :::
 
 ::: {.notes}
-Plan Slide 16c (3 min). Effect modification standardises WITHIN each obesity stratum: the
-obese are set to Groups I and II, the not obese to III and IV. The intervals on the next
-slide come from 500 bootstrap resamples in Week5_joint_exposure.R; 10 of them drew none of
-Group I's deaths.
+2 min. This is deliberately a separate, short code slide so students can see exactly where 4.1,
+0.7, and 3.4 come from.
 :::
 
-## Effect modification: waist fat, by obesity
+## Put both scales on one page
 
 ![](../img/w5_em_forest.png){fig-align="center" width="100%"}
 
 ::: {.plain}
-Week 4's single answer for waist fat, **1.24 (0.93–1.67)**, assumed **one** HR for everyone.
-Let it differ by obesity: **2.99** among the obese, **1.09** among the not obese. Both scales
-point the same way. The evidence is **borderline** — likelihood-ratio p = 0.03, Wald interval
-0.97–7.71 — and the obese estimate rests on Group I's 4 deaths.
+A reasonable report is: **waist fat may have a larger effect among the obese**, on both the
+hazard-ratio and six-year risk-difference scales, but the estimate is unstable and depends heavily
+on a reference cell with only **four deaths**.
 :::
-
-[5,911 rows, adjusted for L. Risk differences are standardised six-year risks (Week 4's
-g-computation): within each stratum, everyone set to lower, then high, waist fat.]{.foot}
 
 ::: {.notes}
-Plan Slide 17 (4 min). Standardised risks within each stratum: among the obese, 2.3% vs
-6.4%; among the not obese, 9.1% vs 9.8%. With only 4 deaths in the reference cell the
-likelihood-ratio test is the better guide than the Wald test; its profile-likelihood
-interval for the ratio is 1.10–9.18. Do not let either threshold decide: the honest
-reading is "possibly larger among the obese, resting on four deaths". Sensitivity: adding
-BMI itself gives 2.80 and 1.07 (ratio 2.62). The green row is our locked contrast, with
-Week 4's pre-exposure set instead of Model 1.
+4 min. Avoid "significant interaction" as the headline. Report the two effects, their contrast,
+intervals, and the sparse-cell warning.
 :::
 
-## The paper's IV vs I, taken apart
+## The paper's IV vs I comparison asks a different question
 
-![](../img/w5_four_groups.png){fig-align="center" width="70%"}
+| Comparison | What changes? | What question does it answer? |
+|---|---|---|
+| **II vs I** | waist fat only | waist-fat association among the **obese** |
+| **IV vs III** | waist fat only | waist-fat association among the **not obese** |
+| **IV vs I** | **obesity status and waist fat** | prognosis of phenotype IV versus phenotype I |
 
-- IV vs I changes **both** exposures, and splits two ways: **2.95 × 1.09** via Group III, or
-  **2.99 × 1.08** via Group II. Which step looks big depends on the route — because the two
-  **interact**, today's topic
-- Either way, the big step is the one that **leaves Group I** and its 4 deaths. The
-  one-exposure-at-a-time contrast is our locked **IV vs III: 1.09**
-
-[3.22 is our estimate of the paper's comparison, adjusted for L. The paper reports 2.9
-(its Model 2).]{.foot}
-
-::: {.notes}
-Plan Slide 18 (4 min). 2.95 × 1.09 and 2.99 × 1.08 both give 3.22 up to rounding: the
-product identity holds both ways, the attribution does not. This is why the course locked
-IV vs III: it changes one exposure at a time, and it is the reading Panel A targets. With
-the paper's Model 1 instead of L, P2's locked estimate is 1.06 (0.77–1.45) on 5,939 rows;
-the story is the same.
-:::
-
-## Interaction: four cells, one reference
-
-*HR (95% CI) vs Group I, the lowest-risk cell, adjusted for L · deaths in the cell. The two
-"exposures" are now **not being obese** (A) and **high waist fat** (M): RR~10~ = Group III,
-RR~01~ = Group II, RR~11~ = Group IV.*
-
-::: {style="font-size: 0.86em"}
-| | Lower waist fat | High waist fat | Waist fat, within row |
-|---|---|---|---|
-| **Obese** | 1 (reference) · 4 deaths | 2.99 (1.11–8.09) · 362 | 2.99 (1.11–8.09) |
-| **Not obese** | 2.95 (1.07–8.13) · 67 | 3.22 (1.17–8.87) · 101 | 1.09 (0.79–1.50) |
-| **Not obese, within column** | 2.95 (1.07–8.13) | 1.08 (0.86–1.35) | |
-:::
-
-- **Multiplicative:** HR~IV~ ÷ (HR~II~ × HR~III~) = **0.37 (0.13–1.03)** — the forest plot's 2.74,
-  coded the other way (0.37 = 1 ÷ 2.74, up to rounding)
-- **Additive:** RERI = **−1.72 (−4.57 to 1.13)**. Standardised 6-year risks with everyone in
-  Group I, II, III or IV: **2.5%, 7.0%, 6.9%, 7.5%** → IC = **−3.9 (−6.7 to −0.5)** points
+Our effect-modification question uses the two **within-row** comparisons: II vs I and IV vs III.
+The paper's IV vs I contrast is **diagonal** across the 2 × 2 table.
 
 ::: {.plain}
-The point estimates are **less than additive** — the same borderline evidence as before,
-coded the other way. Every comparison with Group I leans on its 4 deaths (1.09 and 1.08 do
-not). And this **cannot be read as causal**: U, obesity's confounder, was never measured.
+The paper's IV vs I comparison is not wrong. It is useful for **phenotype risk stratification**.
+It is simply **not the effect of high waist fat among the not obese**; that contrast is IV vs III.
 :::
 
 ::: {.notes}
-Plan Slides 19–20 (5 min). RERI needs the lowest-risk cell as its reference (Knol et al.
-2011), and here it is the paper's own reference — which is also why its comparisons are so
-imprecise. AP = −0.53, S = 0.56: the same verdict, less than additive. The RERI interval
-includes 0 and the IC interval does not: different measures, one from hazard ratios and one
-from standardised risks over everyone; do not let a threshold pick between them. The
-risk-based RERI (IC ÷ R~00~) is −1.56, close to the −1.72 from hazard ratios.
+4 min. Do not decompose IV vs I through alternative routes in the core lecture. The clean visual idea
+is enough: horizontal comparisons change waist fat only; the diagonal comparison changes both variables.
 :::
 
-## In R: RERI, AP, S and IC for the four groups
+# Part 4 · Interaction, survival tools, and reporting {background-color="#eef4fa"}
 
-<!-- code: joint -->
+[Now change the question deliberately.]{.part}
+
+## If obesity is a second exposure, the estimand changes
+
+Now deliberately treat both variables as exposures, keeping the coding consistent:
+
+- **A = high waist fat** (1 = high, 0 = lower)
+- **M = obesity** (1 = obese, 0 = not obese)
+- each person now has four joint potential outcomes, $Y(a,m)$
+
+The interaction contrasts ask whether the waist-fat effect changes when obesity is also changed:
+
+- **Multiplicative:** ratio of waist-fat HRs = **2.74 (0.97–7.71)**
+- **Additive:** $IC=(R_{11}-R_{01})-(R_{10}-R_{00})$; using one common standardised population, **IC = +3.9 points**
+
+::: {.question}
+The arithmetic is estimable, but a **causal** joint-exposure interpretation additionally requires
+identification of obesity's effect. In our DAG, **U confounds obesity → death and is unmeasured**.
+:::
+
+::: {.notes}
+5 min. IC was already defined in the smoking-income example. Here we reuse it with A=high waist and
+M=obesity rather than reversing the coding just to preserve Group I as the reference.
+:::
+
+## In R: interaction with the same A and M coding
+
+<!-- code: int_mult -->
 ```r
-# fit_joint and risk6(): from the earlier In-R slides
-h <- exp(coef(fit_joint))[c("groupII", "groupIII", "groupIV")]   # vs I
-RERI <- h[["groupIV"]] - h[["groupII"]] - h[["groupIII"]] + 1
-round(c(RERI = RERI, AP = RERI / h[["groupIV"]],
-        S = (h[["groupIV"]] - 1) /
-            ((h[["groupII"]] - 1) + (h[["groupIII"]] - 1))), 2)
-#>  RERI    AP     S
-#> -1.72 -0.53  0.56
-r_all <- sapply(c("I", "II", "III", "IV"),
-                function(g) risk6(d, g))       # everyone, set to each group
-round(100 * c(r_all, IC = r_all[["IV"]] - r_all[["II"]] -
-                          r_all[["III"]] + r_all[["I"]]), 1)
-#>    I   II  III   IV   IC
-#>  2.5  7.0  6.9  7.5 -3.9
+# Multiplicative interaction from the Cox product term
+b <- coef(fit)
+round(exp(b[["obese:central"]]), 2)   # HR(waist | obese) / HR(waist | not obese)
+#> [1] 2.74
+```
+
+::: {.notes}
+2 min. The multiplicative contrast is the same product term as in the effect-modification analysis.
+:::
+
+## In R: the additive interaction contrast
+
+For the additive joint-exposure contrast, put **all four joint states in the same target population**:
+
+<!-- code: int_ic -->
+```r
+# A = high waist, M = obesity
+# R00 = Group III; R10 = IV; R01 = I; R11 = II
+risk6_all <- function(waist, obese) {   # everyone, set to one joint state
+  nd <- d; nd$central <- waist; nd$obese <- obese
+  mean(1 - summary(survfit(fit, newdata = nd), times = 6)$surv)
+}
+R <- c(R00 = risk6_all(0, 0), R10 = risk6_all(1, 0),
+       R01 = risk6_all(0, 1), R11 = risk6_all(1, 1))
+round(100 * R, 1)
+#> R00 R10 R01 R11
+#> 6.9 7.5 2.5 7.0
+
+IC <- 100 * (R[["R11"]] - R[["R01"]] - R[["R10"]] + R[["R00"]])
+round(IC, 1)   # percentage points
+#> [1] 3.9
 ```
 
 ::: {.plain}
-Read the four risks in pairs. If everyone were obese, high waist fat would add 7.0 − 2.5 =
-**4.5** points; if no one were, 7.5 − 6.9 = **0.6**. IC = 0.6 − 4.5 = **−3.9**: waist fat adds
-more among the obese — the standardised-risk slide's pattern, now averaged over everyone.
-Both point estimates are below additive; RERI's interval includes 0 (−4.57 to 1.13), IC's
-does not (−6.7 to −0.5).
+Why **3.9** here but **3.4** for effect modification? Effect modification averaged within each
+obesity stratum; joint interaction standardises all four exposure states to **one common population**.
+They are related, but not identical, estimands.
 :::
 
 ::: {.notes}
-Plan Slide 20a (3 min). With Group I as the reference, "not obese" is the first exposure,
-so "less than additive" here means "waist fat adds more among the obese". The risk-based
-RERI is IC ÷ R(Group I) = −1.56.
+2 min. This difference in target population is subtle. Keep it to one sentence unless students ask.
+The main lesson is that the scientific question changed when obesity became a second exposure.
 :::
 
-# Part 5 · Tools for time-to-event, and a subgroup claim {background-color="#eef4fa"}
+## The right survival tool depends on the scale
 
-[EpiMethods *Concepts*: "Reporting guideline"]{.part}
-
-## The right tools for a time-to-event outcome
-
-::: {style="font-size: 0.86em"}
-| Scale | Tool | Effect modification (waist fat, obese vs not) | Interaction (Group I reference) |
-|---|---|---|---|
-| Multiplicative | product term in the **Cox** model → ratio of HRs | 2.74 (0.97–7.71) | 0.37 (0.13–1.03) |
-| Additive | **standardised risks** at a fixed time → difference of RDs, or IC | +3.4 (−0.1 to +6.6) points | IC −3.9 (−6.7 to −0.5) points |
-| Additive, shortcut | **RERI from HRs** — close to the risk-based RERI when deaths are uncommon | — | −1.72 (risk-based −1.56) |
-:::
-
-- **Don't** turn survival into "ever died" and fit a logistic model: it throws away
-  follow-up time and censoring
-- A **binary** outcome with fixed follow-up (Thursday's lab) is different: logistic is
-  right there. But an OR approximates an RR only when the outcome is **rare**, so with a
-  common outcome an RERI from ORs is **not** the RERI from risks
-
-[5,911 rows, adjusted for L.]{.foot}
-
-::: {.notes}
-Plan Slide 21 (3 min). The standardised-risk idea is Week 4's g-computation with a survival
-curve: set everyone's group, predict survival at 6 years, average. Effect modification
-standardises within each obesity stratum; interaction standardises over everyone. Thursday's
-lab: death is common there (about 40%), so read its RERI as an OR-based quantity.
-:::
-
-## A dramatic subgroup claim
-
-*Crude HR, Group IV vs Group I, fitted separately in men and women (the 6,048-row locked
-domain, where Group I has 375 people):*
-
-| | Men | Women |
+| Goal | Tool | MASLD effect-modification result |
 |---|---|---|
-| HR, IV vs I | **36.14 (8.86–147.48)** | **4.11 (0.99–17.12)** |
-| Group I, deaths / people | 2 / 317 (0.6%) | 2 / 58 (3.4%) |
+| Multiplicative | Cox `A * M` → ratio of HRs | **2.74 (0.97–7.71)** |
+| Additive | standardised risk at a fixed time → difference of RDs | **+3.4 (−0.1 to +6.6) points** |
 
-- "Non-obese waist fat is far deadlier in men"? Each HR **divides by a death rate built on
-  2 deaths**
-- The crude ratio, women vs men, is 0.11 (0.02–0.85): "significant" — for a contrast that
-  changes **both** exposures, in a crude model
+- Do **not** turn a censored survival outcome into "ever died" and fit ordinary logistic regression
+- A fixed-follow-up binary outcome is different; then a binary regression model may be appropriate
 
 ::: {.plain}
-**Count first.** A "significant" interaction can rest on four deaths.
+For survival outcomes, define the time horizon for an absolute effect: here, **six years**.
+The standardised risks are **our Week 5 re-analysis**, not quantities reported in the paper.
 :::
 
 ::: {.notes}
-Plan Slide 22 (4 min). Rows: the 6,048-row locked domain, crude, as in P3's code. P3's
-worked example retires exactly this table. Do not offer a mechanism for the gap: the point
-is what each number rests on, not why it is large.
+4 min. This replaces a more complicated slide that mixed HR-based RERI and risk-based measures.
 :::
 
-## In R: count Group I by sex first
+## A dramatic subgroup claim can be built on almost no information
+
+These are **crude diagonal phenotype comparisons** (Group IV vs Group I), fitted separately by sex.
+They are **not** sex-specific waist-fat effects.
+
+| | Men | Women |
+|---|---:|---:|
+| HR, IV vs I | **36.14 (8.86–147.48)** | **4.11 (0.99–17.12)** |
+| Group I deaths / people | **2 / 317** | **2 / 58** |
+
+::: {.plain}
+The apparent 36-versus-4 gap is dramatic, but each reference survival experience contains only
+**two deaths**, and both confidence intervals are extremely wide. Do not build a biological story from it.
+:::
+
+::: {.notes}
+3 min. Reinforce two problems at once: IV vs I changes both obesity and waist fat, and the reference
+cell is exceptionally sparse after stratifying by sex.
+:::
+
+## In R: reproduce the crude IV-vs-I HRs
+
+<!-- code: crude_sex -->
+```r
+dom$group <- relevel(factor(dom$group), ref = "I")
+
+fit_men <- coxph(Surv(time_yr, dead) ~ group,
+                 data = subset(dom, female == 0))
+fit_women <- coxph(Surv(time_yr, dead) ~ group,
+                   data = subset(dom, female == 1))
+
+round(summary(fit_men)$conf.int[
+  "groupIV", c("exp(coef)", "lower .95", "upper .95")], 2)
+#> exp(coef) lower .95 upper .95
+#>     36.14      8.86    147.48
+
+round(summary(fit_women)$conf.int[
+  "groupIV", c("exp(coef)", "lower .95", "upper .95")], 2)
+#> exp(coef) lower .95 upper .95
+#>      4.11      0.99     17.12
+```
+
+::: {.plain}
+Because Group I is the reference, `groupIV` is exactly the crude **IV vs I** phenotype HR,
+calculated separately in men and women.
+:::
+
+::: {.notes}
+3 min. The model code must appear here because otherwise the 36.14 and 4.11 look like unexplained
+numbers. The next slide shows the event counts supporting the reference survival curves.
+:::
+
+## In R: now count the reference events
 
 <!-- code: sexcount -->
 ```r
-with(subset(dom, group == "I"), table(female, died = dead))   # 6,048 rows
+with(subset(dom, group == "I"), table(female, died = dead))
 #>       died
 #> female   0   1
 #>      0 315   2
@@ -918,84 +899,72 @@ with(subset(dom, group == "I"), table(female, died = dead))   # 6,048 rows
 ```
 
 ::: {.plain}
-**Two** deaths among the men in Group I, and **two** among the women. Every IV-vs-I hazard
-ratio in the last table divides by one of these death rates.
+Group I contributes only **2 deaths in men and 2 deaths in women**. That is why the sex-specific
+IV-vs-I HRs are so unstable despite their dramatic point estimates.
 :::
-
-[`dom`: the 6,048-row locked domain, before rows with incomplete covariates are dropped —
-the rows P3's code uses.]{.foot}
 
 ::: {.notes}
-Plan Slide 22a (2 min).
+2 min. Count first, then interpret. Now move to the cleaner IV-vs-III waist-fat contrast with sex as
+the modifier.
 :::
 
-## The same question, asked properly
+## Ask the subgroup question cleanly
 
-*Our locked contrast, IV vs III, with sex as the modifier: one test of the product term.*
+For the locked waist-fat contrast **IV vs III**, with sex as the modifier:
 
-::: {style="font-size: 0.9em"}
 | Model | Ratio of HRs, women ÷ men | p |
-|---|---|---|
-| Crude (P3; 1,296 rows) | 0.62 (0.26–1.43) | 0.278 |
-| The paper's Model 1 (P3; 1,296 rows) | 1.00 (0.42–2.35) | 0.993 |
-| Week 4's pre-exposure set (1,291 rows) | 1.13 (0.48–2.66) | 0.78 |
-:::
+|---|---:|---:|
+| Crude | 0.62 (0.26–1.43) | 0.278 |
+| Paper's Model 1 | 1.00 (0.42–2.35) | 0.993 |
+| Week 4 pre-exposure set | **1.13 (0.48–2.66)** | **0.78** |
 
-- Additive (P3): six-year risk differences of +0.8 (−3.3 to +4.2) points in men and
-  +0.5 (−7.3 to +7.6) in women — small point estimates, wide intervals
+Additive six-year RDs are also imprecise: about **+0.8 points in men** and **+0.5 in women**.
 
 ::: {.plain}
-**No evidence of modification at this precision** — and an interval compatible with the
-effect in women being **less than half**, or **more than twice**, that in men. Report the
-interval; don't explain a gap the data cannot.
+At this precision there is **no clear evidence of sex modification**, but the interval still allows
+important differences in either direction.
 :::
-
-[p: likelihood-ratio tests. 1,296 = Groups III + IV complete on Model 1; 1,291 = Groups III +
-IV within Week 4's 5,911.]{.foot}
 
 ::: {.notes}
-Plan Slide 23 (4 min). The first two rows are P3's (examples/_results/P3.json); the third is
-from today's analysis. A null test is not evidence that sex is irrelevant. If students saw
-an earlier version of this lecture: it called the crude gap "confounding by baseline risk";
-that claim is withdrawn — the data cannot say what produced it.
+4 min. "No evidence" is not "evidence of no difference". The interval is the message.
 :::
 
-## In R: one test for sex, on the locked contrast
+## In R: one test for sex modification on the locked contrast
 
 <!-- code: sextest -->
 ```r
-s34 <- subset(d, group %in% c("III", "IV"))   # the locked contrast only
+s34 <- subset(d, group %in% c("III", "IV"))
 s34$IV <- as.integer(s34$group == "IV")
-f0 <- coxph(Surv(time_yr, dead) ~ IV + female +        # no product term
+
+f0 <- coxph(Surv(time_yr, dead) ~ IV + female +
               age + race + smk_current + sed, data = s34)
-f1 <- coxph(Surv(time_yr, dead) ~ IV * female +        # IV x sex
+f1 <- coxph(Surv(time_yr, dead) ~ IV * female +
               age + race + smk_current + sed, data = s34)
-round(summary(f1)$conf.int["IV:female", c(1, 3, 4)], 2)   # HR, lower, upper
+
+round(summary(f1)$conf.int["IV:female", c(1, 3, 4)], 2)   # ratio of HRs
 #> exp(coef) lower .95 upper .95
 #>      1.13      0.48      2.66
-round(anova(f0, f1)$`Pr(>|Chi|)`[2], 2)        # likelihood-ratio p
+
+round(anova(f0, f1)$`Pr(>|Chi|)`[2], 2)   # likelihood-ratio p
 #> [1] 0.78
 ```
 
 ::: {.plain}
-Restricting to Groups III and IV makes the product term test exactly the locked contrast:
-**1.13 (0.48–2.66)**, likelihood-ratio **p = 0.78**. No evidence of modification, and an
-interval wide enough to allow large differences either way.
+One pre-specified contrast, one product-term test, and an interval wide enough to show the uncertainty.
 :::
 
 ::: {.notes}
-Plan Slide 23a (2 min). This is the third row of the previous table. P3's own code fits the
-same model with the paper's Model 1 covariates on 1,296 rows.
+3 min. This is the code pattern students should adapt for P3 when the outcome is time-to-event.
 :::
 
 ## Honest subgroup reporting
 
-1. **Pre-specify** one modifier, with a reason. One well-argued modifier beats twenty
-2. Say **which question** — effect modification or interaction. It sets the adjustment set
-3. **Count** the people and outcomes in every cell
-4. Report **both scales**, with intervals, and name the reference cell
-5. A big crude gap is not evidence of modification; a null test is not evidence of none
-6. Don't **explain** a difference the data cannot
+1. **Pre-specify** a plausible modifier and explain why A cannot cause it
+2. State the **question**: effect modification or joint interaction
+3. **Count** people and outcomes in every A × M cell
+4. Report A's effect within each M on a **named scale**
+5. Give the **contrast and interval**, not just a p-value
+6. Do not invent a biological explanation for a noisy subgroup difference
 
 ::: {.readmore}
 **Read more** · Knol & VanderWeele, *Int J Epidemiol* 2012 · Karim, ch. 8, §8.7–8.8 ·
@@ -1003,36 +972,120 @@ same model with the paper's Model 1 covariates on 1,296 rows.
 :::
 
 ::: {.notes}
-Plan Slide 24 (2 min). This is the checklist for P3: one pre-specified modifier on the
-student's own paper, the cell counts, both scales, and a one-line verdict stated as
-evidence, not mechanism.
+3 min. This is the practical checklist for P3.
+:::
+
+## The algorithm to take into your own paper
+
+::: {.plain}
+**1. One exposure or two?**  
+Effect modification = one exposure across groups. Interaction = two exposures jointly.
+:::
+
+::: {.plain}
+**2. Can A change M?**  
+If yes, simple subgroup effect modification may not be the right estimand.
+:::
+
+::: {.plain}
+**3. Which scale?**  
+Report multiplicative and additive effects when they answer useful questions.
+:::
+
+::: {.plain}
+**4. What do the cells contain?**  
+Sparse cells can dominate apparently dramatic interaction estimates.
+:::
+
+::: {.notes}
+3 min. Have students say the four questions back. This is intentionally more compact than the
+original six-item takeaway slide.
 :::
 
 ## Key takeaways
 
-1. **Effect modification:** one exposure, its effect differs by M — and M must be something
-   the exposure **cannot change**. **Interaction:** the joint effect of two exposures
-2. Modification needs A's confounders; interaction needs **both** exposures'. In MASLD,
-   interaction fails even under the assumptions that would rescue modification
-3. **Name the scale.** Harmful exposures with no multiplicative interaction have additive
-   interaction
-4. **Count every cell.** The lowest-risk reference is often the sparse one
-5. Time-to-event: a **Cox product term** and **standardised risks**, not "ever died"
-6. Waist fat may matter more among the obese — borderline, on four deaths. The paper's
-   IV vs I mixes two exposures and cannot be split uniquely
+- **Effect modification:** A's effect differs across levels of M; for the usual causal subgroup
+  interpretation, A should not determine M
+- **Interaction:** the joint effect of A and M departs from additivity or multiplicativity
+- The **scale matters**: the same data can modify one measure and not another
+- The **question determines confounding control**; a product term does not
+- With survival outcomes: Cox product term for the multiplicative scale; **standardised risks at a fixed time** for an additive scale
+- In MASLD, the point estimates suggest more waist-fat harm among the obese, but the conclusion is fragile because the obese lower-waist cell anchoring **II vs I has only 4 deaths**
 
 ::: {.plain}
-**Next:** Week 6 — survey weights. Design-aware, P3's Model 1 sex ratio (1.00) becomes
-2.53 (0.92–6.98) (M1). **Exit question:** one modifier for your own paper — and why your
-exposure cannot change it.
+**Exit question:** name one modifier for your own paper, and give one sentence explaining why your exposure cannot change it.
 :::
 
 ::: {.notes}
-Plan Slide 25 (4 min). What today cannot fix: unmeasured U, and selection on FLI ≥ 60,
-which is computed from both of today's exposures and need not bias every stratum equally —
-so it can create or hide a difference between strata. M1 asks each group to rank these
-threats from its own evidence.
+4 min. Next week: survey weights. If time is short, end here and leave the appendix for lab/reference.
 :::
+
+# Appendix · Extensions and diagnostics {visibility="uncounted" background-color="#f7f7f7"}
+
+## Appendix: optional — one model, two parameterisations {visibility="uncounted"}
+
+<!-- code: twoways -->
+```r
+fit_joint <- coxph(Surv(time_yr, dead) ~ group +
+                     age + female + race + smk_current + sed, data = d)
+fit_prod  <- coxph(Surv(time_yr, dead) ~ obese * central +
+                     age + female + race + smk_current + sed, data = d)
+all.equal(fit_joint$loglik, fit_prod$loglik)
+#> [1] TRUE
+
+round(exp(coef(fit_prod))[c("obese", "central", "obese:central")], 2)
+#>         obese       central obese:central
+#>          0.34          1.09          2.74
+```
+
+The four-level factor and product-term parameterisations give the same fitted model.
+
+## Appendix: RERI, AP, S, and IC {visibility="uncounted"}
+
+For a four-cell joint-exposure table with a clearly defined \(00\) state:
+
+- **RERI** = RR~11~ − RR~10~ − RR~01~ + 1; null = 0
+- **AP** = RERI / RR~11~; null = 0
+- **S** = (RR~11~ − 1) / [(RR~10~ − 1) + (RR~01~ − 1)]; null = 1
+- **IC** = R~11~ − R~10~ − R~01~ + R~00~; null = 0
+
+In the core MASLD slides we keep **A = high waist fat** and **M = obesity** throughout. With the
+four joint states standardised to one common population, the six-year risk-scale **IC = +3.9 points**.
+
+::: {.foot}
+RERI, AP, and S depend on the chosen exposure/reference coding and are not emphasized here because
+the joint causal effect of obesity is not identified in this example. IC was defined at first use in
+the smoking-income example.
+:::
+
+## Appendix: why diabetes is a risky modifier here {visibility="uncounted"}
+
+<!-- code: diabetes_tab -->
+```r
+tab <- table(diabetes = d$t2dm, high_waist = d$central)
+round(100 * prop.table(tab, 2))
+#>         high_waist
+#> diabetes  0  1
+#>        0 87 72
+#>        1 13 28
+```
+
+Diabetes is more common among people with high waist fat (28% vs 13%). That does not prove
+waist fat causes diabetes, but it makes a same-visit diabetes stratum a poor choice for the simple
+pre-exposure-modifier interpretation.
+
+## Appendix: what splitting by diabetes produces {visibility="uncounted"}
+
+<!-- code: dm_models -->
+```r
+f_no  <- coxph(Surv(time_yr, dead) ~ central + obese + age + female +
+                 race + smk_current + sed, data = subset(d, t2dm == 0))
+f_yes <- coxph(Surv(time_yr, dead) ~ central + obese + age + female +
+                 race + smk_current + sed, data = subset(d, t2dm == 1))
+```
+
+The waist-fat HR is about **1.23** without diabetes and **0.93** with diabetes, but neither
+number automatically has a clean causal subgroup interpretation if waist fat can affect diabetes.
 
 ## Where to read more {visibility="uncounted"}
 
@@ -1048,15 +1101,20 @@ threats from its own evidence.
 | Thursday's lab | [Exercise](https://ehsanx.github.io/EpiMethods/confoundingE2.html) · [solution](https://ehsanx.github.io/EpiMethods/confoundingE2solution.html) | — |
 :::
 
-## References {visibility="uncounted"}
+## References (1/2) {visibility="uncounted"}
 
-::: {style="font-size: 0.66em"}
+::: {style="font-size: 0.72em"}
 - Banack HR, Kaufman JS. The obesity paradox: understanding the effect of obesity on mortality among individuals with cardiovascular disease. *Prev Med* 2014;62:96–102.
 - Bours MJL. Tutorial: a nontechnical explanation of the counterfactual definition of effect modification and interaction. *J Clin Epidemiol* 2021;134:113–124.
 - Hosmer DW, Lemeshow S. Confidence interval estimation of interaction. *Epidemiology* 1992;3:452–456.
 - Karim ME. Effect modification in non-randomized studies: methods and applications with propensity scores. Chapter 8 (book chapter).
 - Lajous M, Bijon A, Fagherazzi G, et al. Body mass index, diabetes, and mortality in French women: explaining away a "paradox". *Epidemiology* 2014;25:10–14.
 - Knol MJ, VanderWeele TJ. Recommendations for presenting analyses of effect modification and interaction. *Int J Epidemiol* 2012;41:514–520.
+:::
+
+## References (2/2) {visibility="uncounted"}
+
+::: {style="font-size: 0.72em"}
 - Knol MJ, VanderWeele TJ, Groenwold RHH, et al. Estimating measures of interaction on an additive scale for preventive exposures. *Eur J Epidemiol* 2011;26:433–438.
 - Kueh MTW, et al. Body weight categories and fat distribution in relation to all-cause mortality among adults with metabolic dysfunction-associated steatotic liver disease. *BMJ Open* 2026;16:e113719.
 - VanderWeele TJ. On the distinction between interaction and effect modification. *Epidemiology* 2009;20:863–871.

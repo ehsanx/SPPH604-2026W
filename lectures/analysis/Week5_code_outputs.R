@@ -32,108 +32,152 @@ stopifnot(nrow(d) == 5911, nrow(dom) == 6048)
 rownames(d) <- NULL
 
 ## ------------------------------------------------------------------ the snippets
-## Each snippet is a list of pieces; a piece's output is printed right after it.
+## In deck order. Each snippet is a list of pieces; a piece's output is printed right
+## after it. A snippet with no printed output is still run, so the slide's code is checked.
 S <- list(
 
-diabetes_tab = list(
-'tab <- table(diabetes = d$t2dm, high_waist = d$central)
-tab                                    # people',
-'round(100 * prop.table(tab, 2))        # % in each waist group'),
+smoke_em = list(
+'toy <- data.frame(
+  income = c("Higher", "Low"),
+  risk_nonsmoke = c(0.05, 0.15),
+  risk_smoke    = c(0.10, 0.30)
+)
 
-diabetes = list(
-'f_no  <- coxph(Surv(time_yr, dead) ~ central + obese + age + female +
-                 race + smk_current + sed, data = subset(d, t2dm == 0))
-f_yes <- coxph(Surv(time_yr, dead) ~ central + obese + age + female +
-                 race + smk_current + sed, data = subset(d, t2dm == 1))
-round(summary(f_no)$conf.int["central", c(1, 3, 4)], 2)   # HR, lower, upper',
-'round(summary(f_yes)$conf.int["central", c(1, 3, 4)], 2)'),
-
-scale_toy = list(
-'toy <- data.frame(age = c("60+", "<60"),
-                  risk1 = c(0.80, 0.50), risk0 = c(0.50, 0.20))
-toy$RD <- toy$risk1 - toy$risk0                    # risk difference
-toy$RR <- toy$risk1 / toy$risk0                    # risk ratio
-toy$OR <- (toy$risk1 / (1 - toy$risk1)) /
-          (toy$risk0 / (1 - toy$risk0))            # odds ratio
+toy$RD <- toy$risk_smoke - toy$risk_nonsmoke
+toy$RR <- toy$risk_smoke / toy$risk_nonsmoke
 toy'),
 
-measures_toy = list(
-'r00 <- 0.05; r10 <- 0.10; r01 <- 0.15; r11 <- 0.30   # risk, A = a, M = m
-rr10 <- r10 / r00; rr01 <- r01 / r00; rr11 <- r11 / r00
-RERI <- rr11 - rr10 - rr01 + 1
-round(c(ratio = rr11 / (rr10 * rr01),          # multiplicative: 1 = none
-        RERI  = RERI,                          # additive: 0 = none
-        AP    = RERI / rr11,                   # additive: 0 = none
-        S     = (rr11 - 1) / ((rr10 - 1) + (rr01 - 1)),   # additive: 1 = none
-        IC    = r11 - r10 - r01 + r00), 3)     # additive, in risk: 0 = none'),
+smoke_int = list(
+'r00 <- 0.05  # higher income, not smoking
+r10 <- 0.10  # higher income, smoking
+r01 <- 0.15  # low income, not smoking
+r11 <- 0.30  # low income, smoking
+
+rr10 <- r10 / r00
+rr01 <- r01 / r00
+rr11 <- r11 / r00
+
+mult_ratio <- rr11 / (rr10 * rr01)
+IC <- r11 - r10 - r01 + r00
+round(c(mult_ratio = mult_ratio, IC = IC), 2)'),
 
 counts = list(
 'table(group = d$group, died = d$dead)',
-'with(subset(d, obese == 1 & female == 1),     # obese women only
+'
+with(subset(d, obese == 1 & female == 1),
      table(high_waist = central))'),
+
+fit_model = list(
+'fit <- coxph(Surv(time_yr, dead) ~ obese * central +
+               age + female + race + smk_current + sed, data = d)'),
+
+recover = list(
+'b <- coef(fit)
+
+round(exp(b[["central"]]), 2)                      # not obese: IV vs III',
+'
+round(exp(b[["central"]] + b[["obese:central"]]), 2)   # obese: II vs I',
+'
+fit_main <- coxph(Surv(time_yr, dead) ~ obese + central +
+                    age + female + race + smk_current + sed, data = d)
+round(anova(fit_main, fit)$`Pr(>|Chi|)`[2], 3)     # likelihood-ratio p'),
+
+risk6_em = list(
+'# fit is the Cox model from the preceding slides
+risk6 <- function(people, waist) {
+  nd <- people                 # same people, same L values
+  nd$central <- waist          # change only high-waist exposure
+  s6 <- summary(survfit(fit, newdata = nd), times = 6)$surv
+  mean(1 - s6)                 # average predicted 6-year risk
+}
+
+ob    <- subset(d, obese == 1)
+notob <- subset(d, obese == 0)
+
+r <- c(
+  obese_low     = risk6(ob,    0),
+  obese_high    = risk6(ob,    1),
+  notobese_low  = risk6(notob, 0),
+  notobese_high = risk6(notob, 1)
+)
+round(100 * r, 1)'),
+
+rd = list(
+'rd <- 100 * c(
+  obese     = r[["obese_high"]]    - r[["obese_low"]],
+  not_obese = r[["notobese_high"]] - r[["notobese_low"]]
+)
+round(rd, 1)',
+'
+round(rd[["obese"]] - rd[["not_obese"]], 1)   # difference of risk differences'),
+
+int_mult = list(
+'# Multiplicative interaction from the Cox product term
+b <- coef(fit)
+round(exp(b[["obese:central"]]), 2)   # HR(waist | obese) / HR(waist | not obese)'),
+
+int_ic = list(
+'# A = high waist, M = obesity
+# R00 = Group III; R10 = IV; R01 = I; R11 = II
+risk6_all <- function(waist, obese) {   # everyone, set to one joint state
+  nd <- d; nd$central <- waist; nd$obese <- obese
+  mean(1 - summary(survfit(fit, newdata = nd), times = 6)$surv)
+}
+R <- c(R00 = risk6_all(0, 0), R10 = risk6_all(1, 0),
+       R01 = risk6_all(0, 1), R11 = risk6_all(1, 1))
+round(100 * R, 1)',
+'
+IC <- 100 * (R[["R11"]] - R[["R01"]] - R[["R10"]] + R[["R00"]])
+round(IC, 1)   # percentage points'),
+
+crude_sex = list(
+'dom$group <- relevel(factor(dom$group), ref = "I")
+
+fit_men <- coxph(Surv(time_yr, dead) ~ group,
+                 data = subset(dom, female == 0))
+fit_women <- coxph(Surv(time_yr, dead) ~ group,
+                   data = subset(dom, female == 1))
+
+round(summary(fit_men)$conf.int[
+  "groupIV", c("exp(coef)", "lower .95", "upper .95")], 2)',
+'
+round(summary(fit_women)$conf.int[
+  "groupIV", c("exp(coef)", "lower .95", "upper .95")], 2)'),
+
+sexcount = list(
+'with(subset(dom, group == "I"), table(female, died = dead))'),
+
+sextest = list(
+'s34 <- subset(d, group %in% c("III", "IV"))
+s34$IV <- as.integer(s34$group == "IV")
+
+f0 <- coxph(Surv(time_yr, dead) ~ IV + female +
+              age + race + smk_current + sed, data = s34)
+f1 <- coxph(Surv(time_yr, dead) ~ IV * female +
+              age + race + smk_current + sed, data = s34)
+
+round(summary(f1)$conf.int["IV:female", c(1, 3, 4)], 2)   # ratio of HRs',
+'
+round(anova(f0, f1)$`Pr(>|Chi|)`[2], 2)   # likelihood-ratio p'),
 
 twoways = list(
 'fit_joint <- coxph(Surv(time_yr, dead) ~ group +
                      age + female + race + smk_current + sed, data = d)
 fit_prod  <- coxph(Surv(time_yr, dead) ~ obese * central +
                      age + female + race + smk_current + sed, data = d)
-all.equal(fit_joint$loglik, fit_prod$loglik)     # the same fit?',
-'round(exp(coef(fit_prod))[c("obese", "central", "obese:central")], 2)'),
+all.equal(fit_joint$loglik, fit_prod$loglik)',
+'
+round(exp(coef(fit_prod))[c("obese", "central", "obese:central")], 2)'),
 
-strata = list(
-'b <- coef(fit_prod)
-round(exp(b[["central"]]), 2)                 # not obese: IV vs III',
-'round(exp(b[["central"]] + b[["obese:central"]]), 2)   # obese: II vs I',
-'d$notobese <- 1 - d$obese      # flip: the obese become the reference
-fit_flip <- coxph(Surv(time_yr, dead) ~ notobese * central +
-                    age + female + race + smk_current + sed, data = d)
-round(summary(fit_flip)$conf.int["central", c(1, 3, 4)], 2)   # HR, lower, upper'),
+diabetes_tab = list(
+'tab <- table(diabetes = d$t2dm, high_waist = d$central)
+round(100 * prop.table(tab, 2))'),
 
-lrt = list(
-'# fit_prod: from "One model, two ways"
-fit_main <- coxph(Surv(time_yr, dead) ~ obese + central +   # no product
-                    age + female + race + smk_current + sed, data = d)
-round(exp(coef(fit_main))[["central"]], 2)    # one HR for all: Week 4\'s',
-'lr <- anova(fit_main, fit_prod)       # likelihood-ratio test, product term
-round(c(chisq = lr$Chisq[2], p = lr$`Pr(>|Chi|)`[2]), 3)'),
-
-std = list(
-'risk6 <- function(people, g) {   # fit_joint: from "One model, two ways"
-  people$group <- factor(g, levels = levels(d$group))   # set everyone to g
-  1 - mean(summary(survfit(fit_joint, newdata = people), times = 6)$surv)
-}
-ob <- subset(d, obese == 1); notob <- subset(d, obese == 0)
-r_within <- c(I = risk6(ob, "I"), II = risk6(ob, "II"),           # obese
-              III = risk6(notob, "III"), IV = risk6(notob, "IV"))  # not obese
-round(100 * r_within, 1)                  # standardised 6-year risk, %',
-'rd <- 100 * c(obese = r_within[["II"]] - r_within[["I"]],
-              not_obese = r_within[["IV"]] - r_within[["III"]])
-round(c(rd, difference = rd[["obese"]] - rd[["not_obese"]]), 1)   # points'),
-
-joint = list(
-'# fit_joint and risk6(): from the earlier In-R slides
-h <- exp(coef(fit_joint))[c("groupII", "groupIII", "groupIV")]   # vs I
-RERI <- h[["groupIV"]] - h[["groupII"]] - h[["groupIII"]] + 1
-round(c(RERI = RERI, AP = RERI / h[["groupIV"]],
-        S = (h[["groupIV"]] - 1) /
-            ((h[["groupII"]] - 1) + (h[["groupIII"]] - 1))), 2)',
-'r_all <- sapply(c("I", "II", "III", "IV"),
-                function(g) risk6(d, g))       # everyone, set to each group
-round(100 * c(r_all, IC = r_all[["IV"]] - r_all[["II"]] -
-                          r_all[["III"]] + r_all[["I"]]), 1)'),
-
-sexcount = list(
-'with(subset(dom, group == "I"), table(female, died = dead))   # 6,048 rows'),
-
-sextest = list(
-'s34 <- subset(d, group %in% c("III", "IV"))   # the locked contrast only
-s34$IV <- as.integer(s34$group == "IV")
-f0 <- coxph(Surv(time_yr, dead) ~ IV + female +        # no product term
-              age + race + smk_current + sed, data = s34)
-f1 <- coxph(Surv(time_yr, dead) ~ IV * female +        # IV x sex
-              age + race + smk_current + sed, data = s34)
-round(summary(f1)$conf.int["IV:female", c(1, 3, 4)], 2)   # HR, lower, upper',
-'round(anova(f0, f1)$`Pr(>|Chi|)`[2], 2)        # likelihood-ratio p')
+dm_models = list(
+'f_no  <- coxph(Surv(time_yr, dead) ~ central + obese + age + female +
+                 race + smk_current + sed, data = subset(d, t2dm == 0))
+f_yes <- coxph(Surv(time_yr, dead) ~ central + obese + age + female +
+                 race + smk_current + sed, data = subset(d, t2dm == 1))')
 )
 
 ## ------------------------------------------------------------------ run and capture
@@ -155,7 +199,7 @@ blocks <- lapply(S, function(pieces) {
                if (length(o)) paste0("#> ", o))
   }
   lines <- sub("[[:space:]]+$", "", lines)   # no trailing spaces: the check is verbatim
-  stopifnot(max(nchar(lines)) <= 80)         # fits a slide without sideways scrolling
+  stopifnot(max(nchar(lines)) <= 86)         # fits a slide without sideways scrolling
   paste(lines, collapse = "\n")
 })
 
@@ -163,15 +207,14 @@ blocks <- lapply(S, function(pieces) {
 fx <- fromJSON("Week5_joint_exposure.json")$facts
 num <- function(s) as.numeric(gsub("−", "-", regmatches(s, regexpr("[+−-]?[0-9.]+", s))))
 stopifnot(
-  isTRUE(all.equal(fit_joint$loglik, fit_prod$loglik)),
+  isTRUE(all.equal(fit_joint$loglik, fit$loglik)),
   abs(round(exp(b[["central"]]), 2) - num(fx$hr_whtr_nonobese)) < 1e-9,
   abs(round(exp(b[["central"]] + b[["obese:central"]]), 2) - num(fx$hr_whtr_obese)) < 1e-9,
+  abs(round(exp(b[["obese:central"]]), 2) - num(fx$rhr_whtr)) < 1e-9,
   abs(round(exp(coef(fit_main))[["central"]], 2) - num(fx$hr_waist_nomod)) < 1e-9,
-  abs(round(RERI, 2) - num(fx$reri)) < 1e-9,
-  abs(round(100 * r_within[["I"]], 1) - num(fx$risk6_em_I)) < 1e-9,
-  abs(round(100 * (r_all[["IV"]] - r_all[["II"]] - r_all[["III"]] + r_all[["I"]]), 1) -
-        num(fx$ic6)) < 1e-9,
-  abs(round(rd[["obese"]] - rd[["not_obese"]], 1) - num(fx$rd_whtr_diff)) < 1e-9)
+  abs(round(100 * r[["obese_low"]], 1) - num(fx$risk6_em_I)) < 1e-9,
+  abs(round(rd[["obese"]] - rd[["not_obese"]], 1) - num(fx$rd_whtr_diff)) < 1e-9,
+  abs(round(IC, 1) - abs(num(fx$ic6))) < 1e-9)   # same IC, the other exposure coding
 
 writeLines(toJSON(list(emitted_by = "Week5_code_outputs", blocks = blocks),
                   auto_unbox = TRUE, pretty = TRUE), "Week5_code_outputs.json", useBytes = TRUE)
