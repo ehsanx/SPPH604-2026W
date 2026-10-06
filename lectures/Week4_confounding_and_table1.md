@@ -221,7 +221,7 @@ and a student waiting for MASLD to appear on Thursday loses the first half of th
   selection.** This cohort was selected on FLI ≥ 60 before anyone fitted a model.
 - Could adjustment undo it? Adjusting for TG and GGT would close the path the selection
   opened — but TG and GGT are plausibly **effects** of central fat, so that trades
-  selection bias for mediator and collider bias. Week 5 (Slide 15) and M1 return to this
+  selection bias for mediator and collider bias. Week 5 (Slide 8) and M1 return to this
   entanglement.
 - One-minute check: *which structure is "hypertension"?* Take answers, then hold them —
   the answer depends on timing, and Slide 8 shows why the data cannot give it.
@@ -649,7 +649,7 @@ and a student waiting for MASLD to appear on Thursday loses the first half of th
 - **Unmeasured confounding**, and **a wrong DAG**.
 - **Selection into the cohort (FLI ≥ 60).** In principle it is blockable by adjusting
   FLI's inputs, but TG and GGT are plausibly effects of central fat, so doing so trades
-  one bias for another (Week 5 Slide 15, M1).
+  one bias for another (Week 5 Slide 8, M1).
 - **The survey design.** Week 6 re-runs the locked contrast design-aware: **1.29
   (0.90–1.86)**, an interval that still includes 1.
 - **Heterogeneity across subgroups** (Week 5).

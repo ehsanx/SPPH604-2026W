@@ -265,13 +265,15 @@ modification</strong> and <strong>interaction</strong> using the
 <code>RHC</code> dataset, investigating whether the effect of
 right-heart catheterization on mortality is modified by a patient’s
 Do-Not-Resuscitate (DNR) status. You will prepare an analysis-ready
-dataset, fit logistic regression models with interaction terms, and
-calculate the Relative Excess Risk due to Interaction (RERI),
-Attributable Proportion (AP) and Synergy Index (SI) to quantify
-interaction on both the multiplicative and additive scales. Your TA will
-walk through the worked solution during the session.</p>
-<p>This is the workflow you will reuse in <strong>P3</strong> on your
-own locked paper.</p>
+dataset, fit logistic regression models with a product term (the
+multiplicative scale), and calculate the Relative Excess Risk due to
+Interaction (RERI), Attributable Proportion (AP) and Synergy Index (SI)
+— all three on the additive scale. Your TA will walk through the worked
+solution during the session.</p>
+<p>These are the questions you will ask in <strong>P3</strong> on your
+own locked paper. If your paper’s outcome is time-to-event, use
+Tuesday’s time-to-event tools rather than this lab’s logistic
+recipe.</p>
 <h2 id="materials">Materials</h2>
 <ul>
 <li><strong>Exercise instructions:</strong> <a href="https://ehsanx.github.io/EpiMethods/confoundingE2.html">Interaction
@@ -285,6 +287,46 @@ this exercise needs:</p>
 <p>Note the capital <strong>P</strong> in <code>Publish</code> — the
 CRAN package is capitalised even though the function you call is
 lowercase <code>publish()</code>.</p>
+<p>Things to know about the exercise before you read its output:</p>
+<ul>
+<li><strong>Count the cells first.</strong> Run
+<code>with(high_dasi_data, table(rhc_status, dnr_status, death_status))</code>.
+Only 23 of the 623 patients have a DNR order, and the exercise’s
+reference cell — RHC <em>and</em> a DNR order — holds <strong>3
+patients</strong>, 1 of whom died. Every RERI, AP and S you compute
+divides by them, which is why their intervals are so wide. This is
+Tuesday’s “count first” slide, in the lab’s own data.</li>
+<li><strong>Which cell is the reference?</strong> The text says it
+changes the reference levels “to <code>No RHC</code> and
+<code>No</code>”; the code does the reverse (both indicators are 1 for
+“No”), so the reference cell is RHC with a DNR order.</li>
+<li><strong>S (the synergy index) is an additive-scale measure,</strong>
+like RERI and AP: S = 1 means no <em>additive</em> interaction. The
+exercise text calls it multiplicative; go with Tuesday.</li>
+<li><strong>A negative RERI means “less than additive”,</strong> not
+that the exposures are protective when combined.</li>
+<li><strong>Death is common here (about 40%),</strong> so odds ratios
+overstate risk ratios, and an RERI computed from odds ratios is not the
+RERI you would get from risks.</li>
+<li><strong>Read the intervals, not interactionR’s p column.</strong>
+Its p-values for RERI, AP and S are one-sided or on the wrong scale (S
+prints p = 0.98 while its own interval excludes 1).</li>
+<li><strong>In 1(c), interactionR prints the question the other way
+round.</strong> With <code>em = TRUE</code> it treats the <em>first</em>
+exposure named as the modifier, so as called it shows DNR’s effect by
+RHC. Problem 1 asks for RHC’s effect by DNR: read it from the
+<code>publish()</code> rows, or swap the order of
+<code>exposure_names</code>.</li>
+<li><strong>The exercise defines interaction as “a departure from
+multiplicativity”.</strong> Tuesday’s definition (and the EpiMethods
+<em>Concepts</em> page): interaction is the joint effect of two
+exposures, which can be assessed on either scale.</li>
+<li><strong>Is DNR a fair modifier?</strong> DNR and RHC are both
+recorded on day 1, and which came first is not known. Tuesday’s rule
+says the exposure must not change the modifier. If catheterisation (or
+what it revealed) could prompt a DNR order, DNR fails that rule; Problem
+1’s reading assumes it could not.</li>
+</ul>
 <h2 id="your-task">Your task</h2>
 <ol type="1">
 <li><p>Follow along as the TA explains the worked solution.</p></li>
@@ -332,10 +374,13 @@ increment applies it to the paper your group locked at M0.</p>
 <td><strong>This week’s lecture</strong></td>
 <td><a href="https://ehsanx.github.io/SPPH604-2026W/lectures/Week5_interaction_effect_modification.html">Week
 5 — Interaction and effect modification</a></td>
-<td>Tuesday separated effect modification from interaction, and the
-multiplicative scale from the additive one. This lab fits the product
-term, extracts stratum-specific estimates, and computes RERI, AP and SI
-so you have done both scales by hand.</td>
+<td>Tuesday used the paper’s four groups (obesity × waist fat) to
+separate effect modification from interaction — each with its own
+adjustment set — and the multiplicative scale from the additive one. Its
+rule was to count every cell first. This lab does both questions on a
+binary outcome, where logistic regression is the right tool: Problem 1
+is effect modification (RHC’s confounders only), Problem 2 is
+interaction (the confounders of both).</td>
 </tr>
 <tr>
 <td><strong>Slide deck</strong></td>

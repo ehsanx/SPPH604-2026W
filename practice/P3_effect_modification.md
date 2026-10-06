@@ -15,7 +15,7 @@ header-includes:
   - '\newunicodechar{½}{\ensuremath{\tfrac{1}{2}}}'
   - '\newunicodechar{…}{\ldots}'
 ---
-# P3 — Effect modification (interaction)
+# P3 — Effect modification
 
 **Week 5 · applies L4 (Interaction) · optional and ungraded — no separate deadline, nothing to submit; M1 is assembled from these five increments**
 **Keep in your group GitHub repo:** stratum-specific estimates + a formal interaction test + a short interpretation.
@@ -28,11 +28,23 @@ number actually hides two, i.e. whether some group carries the effect.
 
 ## What to do
 1. **Choose one effect modifier with a rationale.** Sex, age band, income, or a
-   clinical subgroup — and say *why* modification is biologically/socially plausible.
-   One well-argued modifier beats a fishing expedition.
-2. **Estimate stratum-specific effects.** Fit the association separately within each
-   level of the modifier and report the estimates side by side.
-3. **Test interaction formally, on the right scale.**
+   clinical subgroup your exposure cannot cause — and say *why* modification is
+   biologically/socially plausible.
+   One well-argued modifier beats a fishing expedition. The modifier must be something
+   **your exposure cannot change**. The safe check is time: sex, age, genes, or a condition
+   that began before the exposure. Being recorded at the same visit is not enough — ask
+   whether your exposure could have caused it. A variable your exposure can change, such as
+   a disease it causes, turns the question into mediation, not modification: stratifying on
+   it removes part of the effect and compares unlike people (Week 5, "The exposure must not
+   change the modifier").
+   Say which question you are asking: **effect modification** (your exposure's effect,
+   by M — adjust for your exposure's confounders) or **interaction** (two exposures —
+   adjust for the confounders of both).
+2. **Count, then estimate stratum-specific effects.** Tabulate people and outcomes in
+   every exposure × modifier cell first; a sparse cell decides how much any interaction
+   measure can tell you. Then fit the association within each level of the modifier and
+   report the estimates side by side.
+3. **Test for modification formally, on the right scale** (a product term is the tool).
    - *Multiplicative:* an exposure × modifier product term in your outcome model.
    - *Additive* (often more relevant for public health): compare **absolute risks**
      across strata — for a time-to-event outcome, contrast predicted risks at a fixed
@@ -53,10 +65,11 @@ number actually hides two, i.e. whether some group carries the effect.
   A natural P3 question: **does the central-adiposity → mortality association differ
   by sex?** (Group II is 56% female; Group I only 15% — so sex is entangled with the
   exposure and worth probing.)
-- **Right tool for the outcome:** mortality is time-to-event with censoring, so put a
-  `group × sex` term in the **Cox** model (multiplicative), and for additive
-  modification compare **predicted 6-year mortality risk** by sex within group — *not*
-  a logistic RERI on an "ever died" flag.
+- **Right tool for the outcome:** mortality is time-to-event with censoring. Restrict to
+  the locked contrast (Groups III and IV) and put an `IV × sex` term in the **Cox** model,
+  so the product term is a 1-df test of exactly that contrast (multiplicative). For the
+  additive scale, compare **standardised 6-year mortality risks** of IV vs III within
+  each sex — *not* a logistic RERI on an "ever died" flag.
 - A defensible result is often "no meaningful modification" — reported clearly, that
   is a complete P3.
 

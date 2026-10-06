@@ -17,14 +17,16 @@ Refitting the crude Cox model within each sex against Group I (Table P3.1), the
 all-cause HRs are dramatically larger in men.
 
 **Table P3.1. Crude sex-stratified all-cause HR (95% CI), Group I = reference.**
+*Locked domain, N = 6,048 — the rows `P3_code` fits. Group I holds 4 deaths: 2 of 317 men
+and 2 of 58 women.*
 
 | Group | Men | Women |
 |---|---|---|
-| II (obese, high central) | 11.7 | 2.25 |
-| III (non-obese, low central) | 8.47 | 2.94 |
-| IV (non-obese, high central) | **28.2 (8.9–89.3)** | **4.08 (0.98–16.9)** |
+| II (obese, high central) | 16.5 | 2.16 |
+| III (non-obese, low central) | 12.2 | 2.28 |
+| IV (non-obese, high central) | **36.1 (8.9–147.5)** | **4.11 (0.99–17.1)** |
 
-Read naively, this is a striking picture: for the headline Group IV, the crude HR is roughly seven-fold higher in men (28.2) than in women (4.08), and the women's interval even crosses 1. Taken at face value it would suggest that non-obese central adiposity is far more lethal for men.
+Read naively, this is a striking picture: for the headline Group IV, the crude HR is nearly nine-fold higher in men (36.1) than in women (4.11), and the women's interval even crosses 1. Taken at face value it would suggest that non-obese central adiposity is far more lethal for men.
 
 ## The formal interaction test — targeted at the locked contrast
 
@@ -43,12 +45,12 @@ difference between them is attributable to adjustment rather than to sample chan
 | Crude | 0.62 (0.26–1.43) | 0.278 |
 | Model 1 adjusted | **1.00 (0.42–2.35)** | **0.993** |
 
-Sex-specific adjusted IV vs III hazard ratios:
+Sex-specific adjusted IV vs III hazard ratios (Model 1, fitted within each sex):
 
 | | n | HR (95% CI) |
 |---|---:|---|
 | Men | 937 | 1.10 (0.75–1.62) |
-| Women | 359 | 1.06 (0.48–2.34) |
+| Women | 359 | 1.08 (0.49–2.38) |
 
 ## The additive scale — a real estimand, not an inference from hazard ratios
 

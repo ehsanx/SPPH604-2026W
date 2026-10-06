@@ -187,8 +187,8 @@ vertical-align: middle;
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
-<li><a href="#p3-effect-modification-interaction" id="toc-p3-effect-modification-interaction">P3 — Effect modification
-(interaction)</a>
+<li><a href="#p3-effect-modification" id="toc-p3-effect-modification">P3
+— Effect modification</a>
 <ul>
 <li><a href="#the-question-this-week" id="toc-the-question-this-week">The question this week</a></li>
 <li><a href="#what-to-do" id="toc-what-to-do">What to do</a></li>
@@ -206,8 +206,7 @@ project handoff</a></li>
 </ul></li>
 </ul>
 </nav>
-<h1 id="p3-effect-modification-interaction">P3 — Effect modification
-(interaction)</h1>
+<h1 id="p3-effect-modification">P3 — Effect modification</h1>
 <p><strong>Week 5 · applies L4 (Interaction) · optional and ungraded —
 no separate deadline, nothing to submit; M1 is assembled from these five
 increments</strong> <strong>Keep in your group GitHub repo:</strong>
@@ -222,13 +221,27 @@ hides two, i.e. whether some group carries the effect.</p>
 <h2 id="what-to-do">What to do</h2>
 <ol type="1">
 <li><strong>Choose one effect modifier with a rationale.</strong> Sex,
-age band, income, or a clinical subgroup — and say <em>why</em>
-modification is biologically/socially plausible. One well-argued
-modifier beats a fishing expedition.</li>
-<li><strong>Estimate stratum-specific effects.</strong> Fit the
-association separately within each level of the modifier and report the
+age band, income, or a clinical subgroup your exposure cannot cause —
+and say <em>why</em> modification is biologically/socially plausible.
+One well-argued modifier beats a fishing expedition. The modifier must
+be something <strong>your exposure cannot change</strong>. The safe
+check is time: sex, age, genes, or a condition that began before the
+exposure. Being recorded at the same visit is not enough — ask whether
+your exposure could have caused it. A variable your exposure can change,
+such as a disease it causes, turns the question into mediation, not
+modification: stratifying on it removes part of the effect and compares
+unlike people (Week 5, “The exposure must not change the modifier”). Say
+which question you are asking: <strong>effect modification</strong>
+(your exposure’s effect, by M — adjust for your exposure’s confounders)
+or <strong>interaction</strong> (two exposures — adjust for the
+confounders of both).</li>
+<li><strong>Count, then estimate stratum-specific effects.</strong>
+Tabulate people and outcomes in every exposure × modifier cell first; a
+sparse cell decides how much any interaction measure can tell you. Then
+fit the association within each level of the modifier and report the
 estimates side by side.</li>
-<li><strong>Test interaction formally, on the right scale.</strong>
+<li><strong>Test for modification formally, on the right scale</strong>
+(a product term is the tool).
 <ul>
 <li><em>Multiplicative:</em> an exposure × modifier product term in your
 outcome model.</li>
@@ -260,11 +273,12 @@ central-adiposity → mortality association differ by sex?</strong> (Group
 II is 56% female; Group I only 15% — so sex is entangled with the
 exposure and worth probing.)</li>
 <li><strong>Right tool for the outcome:</strong> mortality is
-time-to-event with censoring, so put a <code>group × sex</code> term in
-the <strong>Cox</strong> model (multiplicative), and for additive
-modification compare <strong>predicted 6-year mortality risk</strong> by
-sex within group — <em>not</em> a logistic RERI on an “ever died”
-flag.</li>
+time-to-event with censoring. Restrict to the locked contrast (Groups
+III and IV) and put an <code>IV × sex</code> term in the
+<strong>Cox</strong> model, so the product term is a 1-df test of
+exactly that contrast (multiplicative). For the additive scale, compare
+<strong>standardised 6-year mortality risks</strong> of IV vs III within
+each sex — <em>not</em> a logistic RERI on an “ever died” flag.</li>
 <li>A defensible result is often “no meaningful modification” — reported
 clearly, that is a complete P3.</li>
 </ul>
