@@ -2506,6 +2506,7 @@ vertical-align: -.125em;
 <pre><code>Full cohort: 6371  | complete-case on covariates: 6246  | missing serum creatinine: 1 </code></pre>
 </div>
 </div>
+<p>These counts do not account for the residual gap. Our N is <em>above</em> the paper’s ~6,300, and dropping rows with incomplete covariates would take it below. We report the +71 as unresolved rather than attribute it.</p>
 </section>
 <section id="results-for-m1" class="level2">
 <h2 class="anchored" data-anchor-id="results-for-m1">Results for M1</h2>
@@ -3165,36 +3166,40 @@ vertical-align: -.125em;
 <span id="cb15-169"><a href="#cb15-169" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot; | missing serum creatinine:&quot;</span>, <span class="fu">sum</span>(<span class="fu">is.na</span>(coh<span class="sc">$</span>LBXSCR)), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
 <span id="cb15-170"><a href="#cb15-170" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb15-171"><a href="#cb15-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-172"><a href="#cb15-172" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results for M1</span></span>
-<span id="cb15-173"><a href="#cb15-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-174"><a href="#cb15-174" aria-hidden="true" tabindex="-1"></a>M1 cites these by name; it does not re-run this file. Every number is formatted</span>
-<span id="cb15-175"><a href="#cb15-175" aria-hidden="true" tabindex="-1"></a>once, here, so the deck cannot reformat or mistype it.</span>
-<span id="cb15-176"><a href="#cb15-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-177"><a href="#cb15-177" aria-hidden="true" tabindex="-1"></a><span class="in">```{r emit}</span></span>
-<span id="cb15-178"><a href="#cb15-178" aria-hidden="true" tabindex="-1"></a>fn <span class="ot">&lt;-</span> funnel<span class="sc">$</span>N; <span class="fu">names</span>(fn) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;s&quot;</span>, funnel<span class="sc">$</span>Step)</span>
-<span id="cb15-179"><a href="#cb15-179" aria-hidden="true" tabindex="-1"></a><span class="fu">emit_results</span>(<span class="st">&quot;P1&quot;</span>, <span class="fu">list</span>(</span>
-<span id="cb15-180"><a href="#cb15-180" aria-hidden="true" tabindex="-1"></a>  <span class="at">full_n   =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(coh)),</span>
-<span id="cb15-181"><a href="#cb15-181" aria-hidden="true" tabindex="-1"></a>  <span class="at">groups   =</span> <span class="fu">paste</span>(<span class="fu">fmtn</span>(<span class="fu">as.integer</span>(<span class="fu">table</span>(coh<span class="sc">$</span>group))), <span class="at">collapse =</span> <span class="st">&quot; / &quot;</span>),</span>
-<span id="cb15-182"><a href="#cb15-182" aria-hidden="true" tabindex="-1"></a>  <span class="at">deaths   =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(coh<span class="sc">$</span>dead, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb15-183"><a href="#cb15-183" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_n =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(coh<span class="sc">$</span>WTSAF2YR) <span class="sc">&amp;</span> coh<span class="sc">$</span>WTSAF2YR <span class="sc">&gt;</span> <span class="dv">0</span>)),</span>
-<span id="cb15-184"><a href="#cb15-184" aria-hidden="true" tabindex="-1"></a>  <span class="at">funnel_records   =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s0&quot;</span>]]),</span>
-<span id="cb15-185"><a href="#cb15-185" aria-hidden="true" tabindex="-1"></a>  <span class="at">funnel_adults    =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s1&quot;</span>]]),</span>
-<span id="cb15-186"><a href="#cb15-186" aria-hidden="true" tabindex="-1"></a>  <span class="at">funnel_fasting   =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s2&quot;</span>]]),</span>
-<span id="cb15-187"><a href="#cb15-187" aria-hidden="true" tabindex="-1"></a>  <span class="at">funnel_fli       =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s3&quot;</span>]]),</span>
-<span id="cb15-188"><a href="#cb15-188" aria-hidden="true" tabindex="-1"></a>  <span class="at">funnel_steatosis =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s4&quot;</span>]]),</span>
-<span id="cb15-189"><a href="#cb15-189" aria-hidden="true" tabindex="-1"></a>  <span class="at">funnel_masld     =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s5&quot;</span>]]),</span>
-<span id="cb15-190"><a href="#cb15-190" aria-hidden="true" tabindex="-1"></a>  <span class="at">funnel_linked    =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s7&quot;</span>]]),</span>
-<span id="cb15-191"><a href="#cb15-191" aria-hidden="true" tabindex="-1"></a>  <span class="at">item_nonresponse =</span> <span class="fu">fmtn</span>(funnel<span class="sc">$</span>Dropped[funnel<span class="sc">$</span>Step <span class="sc">==</span> <span class="dv">3</span>]),</span>
-<span id="cb15-192"><a href="#cb15-192" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcome_loss     =</span> <span class="fu">fmtn</span>(funnel<span class="sc">$</span>Dropped[funnel<span class="sc">$</span>Step <span class="sc">==</span> <span class="dv">7</span>]),</span>
-<span id="cb15-193"><a href="#cb15-193" aria-hidden="true" tabindex="-1"></a>  <span class="co"># what &quot;read every downward step as attrition&quot; would actually total</span></span>
-<span id="cb15-194"><a href="#cb15-194" aria-hidden="true" tabindex="-1"></a>  <span class="at">all_downward_steps =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s1&quot;</span>]] <span class="sc">-</span> fn[[<span class="st">&quot;s7&quot;</span>]]),</span>
-<span id="cb15-195"><a href="#cb15-195" aria-hidden="true" tabindex="-1"></a>  <span class="at">alq_excluded =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(crude, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb15-196"><a href="#cb15-196" aria-hidden="true" tabindex="-1"></a>  <span class="at">alq_n        =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(base) <span class="sc">-</span> <span class="fu">sum</span>(crude, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb15-197"><a href="#cb15-197" aria-hidden="true" tabindex="-1"></a>  <span class="at">avg_excluded =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(avg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb15-198"><a href="#cb15-198" aria-hidden="true" tabindex="-1"></a>  <span class="at">avg_n        =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(base) <span class="sc">-</span> <span class="fu">sum</span>(avg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb15-199"><a href="#cb15-199" aria-hidden="true" tabindex="-1"></a>  <span class="at">alq_reserved =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(base<span class="sc">$</span>ALQ130 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">777</span>, <span class="dv">999</span>)))</span>
-<span id="cb15-200"><a href="#cb15-200" aria-hidden="true" tabindex="-1"></a>), <span class="fu">list</span>(<span class="at">funnel =</span> <span class="fu">as.data.frame</span>(funnel)))</span>
-<span id="cb15-201"><a href="#cb15-201" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
+<span id="cb15-172"><a href="#cb15-172" aria-hidden="true" tabindex="-1"></a>These counts do not account for the residual gap. Our N is *above* the paper&#39;s ~6,300,</span>
+<span id="cb15-173"><a href="#cb15-173" aria-hidden="true" tabindex="-1"></a>and dropping rows with incomplete covariates would take it below. We report the +71 as</span>
+<span id="cb15-174"><a href="#cb15-174" aria-hidden="true" tabindex="-1"></a>unresolved rather than attribute it.</span>
+<span id="cb15-175"><a href="#cb15-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-176"><a href="#cb15-176" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results for M1</span></span>
+<span id="cb15-177"><a href="#cb15-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-178"><a href="#cb15-178" aria-hidden="true" tabindex="-1"></a>M1 cites these by name; it does not re-run this file. Every number is formatted</span>
+<span id="cb15-179"><a href="#cb15-179" aria-hidden="true" tabindex="-1"></a>once, here, so the deck cannot reformat or mistype it.</span>
+<span id="cb15-180"><a href="#cb15-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-181"><a href="#cb15-181" aria-hidden="true" tabindex="-1"></a><span class="in">```{r emit}</span></span>
+<span id="cb15-182"><a href="#cb15-182" aria-hidden="true" tabindex="-1"></a>fn <span class="ot">&lt;-</span> funnel<span class="sc">$</span>N; <span class="fu">names</span>(fn) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;s&quot;</span>, funnel<span class="sc">$</span>Step)</span>
+<span id="cb15-183"><a href="#cb15-183" aria-hidden="true" tabindex="-1"></a><span class="fu">emit_results</span>(<span class="st">&quot;P1&quot;</span>, <span class="fu">list</span>(</span>
+<span id="cb15-184"><a href="#cb15-184" aria-hidden="true" tabindex="-1"></a>  <span class="at">full_n   =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(coh)),</span>
+<span id="cb15-185"><a href="#cb15-185" aria-hidden="true" tabindex="-1"></a>  <span class="at">groups   =</span> <span class="fu">paste</span>(<span class="fu">fmtn</span>(<span class="fu">as.integer</span>(<span class="fu">table</span>(coh<span class="sc">$</span>group))), <span class="at">collapse =</span> <span class="st">&quot; / &quot;</span>),</span>
+<span id="cb15-186"><a href="#cb15-186" aria-hidden="true" tabindex="-1"></a>  <span class="at">deaths   =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(coh<span class="sc">$</span>dead, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb15-187"><a href="#cb15-187" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_n =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(coh<span class="sc">$</span>WTSAF2YR) <span class="sc">&amp;</span> coh<span class="sc">$</span>WTSAF2YR <span class="sc">&gt;</span> <span class="dv">0</span>)),</span>
+<span id="cb15-188"><a href="#cb15-188" aria-hidden="true" tabindex="-1"></a>  <span class="at">funnel_records   =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s0&quot;</span>]]),</span>
+<span id="cb15-189"><a href="#cb15-189" aria-hidden="true" tabindex="-1"></a>  <span class="at">funnel_adults    =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s1&quot;</span>]]),</span>
+<span id="cb15-190"><a href="#cb15-190" aria-hidden="true" tabindex="-1"></a>  <span class="at">funnel_fasting   =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s2&quot;</span>]]),</span>
+<span id="cb15-191"><a href="#cb15-191" aria-hidden="true" tabindex="-1"></a>  <span class="at">funnel_fli       =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s3&quot;</span>]]),</span>
+<span id="cb15-192"><a href="#cb15-192" aria-hidden="true" tabindex="-1"></a>  <span class="at">funnel_steatosis =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s4&quot;</span>]]),</span>
+<span id="cb15-193"><a href="#cb15-193" aria-hidden="true" tabindex="-1"></a>  <span class="at">funnel_masld     =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s5&quot;</span>]]),</span>
+<span id="cb15-194"><a href="#cb15-194" aria-hidden="true" tabindex="-1"></a>  <span class="at">funnel_linked    =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s7&quot;</span>]]),</span>
+<span id="cb15-195"><a href="#cb15-195" aria-hidden="true" tabindex="-1"></a>  <span class="at">item_nonresponse =</span> <span class="fu">fmtn</span>(funnel<span class="sc">$</span>Dropped[funnel<span class="sc">$</span>Step <span class="sc">==</span> <span class="dv">3</span>]),</span>
+<span id="cb15-196"><a href="#cb15-196" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcome_loss     =</span> <span class="fu">fmtn</span>(funnel<span class="sc">$</span>Dropped[funnel<span class="sc">$</span>Step <span class="sc">==</span> <span class="dv">7</span>]),</span>
+<span id="cb15-197"><a href="#cb15-197" aria-hidden="true" tabindex="-1"></a>  <span class="co"># what &quot;read every downward step as attrition&quot; would actually total</span></span>
+<span id="cb15-198"><a href="#cb15-198" aria-hidden="true" tabindex="-1"></a>  <span class="at">all_downward_steps =</span> <span class="fu">fmtn</span>(fn[[<span class="st">&quot;s1&quot;</span>]] <span class="sc">-</span> fn[[<span class="st">&quot;s7&quot;</span>]]),</span>
+<span id="cb15-199"><a href="#cb15-199" aria-hidden="true" tabindex="-1"></a>  <span class="at">alq_excluded =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(crude, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb15-200"><a href="#cb15-200" aria-hidden="true" tabindex="-1"></a>  <span class="at">alq_n        =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(base) <span class="sc">-</span> <span class="fu">sum</span>(crude, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb15-201"><a href="#cb15-201" aria-hidden="true" tabindex="-1"></a>  <span class="at">avg_excluded =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(avg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb15-202"><a href="#cb15-202" aria-hidden="true" tabindex="-1"></a>  <span class="at">avg_n        =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(base) <span class="sc">-</span> <span class="fu">sum</span>(avg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb15-203"><a href="#cb15-203" aria-hidden="true" tabindex="-1"></a>  <span class="at">alq_reserved =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(base<span class="sc">$</span>ALQ130 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">777</span>, <span class="dv">999</span>)))</span>
+<span id="cb15-204"><a href="#cb15-204" aria-hidden="true" tabindex="-1"></a>), <span class="fu">list</span>(<span class="at">funnel =</span> <span class="fu">as.data.frame</span>(funnel)))</span>
+<span id="cb15-205"><a href="#cb15-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

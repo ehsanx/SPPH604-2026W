@@ -13,10 +13,11 @@ execute:
 ---
 
 > Reproduces every number stated in the letter. The replication figures are
-> derived live here; the two improvement estimates (survey-weighted, imputed) are
-> reproduced in full by `../P4_design_aware/P4_code.qmd` and
-> `../M3_defense/M3_defense_evidence.qmd` (the PIR + SBP sensitivity model, whose
-> adjustment set is wider than the paper's Model 1) and summarised below.
+> derived live here, except the Model 1 hazard ratio, which comes from the
+> reproduction's `../../reproduction/output/tables/table2_reproduced.csv`. The locked-contrast estimates
+> (Group IV vs III, the paper's Model 1, design-weighted) and the funnel counts are
+> emitted by `../P5_missing_data/P5_code.qmd` and `../M3_defense/M3_defense_evidence.qmd`,
+> and are read below rather than retyped.
 
 ```{r setup}
 source("../_shared/paths.R")   # find_repro(), emit_results(), ci(), fmtn(), endash()
@@ -27,7 +28,7 @@ hr <- function(m,g){s<-summary(m); sprintf("%.2f (%.2f-%.2f)",
         s$conf.int[g,1], s$conf.int[g,"lower .95"], s$conf.int[g,"upper .95"])}
 ```
 
-## Claim 1 — the cohort and headline results reproduce
+## Claim 1 — the cohort and headline results, against the paper's
 
 ```{r reproduce}
 cat("N =", nrow(d), "(paper 6300);  groups",
@@ -43,17 +44,22 @@ cat("Group IV all-cause: unadjusted", hr(u,"groupIV"), "(paper 15.13);  Model 2"
     hr(m2,"groupIV"), "(paper 2.89)\n")
 ```
 
-## Claim 2/4 — improved estimates attenuate but do not overturn
+## Claim 2/4 — the locked contrast, and its missing-data sensitivity
 
 ```{r improved}
+# Read, not retyped: P5.json is emitted by ../P5_missing_data/P5_code.qmd and chain.json
+# by ../M3_defense/M3_defense_evidence.qmd. All rows: Group IV vs III, the paper's
+# Model 1, design-weighted (WTSAF2YR/6, strata, PSU).
+p5 <- read_results("P5")$facts; ch <- read_results("chain")$facts
 data.frame(
-  Analysis = c("Survey-weighted (fasting design)","Multiple imputation",
-               "Weighted direct IV vs III","Weighted direct IV vs II"),
-  `Group IV HR` = c("12.40 (2.69-57.15)","2.79 (1.12-6.92)",
-                    "3.07 (2.11-4.46)","2.30 (1.76-3.02)"),
-  Source = c("P4_code.qmd","M3_defense_evidence.qmd","P4_code.qmd","P4_code.qmd"),
+  Analysis = c("complete case (the defended estimate)", "all missing assigned no cancer",
+               "all missing assigned cancer", "MI (m = 10), outcome in the imputation model"),
+  Rows = c(p5$n_cc, p5$n_full, p5$n_full, p5$n_full),
+  `HR (95% CI)` = c(ch$locked_full, p5$locked_no, p5$locked_yes, ch$locked_mi_full),
+  Source = c("M3_defense_evidence.qmd", "P5_code.qmd", "P5_code.qmd", "M3_defense_evidence.qmd"),
   check.names = FALSE)
-cat("Direction is stable across every specification: Group IV remains worst.\n")
+cat("Funnel: adults 18+", ch$n_adults, "; sampled into the fasting subsample", ch$n_fasting,
+    "; of those, FLI computable", ch$n_fli, "\n")
 ```
 
 ## Claim 3 — published-vs-reproduced discrepancies we flag

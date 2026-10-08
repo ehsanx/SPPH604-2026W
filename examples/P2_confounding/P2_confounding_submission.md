@@ -6,9 +6,9 @@
 
 Our term question isolates central adiposity: among adults meeting FLI-based MASLD criteria, we compare **Group IV (non-obese, high central adiposity: BMI<30, WHtR≥0.6)** against **Group III (non-obese, low central adiposity: WHtR<0.6)** for all-cause mortality, holding body-mass category fixed so that WHtR carries the exposure contrast rather than obesity.
 
-## Reproduced Table 1 (mortality-eligible cohort, n=6,371)
+## Reproduced Table 1 (full analytic file, n=6,371)
 
-We reproduced the descriptive table from the raw NHANES 2007–2018 files. Reproduced vs paper, key rows:
+We reproduced the descriptive table from the raw NHANES 2007–2018 files. The rows below are the reproduction pipeline's Table 1 (`reproduction/output/tables/table1_reproduced.csv`), on the full analytic file of 6,371, the row set comparable with the paper's. `P2_code.qmd` computes the same characteristics on the 6,048-row locked domain, so the values it prints differ slightly (for example, mean age 50.9 (16.5)). Reproduced vs paper, key rows:
 
 | Characteristic | Reproduced | Paper |
 |---|---|---|
@@ -82,20 +82,23 @@ mode is switching between them without saying so.
 earlier draft — quietly turns the paper's contrast into a claim about thinness that it
 does not make.
 
+All hazard ratios in this section are from unweighted Cox models. "Model 1" is the
+paper's Model 1 covariate set, and the rows column gives the row set each was fitted on.
+
 ### Replication estimand — the paper's contrast, IV vs I
 
 | Model | rows | Group IV vs I HR (95% CI) |
 |---|---:|---|
 | Crude | 6,048 | 16.96 (6.24–46.05) |
 | Crude | 5,939 | 16.05 (5.91–43.58) |
-| Model 1 | 5,939 | **3.79 (1.38–10.39)** |
+| Model 1 | 5,939 | **3.81 (1.39–10.43)** |
 
-Reproduced. The paper's headline survives adjustment on its own reference.
+Reproduced in direction. The paper's headline survives Model-1 adjustment on its own reference.
 
 ### Locked scientific estimand — IV vs III, identical rows
 
 Model 1 loses 109 observations to missing cancer status, so a crude estimate on 6,048
-rows and an adjusted estimate on 5,939 differ for **two** reasons at once. We therefore
+rows and a Model-1 estimate on 5,939 differ for **two** reasons at once. We therefore
 fit both on the same complete-case set, and report the all-rows crude separately to show
 what the restriction did.
 
@@ -103,15 +106,21 @@ what the restriction did.
 |---|---:|---|
 | Crude | 6,048 | 2.33 (1.71–3.17) |
 | Crude | 5,939 | 2.34 (1.72–3.18) |
-| Model 1 | 5,939 | **1.06 (0.77–1.45)** |
+| Model 1 | 5,939 | **1.05 (0.77–1.45)** |
 
 **The row restriction accounts for essentially none of the change** (2.33 → 2.34). What
 follows is attributable to adjustment, which is the only reason we can say so.
 
+The lectures' exposure analysis (Weeks 4–7) estimates the same comparison, high against
+low waist fat among the non-obese, with a different adjustment set (set L: age, sex,
+race/ethnicity, current smoking and sedentary time) on 5,911 rows, and gets 1.09
+(0.79–1.50), unweighted. The crude estimates on the two row sets are close (2.34 here,
+2.31 there), so the difference comes mainly from the adjustment set, not the rows.
+
 ### What this shows, and what it does not
 
 On our locked contrast, the crude 2.34-fold excess **does not survive Model-1
-adjustment**: the adjusted hazard ratio is 1.06 with a confidence interval spanning
+adjustment**: the Model-1 hazard ratio is 1.05 with a confidence interval spanning
 0.77 to 1.45. Among non-obese adults with MASLD, we find **no evidence of a higher
 hazard at the available precision** once age, sex and cardiometabolic burden are
 accounted for. That interval is compatible with a 23% reduction and a 45% increase, so
@@ -125,14 +134,15 @@ reference group" — it does not. What it says is that the model contains two di
 scientific questions, and they have different answers:
 
 - *Is the non-obese, high-central-adiposity group worse off than the obese, low-central
-  group?* Yes — 3.79 (1.38–10.39).
+  group?* Yes — 3.81 (1.39–10.43).
 - *Within the non-obese, does high central adiposity carry higher mortality?* Not
-  detectably — 1.06 (0.77–1.45).
+  detectably — 1.05 (0.77–1.45).
 
 Both are true of the same model at once. Group IV looks dramatic against Group I partly
-because **Group I is a small, comparatively healthy obese stratum (n = 391)**. The
-paper's headline is stated against that reference and reproduces against it; our locked
-question is the second one, and it is the one that does not survive adjustment.
+because **Group I is a small, comparatively healthy obese stratum** (375 people with 4
+deaths in the 6,048-row locked domain, and at most that many in the 5,939 rows these models use).
+The paper's headline is stated against that reference and reproduces against it; our
+locked question is the second one, and it is the one that does not survive adjustment.
 
 **We do not read the attenuation as validation.** An earlier draft of this submission
 claimed a large effect surviving adjustment is "more credible" than a large crude
@@ -145,4 +155,4 @@ variable-role analysis below cannot yet settle.
 
 ## Publication inconsistency caught: PIR income-% swap
 
-Reconstructing the income (poverty-income ratio) distribution from the counts, we get **High 22.1% / Middle 54.9% / Low 23.0%**. The paper prints **High 23.0% / Low 22.1%** — the high- and low-income percentages are transposed. The middle category and the underlying counts agree, so the difference is in the printed percentages rather than in how the variable is defined. It does not affect the models (PIR is not in Model 1/2), but it is the kind of small, traceable discrepancy the diagnostic exists to surface, and we log it alongside the BMI cut-point mislabel for the M1 synthesis.
+Reconstructing the income (poverty-income ratio) distribution from the counts on the full analytic file (6,371 rows), we get **High 22.1% / Middle 54.9% / Low 23.0%**. The paper prints **High 23.0% / Low 22.1%** — the high- and low-income percentages are transposed. The middle category and the underlying counts agree, so the difference is in the printed percentages rather than in how the variable is defined. It does not affect the models (PIR is not in Model 1/2), but it is the kind of small, traceable discrepancy the diagnostic exists to surface, and we log it alongside the BMI cut-point mislabel for the M1 synthesis.

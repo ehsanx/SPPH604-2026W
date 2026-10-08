@@ -26,15 +26,31 @@ M2 asks you to do.
 If a file is ever added as a deliberately flawed **Review case**, it will say so in its
 first line and its folder will be named `*_review_case`. Nothing here is one today.
 
+## Two analyses of the same cohort
+
+Every exemplar here is a **paper replication**: it keeps the paper's four phenotype groups
+(I–IV) and its Model 1 and Model 2 covariates, and reports the paper's contrast (IV vs I)
+beside our locked one (IV vs III), on the 6,371-row full analytic file, the 6,048-row
+locked domain, or its complete-case subsets (5,939 rows; 1,296 for the sex interaction).
+The Week 4–7 lectures run a second analysis of the same cohort, an **exposure analysis**
+of obesity and of high waist fat within obesity strata, adjusted only for factors that
+precede the exposure (set L: age, sex, race/ethnicity, current smoking and sedentary
+time; 5,911 rows), because Week 4 argues that several Model 1 covariates may lie on the
+causal path. The two can give different numbers for what looks like the same
+comparison; the rows differ only slightly, so most of the difference comes from the
+adjustment set. Estimates in these folders are therefore labelled with the comparison,
+the rows, the adjustment set (crude, Model 1, Model 2 or set L) and the weighting
+(unweighted, or design-weighted with `WTSAF2YR`/6, strata and PSU).
+
 ## Contents
 
 | Assignment | Subfolder | Submission | Reproducible code | Reproduces |
 |---|---|---|---|---|
 | P1 Analytic cohort | `P1_analytic_cohort/` | `_submission.md` | `P1_code.qmd` | typed funnel; locked domain N = 6,048 |
-| P2 Confounding / Table 1 | `P2_confounding/` | `_submission.md` | `P2_code.qmd` | Table 1; PIR swap; replication IV vs I 16.05->3.79, locked IV vs III 2.34->1.06, matched rows |
-| P3 Effect modification | `P3_effect_modification/` | `_submission.md` | `P3_code.qmd` | targeted 1-df IV vs III x sex: ratio of HRs 1.00 (0.42-2.35); 6-yr risk differences |
-| P4 Design-aware estimate | `P4_design_aware/` | `_submission.md` | `P4_code.qmd` | design built on the frame then subset(); adjustment x design matrix on matched rows |
-| P5 Missing data | `P5_missing_data/` | `_submission.md` | `P5_code.qmd` | Model-1 missingness 1.8% (cancer only); complete-case 2.97, stress 2.98/2.99, MI 2.98 |
+| P2 Confounding / Table 1 | `P2_confounding/` | `_submission.md` | `P2_code.qmd` | Table 1; PIR swap; crude -> Model 1, unweighted, on the same 5,939 rows: replication IV vs I 16.05->3.81, locked IV vs III 2.34->1.05 |
+| P3 Effect modification | `P3_effect_modification/` | `_submission.md` | `P3_code.qmd` | targeted 1-df IV vs III x sex (Model 1, unweighted, 1,296 rows): ratio of HRs 1.00 (0.42-2.35); 6-yr risk differences |
+| P4 Design-aware estimate | `P4_design_aware/` | `_submission.md` | `P4_code.qmd` | design built on the frame then subset(); adjustment x design matrix on the same 5,939 rows |
+| P5 Missing data | `P5_missing_data/` | `_submission.md` | `P5_code.qmd` | Model-1 missingness 1.8% (cancer only); weighted Model 1, locked IV vs III: complete case 1.29, stress and MI 1.28; replication IV vs I: 2.98 to 2.99 |
 | M1 Replication deck | `M1_replication/` | `_deck.md` | `M1_code.qmd` | all five increments + figures + dominant-threat judgment |
 | M2 Critique | `M2_critique/` | `_critique_deck.md` | `NOTE_reproducibility.md` | (critique of the M1 deck above — no new numbers) |
 | M3 Oral defense | `M3_defense/` | `_defense.md` | `M3_defense_evidence.qmd` | the numbers behind each defense answer |
@@ -61,7 +77,8 @@ quarto render P1_code.qmd     # writes P1_code.html
 
 Requires R (≥ 4.4) with `dplyr, survival, survey, mice, rms, jsonlite` and Quarto
 (≥ 1.4). All code files render cleanly and reproduce the numbers cited in the matching
-submission.
+submission, except where a submission says that a number comes from elsewhere or is not
+printed by its code.
 
 **You do not have to run anything to read these examples.** Every `.qmd` has a rendered
 `.html` beside it and every submission has a rendered `.pdf`. Running the code is for
@@ -117,7 +134,7 @@ your code without editing a path first.
 ## Note on honesty
 
 These model answers deliberately **do not force the paper's exact numbers**. They
-reproduce the cohort to N = 6,371 (paper 6,300) and *explain* the gap, document the
-alcohol ambiguity rather than tuning it away, and report where the design-aware and
+reproduce the cohort to N = 6,371 (paper 6,300) and say plainly that the gap is not
+fully explained, document the alcohol ambiguity rather than tuning it away, and report where the design-aware and
 imputed estimates change the point estimate. That is what earns the Exceptional band:
 tracing and defending choices, not matching a target.

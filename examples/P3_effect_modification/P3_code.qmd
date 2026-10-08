@@ -84,6 +84,18 @@ res
 
 Ratio of hazard ratios is women / men for the IV-vs-III contrast.
 
+The same contrast within each sex (Model 1 without sex, unweighted, on the same rows):
+
+```{r by-sex}
+hr_sex <- sapply(c(men = 0, women = 1), function(sx) {
+  f <- coxph(as.formula(paste("Surv(time_yr,dead) ~ IV +", paste(COVns, collapse=" + "))),
+             data = scc[scc$female == sx, ])
+  s <- summary(f)$conf.int["IV", ]
+  sprintf("%.2f (%.2f-%.2f)", s[["exp(coef)"]], s[["lower .95"]], s[["upper .95"]])
+})
+hr_sex
+```
+
 ## Additive scale — six-year standardized risk difference
 
 Stratum-specific hazard ratios do not show the additive picture; it has to be estimated.
@@ -123,9 +135,10 @@ multiplicative interaction at the available precision**; they do not show that s
 irrelevant, and they do not identify what generated the crude stratified gap.
 
 **What this file deliberately does not do.** Everything above is **unweighted**, because
-P3 precedes the survey-design increment. P4 shows that design materially changes
-inference for the main estimate, so whether the design-aware interaction agrees is an
-open question — one M1 answers, by applying P4's domain rule to this contrast.
+P3 precedes the survey-design increment. P4 shows that the design can move estimates in
+either direction, even where it changes no conclusion on the locked contrast, so whether
+the design-aware interaction agrees is an open question — one M1 answers, by applying
+P4's domain rule to this contrast.
 
 ## Results for M1
 
@@ -140,6 +153,8 @@ emit_results("P3", list(
   n_men    = fmtn(sum(scc$female == 0)),
   n_women  = fmtn(sum(scc$female == 1)),
   rd_men   = add$RD[add$Sex == "men"],
-  rd_women = add$RD[add$Sex == "women"]
+  rd_women = add$RD[add$Sex == "women"],
+  hr_men   = endash(hr_sex[["men"]]),
+  hr_women = endash(hr_sex[["women"]])
 ), list(interaction = res, additive = add))
 ```

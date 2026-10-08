@@ -196,16 +196,21 @@ variance structure for narrower domains.
 **Your own paper's subgroups will be sparser than this one.** Build the design once,
 then subset.
 
-**Interpretation.** Weighting attenuates the Group IV estimate (≈ 17 → ≈ 12) and
-widens the CI — that is the design effect. Group IV stays worst even against the
-other high-risk groups (IV vs III ≈ 3.1; IV vs II ≈ 2.3).
+**Interpretation.** On these 6,048 rows (crude, IV vs I), weighting moves the estimate
+from about 17 to about 12 and widens the interval. Weighting has no fixed direction:
+in the 2×2 on the matched 5,939 rows, the crude IV-vs-III estimate *rises* when
+weighted. The wider interval is the price of estimating for the US population rather
+than for this sample; the unweighted interval is not wrong, it answers the unweighted
+question. Crude and weighted, Group IV still has the highest hazard against the other
+high-risk groups (IV vs III ≈ 3.1; IV vs II ≈ 2.3).
 
 **On which weight.** CDC's rule is the *least common denominator*: when an analysis
 draws on variables measured in different components, use the weight belonging to
 the **smallest** applicable subsample. FLI requires fasting triglycerides, so the
 fasting weight governs, even though GGT is measured on the larger MEC sample. This
-is a rule, not a judgment call — the MEC weight would weight to a population in
-which the exposure cannot be constructed.
+is a rule, not a judgment call. Both weights target the same US population, but only
+the fasting weight accounts for selection into the fasting subsample and its
+nonresponse, which is where FLI comes from.
 
 ## Results for M1
 

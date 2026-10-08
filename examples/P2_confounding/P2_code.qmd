@@ -64,8 +64,10 @@ data.frame(
   paper_printed = c(23.0,54.9,22.1))
 ```
 
-The counts imply High **22.1** / Low **23.0**, but the paper prints 23.0 / 22.1 —
-the high and low percentages are transposed.
+On the full analytic file (6,371 rows; `reproduction/output/tables/table1_reproduced.csv`)
+the counts imply High **22.1** / Low **23.0**; on the 6,048 rows above they give the
+percentages this chunk prints. Either way the paper prints 23.0 / 22.1 — the high and
+low percentages are transposed.
 
 ## Two estimands, and why the rows must match
 

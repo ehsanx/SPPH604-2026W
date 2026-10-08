@@ -943,9 +943,13 @@ reconstructed file is 6,371.</li>
 funnel reveals (3 min)</h2>
 <ul>
 <li>The published paper reports <strong>~6,300</strong> participants
-with MASLD; this pipeline yields <strong>6,048</strong> mortality-linked
-participants. <em>Analysis set: locked mortality-linked cohort, N =
-6,048.</em> The two should not be presented as the same cohort.</li>
+with MASLD; the comparable file here is the full reconstructed analytic
+file, <strong>6,371</strong> (Week 3 works through the difference). The
+funnel’s <strong>6,048</strong> is a further subset, those with a valid
+fasting weight, which the design-aware analyses use. <em>Analysis set:
+full reconstructed analytic file, N = 6,371; locked mortality-linked
+cohort, N = 6,048.</em> The paper’s ~6,300 and our 6,371 should not be
+presented as the same cohort.</li>
 <li>The paper states eligibility as <strong>age &gt; 18</strong>; this
 reproduction uses <strong>age ≥ 18</strong>. Small implementation
 differences are <strong>recorded, not silently harmonised</strong>.</li>
@@ -1125,9 +1129,14 @@ set need not be confounders at all.</li>
 <h2 id="slide-31-what-a-crude-to-adjusted-change-establishes-5-min">Slide 31
 — What a crude-to-adjusted change establishes (5 min)</h2>
 <ul>
-<li>Group IV all-cause HR ≈ <strong>15.1 crude → ≈ 2.9
-adjusted</strong>. <em>Analysis set: full reconstructed analytic file, N
-= 6,371.</em></li>
+<li>Group IV vs Group I, all-cause HR ≈ <strong>15.1 crude → ≈ 2.9 with
+the paper’s Model 2 covariates</strong>, both unweighted, as in the
+paper. <em>Analysis set: full reconstructed analytic file, N = 6,371;
+Model 2 drops rows missing one of its covariates, so the rows change
+slightly too.</em></li>
+<li>This is the paper replication: the paper’s contrast and its model.
+Week 4 makes the same kind of move on other contrasts and adjustment
+sets, so its numbers differ.</li>
 <li>Conditioning on the adjustment set moves the estimate enormously.
 What that movement <strong>means</strong> — confounding controlled,
 mediation removed, a collider opened — depends on the goal and on the
@@ -1143,16 +1152,20 @@ min)</h2>
 <ul>
 <li><strong><code>ALQ130</code> is drinks per <em>drinking day</em>, not
 drinks per day.</strong> The paper’s “&gt;2 drinks a day” is an average
-intake — frequency × quantity. Applying the rule to <code>ALQ130</code>
-directly over-excluded roughly <strong>2,000</strong> people here.
-<strong>Week 3 owns the full demonstration.</strong></li>
+intake — frequency × quantity. Applied to <code>ALQ130</code> directly,
+the rule removes <strong>2,063</strong> people here; the average-intake
+rule removes <strong>427</strong>, all of whom the direct rule also
+removes, so the direct rule over-excludes about <strong>1,600</strong>
+(1,636). <em>Analysis set: full reconstructed analytic file, N =
+6,371.</em> <strong>Week 3 owns the full demonstration.</strong></li>
 <li><strong>777 = refused, 999 = don’t know.</strong> Codes, not counts.
 Left inside a threshold rule they reclassified <strong>nine</strong>
-refusals as heavy drinkers (the exclusion moves 2,063 → 2,072).</li>
+records (refused or don’t know) as heavy drinkers (the exclusion moves
+2,063 → 2,072).</li>
 <li>Keep those two bullets <strong>separate</strong>. An earlier version
-of this slide fused them and attached the 2,000 to the reserved codes —
-wrong by a factor of two hundred, and the sort of error this course
-exists to catch.</li>
+of this slide fused them and attached the direct rule’s ~2,000 removals
+to the reserved codes — wrong by a factor of about two hundred, and the
+sort of error this course exists to catch.</li>
 <li><strong><code>RIDRETH3</code> does not exist before 2011.</strong>
 It identifies Asian participants for the lower BMI threshold, so the
 first two cycles cannot apply the paper’s own rule. A definition that
@@ -1176,11 +1189,11 @@ is excluded</strong> whenever more than one was obtained; an
 diastolic 0 is a measurement and a failure to obtain a reading is coded
 separately as missing; and a <strong>zero beside a positive reading is
 omitted</strong>.</li>
-<li>Applying it changed derived SBP/DBP for <strong>5,523 of
-6,371</strong> participants and moved hypertension from 3,444 to 3,448,
-while adjusted hazard ratios shifted only in the third significant
-figure. <em>Analysis set: full reconstructed analytic file, N =
-6,371.</em></li>
+<li>Applying it changed the derived diastolic pressure for <strong>5,523
+of 6,371</strong> participants and moved hypertension from 3,444 to
+3,448, while the Model 1 and Model 2 hazard ratios of the reproduced
+Table 2 shifted only in the third significant figure. <em>Analysis set:
+full reconstructed analytic file, N = 6,371.</em></li>
 <li><strong>A coding error can be real, and worth fixing, even when the
 headline estimate survives.</strong></li>
 <li>The paper does not specify its own averaging in enough detail to
@@ -1208,9 +1221,12 @@ common survey-analysis error, worth planting now.</li>
 <h2 id="slide-35-designed-subsampling-is-not-missingness-4-min">Slide 35
 — Designed subsampling is not missingness (4 min)</h2>
 <ul>
-<li>The fasting subsample is <strong>statistically designed</strong>,
-not self-selected, and carries a weight built to keep it nationally
-representative.</li>
+<li>Sampling into the fasting subsample is <strong>statistically
+designed</strong>, and it carries a weight built to keep it nationally
+representative. It is not purely design, though: <strong>2,031</strong>
+adults carry a fasting weight of exactly 0, and fasting compliance and
+laboratory nonresponse can also affect who has a positive weight (Week 3
+says the same).</li>
 <li>Check it rather than assume: adults in and out of it differ by
 <strong>0.2 years of age, 0.02 kg/m² of BMI and 0.07 cm of
 waist</strong>. It is balanced on the very measurements this paper’s

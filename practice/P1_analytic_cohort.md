@@ -62,9 +62,10 @@ first result — everything downstream depends on getting this right.
   coding to 25 does not.
 
 ## What good looks like
-- **Exceptional:** full step-by-step funnel; the residual N gap is *traced
-  and explained* (e.g., complete-case on covariates; here, exactly one person
-  missing serum creatinine); ambiguities documented rather than tuned away.
+- **Exceptional:** full step-by-step funnel; the residual N gap is *traced*,
+  and any part that cannot be explained is reported as unresolved
+  (here, the alcohol codings were tested and none of them accounts for the gap);
+  ambiguities documented rather than tuned away.
 - **Adequate:** cohort rebuilt and runs; N close; most exclusions justified.
 - **Weak:** "N matches ✓" with no funnel, or code that hard-codes the target N.
 

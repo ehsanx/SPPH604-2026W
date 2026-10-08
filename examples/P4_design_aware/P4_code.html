@@ -2373,8 +2373,8 @@ subset(svydesign(ids = ~SDMVPSU, strata = ~SDMVSTRA, weights = ~wt,
 </tr>
 <tr class="even">
 <td style="text-align: left;">unweighted Model 1</td>
-<td style="text-align: left;">3.79 (1.38-10.39)</td>
-<td style="text-align: left;">1.06 (0.77-1.45)</td>
+<td style="text-align: left;">3.81 (1.39-10.43)</td>
+<td style="text-align: left;">1.05 (0.77-1.45)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">weighted crude</td>
@@ -2383,8 +2383,8 @@ subset(svydesign(ids = ~SDMVPSU, strata = ~SDMVSTRA, weights = ~wt,
 </tr>
 <tr class="even">
 <td style="text-align: left;">weighted Model 1</td>
-<td style="text-align: left;">2.97 (0.69-12.79)</td>
-<td style="text-align: left;">1.29 (0.90-1.86)</td>
+<td style="text-align: left;">2.98 (0.69-12.82)</td>
+<td style="text-align: left;">1.29 (0.89-1.86)</td>
 </tr>
 </tbody>
 </table>
@@ -2445,8 +2445,8 @@ lonely.psu=adjust   pre-filtered: 2.3852                                        
 <p>So the rule is not “pre-filtering biases your estimate.” It is: <strong>pre-filtering can create lonely-PSU strata that would not arise under proper domain analysis, making the variance estimate depend on the chosen lonely-PSU fallback.</strong> Restricting the 6,048-person MASLD cohort did nothing at all, because it retained every PSU and stratum. The failure appears once restriction starts dropping them. Sometimes the fallback agrees; you will not know which time you are in.</p>
 <p>Note what this separates: <strong>a correct procedure is not the same as a procedure that changes today’s answer.</strong> The wrong implementation returns an identical HR and CI in the main analysis and is still wrong, because it is not guaranteed to preserve the variance structure for narrower domains.</p>
 <p><strong>Your own paper’s subgroups will be sparser than this one.</strong> Build the design once, then subset.</p>
-<p><strong>Interpretation.</strong> Weighting attenuates the Group IV estimate (≈ 17 → ≈ 12) and widens the CI — that is the design effect. Group IV stays worst even against the other high-risk groups (IV vs III ≈ 3.1; IV vs II ≈ 2.3).</p>
-<p><strong>On which weight.</strong> CDC’s rule is the <em>least common denominator</em>: when an analysis draws on variables measured in different components, use the weight belonging to the <strong>smallest</strong> applicable subsample. FLI requires fasting triglycerides, so the fasting weight governs, even though GGT is measured on the larger MEC sample. This is a rule, not a judgment call — the MEC weight would weight to a population in which the exposure cannot be constructed.</p>
+<p><strong>Interpretation.</strong> On these 6,048 rows (crude, IV vs I), weighting moves the estimate from about 17 to about 12 and widens the interval. Weighting has no fixed direction: in the 2×2 on the matched 5,939 rows, the crude IV-vs-III estimate <em>rises</em> when weighted. The wider interval is the price of estimating for the US population rather than for this sample; the unweighted interval is not wrong, it answers the unweighted question. Crude and weighted, Group IV still has the highest hazard against the other high-risk groups (IV vs III ≈ 3.1; IV vs II ≈ 2.3).</p>
+<p><strong>On which weight.</strong> CDC’s rule is the <em>least common denominator</em>: when an analysis draws on variables measured in different components, use the weight belonging to the <strong>smallest</strong> applicable subsample. FLI requires fasting triglycerides, so the fasting weight governs, even though GGT is measured on the larger MEC sample. This is a rule, not a judgment call. Both weights target the same US population, but only the fasting weight accounts for selection into the fasting subsample and its nonresponse, which is where FLI comes from.</p>
 </section>
 <section id="results-for-m1" class="level2">
 <h2 class="anchored" data-anchor-id="results-for-m1">Results for M1</h2>
@@ -3123,35 +3123,40 @@ lonely.psu=adjust   pre-filtered: 2.3852                                        
 <span id="cb32-196"><a href="#cb32-196" aria-hidden="true" tabindex="-1"></a>**Your own paper&#39;s subgroups will be sparser than this one.** Build the design once,</span>
 <span id="cb32-197"><a href="#cb32-197" aria-hidden="true" tabindex="-1"></a>then subset.</span>
 <span id="cb32-198"><a href="#cb32-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-199"><a href="#cb32-199" aria-hidden="true" tabindex="-1"></a>**Interpretation.** Weighting attenuates the Group IV estimate (≈ 17 → ≈ 12) and</span>
-<span id="cb32-200"><a href="#cb32-200" aria-hidden="true" tabindex="-1"></a>widens the CI — that is the design effect. Group IV stays worst even against the</span>
-<span id="cb32-201"><a href="#cb32-201" aria-hidden="true" tabindex="-1"></a>other high-risk groups (IV vs III ≈ 3.1; IV vs II ≈ 2.3).</span>
-<span id="cb32-202"><a href="#cb32-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-203"><a href="#cb32-203" aria-hidden="true" tabindex="-1"></a>**On which weight.** CDC&#39;s rule is the *least common denominator*: when an analysis</span>
-<span id="cb32-204"><a href="#cb32-204" aria-hidden="true" tabindex="-1"></a>draws on variables measured in different components, use the weight belonging to</span>
-<span id="cb32-205"><a href="#cb32-205" aria-hidden="true" tabindex="-1"></a>the **smallest** applicable subsample. FLI requires fasting triglycerides, so the</span>
-<span id="cb32-206"><a href="#cb32-206" aria-hidden="true" tabindex="-1"></a>fasting weight governs, even though GGT is measured on the larger MEC sample. This</span>
-<span id="cb32-207"><a href="#cb32-207" aria-hidden="true" tabindex="-1"></a>is a rule, not a judgment call — the MEC weight would weight to a population in</span>
-<span id="cb32-208"><a href="#cb32-208" aria-hidden="true" tabindex="-1"></a>which the exposure cannot be constructed.</span>
-<span id="cb32-209"><a href="#cb32-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-210"><a href="#cb32-210" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results for M1</span></span>
-<span id="cb32-211"><a href="#cb32-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-212"><a href="#cb32-212" aria-hidden="true" tabindex="-1"></a><span class="in">```{r emit}</span></span>
-<span id="cb32-213"><a href="#cb32-213" aria-hidden="true" tabindex="-1"></a>cell <span class="ot">&lt;-</span> <span class="cf">function</span>(row, col) <span class="fu">endash</span>(mat[[col]][mat<span class="sc">$</span>cell <span class="sc">==</span> row])</span>
-<span id="cb32-214"><a href="#cb32-214" aria-hidden="true" tabindex="-1"></a><span class="fu">emit_results</span>(<span class="st">&quot;P4&quot;</span>, <span class="fu">list</span>(</span>
-<span id="cb32-215"><a href="#cb32-215" aria-hidden="true" tabindex="-1"></a>  <span class="at">uw_crude_i    =</span> <span class="fu">cell</span>(<span class="st">&quot;unweighted crude&quot;</span>,   <span class="st">&quot;IV_vs_I&quot;</span>),</span>
-<span id="cb32-216"><a href="#cb32-216" aria-hidden="true" tabindex="-1"></a>  <span class="at">uw_crude_iii  =</span> <span class="fu">cell</span>(<span class="st">&quot;unweighted crude&quot;</span>,   <span class="st">&quot;IV_vs_III&quot;</span>),</span>
-<span id="cb32-217"><a href="#cb32-217" aria-hidden="true" tabindex="-1"></a>  <span class="at">uw_m1_i       =</span> <span class="fu">cell</span>(<span class="st">&quot;unweighted Model 1&quot;</span>, <span class="st">&quot;IV_vs_I&quot;</span>),</span>
-<span id="cb32-218"><a href="#cb32-218" aria-hidden="true" tabindex="-1"></a>  <span class="at">uw_m1_iii     =</span> <span class="fu">cell</span>(<span class="st">&quot;unweighted Model 1&quot;</span>, <span class="st">&quot;IV_vs_III&quot;</span>),</span>
-<span id="cb32-219"><a href="#cb32-219" aria-hidden="true" tabindex="-1"></a>  <span class="at">w_crude_i     =</span> <span class="fu">cell</span>(<span class="st">&quot;weighted crude&quot;</span>,     <span class="st">&quot;IV_vs_I&quot;</span>),</span>
-<span id="cb32-220"><a href="#cb32-220" aria-hidden="true" tabindex="-1"></a>  <span class="at">w_crude_iii   =</span> <span class="fu">cell</span>(<span class="st">&quot;weighted crude&quot;</span>,     <span class="st">&quot;IV_vs_III&quot;</span>),</span>
-<span id="cb32-221"><a href="#cb32-221" aria-hidden="true" tabindex="-1"></a>  <span class="at">w_m1_i        =</span> <span class="fu">cell</span>(<span class="st">&quot;weighted Model 1&quot;</span>,   <span class="st">&quot;IV_vs_I&quot;</span>),</span>
-<span id="cb32-222"><a href="#cb32-222" aria-hidden="true" tabindex="-1"></a>  <span class="at">w_m1_iii      =</span> <span class="fu">cell</span>(<span class="st">&quot;weighted Model 1&quot;</span>,   <span class="st">&quot;IV_vs_III&quot;</span>),</span>
-<span id="cb32-223"><a href="#cb32-223" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_matched     =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(dcc)),</span>
-<span id="cb32-224"><a href="#cb32-224" aria-hidden="true" tabindex="-1"></a>  <span class="at">psu_full      =</span> <span class="fu">fmtn</span>(<span class="fu">psu</span>(fast)),</span>
-<span id="cb32-225"><a href="#cb32-225" aria-hidden="true" tabindex="-1"></a>  <span class="at">psu_domain    =</span> <span class="fu">fmtn</span>(<span class="fu">psu</span>(dom))</span>
-<span id="cb32-226"><a href="#cb32-226" aria-hidden="true" tabindex="-1"></a>), <span class="fu">list</span>(<span class="at">matrix =</span> mat))</span>
-<span id="cb32-227"><a href="#cb32-227" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
+<span id="cb32-199"><a href="#cb32-199" aria-hidden="true" tabindex="-1"></a>**Interpretation.** On these 6,048 rows (crude, IV vs I), weighting moves the estimate</span>
+<span id="cb32-200"><a href="#cb32-200" aria-hidden="true" tabindex="-1"></a>from about 17 to about 12 and widens the interval. Weighting has no fixed direction:</span>
+<span id="cb32-201"><a href="#cb32-201" aria-hidden="true" tabindex="-1"></a>in the 2×2 on the matched 5,939 rows, the crude IV-vs-III estimate *rises* when</span>
+<span id="cb32-202"><a href="#cb32-202" aria-hidden="true" tabindex="-1"></a>weighted. The wider interval is the price of estimating for the US population rather</span>
+<span id="cb32-203"><a href="#cb32-203" aria-hidden="true" tabindex="-1"></a>than for this sample; the unweighted interval is not wrong, it answers the unweighted</span>
+<span id="cb32-204"><a href="#cb32-204" aria-hidden="true" tabindex="-1"></a>question. Crude and weighted, Group IV still has the highest hazard against the other</span>
+<span id="cb32-205"><a href="#cb32-205" aria-hidden="true" tabindex="-1"></a>high-risk groups (IV vs III ≈ 3.1; IV vs II ≈ 2.3).</span>
+<span id="cb32-206"><a href="#cb32-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-207"><a href="#cb32-207" aria-hidden="true" tabindex="-1"></a>**On which weight.** CDC&#39;s rule is the *least common denominator*: when an analysis</span>
+<span id="cb32-208"><a href="#cb32-208" aria-hidden="true" tabindex="-1"></a>draws on variables measured in different components, use the weight belonging to</span>
+<span id="cb32-209"><a href="#cb32-209" aria-hidden="true" tabindex="-1"></a>the **smallest** applicable subsample. FLI requires fasting triglycerides, so the</span>
+<span id="cb32-210"><a href="#cb32-210" aria-hidden="true" tabindex="-1"></a>fasting weight governs, even though GGT is measured on the larger MEC sample. This</span>
+<span id="cb32-211"><a href="#cb32-211" aria-hidden="true" tabindex="-1"></a>is a rule, not a judgment call. Both weights target the same US population, but only</span>
+<span id="cb32-212"><a href="#cb32-212" aria-hidden="true" tabindex="-1"></a>the fasting weight accounts for selection into the fasting subsample and its</span>
+<span id="cb32-213"><a href="#cb32-213" aria-hidden="true" tabindex="-1"></a>nonresponse, which is where FLI comes from.</span>
+<span id="cb32-214"><a href="#cb32-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-215"><a href="#cb32-215" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results for M1</span></span>
+<span id="cb32-216"><a href="#cb32-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-217"><a href="#cb32-217" aria-hidden="true" tabindex="-1"></a><span class="in">```{r emit}</span></span>
+<span id="cb32-218"><a href="#cb32-218" aria-hidden="true" tabindex="-1"></a>cell <span class="ot">&lt;-</span> <span class="cf">function</span>(row, col) <span class="fu">endash</span>(mat[[col]][mat<span class="sc">$</span>cell <span class="sc">==</span> row])</span>
+<span id="cb32-219"><a href="#cb32-219" aria-hidden="true" tabindex="-1"></a><span class="fu">emit_results</span>(<span class="st">&quot;P4&quot;</span>, <span class="fu">list</span>(</span>
+<span id="cb32-220"><a href="#cb32-220" aria-hidden="true" tabindex="-1"></a>  <span class="at">uw_crude_i    =</span> <span class="fu">cell</span>(<span class="st">&quot;unweighted crude&quot;</span>,   <span class="st">&quot;IV_vs_I&quot;</span>),</span>
+<span id="cb32-221"><a href="#cb32-221" aria-hidden="true" tabindex="-1"></a>  <span class="at">uw_crude_iii  =</span> <span class="fu">cell</span>(<span class="st">&quot;unweighted crude&quot;</span>,   <span class="st">&quot;IV_vs_III&quot;</span>),</span>
+<span id="cb32-222"><a href="#cb32-222" aria-hidden="true" tabindex="-1"></a>  <span class="at">uw_m1_i       =</span> <span class="fu">cell</span>(<span class="st">&quot;unweighted Model 1&quot;</span>, <span class="st">&quot;IV_vs_I&quot;</span>),</span>
+<span id="cb32-223"><a href="#cb32-223" aria-hidden="true" tabindex="-1"></a>  <span class="at">uw_m1_iii     =</span> <span class="fu">cell</span>(<span class="st">&quot;unweighted Model 1&quot;</span>, <span class="st">&quot;IV_vs_III&quot;</span>),</span>
+<span id="cb32-224"><a href="#cb32-224" aria-hidden="true" tabindex="-1"></a>  <span class="at">w_crude_i     =</span> <span class="fu">cell</span>(<span class="st">&quot;weighted crude&quot;</span>,     <span class="st">&quot;IV_vs_I&quot;</span>),</span>
+<span id="cb32-225"><a href="#cb32-225" aria-hidden="true" tabindex="-1"></a>  <span class="at">w_crude_iii   =</span> <span class="fu">cell</span>(<span class="st">&quot;weighted crude&quot;</span>,     <span class="st">&quot;IV_vs_III&quot;</span>),</span>
+<span id="cb32-226"><a href="#cb32-226" aria-hidden="true" tabindex="-1"></a>  <span class="at">w_m1_i        =</span> <span class="fu">cell</span>(<span class="st">&quot;weighted Model 1&quot;</span>,   <span class="st">&quot;IV_vs_I&quot;</span>),</span>
+<span id="cb32-227"><a href="#cb32-227" aria-hidden="true" tabindex="-1"></a>  <span class="at">w_m1_iii      =</span> <span class="fu">cell</span>(<span class="st">&quot;weighted Model 1&quot;</span>,   <span class="st">&quot;IV_vs_III&quot;</span>),</span>
+<span id="cb32-228"><a href="#cb32-228" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_matched     =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(dcc)),</span>
+<span id="cb32-229"><a href="#cb32-229" aria-hidden="true" tabindex="-1"></a>  <span class="at">psu_full      =</span> <span class="fu">fmtn</span>(<span class="fu">psu</span>(fast)),</span>
+<span id="cb32-230"><a href="#cb32-230" aria-hidden="true" tabindex="-1"></a>  <span class="at">psu_domain    =</span> <span class="fu">fmtn</span>(<span class="fu">psu</span>(dom))</span>
+<span id="cb32-231"><a href="#cb32-231" aria-hidden="true" tabindex="-1"></a>), <span class="fu">list</span>(<span class="at">matrix =</span> mat))</span>
+<span id="cb32-232"><a href="#cb32-232" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

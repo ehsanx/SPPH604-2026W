@@ -1214,7 +1214,7 @@ display:block!important;
 <tr class="header">
 <th>Step</th>
 <th>Criterion</th>
-<th style="text-align: right;">N</th>
+<th style="text-align: right;">N, full analytic file</th>
 <th>Type</th>
 </tr>
 </thead>
@@ -1688,7 +1688,7 @@ display:block!important;
 </div><div class="column" style="width:50%;">
 <p><strong><code>ALQ130</code> — a questionnaire item</strong></p>
 <p><code>777</code> is <em>refused</em>, <code>999</code> is <em>don’t know</em>.</p>
-<p>Leaving them in turns 9 refusals into people drinking <strong>777 drinks a day</strong>.</p>
+<p>Leaving them in turns 9 non-answers into people drinking <strong>777 or 999 drinks a day</strong>.</p>
 </div></div>
 <div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
@@ -1704,7 +1704,7 @@ display:block!important;
 </div>
 </div>
 <aside class="notes">
-<p>(3 min) The second big NHANES trap, and the one most likely to appear in a student’s own paper. Nine misclassified refusals would not change this paper’s conclusion — say that — and then say that “it did not matter this time” is not a method. They found it because they looked.</p>
+<p>(3 min) The second big NHANES trap, and the one most likely to appear in a student’s own paper. Nine misclassified non-answers would not change this paper’s conclusion — say that — and then say that “it did not matter this time” is not a method. They found it because they looked.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1737,7 +1737,7 @@ display:block!important;
 </div>
 </div>
 </div>
-<p>Different problems, different remedies: a <strong>weight and a population sentence</strong> for the first; <strong>P5’s missing-data analysis</strong> for the second. Never their sum.</p>
+<p>Different problems, different remedies: a <strong>weight and a population sentence</strong> for the first; <strong>a missing-data analysis</strong> for the second. Never their sum.</p>
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -1752,7 +1752,7 @@ display:block!important;
 </div>
 </div>
 <aside class="notes">
-<p>(4 min) Return to the question you asked at the funnel slide. Reading every post-eligibility drop as attrition gives you a number like 30,532 and a completely wrong story about data quality. The remedy differs by type, which is why typing the row is not bookkeeping — it determines what you do next.</p>
+<p>(4 min) Return to the question you asked at the funnel slide. Reading every post-eligibility drop as attrition gives you a number like 30,532 (P1’s total, counted to the locked domain’s 6,048) and a completely wrong story about data quality. The remedy differs by type, which is why typing the row is not bookkeeping — it determines what you do next.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1963,7 +1963,7 @@ display:block!important;
 </tr>
 </tbody>
 </table>
-<p><strong>Why.</strong> FLI is built from BMI and waist, and criterion (i) <em>tests</em> BMI and waist — so selecting on FLI ≥ 60 strongly <strong>enriches</strong> for criterion (i) without requiring it. (<strong>89</strong> people here have FLI ≥ 60 with BMI &lt; 25; 42 fail criterion (i) outright.) It is near-automatic by enrichment, so the other four rarely decide anything.</p>
+<p><strong>Why.</strong> FLI is built from BMI and waist, and criterion (i) <em>tests</em> BMI and waist — so selecting on FLI ≥ 60 strongly <strong>enriches</strong> for criterion (i) without requiring it. (<strong>89</strong> of the final 6,371 have FLI ≥ 60 with BMI &lt; 25; 42 fail criterion (i) outright.) It is near-automatic by enrichment, so the other four rarely decide anything.</p>
 <blockquote>
 <p><strong>Report a filter by its effect, not its definition.</strong> “MASLD required at least one cardiometabolic criterion” sounds like work; here it excluded <strong>2 people</strong>.</p>
 </blockquote>
@@ -1992,8 +1992,8 @@ display:block!important;
 <p><strong>Paper:</strong> “Individuals with significant alcohol consumption — defined as more than two drinks per day for men and more than one drink per day for women — were excluded.”</p>
 </blockquote>
 <p><strong>The paper says it removed these people, so we built the rule.</strong> Getting it right needs two codebook checks that are easy to skip.</p>
-<p><strong>1 — “Drinks per day” is frequency × quantity, not <code>ALQ130</code>.</strong> <code>ALQ130</code> is drinks per <em>drinking day</em>. Three drinks every Saturday gives <code>ALQ130 = 3</code> but an average of <strong>0.4/day</strong>. Thresholding <code>ALQ130</code> on its own over-excludes about <strong>2,000</strong> people. So we rebuild it: <strong><code>(ALQ130 × days_per_year) / 365</code></strong>, with <code>ALQ120Q</code>/<code>ALQ120U</code> supplying the frequency (×52 / ×12 / ×1), and <code>ALQ121</code> replacing that pair in 2017-18.</p>
-<p><strong>2 — Strip <code>777</code> and <code>999</code> before comparing to any number.</strong> They mean <em>refused</em> and <em>don’t know</em>. Left in, <strong>9 people</strong> here become 777-drinks-a-day heavy drinkers.</p>
+<p><strong>1 — “Drinks per day” is frequency × quantity, not <code>ALQ130</code>.</strong> <code>ALQ130</code> is drinks per <em>drinking day</em>. Three drinks every Saturday gives <code>ALQ130 = 3</code> but an average of <strong>0.4/day</strong>. Thresholding <code>ALQ130</code> on its own removes about <strong>2,000</strong> people, far more than average intake would. So we rebuild it: <strong><code>(ALQ130 × days_per_year) / 365</code></strong>, with <code>ALQ120Q</code>/<code>ALQ120U</code> supplying the frequency (×52 / ×12 / ×1), and <code>ALQ121</code> replacing that pair in 2017-18.</p>
+<p><strong>2 — Strip <code>777</code> and <code>999</code> before comparing to any number.</strong> They mean <em>refused</em> and <em>don’t know</em>. Left in, <strong>9 people</strong> here become 777- or 999-drinks-a-day heavy drinkers.</p>
 <p>That yields a per-person flag, <code>sig_alcohol</code>. <strong>427 people in the cohort exceed the paper’s threshold.</strong> Whether we then <em>drop</em> them is the next slide.</p>
 <aside class="notes">
 <p>(3 min) Two lessons live in this one variable: the wrong-variable error (<code>ALQ130</code> alone) and the reserved-code error (777). Both are only recoverable by reading the codebook, which is the habit being drilled. Stress that we are still just <em>building</em> here - nothing has been excluded yet. Students conflate “I implemented the criterion” with “I applied it”, and this step separates them on purpose.</p>
@@ -2238,7 +2238,7 @@ display:block!important;
 </div>
 </div>
 <aside class="notes">
-<p>(3 min) Droppable. If you keep it, the callout is the reason: this is the least defensible thing in the pipeline, it is disclosed rather than hidden, and students should be able to recognise the same move in papers they read. Also flag that <code>current_smoke</code> is NA for never-smokers, which silently shrinks Model 2’s complete-case N.</p>
+<p>(3 min) Droppable. If you keep it, the callout is the reason: this is the least defensible thing in the pipeline, it is disclosed rather than hidden, and students should be able to recognise the same move in papers they read. Also flag that <code>current_smoke</code> is NA for never-smokers by design. It feeds Table 1 only: Model 2 uses a separate <code>smk_current</code> (<code>04_table2_cox.R:33-35</code>) that codes never-smokers 0, so it does not shrink Model 2’s N.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -2417,12 +2417,12 @@ display:block!important;
 <tr class="odd">
 <td>⚠ Age <code>&gt;= 18</code>, paper writes <code>&gt; 18</code></td>
 <td>matches the reported mean age</td>
-<td>70 rows; best explanation of the N gap</td>
+<td>70 rows; the strongest lead on the N gap, not settled</td>
 </tr>
 <tr class="even">
 <td>⚠ Alcohol exclusion <strong>off</strong></td>
 <td>applying it gives 5,944 vs 6,300</td>
-<td>427 rows; report §6’s reason is wrong</td>
+<td>427 rows</td>
 </tr>
 <tr class="odd">
 <td>⚠ Asian cut only where <code>RIDRETH3</code> exists</td>
@@ -2493,13 +2493,13 @@ display:block!important;
 </tr>
 <tr class="odd">
 <td>Strip <code>777</code>/<code>999</code> in <code>ALQ130</code>/<code>ALQ120Q</code></td>
-<td>there they <em>are</em> refusals</td>
-<td>9 refusals saved</td>
+<td>there they <em>are</em> non-answers</td>
+<td>9 non-answers saved</td>
 </tr>
 <tr class="even">
 <td>Alcohol = frequency × quantity</td>
 <td><code>ALQ130</code> is per drinking-day</td>
-<td><code>ALQ130</code> alone over-excludes ~2,000</td>
+<td><code>ALQ130</code> alone removes ~2,000, not 427</td>
 </tr>
 <tr class="odd">
 <td>Glucose 100 mg/dL for 5.6 mmol/L</td>
@@ -2514,7 +2514,7 @@ display:block!important;
 <tr class="odd">
 <td>NHANES BP averaging, not <code>rowMeans</code></td>
 <td>documented CDC rule</td>
-<td>5,523 people’s SBP/DBP changed</td>
+<td>5,523 people’s DBP changed</td>
 </tr>
 <tr class="even">
 <td>Composite comorbidities</td>
@@ -2524,7 +2524,7 @@ display:block!important;
 </tbody>
 </table>
 <aside class="notes">
-<p>(2 min) Droppable. If you keep it, the BP row is the one to dwell on: correcting it moved 5,523 people’s blood pressure and the hazard ratios only in the third significant figure. A coding error can be real, worth fixing, and immaterial to the headline — all at once.</p>
+<p>(2 min) Droppable. If you keep it, the BP row is the one to dwell on: correcting it moved 5,523 people’s diastolic pressure (systolic values moved too) and the hazard ratios only in the third significant figure. A coding error can be real, worth fixing, and immaterial to the headline — all at once.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -2574,15 +2574,16 @@ display:block!important;
 <td><strong>identical</strong></td>
 </tr>
 <tr class="odd">
-<td>Group IV HR, unadjusted → adjusted</td>
+<td>Group IV vs I HR, unadjusted → Model 2</td>
 <td>15.14 → 2.91</td>
 <td>15.13 → 2.89</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Yes — and the residual gap is traceable, not mysterious.</strong></p>
+<p><small>Reproduced HRs: unweighted, full 6,371-row file (Model 2 on its complete cases). Published: the paper’s Table 2.</small></p>
+<p><strong>Yes, closely — apart from a residual gap of 71 that is not yet resolved.</strong></p>
 <blockquote>
-<p>Read crudely, Group IV has the poorest survival, and the paper reports that. Read adjusted, Groups III and IV are indistinguishable (2.99 vs 2.91). The replication succeeds; the disagreement is about <strong>which contrast supports the conclusion</strong>.</p>
+<p>Read crudely, Group IV has the poorest survival, and the paper reports that. Under Model 2, Groups III and IV have similar HRs against Group I (ours: 3.00 vs 2.91). The replication succeeds; the disagreement is about <strong>which contrast supports the conclusion</strong>.</p>
 </blockquote>
 <aside class="notes">
 <p>(3 min) End the analytic content here. The blockquote is the most important sentence in the whole reproduction: the arithmetic is fine and the interpretation is the problem. That distinction — reproducible but over-claimed — is the M2 genre in one line.</p>

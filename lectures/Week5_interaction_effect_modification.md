@@ -20,7 +20,7 @@ shown and records what R printed.
 > running behind* at the foot of this file. If you retime a slide, retime it in the deck's
 > notes too; this plan copies their minutes.
 
-> **Built on Week 4.** Same rows (**5,911**), same pre-exposure adjustment set L (age, sex,
+> **Built on Week 4.** Same rows (**5,911; 534 deaths**), same pre-exposure adjustment set L (age, sex,
 > race/ethnicity, smoking, sedentary time), same DAG style, Week 4's collapsibility table
 > reread for modification (Slide 13), and Week 4's g-computation idea extended to
 > standardised survival (Slides 23–26).
@@ -31,13 +31,16 @@ shown and records what R printed.
 >   interaction slides.
 > - **6,048** — the locked domain itself: only the crude IV-vs-I table by sex (Slides 33–35),
 >   the rows P3's code uses.
-> - **1,296** — P3's rows (Groups III + IV complete on Model 1) and **1,291** (Groups III + IV
->   within the 5,911): the sex test on Slide 36.
+> - **1,296** — P3's rows, from the paper replication (Groups III + IV of the 6,048 complete on
+>   the paper's Model 1 covariates): Slide 36's crude and Model 1 ratios and its six-year RDs,
+>   and M1's design-weighted hand-off on Slide 40. **1,291** (Groups III + IV within the 5,911):
+>   this lecture's set-L sex test on Slide 36 (**168 deaths**). These model sample sizes and
+>   event counts are emitted directly from the fitted Cox objects.
 
 > **What this week does NOT do.** Survey weights are Week 6: every number here is
-> **unweighted**. RERI, AP and S are in the appendix and the lab, not the core lecture.
-> Propensity-score methods for subgroup effects (Karim, ch. 8, §8.6) come after the
-> propensity-score weeks.
+> **unweighted**, apart from Slide 40's pointer to Week 6. RERI, AP and S are in the appendix
+> and the lab, not the core lecture. Propensity-score methods for subgroup effects (Karim,
+> ch. 8, §8.6) come after the propensity-score weeks.
 
 ## Learning objectives
 
@@ -204,9 +207,12 @@ and the likelihood-ratio test, standardised six-year risks, and the interaction 
 ## Slide 21 — One product-term model, two stratum-specific HRs (4 min)
 
 - `fit <- coxph(... ~ obese * central + L)`. Not obese: **1.09 (0.79–1.50)**; obese:
-  **2.99 (1.11–8.09)**; ratio **2.74 (0.97–7.71)**; likelihood-ratio p = 0.03. The product
-  term re-parameterises the same four cells; it does not create information where Group I
-  has four deaths.
+  **2.99 (1.11–8.09)**; ratio **2.74 (0.97–7.71)**, with normal Wald 95% CIs. The matching
+  Wald p = 0.06; likelihood-ratio p = 0.03, paired with the profile-likelihood 95% CI
+  **1.10–9.18**. Both test the same product-term restriction on **5,911 rows and 534 deaths**.
+  The product term re-parameterises the same four cells. The Wald and profile methods differ
+  here; Group I's four deaths warrant caution with both large-sample approximations. Avoid
+  making the conclusion depend on a 0.05 threshold.
 
 ## Slide 22 — In R: recover both HRs and test the product term (4 min)
 
@@ -289,14 +295,19 @@ and the likelihood-ratio test, standardised six-year risks, and the interaction 
 
 ## Slide 36 — Ask the subgroup question cleanly (4 min)
 
-- The locked IV-vs-III contrast with sex as the modifier: crude **0.62 (0.26–1.43)**,
-  p 0.278 (P3); the paper's Model 1 **1.00 (0.42–2.35)**, p 0.993 (P3); Week 4's pre-exposure
-  set **1.13 (0.48–2.66)**, p 0.78. Six-year RDs about +0.8 points in men and +0.5 in women.
+- The locked IV-vs-III contrast with sex as the modifier, all unweighted. From the paper
+  replication (P3, 1,296 rows): crude **0.62 (0.26–1.43)**, p 0.278; the paper's Model 1
+  **1.00 (0.42–2.35)**, p 0.993; six-year RDs (Model 1) about +0.8 points in men and +0.7 in
+  women. From this lecture's analysis (1,291 rows): Week 4's pre-exposure set
+  **1.13 (0.48–2.66)**, p 0.78. The set-L row changes the rows as well as the adjustment set.
+  All reported HR-ratio intervals are normal Wald 95% CIs; this table's p-values are
+  likelihood-ratio tests. The set-L models use the same **1,291 rows and 168 deaths**.
   "No evidence" is not "evidence of no difference".
 
 ## Slide 37 — In R: one test for sex modification on the locked contrast (3 min)
 
-- Restrict to III + IV; `IV * female` with L; ratio 1.13 (0.48–2.66), likelihood-ratio p 0.78.
+- Restrict to III + IV; `IV * female` with L; ratio 1.13 (0.48–2.66), Wald 95% CI,
+  likelihood-ratio p 0.78. The fitted Wald p is also 0.78 at this precision.
 
 ## Slide 38 — Honest subgroup reporting (3 min)
 
@@ -310,8 +321,10 @@ and the likelihood-ratio test, standardised six-year risks, and the interaction 
 ## Slide 40 — Key takeaways (4 min)
 
 - Six takeaways; exit question: *one modifier for your own paper, and one sentence on why
-  your exposure cannot change it.* **Next:** Week 6, survey weights — design-aware, P3's
-  Model 1 sex ratio becomes **2.53 (0.92–6.98)** (M1).
+  your exposure cannot change it.* **Next (say this; it is not on the slide):** Week 6, survey weights — design-weighted on the
+  same 1,296 rows and paper Model 1 adjustment set, P3's sex ratio 1.00 becomes
+  **2.54 (0.92–7.03)** (M1, paper replication). Both intervals use the normal Wald method;
+  this comparison changes weighting and variance estimation while holding the model and rows fixed.
 
 ## Appendix (uncounted)
 

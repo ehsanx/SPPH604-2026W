@@ -203,8 +203,8 @@ locked <- rbind(
 locked[, c("scenario","HR","n")]
 ```
 
-The locked contrast behaves exactly as the replication contrast does: every approach
-returns the same estimate to two decimals. Note that this is a statement about *this*
+The locked contrast behaves as the replication contrast does: the four approaches return
+estimates that differ by at most 0.01, far less than the width of any of the intervals. Note that this is a statement about *this*
 missingness, not a general result — it had to be computed on the locked contrast to be
 claimed about the locked contrast.
 

@@ -1673,7 +1673,8 @@ display:block!important;
 <span id="cb3-3"><a href></a>         <span class="at">RaceEthnicity =</span> RIDRETH3, <span class="at">BMI =</span> BMXBMI) <span class="sc">%&gt;%</span></span>
 <span id="cb3-4"><a href></a>  <span class="fu">filter</span>(Age <span class="sc">&gt;=</span> <span class="dv">20</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb3-5"><a href></a>  <span class="fu">mutate</span>(<span class="at">BMICat =</span> <span class="fu">cut</span>(BMI, <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">18.5</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="cn">Inf</span>), <span class="at">right =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-6"><a href></a>                      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Underweight&quot;</span>, <span class="st">&quot;Normal weight&quot;</span>, <span class="st">&quot;Overweight&quot;</span>, <span class="st">&quot;Obese&quot;</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-6"><a href></a>                      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Underweight&quot;</span>, <span class="st">&quot;Normal weight&quot;</span>,</span>
+<span id="cb3-7"><a href></a>                                 <span class="st">&quot;Overweight&quot;</span>, <span class="st">&quot;Obese&quot;</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li>Every rename is a <strong>decision you have to be able to defend</strong>, not cosmetics</li>
 <li><strong><code>right = FALSE</code> is not optional.</strong> Without it <code>cut()</code> closes the intervals the other way and BMI exactly 30.0 lands in <em>Overweight</em> — one argument, and the categories are the mirror image of the ones you meant</li>
@@ -1884,11 +1885,11 @@ display:block!important;
 </section>
 <section id="what-the-funnel-reveals" class="slide level2">
 <h2>What the funnel reveals</h2>
-<p><strong>Reproducibility note.</strong> The published paper reports <strong>~6,300</strong> participants with MASLD; this pipeline yields <strong>6,048</strong> mortality-linked participants. <em>Analysis set: locked mortality-linked cohort, N = 6,048.</em></p>
-<p>The two numbers should not be presented as if they described the same cohort.</p>
+<p><strong>Reproducibility note.</strong> The published paper reports <strong>~6,300</strong> participants with MASLD; this pipeline’s full reconstructed analytic file has <strong>6,371</strong>. The funnel’s <strong>6,048</strong> is a further subset, those with a valid fasting weight. <em>Analysis set: full reconstructed analytic file, N = 6,371; locked cohort, N = 6,048.</em></p>
+<p>The paper’s ~6,300 and our 6,371 should not be presented as if they described the same cohort.</p>
 <p>The paper also states eligibility as <strong>age &gt; 18</strong>, while this reproduction uses <strong>age ≥ 18</strong>. Small implementation differences like this are <strong>recorded, not silently harmonised</strong>.</p>
 <aside class="notes">
-<p>(3 min) Tie back to the lab preview: they have just seen three different age rules on one slide. Here is what that costs. The discipline being taught is recording the difference, not resolving it — a reproduction that quietly adopts the other rule has destroyed its own evidence.</p>
+<p>(3 min) Compare the paper with 6,371, not with 6,048: the 6,048 is the subset the design-aware analyses use, and Week 3 works through the +71. Tie back to the lab preview: they have just seen three different age rules on one slide. Here is what that costs. The discipline being taught is recording the difference, not resolving it — a reproduction that quietly adopts the other rule has destroyed its own evidence.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -2142,13 +2143,13 @@ display:block!important;
 <section id="what-a-crude-to-adjusted-change-establishes" class="slide level2">
 <h2>What a crude-to-adjusted change establishes</h2>
 <ul>
-<li>Group IV all-cause HR ≈ <strong>15.1 crude → ≈ 2.9 adjusted</strong></li>
+<li>Group IV vs I all-cause HR ≈ <strong>15.1 crude → ≈ 2.9 with the paper’s Model 2</strong></li>
 <li>Conditioning on the adjustment set moves the estimate <strong>enormously</strong></li>
 <li>What that movement <em>means</em> — confounding controlled, mediation removed, a collider opened — depends on the goal and the causal role of those variables</li>
 </ul>
-<p><em>Analysis set: full reconstructed analytic file, N = 6,371.</em></p>
+<p><em>Analysis set: full reconstructed analytic file, N = 6,371 (Model 2 on its complete cases); unweighted, as in the paper.</em></p>
 <aside class="notes">
-<p>(5 min) <strong>Week 4 does this work.</strong> Today it is enough that the size of a move is not itself an interpretation. <strong>Vote and argue:</strong> what would you need to know to call this confounding? Collect answers, resist supplying one — Week 4 is where the DAG logic arrives.</p>
+<p>(5 min) This is the paper replication: the paper’s contrast (IV vs I) and its Model 2. Model 2 drops rows missing one of its covariates, so the rows change slightly too. Week 4 makes the same kind of move on other contrasts and adjustment sets, so its numbers differ. <strong>Week 4 does this work.</strong> Today it is enough that the size of a move is not itself an interpretation. <strong>Vote and argue:</strong> what would you need to know to call this confounding? Collect answers, resist supplying one — Week 4 is where the DAG logic arrives.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -2164,14 +2165,15 @@ display:block!important;
 <section id="five-nhanes-traps-each-has-bitten-this-project" class="slide level2">
 <h2>Five NHANES traps — each has bitten this project</h2>
 <ul>
-<li><strong><code>ALQ130</code> is drinks per <em>drinking day</em>, not drinks per day.</strong> A “&gt;2 a day” rule applied to it directly over-excluded roughly <strong>2,000</strong> people here — average intake needs frequency × quantity. <strong>Week 3 owns this one</strong></li>
-<li><strong>777 = refused, 999 = don’t know — codes, not counts.</strong> Left inside a threshold rule they reclassified <strong>nine</strong> refusals as heavy drinkers. Two traps on one variable, a factor of two hundred apart</li>
+<li><strong><code>ALQ130</code> is drinks per <em>drinking day</em>, not drinks per day.</strong> A “&gt;2 a day” rule applied to it directly removes <strong>2,063</strong> people here, against <strong>427</strong> for average intake (frequency × quantity): about <strong>1,600</strong> over-excluded. <strong>Week 3 owns this one</strong></li>
+<li><strong>777 = refused, 999 = don’t know — codes, not counts.</strong> Left inside a threshold rule they reclassified <strong>nine</strong> such records as heavy drinkers. Two traps on one variable, a factor of about two hundred apart</li>
 <li><strong><code>RIDRETH3</code> does not exist before 2011.</strong> It is what identifies Asian participants for the lower BMI threshold — so the first two cycles cannot apply the paper’s own rule</li>
 <li><strong>Fasting labs carry their own weight.</strong> <code>LBXTR</code> and <code>LBXGLU</code> come from the fasting subsample, weighted by <code>WTSAF2YR</code>, not <code>WTMEC2YR</code></li>
 <li><strong>Blood pressure is not a row mean</strong> — next slide</li>
 </ul>
+<p><em>Analysis set: full reconstructed analytic file, N = 6,371 (the alcohol counts).</em></p>
 <aside class="notes">
-<p>(3 min) Each of these cost this project real time, and each is a variable-handling decision, which is why they sit under Q5 rather than in a separate “tips” section. The first two are deliberately separated: an earlier version of this slide fused them and attached the 2,000 to the reserved codes, which is wrong by a factor of two hundred. The <code>RIDRETH3</code> one is the sharpest teaching point — a definition that cannot be applied in a third of your cycles is a finding about the study, not a nuisance. For the record, the alcohol numbers: the exclusion moves 2,063 → 2,072 when the reserved codes are left in. Week 3 runs the full demonstration.</p>
+<p>(3 min) Each of these cost this project real time, and each is a variable-handling decision, which is why they sit under Q5 rather than in a separate “tips” section. The first two are deliberately separated: an earlier version of this slide fused them and attached the direct rule’s ~2,000 removals to the reserved codes, which is wrong by a factor of about two hundred. The <code>RIDRETH3</code> one is the sharpest teaching point — a definition that cannot be applied in a third of your cycles is a finding about the study, not a nuisance. For the record, the alcohol numbers: the 427 removed by the average-intake rule are all inside the direct rule’s 2,063, so the over-exclusion is 1,636. The nine are reserved-code records, refusals (777) or don’t-knows (999), not nine refusals; the exclusion moves 2,063 → 2,072 when they are left in. Week 3 runs the full demonstration.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -2192,7 +2194,7 @@ display:block!important;
 <li>An <strong>all-zero diastolic set averages to zero</strong> — a diastolic 0 is a <em>measurement</em>, and NHANES codes a failure to obtain a reading separately, as missing</li>
 <li>A <strong>zero sitting beside a positive reading is omitted</strong> from the average</li>
 </ul>
-<p>Applying it changed derived SBP/DBP for <strong>5,523 of 6,371</strong> participants and moved hypertension from 3,444 to 3,448 — while the adjusted hazard ratios shifted only in the third significant figure. <em>Analysis set: full reconstructed analytic file, N = 6,371.</em></p>
+<p>Applying it changed the derived diastolic pressure for <strong>5,523 of 6,371</strong> participants and moved hypertension from 3,444 to 3,448 — while the Model 1 and Model 2 hazard ratios shifted only in the third significant figure. <em>Analysis set: full reconstructed analytic file, N = 6,371.</em></p>
 <blockquote>
 <p><strong>A coding error can be real, and worth fixing, even when the headline estimate survives it.</strong></p>
 </blockquote>
@@ -2240,7 +2242,7 @@ display:block!important;
 <section id="designed-subsampling-is-not-missingness" class="slide level2">
 <h2>Designed subsampling is not missingness</h2>
 <ul>
-<li>The fasting subsample is <strong>statistically designed</strong>, not self-selected, and carries a weight built to keep it nationally representative</li>
+<li>Sampling into the fasting subsample is <strong>statistically designed</strong>, with a weight built to keep it nationally representative; compliance and lab nonresponse also play a part</li>
 <li>Check rather than assume: adults in and out of it differ by <strong>0.2 years of age, 0.02 kg/m² BMI, 0.07 cm waist</strong></li>
 <li>It is balanced on the very measurements this paper’s exposure is built from</li>
 </ul>
@@ -2249,7 +2251,7 @@ display:block!important;
 <p><strong>Designed subsampling ≠ ordinary missingness.</strong></p>
 </blockquote>
 <aside class="notes">
-<p>(4 min) An earlier version of this lecture taught the fasting subsample as a preview of selection bias. That was wrong, and the measured balance above is why. The distinction worth teaching is design versus missingness — and the fact that it was checked, rather than assumed in either direction, is the transferable habit.</p>
+<p>(4 min) An earlier version of this lecture taught the fasting subsample as a preview of selection bias. That was wrong, and the measured balance above is why. Do not overcorrect to “purely design”, though: 2,031 adults carry a fasting weight of exactly 0, and fasting compliance and laboratory nonresponse can affect who has a positive weight (Week 3 says the same). The distinction worth teaching is design versus missingness — and the fact that it was checked, rather than assumed in either direction, is the transferable habit.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;

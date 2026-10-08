@@ -39,11 +39,12 @@ On the **full analytic file** — the row set the paper itself analyses.
 | Groups I / II / III / IV | 386 / 4,541 / 769 / 604 | 391 / 4,585 / 787 / 608 |
 | Deaths | 585 | 586 |
 | Group IV vs I, unadjusted | 15.13 | 15.14 |
-| Group IV vs I, **Model 2** | 2.893 | 2.908 |
+| Group IV vs I, **Model 2** | 2.893 | 2.913 |
 
 - Rebuilt from raw NHANES 2007–2018 plus NCHS linked mortality; no derived extracts.
-- **Model 2 is the paper's headline adjusted model.** Every diagnostic that follows uses
-  **Model 1**, so the model label travels with the number everywhere.
+- **Model 2 is the paper's headline adjusted model**, fit on the rows complete on its
+  covariates. Every diagnostic that follows uses **Model 1**, so the model label travels
+  with the number everywhere.
 - **Four discrepancies logged, none tuned away** — the "BMI <25" header (the Methods
   text uses 30), PIR percentages that disagree with the counts printed beside them,
   an alcohol exclusion matching no reported N, and
@@ -81,22 +82,23 @@ On the **full analytic file** — the row set the paper itself analyses.
 
 ## Slide 4 — The central diagnostic: adjustment versus design
 
-All four cells on the **same 5,939 Model-1 complete-case rows**.
+All four cells on the **same 5,939 Model-1 complete-case rows**;
+*weighted* means `WTSAF2YR`/6 with strata and PSU.
 
 | | IV vs I *(replication)* | IV vs III *(locked)* |
 |---|---|---|
 | unweighted, crude | 16.05 (5.91–43.58) | 2.34 (1.72–3.18) |
-| unweighted, Model 1 | 3.79 (1.38–10.39) | **1.06 (0.77–1.45)** |
+| unweighted, Model 1 | 3.81 (1.39–10.43) | **1.05 (0.77–1.45)** |
 | weighted, crude | 11.93 (2.60–54.84) | 3.07 (2.11–4.48) |
-| weighted, Model 1 | 2.97 (0.69–12.79) | **1.29 (0.90–1.86)** |
+| weighted, Model 1 | 2.98 (0.69–12.82) | **1.29 (0.89–1.86)** |
 
 Read **down** a column for adjustment; **across** a row for design.
 
 - **On the locked estimand, adjustment dominates.** Design moves it in the *opposite*
   direction and by less, and does not materially alter the estimate or the uncertainty
   statement.
-- **Design does materially alter the replication estimate** — 3.79 (1.38–10.39)
-  becomes 2.97 (0.69–12.79) — a lower estimate and a substantially wider interval.
+- **Design does materially alter the replication estimate** — 3.81 (1.39–10.43)
+  becomes 2.98 (0.69–12.82) — a lower estimate and a substantially wider interval.
 - **The paper's own Table 2 points the same way.** Its published Model 1 gives Group III
   3.175 and Group IV 3.155 against Group I —
   an implied IV-vs-III ratio of 0.99.
@@ -113,7 +115,7 @@ the survey design is used.
 | | ratio of HRs (women / men) | p |
 |---|---|---|
 | unweighted, Model 1 | 1.00 (0.42–2.35) | 0.993 |
-| **design-aware, Model 1** | **2.53 (0.92–6.98)** | 0.073 |
+| **design-aware, Model 1** | **2.54 (0.92–7.03)** | 0.073 |
 
 - **The interaction estimate is sensitive to survey design.** The weighted analysis makes
   substantial heterogeneity **more plausible** than the unweighted analysis suggested.
@@ -128,17 +130,20 @@ the survey design is used.
 
 1 of 11 Model-1 covariates carries any
 missingness: cancer status, 109 observations
-(1.80% unweighted, 1.18% weighted).
+(1.80% unweighted, 1.18% weighted). Complete case uses
+the 5,939 rows complete on Model 1; the other three keep all
+6,048.
 
-| Locked estimand, weighted Model 1 | HR (95% CI) |
+| Locked estimand (IV vs III), weighted Model 1 | HR (95% CI) |
 |---|---|
-| complete case | 1.29 (0.90–1.86) |
-| all assigned **no cancer** | 1.29 (0.89–1.85) |
-| all assigned **cancer** | 1.29 (0.89–1.85) |
-| MI (m = 10) | 1.29 (0.89–1.85) |
+| complete case | 1.29 (0.89–1.86) |
+| all assigned **no cancer** | 1.28 (0.89–1.85) |
+| all assigned **cancer** | 1.28 (0.89–1.85) |
+| MI (m = 10) | 1.28 (0.89–1.85) |
 
-- The four approaches are **materially indistinguishable — they agree to the displayed
-  precision.**
+- The four approaches are **materially indistinguishable**, though not identical:
+  complete case gives 1.29 (0.89–1.86) and MI 1.28 (0.89–1.85), a
+  difference of a hundredth, far smaller than either interval.
 - The two extreme assignments are transparent global scenarios, **not bounds**: a uniform
   assignment need not extremise the coefficient.
 - Computed on the locked contrast, not inferred from the replication contrast.
@@ -149,10 +154,10 @@ missingness: cancer status, 109 observations
 
 | Candidate | What we observed | Consequence |
 |---|---|---|
-| **Estimand–adjustment-set alignment** | Target quantity never stated; adjustment moves the locked estimand to 1.29 (0.90–1.86) | **High** |
+| **Estimand–adjustment-set alignment** | Target quantity never stated; on Slide 4, unweighted, adjustment moves the locked estimand from 2.34 (1.72–3.18) to 1.05 (0.77–1.45) | **High** |
 | **Survey design** | Moderate on the locked estimand, large on the replication one | Moderate |
 | **FLI circularity** | Untested by our pipeline — but not by the authors | Uncertain |
-| **Residual missingness** | Four approaches agree to displayed precision | **Low** |
+| **Residual missingness** | Four approaches materially indistinguishable (Slide 6) | **Low** |
 
 **On circularity, be accurate about what already exists.** The paper reports a TyG-based
 re-ascertainment and finds Group III 3.1 (1.3–7.7) and Group IV
@@ -174,10 +179,11 @@ the paper's stronger *independent of total body weight* interpretation.
 - **Read crudely, Group IV has the poorest observed survival** (19.5%
   died, against 9.6% in Group III), and the paper reports exactly
   that. **That descriptive claim does follow.**
-- **Read adjusted, the published Group III and IV point estimates are nearly identical,
-  and our directly estimated IV-vs-III contrast is compatible with no difference**
-  (1.06 (0.77–1.45) unweighted, 1.29 (0.90–1.86) design-aware). The
-  adjusted results therefore **do not provide clear evidence** that Group IV has higher
+- **Read under Model 1, the published Group III and IV point estimates are nearly
+  identical, and our directly estimated IV-vs-III contrast is compatible with no
+  difference** (1.05 (0.77–1.45) unweighted, 1.29 (0.89–1.86) design-aware,
+  both on the Slide 4 rows). The
+  Model 1 results therefore **do not provide clear evidence** that Group IV has higher
   mortality than Group III. The design-aware interval remains compatible with a
   meaningful increase as well as with none.
 
@@ -188,6 +194,6 @@ the paper's stronger *independent of total body weight* interpretation.
   explicit mediation estimand.
 - **A design-aware re-analysis of the TyG sensitivity on the locked contrast**, with its
   own interval.
-- **A larger or pooled sample** resolving the interaction, since the design-aware estimate
-  2.53 (0.92–6.98) is too imprecise to act on.
+- **A larger or pooled sample** resolving the interaction, since the design-aware Model 1
+  estimate 2.54 (0.92–7.03) is too imprecise to act on.
 

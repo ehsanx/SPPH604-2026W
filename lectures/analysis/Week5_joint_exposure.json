@@ -24,6 +24,8 @@
     "hr_IV_vs_I": "3.22 (1.17–8.87)",
     "hr_whtr_nonobese": "1.09 (0.79–1.50)",
     "hr_whtr_obese": "2.99 (1.11–8.09)",
+    "n_model": "5,911",
+    "events_model": "534",
     "rhr_whtr": "2.74 (0.97–7.71)",
     "p_rhr_whtr": "0.06",
     "p_lrt_whtr": "0.03",
@@ -64,8 +66,10 @@
     "pct_dm_lowwaist": "13%",
     "pct_dm_highwaist": "28%",
     "n_sex34": "1,291",
+    "events_sex34": "168",
     "rhr_sex_pre": "1.13 (0.48–2.66)",
     "p_sex_pre": "0.78",
+    "p_sex_pre_wald": "0.78",
     "hr_IVvIII_men_pre": "1.07 (0.73–1.56)",
     "hr_IVvIII_women_pre": "1.21 (0.56–2.62)",
     "n_domain": "6,048",
@@ -85,6 +89,37 @@
     "product": "obese * central + age + female + race + smk_current + sed",
     "sex": "IV * female + age + race + smk_current + sed (Groups III and IV)",
     "retired": "group, crude, within each sex (6,048-row domain)"
+  },
+  "model_diagnostics": {
+    "joint": {
+      "n": 5911,
+      "events": 534
+    },
+    "product": {
+      "n": 5911,
+      "events": 534
+    },
+    "no_product": {
+      "n": 5911,
+      "events": 534
+    },
+    "sex": {
+      "n": 1291,
+      "events": 168
+    },
+    "sex_no_product": {
+      "n": 1291,
+      "events": 168
+    }
+  },
+  "inference": {
+    "hazard_ratio_CI": "normal Wald 95% CI on the log-HR scale",
+    "p_rhr_whtr": "two-sided normal Wald test of obese:central = 0",
+    "p_lrt_whtr": "1-df likelihood-ratio test of product versus no-product model, identical rows",
+    "rhr_whtr_profile": "95% profile partial-likelihood interval paired with the likelihood-ratio test",
+    "p_sex_pre": "1-df likelihood-ratio test of IV:female = 0, identical rows",
+    "p_sex_pre_wald": "two-sided normal Wald test of IV:female = 0",
+    "risk_difference_CI": "percentile interval from 500 individual bootstrap resamples"
   },
   "bootstrap": {
     "B": 500,

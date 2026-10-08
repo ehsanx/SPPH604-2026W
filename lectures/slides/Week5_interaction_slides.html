@@ -1691,6 +1691,7 @@ display:block!important;
 <div class="plain">
 <p>That is an <strong>effect-modification</strong> question: one exposure changes; obesity defines the strata. The paper itself asked a <strong>prognostic phenotype</strong> question; this causal re-reading is ours.</p>
 </div>
+<p><span class="foot">This lecture’s analysis: the same 5,911 rows as Week 4, adjusted for L, unweighted (weights are Week 6). Slides that use other rows say so.</span></p>
 <aside class="notes">
 <p>2 min. Only now introduce the running example formally. Be explicit that the paper was designed to compare prognosis across BMI/WHtR phenotypes, not to identify the causal effect of changing waist fat.</p>
 <style type="text/css">
@@ -1867,8 +1868,8 @@ display:block!important;
 <ul>
 <li>Among the <strong>not obese</strong>: HR for high vs lower waist fat = <strong>1.09 (0.79–1.50)</strong></li>
 <li>Among the <strong>obese</strong>: HR = <strong>2.99 (1.11–8.09)</strong></li>
-<li>Ratio of HRs = <strong>2.74 (0.97–7.71)</strong></li>
-<li>Likelihood-ratio test for allowing the HR to differ: <strong>p = 0.03</strong></li>
+<li>Ratio of HRs = <strong>2.74 (0.97–7.71)</strong> (Wald 95% CI)</li>
+<li>Tests for allowing the HR to differ: <strong>Wald p = 0.06; likelihood-ratio p = 0.03</strong></li>
 </ul>
 <p><span class="math display">\[
 \exp(\beta_{A\times M})
@@ -2311,6 +2312,7 @@ display:block!important;
 <div class="plain">
 <p>The apparent 36-versus-4 gap is dramatic, but each reference survival experience contains only <strong>two deaths</strong>, and both confidence intervals are extremely wide. Do not build a biological story from it.</p>
 </div>
+<p><span class="foot">Crude, unweighted, on the 6,048-row locked domain (<code>dom</code> in the code), so Group I has 375 people here, not the 355 of the 5,911.</span></p>
 <aside class="notes">
 <p>3 min. Reinforce two problems at once: IV vs I changes both obesity and waist fat, and the reference cell is exceptionally sparse after stratifying by sex.</p>
 <style type="text/css">
@@ -2388,13 +2390,14 @@ display:block!important;
 </section>
 <section id="ask-the-subgroup-question-cleanly" class="slide level2">
 <h2>Ask the subgroup question cleanly</h2>
-<p>For the locked waist-fat contrast <strong>IV vs III</strong>, with sex as the modifier:</p>
+<p>For the locked waist-fat contrast <strong>IV vs III</strong>, with sex as the modifier (all unweighted):</p>
 <table class="caption-top">
 <thead>
 <tr class="header">
 <th>Model</th>
 <th style="text-align: right;">Ratio of HRs, women ÷ men</th>
-<th style="text-align: right;">p</th>
+<th style="text-align: right;">LRT p</th>
+<th style="text-align: right;">Rows</th>
 </tr>
 </thead>
 <tbody>
@@ -2402,25 +2405,29 @@ display:block!important;
 <td>Crude</td>
 <td style="text-align: right;">0.62 (0.26–1.43)</td>
 <td style="text-align: right;">0.278</td>
+<td style="text-align: right;">1,296</td>
 </tr>
 <tr class="even">
 <td>Paper’s Model 1</td>
 <td style="text-align: right;">1.00 (0.42–2.35)</td>
 <td style="text-align: right;">0.993</td>
+<td style="text-align: right;">1,296</td>
 </tr>
 <tr class="odd">
 <td>Week 4 pre-exposure set</td>
 <td style="text-align: right;"><strong>1.13 (0.48–2.66)</strong></td>
 <td style="text-align: right;"><strong>0.78</strong></td>
+<td style="text-align: right;">1,291</td>
 </tr>
 </tbody>
 </table>
-<p>Additive six-year RDs are also imprecise: about <strong>+0.8 points in men</strong> and <strong>+0.5 in women</strong>.</p>
+<p>Additive six-year RDs are also imprecise: about <strong>+0.8 points in men</strong> and <strong>+0.7 in women</strong> (P3, Model 1).</p>
 <div class="plain">
 <p>At this precision there is <strong>no clear evidence of sex modification</strong>, but the interval still allows important differences in either direction.</p>
 </div>
+<p><span class="foot">1,296: P3’s paper-replication refits (Groups III + IV complete on the paper’s Model 1). 1,291 (168 deaths): Groups III + IV of our 5,911. CIs use Wald; p-values use likelihood-ratio tests.</span></p>
 <aside class="notes">
-<p>4 min. “No evidence” is not “evidence of no difference”. The interval is the message.</p>
+<p>4 min. “No evidence” is not “evidence of no difference”. The interval is the message. The first two rows are P3’s refits on the same 1,296 rows, so they differ only in adjustment; the set-L row is this lecture’s analysis and also changes the rows, so do not read 1.00 vs 1.13 as the adjustment set alone.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;

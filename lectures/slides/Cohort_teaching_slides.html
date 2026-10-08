@@ -1330,12 +1330,12 @@ display:block!important;
 <p><strong>Warning</strong></p>
 </div>
 <div class="callout-content">
-<p>Apply one global missing-value rule and you either delete valid laboratory values or convert <strong>9 refusals</strong> into people drinking 777 drinks a day. There is no NHANES-wide rule. The codebook for <em>that variable</em>, in <em>that cycle</em>, decides.</p>
+<p>Apply one global missing-value rule and you either delete valid laboratory values or convert <strong>9 non-answers</strong> into people drinking 777 or 999 drinks a day. There is no NHANES-wide rule. The codebook for <em>that variable</em>, in <em>that cycle</em>, decides.</p>
 </div>
 </div>
 </div>
 <aside class="notes">
-<p>(3 min) Nine misclassified refusals would not have changed this paper’s conclusion. Say that - and then say that “it did not matter this time” is not a method. They found it by checking.</p>
+<p>(3 min) Nine misclassified non-answers would not have changed this paper’s conclusion. Say that - and then say that “it did not matter this time” is not a method. They found it by checking.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1387,7 +1387,7 @@ display:block!important;
 <p>It excluded 2 people</p>
 </div>
 <p>6,376 with fatty liver → <strong>6,374</strong> with MASLD.</p>
-<p><strong>Why.</strong> The first criterion is essentially “high BMI or high waist”, and FLI is <em>built from</em> BMI and waist — so selecting on FLI ≥ 60 heavily <strong>enriches</strong> the cohort for that criterion. It does not guarantee it: <strong>89</strong> people here have FLI ≥ 60 with a BMI under 25, and 42 fail criterion (i) outright.</p>
+<p><strong>Why.</strong> The first criterion is essentially “high BMI or high waist”, and FLI is <em>built from</em> BMI and waist — so selecting on FLI ≥ 60 heavily <strong>enriches</strong> the cohort for that criterion. It does not guarantee it: <strong>89</strong> of the final 6,371 have FLI ≥ 60 with a BMI under 25, and 42 fail criterion (i) outright.</p>
 <blockquote>
 <p><strong>Report a filter by its effect, not its definition.</strong> “MASLD required at least one cardiometabolic criterion” sounds like work; here it removed two people.</p>
 </blockquote>
@@ -1553,20 +1553,21 @@ display:block!important;
 <td style="text-align: right;">585</td>
 </tr>
 <tr class="odd">
-<td>Group IV HR, unadjusted</td>
+<td>Group IV vs I HR, unadjusted</td>
 <td style="text-align: right;">15.14</td>
 <td style="text-align: right;">15.13</td>
 </tr>
 <tr class="even">
-<td>Group IV HR, adjusted</td>
+<td>Group IV vs I HR, Model 2</td>
 <td style="text-align: right;">2.91</td>
 <td style="text-align: right;">2.89</td>
 </tr>
 </tbody>
 </table>
-<p><strong>The interesting part is what the numbers support.</strong> Adjusted, Group III is 3.03 and Group IV is 2.89, both against Group I.</p>
+<p><small>Reproduced HRs: unweighted, full 6,371-row file (Model 2 on its complete cases). Published: the paper’s Table 2.</small></p>
+<p><strong>The interesting part is what the numbers support.</strong> In the paper’s Model 2, Group III is 3.03 and Group IV is 2.89, both against Group I (ours: 3.00 and 2.91).</p>
 <blockquote>
-<p>Both groups have higher adjusted mortality than Group I. <strong>Whether Group IV is worse than Group III is a contrast the paper never reports</strong> — and similar point estimates are not evidence of equivalence.</p>
+<p>Under Model 2, both groups have higher mortality than Group I. <strong>Whether Group IV is worse than Group III is a contrast the paper never reports</strong> — and similar point estimates are not evidence of equivalence.</p>
 </blockquote>
 <aside class="notes">
 <p>(4 min) The reproduction succeeds and the disagreement is about interpretation, not arithmetic. That distinction - reproducible but over-claimed - is the M2 genre in one slide. Do not let students leave thinking a successful replication endorses the paper’s conclusion.</p>
@@ -1740,6 +1741,12 @@ display:block!important;
 <td>target population</td>
 </tr>
 <tr class="even">
+<td>6</td>
+<td>Phenotype group assignable</td>
+<td style="text-align: right;">6,050</td>
+<td>missingness</td>
+</tr>
+<tr class="odd">
 <td>7</td>
 <td>Mortality-eligible and linked</td>
 <td style="text-align: right;"><strong>6,048</strong></td>

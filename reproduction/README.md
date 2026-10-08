@@ -12,8 +12,9 @@ Fully reproducible re-analysis of **Kueh MTW et al., BMJ Open 2026;16:e113719**
 among adults with MASLD"). Built as the worked **SPPH 604** example: replicate a
 recent open-data paper end-to-end from raw public data, then interrogate it.
 
-> **Result:** Table 1, Table 2, Figure 1 and Figure 2 all reproduce closely.
-> See [`reproduction_report.md`](reproduction_report.md) for the side-by-side
+> **Result:** Table 1, Table 2, Figure 1 and panel (a) of Figure 2 (BMI) reproduce
+> closely, though not exactly. Panel (b) of Figure 2 (WHtR) does not reproduce at the
+> upper tail. See [`reproduction_report.md`](reproduction_report.md) for the side-by-side
 > comparison and the P1–P5 teaching map.
 
 **Looking up a variable?** [VARIABLE_MAP.md](VARIABLE_MAP.md) is the crosswalk: every
@@ -98,7 +99,11 @@ reproduction/
 - **MASLD** = steatosis + ≥ 1 cardiometabolic criterion (adiposity / glycaemia /
   blood pressure / triglycerides / HDL).
 - **Groups** = obesity (BMI ≥ 30, Asian ≥ 25) × central adiposity (WHtR ≥ 0.6).
-- **Outcomes** = all-cause and cardiovascular (diseases-of-heart) mortality.
+- **Outcomes** = all-cause and cardiovascular (diseases-of-heart) mortality. Table 2's
+  cardiovascular rows count deaths from diseases of the heart only (158, the paper's
+  number), using a variable built inside `04_table2_cox.R`. The `cv_death` variable
+  saved in `masld_analytic.rds` is broader: heart **plus** cerebrovascular deaths (185).
+  Used directly, it will not reproduce Table 2.
 
 ## Caveats
 
@@ -111,5 +116,7 @@ reproduction/
   denominator, not a correction to the first. The typed sample funnel is in
   [WALKTHROUGH.md](WALKTHROUGH.md).
 - The paper's stated alcohol exclusion does not reconcile with its reported N under any
-  coding of the public alcohol variables we implemented; the primary cohort here matches
-  the paper (exclusion off) and the exclusion is a documented switch. See report §5.
+  coding of the public alcohol variables we implemented; the
+  primary cohort here leaves it off, which is closer to the paper's N than applying it,
+  and the exclusion is a documented switch. See report §5; the remaining +71 gap is
+  unresolved (report §6).

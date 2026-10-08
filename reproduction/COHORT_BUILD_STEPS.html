@@ -653,8 +653,8 @@ published PDF contains 24 correctly encoded <code>≥</code> characters
 <code>1≤PIR≤4</code>), so where the authors meant “at least” they wrote
 it. At the age criterion they wrote a plain <code>&gt;</code>, meaning
 19 and older.</p>
-<p>This matters more than 70 rows suggests, because it is the best
-available explanation of our N gap:</p>
+<p>This matters more than 70 rows suggests, because it is the strongest
+lead on our N gap, though not a settled answer:</p>
 <table style="width:100%;">
 <colgroup>
 <col style="width: 16%" />
@@ -832,7 +832,7 @@ fasting-weight frame</strong> — most were never sampled for it, and
 <code>WTSAF2YR</code> exists to account for that selection stage — while
 only <strong>792</strong> are inside the frame and still lack an FLI
 input. The first number is answered by a weight and a sentence naming
-your population; the second is answered by P5’s missing-data analysis.
+your population; the second is answered by a missing-data analysis.
 Adding them together and calling the sum “attrition” is the error the
 typed funnel in <code>logs/sample_funnel.csv</code> exists to
 prevent.</p>
@@ -988,10 +988,11 @@ is dropped. The helper at <code>R/02_build_analytic.R:97-112</code>
 implements exactly that, and <code>:150-160</code> asserts the all-zero
 records survive. <strong>Why the care:</strong> two earlier versions
 were wrong in opposite directions — <code>na_if(BPXDI*, 0)</code>
-deleted 277 measured zeros, and a plain <code>rowMeans</code> averaged
-zeros in alongside real readings <em>and</em> kept the first reading.
-The paper does not say what it did, so this is a documentation-informed
-choice, not a claim of computational identity.</p>
+deleted 277 measured zeros (counted over all 59,842 merged records, not
+the analytic file), and a plain <code>rowMeans</code> averaged zeros in
+alongside real readings <em>and</em> kept the first reading. The paper
+does not say what it did, so this is a documentation-informed choice,
+not a claim of computational identity.</p>
 </blockquote>
 <blockquote>
 <p><strong>Decision — a missing criterion counts as <em>not met</em>,
@@ -1095,8 +1096,8 @@ reverse is not the same as a decision never made.</strong></p>
 <code>ALQ130</code>.</strong> <code>ALQ130</code> is drinks per
 <em>drinking day</em>. Someone who has three drinks every Saturday
 reports <code>ALQ130 = 3</code> but averages 0.4 drinks/day. Using
-<code>ALQ130</code> alone over-excludes roughly 2,000 people. We
-reconstruct average daily intake as
+<code>ALQ130</code> alone removes 2,063 people, against 427 under the
+average-intake rule. We reconstruct average daily intake as
 <code>(ALQ130 × days_per_year) / 365</code>, converting
 <code>ALQ120Q</code>/<code>ALQ120U</code> (per week / month / year → ×52
 / ×12 / ×1) and mapping the redesigned <code>ALQ121</code> categories to
@@ -1105,12 +1106,12 @@ days per year for 2017-18.</p>
 <blockquote>
 <p><strong>Decision — strip <code>777</code> and <code>999</code>
 first.</strong> Both <code>ALQ130</code> and <code>ALQ120Q</code> use
-them for <em>refused</em> and <em>don’t know</em>. <strong>9
-refusals</strong> in this cohort would otherwise become people reporting
-777 drinks a day, and every one of them would be reclassified as a heavy
-drinker. Compare Step 2, where identical-looking digits in
-<code>LBXTR</code> are real measurements. <strong>There is no global
-NHANES missing-value rule; the codebook decides, variable by
+them for <em>refused</em> and <em>don’t know</em>. <strong>9 refused or
+don’t-know answers</strong> in this cohort would otherwise become people
+reporting 777 or 999 drinks a day, and every one of them would be
+reclassified as a heavy drinker. Compare Step 2, where identical-looking
+digits in <code>LBXTR</code> are real measurements. <strong>There is no
+global NHANES missing-value rule; the codebook decides, variable by
 variable.</strong></p>
 </blockquote>
 <blockquote>
@@ -1150,11 +1151,12 @@ not support that:</p>
 </tr>
 </tbody>
 </table>
-<p>Turning the exclusion on overshoots by 356 rows and loses 39 deaths.
-It cannot be what separates us from 6,300 — <strong>Step 1’s age rule is
-the better candidate.</strong> Keeping the exclusion off remains the
-right call; the <em>reason</em> given for it in the report needs
-rewriting.</p>
+<p>Turning the exclusion on overshoots the paper: it lands 356 rows
+below its 6,300 and 39 deaths below its 585. It cannot be what separates
+us from 6,300 — <strong>Step 1’s age rule is the better
+candidate</strong>, though the gap remains unresolved. Keeping the
+exclusion off remains the right call; the <em>reason</em> given for it
+in the report needs rewriting.</p>
 </blockquote>
 <blockquote>
 <p><strong>Known soft spot, if you switch it on.</strong>
@@ -1371,11 +1373,16 @@ clearest case.</p>
 </blockquote>
 <blockquote>
 <p><strong><code>current_smoke</code> has a denominator you must
-state.</strong> It is defined only among ever-smokers, so “40.6% current
-smoking” means 40.6% <em>of ever-smokers</em>, not of the cohort. That
-is what reproduces the paper’s number — but it also makes the variable
-<code>NA</code> for never-smokers, which silently shrinks the
-complete-case N of Cox Model 2.</p>
+state.</strong> It is defined only among ever-smokers, so the paper’s
+“40.6% current smoking” means 40.6% <em>of ever-smokers</em>, not of the
+cohort. That denominator is what brings ours close to the paper’s number
+(40.9% in <code>output/tables/table1_reproduced.csv</code>), and it
+makes the variable <code>NA</code> for never-smokers.
+<code>current_smoke</code> feeds Table 1 only. Cox Model 2 uses a
+separate <code>smk_current</code>
+(<code>R/04_table2_cox.R:33-35</code>), which codes never-smokers 0, so
+the never-smoker <code>NA</code> does not shrink Model 2’s complete-case
+N.</p>
 </blockquote>
 <blockquote>
 <p><strong>eGFR is CKD-EPI 2021, verified.</strong> Constants at
@@ -1511,10 +1518,11 @@ interchangeable.</strong> ELIGIBILITY · DESIGN · MISSINGNESS · TARGET
 POPULATION · OUTCOME ASCERTAINMENT. A funnel shows N falling; it does
 not show <em>why</em>, and the remedy differs for each. The 21,618
 people outside the fasting subsample are a DESIGN fact answered by a
-weight; the 792 with a missing input are MISSINGNESS answered by P5; the
-people without steatosis are simply not who the paper is about. Summing
-them into one “attrition” number is the most common error in a first P1,
-and it is wrong three different ways at once.</p>
+weight; the 792 with a missing input are MISSINGNESS answered by a
+missing-data analysis; the people without steatosis are simply not who
+the paper is about. Summing them into one “attrition” number is the most
+common error in a first P1, and it is wrong three different ways at
+once.</p>
 </blockquote>
 <hr />
 <h2 id="the-decisions-ledger">The decisions ledger</h2>
@@ -1541,7 +1549,7 @@ genuinely differ from the paper.</p>
 <td>⚠ Age <code>&gt;= 18</code>, though the paper writes
 <code>&gt; 18</code></td>
 <td>consistency with the reported mean age</td>
-<td>70 rows; best single explanation of the N gap</td>
+<td>70 rows; the strongest lead on the N gap, not settled</td>
 </tr>
 <tr>
 <td>2</td>
@@ -1574,14 +1582,15 @@ a design-aware estimate</td>
 <td>6</td>
 <td>Strip <code>777</code>/<code>999</code> in
 <code>ALQ130</code>/<code>ALQ120Q</code></td>
-<td>there they <em>are</em> refusals</td>
-<td>9 refusals saved from becoming heavy drinkers</td>
+<td>there they <em>are</em> refused or don’t-know codes</td>
+<td>9 refused or don’t-know answers saved from becoming heavy
+drinkers</td>
 </tr>
 <tr>
 <td>7</td>
 <td>Alcohol = frequency × quantity, not <code>ALQ130</code></td>
 <td><code>ALQ130</code> is per drinking-day, not per day</td>
-<td>using <code>ALQ130</code> alone over-excludes ~2,000</td>
+<td>using <code>ALQ130</code> alone removes 2,063, not 427</td>
 </tr>
 <tr>
 <td>8</td>
@@ -1605,7 +1614,8 @@ a design-aware estimate</td>
 <td>11</td>
 <td>NHANES BP averaging protocol, not <code>rowMeans</code></td>
 <td>documented CDC rule; two prior versions were wrong</td>
-<td>changed SBP/DBP for 5,523 people; HRs moved in the 3rd s.f.</td>
+<td>changed DBP for 5,523 people (SBP changed too); HRs moved in the 3rd
+s.f.</td>
 </tr>
 <tr>
 <td>12</td>
@@ -1622,8 +1632,9 @@ a design-aware estimate</td>
 <tr>
 <td>14</td>
 <td><code>current_smoke</code> denominator = ever-smokers</td>
-<td>reproduces the paper’s 40.6%</td>
-<td><code>NA</code> for never-smokers shrinks Model 2’s N</td>
+<td>matches the paper’s 40.6% closely (ours 40.9%)</td>
+<td><code>NA</code> for never-smokers, in Table 1 only; Model 2’s
+<code>smk_current</code> codes them 0</td>
 </tr>
 <tr>
 <td>15</td>

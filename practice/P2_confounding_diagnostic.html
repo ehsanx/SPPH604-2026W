@@ -263,19 +263,21 @@ interpretation.</li>
 <h2 id="worked-example-masldnhanes-demonstration">Worked example —
 MASLD/NHANES demonstration</h2>
 <ul>
-<li>Continuous variables reproduce <strong>exactly</strong> (Age 51.0
-(16.6), BMI 33.2, SBP/DBP identical) — a good sign your cohort is
-right.</li>
+<li>On the full analytic file (6,371 rows, the row set comparable with
+the paper’s), the continuous variables land on or very near the
+published values (mean age 51.0 (16.6) and median BMI 33.2 exactly;
+median SBP/DBP 124/72; median waist 110.5 against 111.0) — a good sign
+your cohort is right.</li>
 <li><strong>Trap 1 — comorbidities are composites, not
 self-report.</strong> Self-report alone under-counts: hypertension needs
-“self-report <strong>or</strong> measured BP ≥140/90” to reach the
-paper’s 52.6% (54.1 reproduced); dyslipidaemia needs labs + meds to
-reach 57.7%.</li>
+“self-report <strong>or</strong> measured BP ≥140/90” to come near the
+paper’s 52.6% (54.1 reproduced); dyslipidaemia needs labs + meds to come
+near 57.7% (60.3 reproduced).</li>
 <li><strong>Trap 2 — printed percentages that disagree with their own
 counts.</strong> The income (PIR) percentages appear
-<strong>interchanged</strong>: the counts imply High 22.1% / Low 23.0%,
-but the paper prints 23.0 / 22.1. Catching arithmetic like this is
-exactly the P2 skill.</li>
+<strong>interchanged</strong>: the counts on the full analytic file
+imply High 22.1% / Low 23.0%, but the paper prints 23.0 / 22.1. Catching
+arithmetic like this is exactly the P2 skill.</li>
 <li><strong>The age spread is the question, not the answer:</strong>
 group ages run 40 → 62 years. The table reports the spread. Age is a
 confounder here for a causal and temporal reason, not a numeric one: it

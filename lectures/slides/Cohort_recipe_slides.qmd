@@ -125,7 +125,7 @@ almost always in the filter chain rather than in the arithmetic.
 
 ## Where we are going: the funnel {.dense}
 
-| Step | Criterion | N | Type |
+| Step | Criterion | N, full analytic file | Type |
 |---|---|---:|---|
 | 0 | All NHANES 2007–2018 records | 59,842 | — |
 | 1 | Age ≥ 18 | 36,580 | ELIGIBILITY |
@@ -306,8 +306,8 @@ Stripping `77`/`99` "to be safe" deletes
 
 `777` is *refused*, `999` is *don't know*.
 
-Leaving them in turns 9 refusals into
-people drinking **777 drinks a day**.
+Leaving them in turns 9 non-answers into
+people drinking **777 or 999 drinks a day**.
 :::
 :::
 
@@ -319,7 +319,7 @@ to a number.
 
 ::: {.notes}
 (3 min) The second big NHANES trap, and the one most likely to appear in a student's own
-paper. Nine misclassified refusals would not change this paper's conclusion — say that —
+paper. Nine misclassified non-answers would not change this paper's conclusion — say that —
 and then say that "it did not matter this time" is not a method. They found it because
 they looked.
 :::
@@ -340,7 +340,7 @@ weight at all, so they demonstrably *were* measured fasting.
 :::
 
 Different problems, different remedies: a **weight and a population sentence** for the
-first; **P5's missing-data analysis** for the second. Never their sum.
+first; **a missing-data analysis** for the second. Never their sum.
 
 ::: {.callout-note}
 The arithmetic does not simply subtract: the full file loses **21,591** here, because the
@@ -350,9 +350,10 @@ The arithmetic does not simply subtract: the full file loses **21,591** here, be
 
 ::: {.notes}
 (4 min) Return to the question you asked at the funnel slide. Reading every
-post-eligibility drop as attrition gives you a number like 30,532 and a completely wrong
-story about data quality. The remedy differs by type, which is why typing the row is not
-bookkeeping — it determines what you do next.
+post-eligibility drop as attrition gives you a number like 30,532 (P1's total, counted to
+the locked domain's 6,048) and a completely wrong story about data quality. The remedy
+differs by type, which is why typing the row is not bookkeeping — it determines what you
+do next.
 :::
 
 ## Two row sets, kept apart {.dense}
@@ -442,8 +443,8 @@ someone **out** of MASLD, never let someone in. It also barely matters here:
 
 **Why.** FLI is built from BMI and waist, and criterion (i) *tests* BMI and waist — so
 selecting on FLI ≥ 60 strongly **enriches** for criterion (i) without requiring it.
-(**89** people here have FLI ≥ 60 with BMI < 25; 42 fail criterion (i) outright.) It is
-near-automatic by enrichment, so the other four rarely decide anything.
+(**89** of the final 6,371 have FLI ≥ 60 with BMI < 25; 42 fail criterion (i) outright.)
+It is near-automatic by enrichment, so the other four rarely decide anything.
 
 > **Report a filter by its effect, not its definition.** "MASLD required at least one
 > cardiometabolic criterion" sounds like work; here it excluded **2 people**.
@@ -469,12 +470,13 @@ two codebook checks that are easy to skip.
 
 **1 — "Drinks per day" is frequency × quantity, not `ALQ130`.** `ALQ130` is drinks per
 *drinking day*. Three drinks every Saturday gives `ALQ130 = 3` but an average of
-**0.4/day**. Thresholding `ALQ130` on its own over-excludes about **2,000** people. So we
-rebuild it: **`(ALQ130 × days_per_year) / 365`**, with `ALQ120Q`/`ALQ120U` supplying the
-frequency (×52 / ×12 / ×1), and `ALQ121` replacing that pair in 2017-18.
+**0.4/day**. Thresholding `ALQ130` on its own removes about **2,000** people, far more
+than average intake would. So we rebuild it: **`(ALQ130 × days_per_year) / 365`**, with
+`ALQ120Q`/`ALQ120U` supplying the frequency (×52 / ×12 / ×1), and `ALQ121` replacing
+that pair in 2017-18.
 
 **2 — Strip `777` and `999` before comparing to any number.** They mean *refused* and
-*don't know*. Left in, **9 people** here become 777-drinks-a-day heavy drinkers.
+*don't know*. Left in, **9 people** here become 777- or 999-drinks-a-day heavy drinkers.
 
 That yields a per-person flag, `sig_alcohol`. **427 people in the cohort exceed the
 paper's threshold.** Whether we then *drop* them is the next slide.
@@ -611,7 +613,8 @@ prevalences**". That is fitting a definition to a target — **circular**. Repor
 (3 min) Droppable. If you keep it, the callout is the reason: this is the least defensible
 thing in the pipeline, it is disclosed rather than hidden, and students should be able to
 recognise the same move in papers they read. Also flag that `current_smoke` is NA for
-never-smokers, which silently shrinks Model 2's complete-case N.
+never-smokers by design. It feeds Table 1 only: Model 2 uses a separate `smk_current`
+(`04_table2_cox.R:33-35`) that codes never-smokers 0, so it does not shrink Model 2's N.
 :::
 
 ## Step 7 — the outcome is not in NHANES
@@ -693,8 +696,8 @@ and it is why every number in this deck could be checked.
 
 | Decision | Why | Cost |
 |---|---|---|
-| ⚠ Age `>= 18`, paper writes `> 18` | matches the reported mean age | 70 rows; best explanation of the N gap |
-| ⚠ Alcohol exclusion **off** | applying it gives 5,944 vs 6,300 | 427 rows; report §6's reason is wrong |
+| ⚠ Age `>= 18`, paper writes `> 18` | matches the reported mean age | 70 rows; the strongest lead on the N gap, not settled |
+| ⚠ Alcohol exclusion **off** | applying it gives 5,944 vs 6,300 | 427 rows |
 | ⚠ Asian cut only where `RIDRETH3` exists | absent in cycles E, F | ≤ 17 of 6,371 misgrouped |
 | ⚠ `cv_death` = heart + cerebrovascular | — | 185 vs the paper's 158 |
 | Both row sets kept (6,371 / 6,048) | unweighted paper vs design-aware estimate | 323 rows differ |
@@ -713,16 +716,17 @@ classify them — that classification is what a Limitations paragraph is actuall
 |---|---|---|
 | FLI transcribed verbatim, no unit conversion | NHANES already supplies mg/dL, U/L, cm | none |
 | No code-stripping in `LBXTR`/`LBXSGTSI` | `77` there is a measurement | would delete real values |
-| Strip `777`/`999` in `ALQ130`/`ALQ120Q` | there they *are* refusals | 9 refusals saved |
-| Alcohol = frequency × quantity | `ALQ130` is per drinking-day | `ALQ130` alone over-excludes ~2,000 |
+| Strip `777`/`999` in `ALQ130`/`ALQ120Q` | there they *are* non-answers | 9 non-answers saved |
+| Alcohol = frequency × quantity | `ALQ130` is per drinking-day | `ALQ130` alone removes ~2,000, not 427 |
 | Glucose 100 mg/dL for 5.6 mmol/L | conventional equivalent | 212 in the gap, 0 reclassified |
 | Missing criterion = absent | conservative | negligible — 6,329/6,371 already meet (i) |
-| NHANES BP averaging, not `rowMeans` | documented CDC rule | 5,523 people's SBP/DBP changed |
+| NHANES BP averaging, not `rowMeans` | documented CDC rule | 5,523 people's DBP changed |
 | Composite comorbidities | paper cites prior work instead of specifying | 1–3 pt gaps; calibration is circular |
 
 ::: {.notes}
 (2 min) Droppable. If you keep it, the BP row is the one to dwell on: correcting it moved
-5,523 people's blood pressure and the hazard ratios only in the third significant figure.
+5,523 people's diastolic pressure (systolic values moved too) and the hazard ratios only
+in the third significant figure.
 A coding error can be real, worth fixing, and immaterial to the headline — all at once.
 :::
 
@@ -734,13 +738,16 @@ A coding error can be real, worth fixing, and immaterial to the headline — all
 | Groups I/II/III/IV | 391 / 4,585 / 787 / 608 | 386 / 4,541 / 769 / 604 |
 | Deaths | 586 | 585 |
 | Group BMI medians | 30.9 / 35.2 / 27.6 / 28.8 | **identical** |
-| Group IV HR, unadjusted → adjusted | 15.14 → 2.91 | 15.13 → 2.89 |
+| Group IV vs I HR, unadjusted → Model 2 | 15.14 → 2.91 | 15.13 → 2.89 |
 
-**Yes — and the residual gap is traceable, not mysterious.**
+<small>Reproduced HRs: unweighted, full 6,371-row file (Model 2 on its complete cases). Published: the paper's Table 2.</small>
 
-> Read crudely, Group IV has the poorest survival, and the paper reports that. Read
-> adjusted, Groups III and IV are indistinguishable (2.99 vs 2.91). The replication
-> succeeds; the disagreement is about **which contrast supports the conclusion**.
+**Yes, closely — apart from a residual gap of 71 that is not yet resolved.**
+
+> Read crudely, Group IV has the poorest survival, and the paper reports that. Under
+> Model 2, Groups III and IV have similar HRs against Group I (ours: 3.00 vs 2.91). The
+> replication succeeds; the disagreement is about **which contrast supports the
+> conclusion**.
 
 ::: {.notes}
 (3 min) End the analytic content here. The blockquote is the most important sentence in

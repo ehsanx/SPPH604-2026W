@@ -1,7 +1,7 @@
 ---
-title: "Week 6 — Complex Survey Analysis: Why NHANES Is Not a Simple Random Sample"
-subtitle: "SPPH 604 · Application of Advanced Epidemiological Methods"
-author: "Running example: Kueh et al. (2026), MASLD / NHANES"
+title: "Week 6 - Complex Survey Design"
+subtitle: "SPPH 604 - Application of Advanced Epidemiological Methods"
+author: "Running example: obesity, waist fat and mortality in MASLD (Kueh et al. 2026)"
 format:
   revealjs:
     theme: default
@@ -13,294 +13,1322 @@ format:
     height: 720
     fig-align: center
     smaller: true
+    slide-level: 2
+    include-in-header:
+      text: |
+        <style>
+        .reveal .remember { background:#eef4fa; border-left:6px solid #0072B2; padding:.35em .75em; margin:.45em 0; }
+        .reveal .question { background:#f6f6f6; border-left:6px solid #555; padding:.35em .75em; margin:.45em 0; }
+        .reveal .warning { background:#fff5e6; border-left:6px solid #D55E00; padding:.35em .75em; margin:.45em 0; }
+        .reveal .smallish { font-size:.82em; }
+        .reveal .tiny { font-size:.66em; }
+        .reveal .foot { font-size:.62em; color:#555; }
+        .reveal .workflow { font-weight:700; font-size:1.08em; letter-spacing:.01em; }
+        .reveal .core { color:#0072B2; font-weight:700; }
+        .reveal table { font-size:.82em; }
+        .reveal pre code { max-height:none !important; font-size:19px !important; line-height:1.3 !important; }
+        .reveal h2 { margin-bottom:.45em; }
+        .reveal .slides section.tight, .reveal.smaller .slides section.tight { font-size:.9em; }
+        .reveal .slides section.tight pre code { font-size:16px !important; }
+        </style>
+  beamer:
+    aspectratio: 169
+    fontsize: 9pt
+    slide-level: 2
 ---
 
-## Learning objectives
+## Why Week 6 matters
 
-- Explain why **NHANES** is a stratified, multistage, clustered probability sample — and why that breaks default standard errors.
-- Name the three design objects every analysis needs: **weights** (`WTINT`/`WTMEC`/`WTSAF`), **strata** (`SDMVSTRA`), **PSU** (`SDMVPSU`).
-- Pick and **pool** the correct weight when combining cycles; state what **design effects** do to confidence intervals.
-- Contrast the paper's **unweighted** estimates with **design-aware** ones — and see why unweighted was a *choice*.
-- Reason about the **fasting-vs-non-fasting** weight puzzle that MASLD's own analyte mix creates.
+NHANES is designed to describe the **US civilian, noninstitutionalized population** - but it does **not** take a simple random sample of people.
 
-::: {.notes}
-Frame the week: this is not confounding (Wk4) or effect modification (Wk5). It is a question about *whose population* the numbers describe. Everything so far — P1, P2, P3 — sat on an unweighted analytic file. Today we interrogate that. Objectives map to the five plan bullets; return to them at the bridge slide.
-:::
+That creates two practical questions:
 
-## Continuity: where Week 5 left us
+1. **Who does each respondent represent?**
+2. **How should uncertainty reflect the way the sample was drawn?**
 
-- **Recap Wk5:** the targeted IV-vs-III × sex test gave a ratio of HRs of **1.00 (0.42–2.35)** — underpowered rather than resolved.
-- Lesson: a crude stratum difference is **not an interaction test**, and a null test is **not evidence of homogeneity** — a null with its uncertainty attached, not a demonstration that sex is irrelevant (P3).
-- **Today:** a different threat — not confounding, not modification, but whose *population* the estimates describe.
-- The paper analyzed NHANES **as if it were a simple random sample**.
-- **Sets up L5** (naive vs survey-weighted) and **P4**, your first design-aware re-estimate.
-
-::: {.notes}
-~3 min. Bridge from last week explicitly: Wk5 ended on a null with its uncertainty attached, not on a modifier explained away; this week is about a *design* that was never named. Same paper, new lens. Say explicitly, as Week 5 now does, that an earlier version of these lectures told you the crude male-female gap was baseline-risk confounding rather than true modification; that claim is withdrawn. A p-value that moves when covariates enter tells you the estimate changed, not what generated the crude difference. Remind students P4 is where they apply this to their own paper — it feeds M1 (Wk8 replication) and M2 (Wk9 critique of another group's M1).
-:::
-
-## Where we are in the project
-
-- Course arc: **Replicate → Interrogate → Improve → Defend**.
-- **M1** replication due Wk8; **M2** critique of another group's M1 Wk9.
-- Done so far — **P1** eligibility, **P2** Table 1, **P3** effect modification — all built on an *unweighted* analytic file.
-- Today we question a **design assumption baked into every number so far**.
-
-::: {.MASLD .fragment}
-**MASLD:** the paper reports HRs to two decimals but does not name the survey design.
+::: {.remember}
+**Today's practical goal:** choose the right NHANES weight, declare the survey design, analyse a subgroup without breaking that design, and fit a survey-aware model.
 :::
 
 ::: {.notes}
-5 min. Situate today in the semester map. The key move: every P-deliverable so far treated each NHANES row as an independent, equally-weighted person. That assumption is invisible until you name it — which the paper does not do. Two-decimal precision with zero design vocabulary is the tension to sit with.
+Start with the practical problem rather than terminology. The lecture will repeatedly return to one workflow: who -> which weight -> how sampled -> which subgroup -> which model.
 :::
 
-## The motivating puzzle
+## NHANES: stratify first, then sample in stages
 
-- The paper's headline: **Group IV** all-cause **HR ≈ 15.1** (unadjusted).
-- Ask the class: **15.1 for whom** — the *sample*, or *US adults* with MASLD?
-- That gap between **sample** and **population** is exactly what survey design bridges.
-- Punchline preview: design-aware weighting pulls Group IV toward **≈ 12.4** and **widens** the CI.
+![](../img/w6_design_stages.png){width="96%"}
 
-::: {.MASLD .fragment}
-**MASLD:** the inference target is implicitly the US population, but the math is the sample's.
+::: {.remember}
+**Stratification happens before Stage 1.** NHANES groups candidate PSUs into strata, then samples through **PSUs -> segments -> households -> people**.
 :::
 
-::: {.notes}
-8 min. Don't resolve it yet — let the "for whom?" question hang. Most students instinctively read published HRs as population statements; the machinery that would earn that reading (weights + strata + PSU) is absent here. Foreshadow the 15.1 → 12.4 attenuation as the payoff we build toward on slide 11.
+## What are a stratum and a PSU?
+
+| Term | Plain-language meaning in NHANES |
+|---|---|
+| **Stratum** | a group of candidate PSUs made relatively similar using geography, metropolitan status, and population characteristics **before PSU selection** |
+| **PSU** | a large geographic sampling cluster, usually a **county or group of adjacent counties**, selected at Stage 1 |
+| **Segment** | a smaller geographic unit within a PSU, such as a block or group of blocks |
+
+::: {.question}
+Is a PSU just a group of "neighbours"? **Not quite.** A county can be large. The more neighbourhood-like units are the **segments** sampled inside a PSU.
 :::
 
-## What "simple random sample" assumes
+## What the public NHANES file gives you
 
-- **SRS:** every person drawn *independently* and with *equal* probability.
-- Default SEs — including `coxph`'s — assume exactly this.
-- Two violations are coming:
-  - **Unequal selection probabilities** → handled by *weights*.
-  - **Non-independence** (clustering) → handled by *strata/PSU*.
-- Ignore them and: point estimates tilt toward **sample composition**; SEs run **too small**.
+The true first-stage geographic identities are protected for confidentiality. Public NHANES therefore provides **masked variance units**:
 
-::: {.MASLD .fragment}
-**MASLD:** the default `coxph` SEs in the replication silently assume SRS.
+- `SDMVSTRA` = masked variance **pseudo-stratum**;
+- `SDMVPSU` = masked variance **pseudo-PSU**.
+
+Use these variables to tell the software how to estimate sampling uncertainty.
+
+::: {.remember}
+Conceptually, NHANES sampled geographic PSUs within strata. In the public file, `SDMVSTRA` and `SDMVPSU` are the variables we actually use for design-based variance estimation.
 :::
 
-::: {.notes}
-10 min. Anchor the whole week on these two assumptions — every later slide maps to one of them. Weights fix *bias toward the sample*; strata/PSU fix *falsely small SEs*. Students conflate the two; keep the columns separate. Note SEs "usually" too small — clustering inflates variance, so pretending independence understates it.
+## Why sample this way?
+
+NHANES uses complex sampling for two broad reasons:
+
+- **Efficiency of data collection:** people are sampled in geographic clusters rather than scattered independently across the country.
+- **Precision for important subgroups:** some groups are sampled at higher rates so estimates are possible for groups that would otherwise have too few respondents.
+
+Examples of groups oversampled in various NHANES cycles include some race/ethnicity groups, older adults, and lower-income groups.
+
+::: {.remember}
+Complex sampling gives us richer data - but the analysis has to remember **who was oversampled** and **who was sampled together**.
 :::
 
-## How NHANES is actually built
+## One set of rows, two different mixes
 
-- **Multistage** selection: (1) counties = **PSUs** → (2) segments → (3) households → (4) persons.
-- **Stratified** first by design domain; deliberate **oversampling** of targeted subgroups (older adults, some race/ethnicity groups, lower income).
-- Result: neither equal probabilities *nor* independent draws — **both** SRS assumptions fail *by design*.
-- This is a feature, not a flaw — it buys precision where policy needs it.
+| | Our 5,911 rows | Weighted US population represented |
+|---|---:|---:|
+| Non-Hispanic White | 42.2% | 66.8% |
+| Non-Hispanic Black | 20.2% | 11.3% |
+| Mexican American | 18.6% | 10.4% |
+| Other Hispanic | 11.7% | 6.1% |
+| Other or multiracial | 7.2% | 5.4% |
+| Mean age, years | 51.4 | 49.4 |
 
-::: {.MASLD .fragment}
-**MASLD:** MASLD adults are not sprinkled randomly across PSUs — they cluster with the sampled households.
-:::
-
-::: {.notes}
-12 min. Walk the four stages concretely. Oversampling is intentional: NHANES wants stable estimates for small subgroups, which *requires* unequal probabilities, which *requires* weights to undo for national estimates. Clustering at the household/PSU level is why two MASLD cases can be near-neighbors — their outcomes are not independent draws.
-:::
-
-## Weights: `WTINT`, `WTMEC`, `WTSAF`
-
-- A weight ≈ **how many people in the target population** this respondent represents.
-- Formally: **inverse selection probability**, adjusted for nonresponse and post-stratification.
-- Three nested tiers by how deep into the exam a variable lives:
-  - `WTINT` (interview) ⊇ `WTMEC` (mobile exam) ⊇ `WTSAF` (fasting subsample).
-- **Rule:** use the weight for the **most restrictive** data source your analysis actually needs.
-
-::: {.MASLD .fragment}
-**MASLD:** FLI needs **triglycerides** — a fasting analyte — so the honest weight is `WTSAF`, the smallest, most-adjusted tier.
-:::
-
-::: {.notes}
-12 min. The nesting is the mental model: fewer people show up fasting than for the exam than for the interview, so each fasting respondent stands in for more of the population — the weights grow and get more adjusted as the subsample shrinks. The "most restrictive variable" rule is the single most testable idea on this slide.
-:::
-
-## Strata and PSUs: `SDMVSTRA`, `SDMVPSU`
-
-- `SDMVSTRA` encodes the **design strata**; `SDMVPSU` the (masked) **primary sampling units** within a stratum.
-- These drive **variance, not the point estimate**.
-- Clustering: neighbors resemble each other → **effective N < row count**.
-- Analytic strata/PSU are **pseudo-values** released for disclosure control — use *as provided*, never re-derive.
-
-::: {.MASLD .fragment}
-**MASLD:** none of `SDMVSTRA` / `SDMVPSU` appear anywhere in the paper's methods.
+::: {.question}
+The rows are the same. What changed? **How much each row counts when we describe the target population.**
 :::
 
 ::: {.notes}
-10 min. Hammer the split: weights move the *estimate*, strata/PSU move the *uncertainty*. Students often try to "understand" the PSU codes — stop them; they are masked pseudo-PSUs for confidentiality, meaningful only to the variance estimator. Re-deriving or renumbering them corrupts the SEs.
+Avoid raw "died during follow-up" here because follow-up differs. The point is representation, not survival analysis.
 :::
 
-## Pooling weights across cycles
+## The workflow for today
 
-- NHANES **2007–2018** = **six** 2-year cycles; the paper stacks all six.
-- Weights are built **per cycle** → divide by the number of cycles pooled (here **/6**) so the weighted population total isn't multiplied.
-- Use the **cycle-appropriate** weight variable and pool consistently.
-- **Strata/PSU** are pooled **as-is** — no division.
-
-::: {.MASLD .fragment}
-**MASLD:** with six cycles combined, the correct pooled fasting weight is **`WTSAF`/6** — a step easy to miss.
+::: {.workflow}
+**Who? -> Which weight? -> How sampled? -> Which subgroup? -> Which model?**
 :::
 
-::: {.notes}
-10 min. Concrete arithmetic: each cycle's weights sum to ~the US population; stack six and you claim six Americas. Dividing by 6 restores one. Only the *weights* get divided — strata and PSU are identifiers, not magnitudes. This /6 error is a top-2 mistake students make in L5.
+1. **Who?** What population should the estimate describe?
+2. **Which weight?** Which NHANES component measured every variable, and how were cycles combined?
+3. **How sampled?** What are the survey weight, strata, and PSU variables?
+4. **Which subgroup?** How do we analyse a domain/subpopulation without redefining the survey?
+5. **Which model?** Which survey estimator and test answer the epidemiologic question?
+
+::: {.remember}
+Software comes last. `svydesign()` cannot choose the target population or the correct weight for you.
 :::
 
-## The design effect (DEFF)
+# Part 1 - What a survey weight does
 
-- **DEFF ≈** variance under the real design ÷ variance under SRS.
-- Typically **> 1** because of clustering + unequal weights.
-- Practical read: when **DEFF > 1**, your **effective N is smaller** than your row count → honest CIs get **wider**.
-- "**N = 6,300**" overstates the information content once design is respected.
+## A public-health town: younger and older adults
 
-::: {.MASLD .fragment}
-**MASLD:** the paper's tight CIs partly reflect pretending each of ~6,300 rows is an independent draw.
-:::
+Imagine a town of 1,000 adults. We deliberately sample older adults at a much higher rate so that we have enough of them to study.
 
-::: {.notes}
-10 min. DEFF is the single number that translates "clustering + weighting" into "how much did I fool myself?" A DEFF of 2 means half your rows' worth of real information. Tie back to slide 3: the too-small SEs there become quantifiable here. This is why the design-aware CIs on slide 11 are wider, not narrower.
-:::
+| Age group | People in town | People sampled | Sampling chance | Toy weight |
+|---|---:|---:|---:|---:|
+| Younger adults | 900 | 100 | 1 in 9 | **9** |
+| Older adults | 100 | 100 | 1 in 1 | **1** |
 
-## Short break (5 min)
-
-- Stretch, water, reset.
-- Coming up:
-  - what happens to the **MASLD numbers** when we do it right, and
-  - the genuine **fasting-weight puzzle** MASLD creates.
-
-::: {.notes}
-5 min hard stop. Keep it to a real break — resist the urge to teach through it. On return, we move from *mechanics* (weights/strata/PSU/DEFF) to *judgment* (was unweighted defensible? which weight is even correct?).
-:::
-
-## "Unweighted" is a choice, not a default
-
-- Some analysts defend **unweighted, model-based** inference when the outcome model is richly adjusted (a *conditional*, not *descriptive*, target).
-- But that stance must be **stated and defended** — silence reads as oversight, not decision.
-- **Two separate axes, not two rival framings:**
-  - **Design** decides *which population* the estimate speaks for.
-  - **Adjustment** decides *which covariates* it holds fixed.
-  - You **cross** them — crude/adjusted × unweighted/design-aware, on the **same rows**.
-- **Declare the estimand** — population-average, conditional on covariates, or both — name the weight and **which cell of the 2×2** your headline came from.
-
-::: {.MASLD .fragment}
-**MASLD:** the paper never declares which target it's after — so readers can't tell if unweighted was *reasoned* or *accidental*.
+::: {.remember}
+For this toy survey: **weight = 1 / probability of selection**. Each sampled younger adult represents 9 townspeople; each sampled older adult represents 1.
 :::
 
 ::: {.notes}
-10 min. This is the most nuanced slide — don't let students hear "weighting is always right." Weighting is right *for a population-average estimand*. A defensible unweighted analysis exists, but it owes the reader an explicit estimand statement. The paper's sin is silence, not the choice itself. This distinction is what P4's "declare and justify" asks for. And do not let "design-based vs model-based" harden into a dichotomy: the axes are crossable, so "we weighted" and "we adjusted" are two independent statements a methods section owes the reader — the "Two axes, four cells" slide, two on from here, shows all four combinations.
+This is deliberately simple but public-health concrete. NHANES has oversampled older adults in some cycles for the same broad reason: to improve precision for important subgroups.
 :::
 
-## What weighting does to MASLD
+## In R: the toy weight
 
-![](../img/figure1_km.png)
+<!-- code: town_weight -->
+```r
+town <- data.frame(
+  age_group = c("Younger", "Older"),
+  in_town = c(900, 100),
+  sampled = c(100, 100)
+)
 
-- Fit survey-aware Cox: pooled `WTSAF` + `SDMVSTRA` + `SDMVPSU`.
-- Group IV all-cause HR **≈ 15.1 → ≈ 12.4** (unadjusted); CIs **widen** from the design effect.
-- **Direction survives** — Group IV still worst (KM p **< 0.0001**) — but magnitude and precision are honestly smaller/wider.
+town$chance <- town$sampled / town$in_town
+town$weight <- 1 / town$chance
+town
+#>   age_group in_town sampled    chance weight
+#> 1   Younger     900     100 0.1111111      9
+#> 2     Older     100     100 1.0000000      1
+```
 
-::: {.MASLD .fragment}
-**MASLD:** on the paper's IV-vs-I contrast, design decides whether the interval **excludes 1**; on the locked IV-vs-III contrast, **adjustment dominates** and design moves the estimate in the *opposite* direction, by less. "Survey design matters" is true of one contrast and much weaker for the other.
+::: {.remember}
+The weights add back to the town: `100 * 9 + 100 * 1 = 1,000`.
+:::
+
+## Hypertension prevalence: sample versus town
+
+Suppose hypertension prevalence is **15% in younger adults** and **40% in older adults**.
+
+| | Younger | Older | Overall |
+|---|---:|---:|---:|
+| **Sample**: 100 younger + 100 older | 15% | 40% | **27.5%** |
+| **Town**: 900 younger + 100 older | 15% | 40% | **17.5%** |
+
+- Sample: $(15+40)/2 = 27.5\%$.
+- Town: $[900(0.15)+100(0.40)]/1000 = 17.5\%$.
+
+::: {.remember}
+**27.5% correctly describes the 200 sampled people.** Weighting is needed when the question is hypertension prevalence in the **town**.
+:::
+
+## In R: build the town sample
+
+<!-- code: town_sample -->
+```r
+library(survey)
+
+s <- data.frame(
+  age_group = rep(c("Younger", "Older"), each = 100),
+  weight = rep(c(9, 1), each = 100)
+)
+
+s$htn <- c(
+  rep(1, 15), rep(0, 85),
+  rep(1, 40), rep(0, 60)
+)
+
+mean(s$htn)
+#> [1] 0.275
+```
+
+The ordinary mean gives the prevalence among the **200 sampled people**.
+
+## In R: let the weights reconstruct the town
+
+<!-- code: town_svymean -->
+```r
+des_town <- svydesign(
+  ids = ~1,
+  weights = ~weight,
+  data = s
+)
+
+svymean(~htn, des_town)
+#>      mean     SE
+#> htn 0.175 0.0327
+```
+
+::: {.remember}
+Same 200 rows; different contribution from each age group. The weighted mean recovers the town's **17.5%** prevalence.
 :::
 
 ::: {.notes}
-~7 min (the balance of plan Slide 11's 12 min goes to the next slide). Design-awareness changes **what you may claim**, not whether the science is right. For the locked IV-vs-III estimand it moves the crude estimate from 2.34 to 3.07 and the adjusted from 1.06 to 1.29 — both adjusted intervals still include 1.
+The toy uses no clusters (`ids=~1`) so students can understand weighting before strata and PSUs are added.
 :::
 
-## Two axes, four cells
+## Age can matter for two different reasons
 
-All four cells on the **same** Model-1 complete-case rows (**n = 5,939**).
+| Week 4: confounding | Week 6: survey sampling |
+|---|---|
+| Age may be a common cause/predictor of both an exposure and an outcome. | Age may affect the probability of being sampled. |
+| Question: **Is the exposure comparison fair?** | Question: **Does the sample have the population's age mix?** |
+| Tool: causal design / covariate adjustment. | Tool: survey weights + design information. |
 
-| | IV vs I *(the paper's contrast)* | IV vs III *(our locked contrast)* |
+::: {.remember}
+**Survey weighting is not confounding adjustment.** The same variable (such as age) can matter for both reasons, but the two methods solve different problems.
+:::
+
+## Back to NHANES: the final weight is more than 1 / probability
+
+The toy isolated the **base selection weight**. NHANES final weights also adjust for two additional features.
+
+| Component | Why it is needed |
+|---|---|
+| **Selection weight** | some people had a smaller chance of selection than others |
+| **Nonresponse adjustment** | selected people do not all participate |
+| **Population calibration / post-stratification** | align the responding sample with external population control totals |
+
+::: {.remember}
+NHANES gives you the **final weight**. You usually choose the correct weight; you do not reconstruct it from scratch.
+:::
+
+## Which NHANES weight?
+
+Different variables come from different components of NHANES.
+
+| Component | Typical variables | Example weight |
 |---|---|---|
-| unweighted, crude | 16.05 (5.91–43.58) | 2.34 (1.72–3.18) |
-| unweighted, Model 1 | 3.79 (1.38–10.39) | **1.06 (0.77–1.45)** |
-| weighted, crude | 11.93 (2.60–54.84) | 3.07 (2.11–4.48) |
-| weighted, Model 1 | 2.97 (0.69–12.79) | **1.29 (0.90–1.86)** |
+| Home interview | age, sex, smoking, income | `WTINT2YR` |
+| Mobile examination centre | BMI, waist, blood pressure | `WTMEC2YR` |
+| Fasting morning subsample | fasting triglycerides, fasting glucose | `WTSAF2YR` / cycle-specific fasting weight |
+| Other subsamples | dietary, environmental, etc. | component-specific weight |
 
-- Read **down** a column for **adjustment**; **across** a row for **design**.
-- The familiar ledger — unadjusted, then fully adjusted, then survey-weighted — mixes crude and adjusted models fitted on **different row sets**. It is **not** a sequence of successive corrections, and we do not present it as one.
-
-::: {.notes}
-~5 min, from plan Slide 11's 12. Draw the empty 2×2 on the board and make the class predict the signs before revealing the numbers. Two payoffs. (1) Fixing the rows at n = 5,939 is what licenses reading a row or a column as "the effect of moving that axis" — it is also why the crude IV-vs-I cell reads 16.05 rather than the ≈ 15.1 of the full analytic file, which is a different row set. (2) "Survey design matters" holds for one contrast and is much weaker for the other, so the slogan does not transfer — the 2×2 does.
+::: {.remember}
+**Use the weight for the smallest NHANES component that contains every variable needed in the analysis.**
 :::
 
-## The question settled by CDC's least-common-denominator rule: fasting vs non-fasting analytes
+## MASLD: follow the measurement path
 
-- **FLI** combines **triglycerides + GGT + BMI + waist**.
-- **TG** is a *fasting* analyte (`WTSAF` domain); **GGT** is *not* — it lives in the broader MEC (`WTMEC`).
-- The exposure definition **straddles two subsamples** — but this is *not* contested: the rule settles it.
-- **Least-common-denominator:** use the weight of the **smallest applicable** subsample → **`WTSAF`**, because FLI needs a fasting analyte.
-- **`WTMEC` is not a defensible *primary* weight here** — it weights to a population in which the exposure cannot be constructed at all.
-- But **run it anyway, labelled as a sensitivity analysis.** Showing how far the estimate moves under the wrong weight is how you demonstrate that the rule mattered.
-- The job is to **apply the rule, say so, and show what was at stake** — one prespecified primary, one labelled sensitivity run.
+![](../img/w6_nested_samples.png){width="92%"}
 
-::: {.MASLD .fragment}
-**MASLD:** MASLD's own ascertainment recipe forces a weight decision the paper never confronts.
+::: {.remember}
+Our MASLD definition uses fasting triglycerides. That makes the **fasting-subsample weight** the primary weight, even though many other variables were measured in larger components.
 :::
 
 ::: {.notes}
-12 min. The *primary* weight is not a fork: the least-common-denominator rule has one answer, and the binding constraint (fasting TG) settles it on WTSAF. Say that plainly first, so the primary estimand and weight are unambiguous. Then run WTMEC as an explicitly labelled sensitivity analysis — not because it is defensible as a primary, but because seeing how far the estimate moves under a weight that targets a population in which FLI cannot be computed is what makes the rule concrete. "Apply the rule, document it, and show what it bought you" beats both "argue it out" and "correct + silent." This slide is why P4 asks them to name the fasting-vs-non-fasting straddle, say which weight the rule selects, and report the sensitivity run.
+The rule is about the measurement path, not which weight produces a nicer estimate. A more restrictive weight can be valid but inefficient when none of the variables require that subsample.
 :::
 
-## Subset the design, never the data
+## Combining ordinary two-year cycles
 
-- **Cardinal rule:** declare the *full-survey* design **once**, then `subset()` **within it**.
-- **Never** filter rows first and re-declare a design on the survivors.
-- Dropping rows first discards the strata/PSU information non-selected units contribute to **variance** → wrong SEs.
-- This is the **#1 practical error** students hit in L5.
+For 2007-2018, we combine **six ordinary two-year cycles**.
 
-::: {.MASLD .fragment}
-**MASLD:** eligibility (**FLI ≥ 60**, ≥ 1 cardiometabolic criterion) is a *subset* — apply it to the design, keeping `WTSAF`/strata/PSU intact.
+Each two-year weight represents a full population for its cycle, so the pooled weight is
+
+$$
+w_{2007-2018}=\frac{1}{6}w_{2yr}.
+$$
+
+Dividing every weight by the same constant:
+
+- **changes weighted population totals**;
+- does **not** change weighted percentages, means, or most regression coefficients;
+- does **not** change standard errors that are invariant to a common scaling of weights.
+
+::: {.warning}
+The easy rule "divide by the number of cycles" works here because all six components are ordinary **two-year** cycles.
+:::
+
+## In R: `/ 6` changes totals, not the model coefficient {.tight .shrink}
+
+<!-- code: pool6 -->
+```r
+fast <- subset(nhanes, WTSAF2YR > 0)
+fast$wt <- fast$WTSAF2YR / 6
+
+full6 <- svydesign(
+  ids = ~SDMVPSU, strata = ~SDMVSTRA,
+  weights = ~wt, nest = TRUE, data = fast
+)
+
+full1 <- svydesign(
+  ids = ~SDMVPSU, strata = ~SDMVSTRA,
+  weights = ~WTSAF2YR, nest = TRUE, data = fast
+)
+
+round(c(
+  divided = sum(weights(subset(full6, in_rows))),
+  not_divided = sum(weights(subset(full1, in_rows)))
+) / 1e6, 1)
+#>     divided not_divided
+#>        93.0       558.2
+```
+
+::: {.remember}
+For pooled cycles, the weighted total is a **period-representative population total**, not a cumulative count of unique people across all years.
+:::
+
+## First special case: analyses that include 1999-2000 {.tight}
+
+The **1999-2000** two-year weights used a different Census population base from **2001-2002 and later** cycles. NCHS therefore says the two two-year weights should **not** simply be pooled together.
+
+- For **1999-2002**, use the NCHS-provided **4-year weight** (`WTMEC4YR`, `WTINT4YR`, or the corresponding 4-year subsample weight).
+- When adding later cycles, start from that 1999-2002 4-year weight and combine it with the later 2-year weights.
+
+Example: **1999-2004** represents 6 years:
+
+$$
+w^*_{1999-2002}=\frac{2}{3}w_{4yr}, \qquad
+w^*_{2003-04}=\frac{1}{3}w_{2yr}.
+$$
+
+::: {.remember}
+The special period is **1999-2000**. If it is in your analysis, begin with the NCHS-provided **1999-2002 four-year weight**.
+:::
+
+## In R: pooling 1999-2004
+
+```r
+nhanes$wt6 <- NA_real_
+
+# 1999-2002: start with the NCHS 4-year weight
+nhanes$wt6[nhanes$SDDSRVYR %in% c(1, 2)] <-
+  (2 / 3) * nhanes$WTMEC4YR[nhanes$SDDSRVYR %in% c(1, 2)]
+
+# 2003-2004: ordinary 2-year weight
+nhanes$wt6[nhanes$SDDSRVYR == 3] <-
+  (1 / 3) * nhanes$WTMEC2YR[nhanes$SDDSRVYR == 3]
+```
+
+::: {.notes}
+The same structure applies to interview or subsample weights: use the appropriate 4-year weight for 1999-2002, then combine with the appropriate later 2-year weights.
+:::
+
+## Second special case: 2017-March 2020 is a 3.2-year file
+
+The public-use **2017-March 2020 pre-pandemic** file represents **3.2 years**, not 2 years.
+
+Combine 2015-2016 (2 years) with 2017-March 2020 (3.2 years): total period = **5.2 years**.
+
+$$
+w^*_{2015-16}=\frac{2}{5.2}w_{2015-16}
+$$
+
+$$
+w^*_{2017-Mar2020}=\frac{3.2}{5.2}w_{2017-Mar2020}.
+$$
+
+::: {.remember}
+**General idea:** each component receives the fraction of the combined time period that it represents. Do not mechanically divide both weights by 2.
+:::
+
+## COVID-era example in code
+
+```r
+nhanes$wt52 <- NA_real_
+
+nhanes$wt52[nhanes$SDDSRVYR == 9] <-
+  (2 / 5.2) * nhanes$WTMEC2YR[nhanes$SDDSRVYR == 9]
+
+nhanes$wt52[nhanes$SDDSRVYR == 66] <-
+  (3.2 / 5.2) * nhanes$WTMECPRP[nhanes$SDDSRVYR == 66]
+```
+
+For three components - 2013-14, 2015-16, and 2017-March 2020 - the total is **7.2 years**:
+
+- each ordinary 2-year cycle gets `2 / 7.2`;
+- the 3.2-year pre-pandemic file gets `3.2 / 7.2`.
+
+::: {.warning}
+Pooling is not only arithmetic: verify that the variables are comparable across cycles and that combining the periods answers a sensible epidemiologic question.
+:::
+
+## Three pooling situations to remember
+
+| What you are combining | Starting rule |
+|---|---|
+| Ordinary **2-year cycles from 2001-2002 onward** | divide the 2-year weight by the number of equal 2-year cycles |
+| Anything that includes **1999-2000** | start with NCHS's **1999-2002 4-year weight**, then scale it with later cycles |
+| **2017-March 2020** plus other cycles | use **time-period fractions** because the pre-pandemic file represents 3.2 years |
+
+::: {.remember}
+Do not memorize only `/ number of files`. First ask: **What period and population does each supplied weight already represent?**
+:::
+
+# Part 2 - Weights, strata, PSUs, and subpopulations
+
+## Three design ingredients, three jobs
+
+| Design feature | Think of it as | Mainly affects |
+|---|---|---|
+| **Weight** | How much does this respondent count? | estimate + uncertainty |
+| **PSU / cluster** | Who was sampled together? | uncertainty |
+| **Stratum** | How were clusters organized before sampling? | uncertainty |
+
+::: {.remember}
+**Weights help reconstruct the population. Strata and PSUs tell us how much independent sampling information we actually have.**
+:::
+
+## Why strata and PSUs matter
+
+People in the same sampled geographic unit often resemble each other. Treating them as completely independent can make uncertainty too optimistic.
+
+Stratification does something different: sampling PSUs separately within planned strata can **increase precision**.
+
+::: {.remember}
+The net design effect is empirical. **Clustering often widens intervals; stratification often narrows them; unequal weights can also widen them.**
 :::
 
 ::: {.notes}
-10 min. Show the two code shapes side by side verbally: `svydesign(...)` then `subset(design, eligible)` (correct) vs `filter(data, eligible)` then `svydesign(...)` (wrong). The non-eligible rows still carry strata/PSU structure the variance estimator needs. Getting this wrong produces plausible-looking but silently biased SEs — the worst kind of error. Flag it hard; they will meet it Thursday.
+Avoid teaching "complex survey always widens the CI". In the MASLD example, the weights account for most of the increase, while strata partially recover precision.
 :::
 
-## Design-aware workflow, end to end
+## Design-based and model-based inference: the useful distinction
 
-Six steps, in order: {.incremental}
+**Model-based analysis** asks what follows under a statistical model for how outcomes are generated.
 
-1. **Pick the weight tier** by the most-restrictive variable.
-2. **Pool** — divide by number of cycles (`/6`).
-3. **Declare the design** with weight + strata + PSU.
-4. **Subset within** the design (never the rows).
-5. **Fit** the survey-aware model.
-6. **Report DEFF-widened CIs** — plus a one-line design statement in every table caption.
+**Design-based survey analysis** also uses the known sampling design to make inference about a finite target population represented by the survey.
 
-- **Sensitivity analysis is part of the deliverable**, not optional polish. The weight has a settled primary (`WTSAF`), so the sensitivity run is the `WTMEC` comparison — reported and labelled, never swapped in as the headline.
-
-::: {.MASLD .fragment}
-**MASLD:** this six-step recipe is precisely what **P4** asks you to run on your own paper.
+::: {.remember}
+For this lecture, the practical distinction is simple: **ordinary models treat the observed rows as the analysis dataset; survey models also use the information about how those rows were sampled.**
 :::
+
+::: {.warning}
+This is not a claim that every unweighted regression coefficient is meaningless. Regression weighting has extra subtleties; we return to that after the basic workflow is clear.
+:::
+
+## Survey weights are not treatment/IP weights
+
+| Weight | Statistical job |
+|---|---|
+| **Survey sampling weight** | represent the survey target population |
+| **Treatment/IP weight** | create balance for a causal exposure comparison |
+| **Frequency/model weight** | tell the fitting algorithm how observations are counted or prioritized |
+
+::: {.remember}
+Similar words, different jobs. **Today is about survey sampling weights.**
+:::
+
+## Build the survey design before defining the analysis subgroup
+
+<!-- code: design -->
+```r
+# 1. People eligible for the fasting-subsample weight
+fast <- subset(nhanes, WTSAF2YR > 0)
+fast$wt <- fast$WTSAF2YR / 6
+
+# 2. Tell R how NHANES sampled them
+library(survey)
+des_full <- svydesign(
+  ids = ~SDMVPSU,
+  strata = ~SDMVSTRA,
+  weights = ~wt,
+  nest = TRUE,
+  data = fast
+)
+```
+
+::: {.remember}
+**Declare the survey first. Restrict to your epidemiologic subgroup second.**
+:::
+
+## A domain is just the subgroup you want to analyse
+
+Examples:
+
+- adults with MASLD;
+- women;
+- Group I;
+- adults aged 60+;
+- people with complete data for a particular model.
+
+::: {.remember}
+NHANES did not originally sample "only adults with MASLD." A domain analysis keeps the original survey structure while estimating something for that subgroup.
+:::
+
+## Wrong and right ways to analyse a subgroup
+
+::: {.columns}
+::: {.column width="49%"}
+**Wrong: delete first, then redesign**
+
+<!-- code: subset_wrong -->
+```r
+masld <- subset(fast, in_rows)
+
+des_wrong <- svydesign(
+  ids = ~SDMVPSU,
+  strata = ~SDMVSTRA,
+  weights = ~wt,
+  nest = TRUE,
+  data = masld
+)
+```
+:::
+::: {.column width="49%"}
+**Right: design first, then subset**
+
+<!-- code: subset_right -->
+```r
+des_full <- svydesign(
+  ids = ~SDMVPSU,
+  strata = ~SDMVSTRA,
+  weights = ~wt,
+  nest = TRUE,
+  data = fast
+)
+
+des <- subset(des_full, in_rows)
+```
+:::
+:::
+
+::: {.remember}
+Outside-domain respondents do not contribute to the domain estimate, but the **original design information remains available for variance estimation**.
+:::
+
+## A small domain shows why the order matters
+
+<!-- code: lonely -->
+```r
+# Group I women: obese, lower waist fat
+gw <- subset(fast, in_rows & group == "I" & female == 1)
+
+c(people = nrow(gw), strata = length(unique(gw$SDMVSTRA)))
+#> people strata
+#>     57     44
+
+tryCatch(svymean(~age, svydesign(
+  ids = ~SDMVPSU, strata = ~SDMVSTRA,
+  weights = ~wt, nest = TRUE, data = gw
+)), error = function(e) cat("Error:", conditionMessage(e)))
+#> Error: Stratum (59) has only one PSU at stage 1
+
+svymean(~age, subset(des_full, in_rows & group == "I" & female == 1))
+#>       mean     SE
+#> age 41.711 2.3874
+```
+
+::: {.remember}
+Deleting first can create a **lonely PSU** that was not lonely in the original survey design.
+:::
+
+## Complete cases are another domain - but that does not fix missing-data bias
+
+<!-- code: complete_cases -->
+```r
+fast$complete_model <- complete.cases(
+  fast[, c("time_yr", "dead", "obese", "central",
+           "age", "female", "race", "smk_current", "sed")]
+)
+
+# survey design already exists
+des_full <- update(des_full, complete_model = fast$complete_model)
+analysis_des <- subset(
+  des_full,
+  MASLD == 1 & complete_model
+)
+```
+
+::: {.remember}
+Using `subset()` gives the appropriate **survey variance for the complete-case domain**.
+:::
+
+::: {.warning}
+It does **not** make complete-case analysis unbiased for item missingness. Survey design and missing-data assumptions are separate problems.
+:::
+
+## A weighted estimate can still be based on little information
+
+A subgroup may represent millions of people but contain only a small number of respondents.
+
+For descriptive survey estimates, inspect:
+
+- **unweighted n**;
+- the **design effect** and effective sample size;
+- **design degrees of freedom**;
+- confidence-interval width.
+
+::: {.remember}
+**Population size is not information size.** Always show the empirical sample size behind a weighted estimate.
+:::
+
+## Design effect and effective sample size {.tight}
+
+For an estimate $\hat\theta$,
+
+$$
+DEFF = \frac{Var_{complex}(\hat\theta)}{Var_{SRS}(\hat\theta)}.
+$$
+
+A rough effective sample size is
+
+$$
+n_{eff} \approx \frac{n}{DEFF}.
+$$
+
+For the toy town, unequal weights alone give Kish's approximation:
+
+<!-- code: kish -->
+```r
+w <- s$weight
+n <- length(w)
+deff <- n * sum(w^2) / sum(w)^2
+round(c(deff = deff, effective_n = n / deff), 2)
+#>        deff effective_n
+#>        1.64      121.95
+```
+
+::: {.remember}
+DEFF is **estimate-specific**. It is not one permanent number attached to a dataset.
+:::
+
+## Table 1 for a complex survey
+
+A useful reporting convention is:
+
+- report **unweighted n**;
+- report **weighted percentages or weighted means**;
+- report design-based uncertainty when appropriate.
+
+Example:
+
+| Group | Unweighted n | Weighted % |
+|---|---:|---:|
+| Group I | 355 | 6.1% |
+| Group II | 4,265 | 71.7% |
+| Group III | 732 | 14.0% |
+| Group IV | 559 | 8.3% |
+
+::: {.remember}
+The unweighted count tells the reader **how much data you actually observed**; the weighted percentage tells the reader **how common the group is in the represented population**.
+:::
+
+# Part 3 - Survey regression in the MASLD example
+
+## Fit the model on the design object
+
+<!-- code: fit_model -->
+```r
+fm <- Surv(time_yr, dead) ~ obese * central +
+  age + female + race + smk_current + sed
+
+fit_w <- svycoxph(fm, design = des)
+```
+
+The design object supplies:
+
+- the analysis rows in the domain;
+- their survey weights;
+- strata and PSU information for variance estimation.
+
+::: {.remember}
+`svycoxph()` is not simply `coxph(..., weights=)`. The **survey design**, not the weight column alone, carries the inferential structure.
+:::
+
+## Tests use the survey design too
+
+<!-- code: regterm -->
+```r
+regTermTest(
+  fit_w,
+  ~obese:central,
+  df = degf(des)
+)
+#> Wald test for obese:central
+#>  in svycoxph(formula = fm, design = des)
+#> F =  0.3185855  on  1  and  94  df: p= 0.5738
+```
+
+For our pooled design:
+
+$$
+\text{design df} = \text{PSUs} - \text{strata} = 184 - 90 = 94.
+$$
+
+::: {.remember}
+The denominator degrees of freedom come from the **sampling design**, not from the 5,911 individual rows.
+:::
+
+## Weighting changes the real MASLD population mix only modestly
+
+| | Our 5,911 rows | Weighted population represented |
+|---|---:|---:|
+| Women | 47.2% | 45.5% |
+| Group I: obese, lower waist | 6.0% | 6.1% |
+| Group II: obese, high waist | 72.2% | 71.7% |
+| Group III: not obese, lower waist | 12.4% | 14.0% |
+| Group IV: not obese, high waist | 9.5% | 8.3% |
+
+::: {.remember}
+The weights matter even when the phenotype percentages barely move, because **age, race/ethnicity, income, and other characteristics can still be redistributed**.
+:::
+
+## What can we say about the published Cox analysis?
+
+The paper describes NHANES as a stratified, multistage survey designed for national inference.
+
+Its reported statistical methods do **not appear to specify survey weights, strata, or PSUs**, and an ordinary Cox model closely reproduces the published unadjusted Group IV vs I hazard ratio.
+
+::: {.remember}
+A careful statement is: **the published Cox analysis should not be labelled a design-based nationally representative analysis unless the survey design was incorporated in an analysis not reported in the paper.**
+:::
+
+::: {.warning}
+This is not the same as saying every unweighted regression coefficient is invalid. Regression weighting depends on the target estimand, sampling mechanism, model specification, and effect heterogeneity.
+:::
+
+## Start with one comparison
+
+High vs lower waist fat **among the non-obese** (Group IV vs III), adjusted for Week 4's L:
+
+| Analysis | HR (95% CI) |
+|---|---:|
+| Ordinary Cox model | **1.09 (0.79-1.50)** |
+| NHANES design-based Cox model | **1.43 (0.98-2.07)** |
+
+::: {.question}
+Why can the coefficient move? The weighted analysis changes the distribution of people represented by the rows. If the exposure effect or the fitted model behaves differently across those characteristics, the average coefficient can move.
+:::
+
+::: {.remember}
+Do not interpret the movement itself as proof that one model "fixed bias." A weighted-unweighted gap is a **clue**, not a diagnosis.
+:::
+
+## Adjustment and survey design are different choices
+
+::: {.smallish}
+| | Unweighted, crude | Unweighted, adjusted | Weighted, crude | Weighted, adjusted |
+|---|---:|---:|---:|---:|
+| Obese vs not | 0.67 (0.56-0.81) | 0.95 (0.78-1.14) | 0.76 (0.59-0.97) | 1.02 (0.79-1.30) |
+| Waist fat, not obese | 2.31 (1.69-3.14) | 1.09 (0.79-1.50) | 3.06 (2.10-4.46) | 1.43 (0.98-2.07) |
+| Waist fat, obese | 7.56 (2.82-20.25) | 2.99 (1.11-8.09) | 5.23 (1.16-23.63) | 2.21 (0.51-9.61) |
+:::
+
+- Left -> right **within weighting status**: confounder adjustment.
+- Unweighted -> weighted **within adjustment status**: survey design / represented population.
+
+::: {.remember}
+The two operations answer different questions. **Do not call survey weighting "confounding adjustment."**
+:::
+
+## Week 5's effect-modification result, redone with the survey design
+
+![](../img/w6_week5_redone.png){width="96%"}
+
+::: {.remember}
+Unweighted ratio of waist-fat HRs, obese / not obese: **2.74 (0.97-7.71)**.  
+Survey-design ratio: **1.55 (0.34-7.02)**, design-based p = **0.57**.
+:::
+
+The survey-design analysis gives **less evidence and much more uncertainty**. That is not evidence of no heterogeneity - the interval is very wide.
 
 ::: {.notes}
-8 min. This is the checklist to screenshot. The one-line design statement in the caption is the cheap habit that would have fixed the paper entirely. Emphasize step 6's sensitivity analysis is required, not decorative — it operationalizes the slide-12 fork. Read the six steps as the literal spec for P4.
+The point estimate moved, the variance increased, and the inferential test changed. The lesson is not "weighting discovered the truth"; it changed both the represented population and the variance calculation.
 :::
 
-## Common pitfalls checklist
+## In R: the Week 5 interaction model, survey-aware
 
-- Forgetting to **divide pooled weights** by the number of cycles.
-- **Filtering rows before declaring the design** — the fatal one.
-- Using `WTMEC` when a **fasting analyte** is in the model (or vice versa).
-- Reading **unweighted vs weighted** divergence as "error" rather than as **two different estimands**.
+<!-- code: week5_w -->
+```r
+fit_u <- coxph(fm, data = d)          # ordinary model
+fit_w <- svycoxph(fm, design = des)   # NHANES design
 
-::: {.notes}
-6 min. A rapid-fire recap; each bullet maps to an earlier slide (7, 13, 5/12, 10). Ask the class which one is fatal — the answer is #2, because it corrupts SEs silently while everything still runs. The last bullet is the conceptual trap: a naive/weighted gap is information, not a bug.
+waist_hr <- function(fit, obese) {
+  b <- coef(fit)
+  exp(b[["central"]] + obese * b[["obese:central"]])
+}
+
+round(c(
+  unweighted_not_obese = waist_hr(fit_u, 0),
+  weighted_not_obese   = waist_hr(fit_w, 0),
+  unweighted_obese     = waist_hr(fit_u, 1),
+  weighted_obese       = waist_hr(fit_w, 1)
+), 2)
+#> unweighted_not_obese   weighted_not_obese
+#>                 1.09                 1.43
+#>     unweighted_obese       weighted_obese
+#>                 2.99                 2.21
+```
+
+## The correct weight is chosen by the measurement process
+
+*Same 5,911 rows; waist fat adjusted for L.*
+
+| Weight | Not obese HR | Obese HR | Ratio of HRs |
+|---|---:|---:|---:|
+| **Fasting weight** `WTSAF2YR / 6` | 1.43 | 2.21 | 1.55 |
+| Exam weight `WTMEC2YR / 6` | 1.46 | 2.10 | 1.44 |
+
+::: {.remember}
+The HRs happen to be similar. That does **not** make the exam weight correct for an analysis that depends on fasting triglycerides.
 :::
 
-## Bridge to today's lab (L5) and P4
-
-- **L5 (EpiMethods Complex Survey module):** re-fit the MASLD Group I–IV Cox model **two ways** on the fixed dataset:
-  - a **naive** unweighted fit, then
-  - a **design-aware** fit — declare `WTSAF`/6 + `SDMVSTRA` + `SDMVPSU`, and **subset the design** (not the rows) to the MASLD-eligible sample.
-- Tabulate **naive vs survey** HRs/CIs side by side; quantify the attenuation (**≈ 15 → ≈ 12.4**) and CI widening.
-- **P4 deliverable — your design-aware re-estimate:** run the same six-step workflow on *your* paper's headline estimate, **declare and justify** your chosen weight (name the fasting-vs-non-fasting tension if it applies), report the **naive-vs-weighted contrast**, and write the **one-line design statement** the paper omitted.
-- **Time-to-event route** (M0 criterion 5, no survey weights): those six steps are not yours, and there is **no naive-vs-correct number**. Reproduce the paper's survival estimand — follow-up time and censoring intact — then **interrogate the one structural choice you named at M0**: time scale, censoring rule, index date, competing events.
-- **What is comparable:** weighted vs unweighted fits of *the same* survival model on *the same* rows = one estimand, so the gap is the design. Survival model vs collapsed "ever died" = two estimands — that gap is the collapse, **not** a design correction.
-- P4 is **formative** and feeds directly into **M1** replication and **M2** critique of another group's M1.
-
-::: {.notes}
-7 min. Land the plane. L5 is the guided rehearsal on the shared dataset; P4 is the same moves on their own paper — the six survey steps for most groups, the survival-structure interrogation for the ones that qualified on a time-to-event structure. Either way the deliverable is small but load-bearing: it is the first time they produce a number the original authors did not. Say the comparability point out loud, because it is the one they will get wrong: weighted and unweighted fits of the same survival model on the same rows are one estimand on one scale, so the difference is the design; a survival model and a logistic model on "ever died" are two estimands on two scales, so the difference is the collapse and can never be presented as the corrected estimate. A group with no weights is not owed a naive-vs-correct number, and should hear that now rather than at M3. Remind them the design statement is one sentence — the point is the habit, not the length. Preview: next week continues interrogating the paper's assumptions.
+::: {.question}
+Choose the primary weight **before** looking at the answer. Sensitivity analyses can show how much the decision mattered.
 :::
+
+## In R: sensitivity to the exam weight
+
+<!-- code: mec -->
+```r
+mec <- subset(nhanes, WTMEC2YR > 0)
+mec$wt <- mec$WTMEC2YR / 6
+
+des_mec <- subset(
+  svydesign(
+    ids = ~SDMVPSU, strata = ~SDMVSTRA,
+    weights = ~wt, nest = TRUE, data = mec
+  ),
+  in_rows
+)
+
+fit_m <- svycoxph(fm, design = des_mec)
+
+round(rbind(
+  fasting = c(not_obese = waist_hr(fit_w, 0), obese = waist_hr(fit_w, 1)),
+  exam    = c(not_obese = waist_hr(fit_m, 0), obese = waist_hr(fit_m, 1))
+), 2)
+#>         not_obese obese
+#> fasting      1.43  2.21
+#> exam         1.46  2.10
+```
+
+## Why can weighted and unweighted regression differ?
+
+Three broad reasons are worth considering:
+
+1. **Sampling variation:** two noisy estimators can differ by chance.
+2. **Effect heterogeneity:** the effect differs across age/race/income/etc., and weighting changes their population mix.
+3. **Sampling-model dependence:** variables related to sampling or participation are not adequately represented in the outcome model.
+
+::: {.remember}
+The **direction or size of the gap does not tell you which explanation is true**.
+:::
+
+## Why weighting can change an overall RR
+
+::: {.question .smallish}
+**Recall the town:** population = **90% younger / 10% older**; survey sample = **50% younger / 50% older**. Older adults are over-represented, and survey weights restore the 90:10 age mix. Assume half of each age group has a **high-sodium diet**.
+:::
+
+*Hypothetical 5-year hypertension risks:*
+
+| Scenario | Younger | Older | Sample RR (50:50) | Town RR (90:10) |
+|---|---:|---:|---:|---:|
+| Same RR by age | 10% -> 20% (**RR 2**) | 20% -> 40% (**RR 2**) | 2.00 | 2.00 |
+| RR differs by age | 10% -> 20% (**RR 2**) | 20% -> 60% (**RR 3**) | **2.67** | **2.18** |
+
+::: {.remember .smallish}
+**What changes?** When the age-specific RRs are both 2, changing the age mix does not change this overall RR. When the older-adult RR is 3, the unweighted sample gives that stronger effect too much influence because older adults are 50% of the sample but only 10% of the town. Weighting moves the overall RR from **2.67 to 2.18**.
+:::
+
+<span class="foot">**Week 5 + Week 6:** effect modification by age + unequal sampling of age groups. High-sodium diet is 50% in both age groups here, so age does not confound this toy comparison.</span>
+
+## In R: build the high-sodium example
+
+<!-- code: sodium_build -->
+```r
+# 100 younger + 100 older; half exposed in each age group
+s2 <- data.frame(
+  age_group = rep(c("Younger", "Older"), each = 100),
+  high_sodium = rep(rep(c(0, 1), each = 50), times = 2),
+  weight = rep(c(9, 1), each = 100)
+)
+
+cases <- function(k, n = 50) c(rep(1, k), rep(0, n - k))
+s2$incident_htn <- c(
+  cases(5), cases(10),    # younger: 10% -> 20%
+  cases(10), cases(30)    # older:   20% -> 60%
+)
+
+des2 <- svydesign(ids = ~1, weights = ~weight, data = s2)
+```
+
+## In R: sample RR versus town RR
+
+<!-- code: sodium_rr -->
+```r
+fit_sample <- glm(
+  incident_htn ~ high_sodium,
+  family = poisson(link = "log"), data = s2
+)
+
+fit_town <- svyglm(
+  incident_htn ~ high_sodium,
+  family = quasipoisson(link = "log"), design = des2
+)
+
+round(exp(c(
+  sample = coef(fit_sample)[["high_sodium"]],
+  town = coef(fit_town)[["high_sodium"]]
+)), 2)
+#> sample   town
+#>   2.67   2.18
+```
+
+::: {.remember}
+The rows did not change. The **population mix being averaged over** changed.
+:::
+
+## What survey design cannot fix
+
+Survey weighting/design does **not** repair:
+
+- **confounding** of the exposure-outcome comparison;
+- **selection** created by defining the MASLD cohort using variables related to the exposures;
+- **bias from complete-case analysis** due to item missingness;
+- **poorly defined exposures or causal estimands**;
+- **sparse cells** - four deaths remain four deaths after weighting.
+
+::: {.remember}
+Survey design answers **"for whom?"** and **"how uncertain?"**. It does not by itself answer **"is the comparison causal?"**
+:::
+
+# Part 4 - Reporting and synthesis
+
+## Report the same decisions you made
+
+| Decision | What to report |
+|---|---|
+| **Who?** | target population / analytic domain |
+| **Which weight?** | weight name, why it was chosen, how cycles were combined |
+| **How sampled?** | strata, PSU, variance method |
+| **Which subgroup?** | eligibility and complete-case restrictions; unweighted n |
+| **Which model?** | survey estimator, design-based CI/test and degrees of freedom |
+
+::: {.remember}
+For descriptive tables: **unweighted n + weighted %/mean** is usually the most informative pairing.
+:::
+
+## The algorithm to take into your own paper
+
+::: {.workflow}
+**1. Define population -> 2. Select weight -> 3. Combine cycles -> 4. Declare design -> 5. Subset domain -> 6. Fit survey model -> 7. Report n + weighted estimate + uncertainty.**
+:::
+
+Before trusting a result, ask:
+
+- Is the weight valid for every variable?
+- Did cycle pooling follow the correct time period?
+- Was the full survey design declared before subgroup restriction?
+- Is there enough empirical information in the subgroup?
+- Does the population claim match the analysis?
+
+## Key takeaways
+
+1. NHANES is **not** a simple random sample; weights, strata and PSUs each have a job.
+2. Choose the weight from the **smallest component needed by your variables**, not from the answer it produces.
+3. Pool weights according to what each supplied weight represents: ordinary 2-year cycles use `/ number of cycles`; analyses including **1999-2000 must start with the NCHS 1999-2002 4-year weight**; the **2017-March 2020 3.2-year file uses time-proportional scaling**.
+4. **Declare the design first, then subset the domain.** Complete cases are another domain, but that does not solve missing-data bias.
+5. Weighted regression and unweighted regression may differ for several reasons; the gap is a **question to investigate**, not a diagnosis.
+6. Survey design changes **who is represented and how uncertainty is calculated**. It does not make a causal comparison valid.
+
+## Sources for the core workflow
+
+::: {.smallish}
+**EpiMethods**
+
+- Survey data analysis hub: `https://ehsanx.github.io/EpiMethods/surveydata.html`
+- Concepts (weights, strata, PSUs, tests, reporting): `surveydata0.html`
+- Properly subsetting an NHANES design: `surveydata8.html`
+- NHANES reliability standards: `surveydata9.html`
+
+**CDC / NCHS NHANES**
+
+- NHANES Tutorials - Weighting Module (weight construction, correct weight, 1999-2000 special case, and cycle pooling)
+- NHANES Tutorials - Sample Design Module (stratification, PSUs, sampling stages, masked variance units)
+- NHANES Tutorials - Variance Estimation Module
+- NHANES 2017-March 2020 Pre-pandemic analytic guidance (Series 2, No. 190)
+:::
+
+
+## Selected references - survey foundations
+
+::: {.tiny}
+- Heeringa SG, West BT, Berglund PA. *Applied Survey Data Analysis*. Chapman & Hall/CRC; 2010/2017.
+- Johnson CL, Paulose-Ram R, Ogden CL, et al. NHANES analytic guidelines, 1999-2010. *Vital Health Stat 2*. 2013;(161):1-24.
+- Korn EL, Graubard BI. *Analysis of Health Surveys*. Wiley; 1999.
+- Lumley T. *Complex Surveys: A Guide to Analysis Using R*. Wiley; 2010.
+- Kish L. Weighting for unequal Pi. *Journal of Official Statistics*. 1992;8:183-200.
+- NCHS. *NHANES 2017-March 2020 Pre-pandemic File: Sample Design, Estimation, and Analytic Guidelines*. Series 2, No. 190; 2021.
+:::
+
+## Selected references - regression and reporting
+
+::: {.tiny}
+- Binder DA. Fitting Cox's proportional hazards models from survey data. *Biometrika*. 1992;79:139-147.
+- DuMouchel WH, Duncan GJ. Using sample survey weights in multiple regression analyses of stratified samples. *JASA*. 1983;78:535-543.
+- Lumley T, Scott A. Fitting regression models to survey data. *Statistical Science*. 2017;32:265-278.
+- Seidenberg AB, Moser RP, West BT. PRICSSA. *J Survey Statistics and Methodology*. 2023;11:743-757.
+- Solon G, Haider SJ, Wooldridge JM. What are we weighting for? *Journal of Human Resources*. 2015;50:301-316.
+:::
+
+# Appendix - deeper survey ideas and code
+
+## Appendix: design effect in the MASLD model
+
+*Waist fat among the not obese, adjusted for L.*
+
+| Variance calculation | Variance / ordinary-model variance |
+|---|---:|
+| ordinary model only | 1.00 |
+| strata + PSUs, equal weights | 1.05 |
+| weights, no strata/PSUs | 1.56 |
+| full survey design | 1.37 |
+
+::: {.remember}
+In this particular contrast, **unequal weights** account for most of the precision cost; stratification partly offsets it. That is an empirical result, not a universal rule.
+:::
+
+## Appendix: R code for the variance decomposition {.tight .shrink}
+
+<!-- code: ci_cost -->
+```r
+v <- function(fit) vcov(fit)["central", "central"]
+
+fast$one <- 1
+
+des_eq <- subset(
+  svydesign(
+    ids = ~SDMVPSU, strata = ~SDMVSTRA,
+    weights = ~one, nest = TRUE, data = fast
+  ),
+  in_rows
+)
+
+vs <- c(
+  model    = v(fit_u),
+  clusters = v(svycoxph(fm, design = des_eq)),
+  weights  = v(coxph(fm, data = d, weights = wt, robust = TRUE)),
+  design   = v(fit_w)
+)
+
+round(vs / vs[["model"]], 2)
+#>    model clusters  weights   design
+#>     1.00     1.05     1.56     1.37
+```
+
+## Appendix: variance estimation methods
+
+Two broad families are common in complex surveys:
+
+**Taylor linearization**
+
+- approximates the variance of a complex estimator with a linearized form;
+- uses design strata and PSUs;
+- is the standard approach used in the main NHANES examples in this lecture.
+
+**Replication methods**
+
+- repeatedly recompute the statistic under replicate weights;
+- examples: jackknife, BRR, Fay's BRR, survey bootstrap.
+
+::: {.remember}
+Use the variance method that matches the survey documentation and the available design information.
+:::
+
+## Appendix: design-adjusted tests
+
+Complex survey analysis changes more than standard errors.
+
+Examples include:
+
+- **Rao-Scott chi-square** instead of an ordinary Pearson chi-square for contingency tables;
+- design-based Wald/F tests for regression terms;
+- survey-adapted goodness-of-fit procedures such as Archer-Lemeshow for logistic models;
+- survey-aware versions of model summaries such as pseudo-R2 when appropriate.
+
+::: {.remember}
+Do not take an ordinary SRS hypothesis test and simply attach survey-weighted point estimates to it.
+:::
+
+## Appendix: survey-weighted survival curves
+
+![](../img/w6_km.png){width="84%"}
+
+Group IV has the lowest survival in both ordinary and survey-weighted curves. The weighted curves shift because the represented population is younger and differently distributed across sampled groups.
+
+::: {.remember}
+Survey design can change both **descriptive survival curves** and the uncertainty/test attached to their comparison.
+:::
+
+## Appendix: R code for survey survival curves
+
+<!-- code: km -->
+```r
+km <- svykm(Surv(time_yr, dead) ~ group, design = des)
+
+died6 <- function(k) {
+  100 * (1 - k$surv[max(which(k$time <= 6))])
+}
+
+round(sapply(km, died6), 1)
+#>    I   II  III   IV
+#>  1.2  5.1  4.5 11.3
+
+lr <- svylogrank(Surv(time_yr, dead) ~ group, design = des)
+round(lr[[2]], 4)
+#>   Chisq       p
+#> 41.5624  0.0000
+```
+
+## Appendix: Week 5's sex-modification analysis, design-aware
+
+<!-- code: sex -->
+```r
+fs <- Surv(time_yr, dead) ~
+  IV * female + age + race + smk_current + sed
+
+d34 <- subset(des, group %in% c("III", "IV"))
+fit_s <- svycoxph(fs, design = d34)
+
+round(exp(c(
+  ratio = coef(fit_s)[["IV:female"]],
+  confint(fit_s)["IV:female", ]
+)), 2)
+#>  ratio  2.5 % 97.5 %
+#>   2.60   0.89   7.58
+
+regTermTest(fit_s, ~IV:female, df = degf(des))
+#> Wald test for IV:female
+#>  in svycoxph(formula = fs, design = d34)
+#> F =  3.067102  on  1  and  94  df: p= 0.083154
+```
+
+## Appendix: the debate about regression weights
+
+There is broad agreement that survey weights are needed for **population descriptive estimates**.
+
+Regression is more nuanced because the coefficient can depend on:
+
+- the target estimand;
+- whether sampling is informative after conditioning on modeled covariates;
+- model misspecification;
+- effect heterogeneity;
+- efficiency costs from highly variable weights.
+
+::: {.remember}
+A sensible workflow is to **pre-specify the population target and primary survey analysis**, then use unweighted/model-based fits as a sensitivity or diagnostic comparison when scientifically justified.
+:::
+
+## Appendix: extreme weights and trimming
+
+Highly variable survey weights can make a small number of respondents extremely influential and increase variance.
+
+Possible responses include:
+
+- inspect whether the large weights are expected from the documented survey design;
+- verify that the **correct component weight** was chosen;
+- report the weight distribution and design effect;
+- consider trimming only as a **sensitivity analysis** when scientifically justified.
+
+::: {.warning}
+Trimming can improve precision but changes the weighting scheme and can introduce bias. It is not an automatic fix for a wide confidence interval.
+:::
+
+## Appendix: sample and population causal effects - SATE and PATE
+
+When the estimand is genuinely causal, survey generalization is sometimes described using:
+
+- **SATE:** sample average treatment effect - average causal effect in the sampled people;
+- **PATE:** population average treatment effect - average causal effect in the target population.
+
+::: {.remember}
+Survey weights can help move from a sample target toward a population target, but **causal identification still requires the exposure comparison to be valid**. Survey weighting does not replace confounding control.
+:::
+
+## Appendix: sample target vs population target
+
+The old shorthand "weighted = population, unweighted = sample" is most literal for descriptive statistics.
+
+For regression, distinguish the target explicitly:
+
+- **Sample-average / model-based association:** what does the fitted model say for the observed analytic sample under its assumptions?
+- **Population-representative survey analysis:** what coefficient/contrast is obtained when the survey design is used to represent the target population?
+
+::: {.warning}
+Do not attach a national-population interpretation to a coefficient merely because the source dataset is NHANES.
+:::
+
+## Appendix: extra COVID-era pooling example
+
+Combine 2013-14, 2015-16, and 2017-March 2020.
+
+Total represented period:
+
+$$
+2 + 2 + 3.2 = 7.2\text{ years}.
+$$
+
+So:
+
+$$
+w^*_{2013-14}=\frac{2}{7.2}w_{2yr}, \qquad
+w^*_{2015-16}=\frac{2}{7.2}w_{2yr},
+$$
+
+$$
+w^*_{2017-Mar2020}=\frac{3.2}{7.2}w_{prepandemic}.
+$$
+
+::: {.remember}
+The special 3.2-year release teaches the principle better than memorizing a denominator: **scale each component to the fraction of the total represented period.**
+:::
+
+## Appendix: COVID-era pooling in code
+
+```r
+nhanes$wt72 <- NA_real_
+
+nhanes$wt72[nhanes$SDDSRVYR %in% c(8, 9)] <-
+  (2 / 7.2) * nhanes$WTMEC2YR[nhanes$SDDSRVYR %in% c(8, 9)]
+
+nhanes$wt72[nhanes$SDDSRVYR == 66] <-
+  (3.2 / 7.2) * nhanes$WTMECPRP[nhanes$SDDSRVYR == 66]
+```
+
+Check the relevant data-file documentation before assuming the same variable definition or weight name exists in every cycle.
+
+## Appendix: reliability standards - the formal idea
+
+For descriptive proportions, NCHS reliability guidance considers multiple features, not only raw n.
+
+Common diagnostics include:
+
+- unweighted sample size;
+- effective sample size;
+- design degrees of freedom;
+- confidence-interval width / relative precision;
+- whether the estimate is close to the boundary 0 or 1.
+
+::: {.remember}
+Formal suppression/reliability rules are designed mainly for descriptive estimates. Regression coefficients require judgment based on their information, SE/CI, design, and model.
+:::
+
+## Appendix: what if a lonely PSU truly remains?
+
+Sometimes a stratum has only one PSU even after the design is declared correctly. Then the variance for that stratum cannot be estimated in the usual way.
+
+Possible strategies depend on the survey documentation and software:
+
+- treat a certainty PSU appropriately when that is how the design was constructed;
+- combine or adjust singleton strata using a documented rule;
+- use an approved replication method when replicate weights/design information are available.
+
+::: {.warning}
+Do not solve a lonely-PSU problem by silently deleting the stratum or pretending the design was simple random sampling.
+:::
+
+## Appendix: other complex surveys
+
+The same principles recur in many public-health datasets:
+
+- Canadian Community Health Survey (CCHS)
+- Behavioral Risk Factor Surveillance System (BRFSS)
+- Korean NHANES (KNHANES)
+- Health and Retirement Study (HRS)
+- National Comorbidity Survey Replication (NCS-R)
+- European Social Survey (ESS)
+
+::: {.remember}
+The variable names change. The questions do not: **who is represented, what is the weight, how was the sample drawn, and how should subgroups be analysed?**
+:::
+
+## Appendix: software
+
+Common software has dedicated complex-survey procedures:
+
+- **R:** `survey` package (`svydesign`, `svymean`, `svyglm`, `svycoxph`, `svykm`)
+- **Stata:** `svyset`, `svy:` estimators
+- **SAS:** SURVEY procedures
+- **SUDAAN:** survey-specific procedures
+- **SPSS:** Complex Samples procedures
+
+::: {.remember}
+The critical step is not the brand of software. It is **declaring the correct survey design and target population before fitting the model**.
+:::
+
+## Appendix: future extensions
+
+Survey principles also matter for modern prediction workflows.
+
+Examples include:
+
+- sampling weights in machine-learning models;
+- survey-aware cross-validation;
+- calibration and performance measures for complex samples.
+
+These require more than simply passing a weight column to an algorithm and are beyond the core Week 6 goals.
+

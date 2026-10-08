@@ -133,8 +133,8 @@ cycle with `NA`**. The 16 domain frames are then `left_join`ed onto `DEMO` by `S
 > `1≤PIR≤4`), so where the authors meant "at least" they wrote it. At the age criterion
 > they wrote a plain `>`, meaning 19 and older.
 >
-> This matters more than 70 rows suggests, because it is the best available explanation
-> of our N gap:
+> This matters more than 70 rows suggests, because it is the strongest lead on our N gap,
+> though not a settled answer:
 >
 > | Rule | N | Deaths | Groups I/II/III/IV | Total abs. deviation |
 > |---|---:|---:|---|---:|
@@ -207,7 +207,7 @@ threshold, not clustered at it.
 > account for that selection stage — while only **792** are inside the frame and still
 > lack an FLI input. The
 > first number is answered by a weight and a sentence naming your population; the second
-> is answered by P5's missing-data analysis. Adding them together and calling the sum
+> is answered by a missing-data analysis. Adding them together and calling the sum
 > "attrition" is the error the typed funnel in `logs/sample_funnel.csv` exists to prevent.
 >
 > **Say "outside the frame", not "never asked to fast".** A missing or zero `WTSAF2YR`
@@ -268,10 +268,10 @@ threshold, not clustered at it.
 > a zero sitting alongside a positive diastolic reading is dropped. The helper at
 > `R/02_build_analytic.R:97-112` implements exactly that, and `:150-160` asserts the
 > all-zero records survive. **Why the care:** two earlier versions were wrong in opposite
-> directions — `na_if(BPXDI*, 0)` deleted 277 measured zeros, and a plain `rowMeans`
-> averaged zeros in alongside real readings *and* kept the first reading. The paper does
-> not say what it did, so this is a documentation-informed choice, not a claim of
-> computational identity.
+> directions — `na_if(BPXDI*, 0)` deleted 277 measured zeros (counted over all 59,842
+> merged records, not the analytic file), and a plain `rowMeans` averaged zeros in
+> alongside real readings *and* kept the first reading. The paper does not say what it
+> did, so this is a documentation-informed choice, not a claim of computational identity.
 
 > **Decision — a missing criterion counts as *not met*, not as *unknown*.** `n_crit`
 > (`:173`) uses `rowSums(..., na.rm = TRUE)`, so an `NA` criterion contributes 0. That is
@@ -331,18 +331,18 @@ decide not to.
 
 > **Decision — "drinks per day" means frequency × quantity, not `ALQ130`.** `ALQ130` is
 > drinks per *drinking day*. Someone who has three drinks every Saturday reports
-> `ALQ130 = 3` but averages 0.4 drinks/day. Using `ALQ130` alone over-excludes roughly
-> 2,000 people. We reconstruct average daily intake as
+> `ALQ130 = 3` but averages 0.4 drinks/day. Using `ALQ130` alone removes 2,063 people,
+> against 427 under the average-intake rule. We reconstruct average daily intake as
 > `(ALQ130 × days_per_year) / 365`, converting `ALQ120Q`/`ALQ120U` (per week / month /
 > year → ×52 / ×12 / ×1) and mapping the redesigned `ALQ121` categories to days per year
 > for 2017-18.
 
 > **Decision — strip `777` and `999` first.** Both `ALQ130` and `ALQ120Q` use them for
-> *refused* and *don't know*. **9 refusals** in this cohort would otherwise become people
-> reporting 777 drinks a day, and every one of them would be reclassified as a heavy
-> drinker. Compare Step 2, where identical-looking digits in `LBXTR` are real
-> measurements. **There is no global NHANES missing-value rule; the codebook decides,
-> variable by variable.**
+> *refused* and *don't know*. **9 refused or don't-know answers** in this cohort would
+> otherwise become people reporting 777 or 999 drinks a day, and every one of them would
+> be reclassified as a heavy drinker. Compare Step 2, where identical-looking digits in
+> `LBXTR` are real measurements. **There is no global NHANES missing-value rule; the
+> codebook decides, variable by variable.**
 
 > ⚠ **Decision — the exclusion is off, and the published justification for that is wrong.**
 > The switch exists because applying the exclusion moves us *away* from the paper. But
@@ -355,10 +355,10 @@ decide not to.
 > | Ours, exclusion **off** | 6,371 | 586 | 71 |
 > | Ours, exclusion **on** (427 dropped) | **5,944** | 546 | **356** |
 >
-> Turning the exclusion on overshoots by 356 rows and loses 39 deaths. It cannot be what
-> separates us from 6,300 — **Step 1's age rule is the better candidate.** Keeping the
-> exclusion off remains the right call; the *reason* given for it in the report needs
-> rewriting.
+> Turning the exclusion on overshoots the paper: it lands 356 rows below its 6,300 and 39
+> deaths below its 585. It cannot be what separates us from 6,300 — **Step 1's age rule
+> is the better candidate**, though the gap remains unresolved. Keeping the exclusion off
+> remains the right call; the *reason* given for it in the report needs rewriting.
 
 > **Known soft spot, if you switch it on.** `avg_drinks_day` is forced to 0 whenever
 > frequency is missing (2,246 people) or when someone reports drinking days but no
@@ -460,9 +460,12 @@ decide not to.
 > different denominator from the rest of the row. The COPD figure is the clearest case.
 
 > **`current_smoke` has a denominator you must state.** It is defined only among
-> ever-smokers, so "40.6% current smoking" means 40.6% *of ever-smokers*, not of the
-> cohort. That is what reproduces the paper's number — but it also makes the variable
-> `NA` for never-smokers, which silently shrinks the complete-case N of Cox Model 2.
+> ever-smokers, so the paper's "40.6% current smoking" means 40.6% *of ever-smokers*, not
+> of the cohort. That denominator is what brings ours close to the paper's number (40.9%
+> in `output/tables/table1_reproduced.csv`), and it makes the variable `NA` for
+> never-smokers. `current_smoke` feeds Table 1 only. Cox Model 2 uses a separate
+> `smk_current` (`R/04_table2_cox.R:33-35`), which codes never-smokers 0, so the
+> never-smoker `NA` does not shrink Model 2's complete-case N.
 
 > **eGFR is CKD-EPI 2021, verified.** Constants at `:229-231` (142, κ 0.7/0.9,
 > α −0.241/−0.302, exponent −1.200, 0.9938^age, ×1.012 female) match the published
@@ -543,9 +546,10 @@ labelled — goes to `logs/sample_funnel.csv`.
 > ELIGIBILITY · DESIGN · MISSINGNESS · TARGET POPULATION · OUTCOME ASCERTAINMENT.
 > A funnel shows N falling; it does not show *why*, and the remedy differs for each. The
 > 21,618 people outside the fasting subsample are a DESIGN fact answered by a weight; the
-> 792 with a missing input are MISSINGNESS answered by P5; the people without steatosis
-> are simply not who the paper is about. Summing them into one "attrition" number is the
-> most common error in a first P1, and it is wrong three different ways at once.
+> 792 with a missing input are MISSINGNESS answered by a missing-data analysis; the
+> people without steatosis are simply not who the paper is about. Summing them into one
+> "attrition" number is the most common error in a first P1, and it is wrong three
+> different ways at once.
 
 ---
 
@@ -556,20 +560,20 @@ from the paper.
 
 | # | Decision | Why | Cost |
 |---|---|---|---|
-| 1 | ⚠ Age `>= 18`, though the paper writes `> 18` | consistency with the reported mean age | 70 rows; best single explanation of the N gap |
+| 1 | ⚠ Age `>= 18`, though the paper writes `> 18` | consistency with the reported mean age | 70 rows; the strongest lead on the N gap, not settled |
 | 2 | Keep both the full file (6,371) and the locked domain (6,048) | paper reports no weights → 6,371 reproduces it; only 6,048 supports a design-aware estimate | 323 rows differ; both are logged |
 | 3 | Fasting subsample typed as DESIGN, not missingness | NHANES sampled it deliberately and supplies `WTSAF2YR` | none — it changes the *interpretation*, not the N |
 | 4 | FLI transcribed verbatim; no unit conversion | NHANES already supplies mg/dL, U/L, cm, kg/m² | none |
 | 5 | No reserved-code stripping in `LBXTR`/`LBXSGTSI` | `77` there is a measurement, not a refusal | would have deleted real values |
-| 6 | Strip `777`/`999` in `ALQ130`/`ALQ120Q` | there they *are* refusals | 9 refusals saved from becoming heavy drinkers |
-| 7 | Alcohol = frequency × quantity, not `ALQ130` | `ALQ130` is per drinking-day, not per day | using `ALQ130` alone over-excludes ~2,000 |
+| 6 | Strip `777`/`999` in `ALQ130`/`ALQ120Q` | there they *are* refused or don't-know codes | 9 refused or don't-know answers saved from becoming heavy drinkers |
+| 7 | Alcohol = frequency × quantity, not `ALQ130` | `ALQ130` is per drinking-day, not per day | using `ALQ130` alone removes 2,063, not 427 |
 | 8 | ⚠ Alcohol exclusion switched **off** | applying it gives 5,944 vs the paper's 6,300 | 427 rows if switched on; report §6's stated reason is wrong |
 | 9 | Glucose threshold 100 mg/dL for 5.6 mmol/L | the conventional equivalent | 212 people in the gap, zero reclassified |
 | 10 | Missing criterion counts as absent (`na.rm = TRUE`) | conservative; can only fail to admit | negligible — 6,329/6,371 already meet criterion (i) |
-| 11 | NHANES BP averaging protocol, not `rowMeans` | documented CDC rule; two prior versions were wrong | changed SBP/DBP for 5,523 people; HRs moved in the 3rd s.f. |
+| 11 | NHANES BP averaging protocol, not `rowMeans` | documented CDC rule; two prior versions were wrong | changed DBP for 5,523 people (SBP changed too); HRs moved in the 3rd s.f. |
 | 12 | ⚠ Asian BMI cut applied only where `RIDRETH3` exists | it does not exist in E or F | ≤ 17 of 6,371 possibly misgrouped |
 | 13 | Composite comorbidity definitions | paper cites prior work instead of specifying | 1–3 pt residual gaps; the calibration is circular |
-| 14 | `current_smoke` denominator = ever-smokers | reproduces the paper's 40.6% | `NA` for never-smokers shrinks Model 2's N |
+| 14 | `current_smoke` denominator = ever-smokers | matches the paper's 40.6% closely (ours 40.9%) | `NA` for never-smokers, in Table 1 only; Model 2's `smk_current` codes them 0 |
 | 15 | `PERMTH_EXM` as the clock | exposure is measured at the MEC exam | 6.76 y vs the paper's 6.9 y |
 | 16 | ⚠ `cv_death` = heart + cerebrovascular in the saved file | — | **185 vs the paper's 158; three other documents disagree with it** |
 | 17 | Unweighted throughout | the paper reports no weights, strata or PSUs; reproducing ≠ endorsing | the design-aware estimate is P4's job |

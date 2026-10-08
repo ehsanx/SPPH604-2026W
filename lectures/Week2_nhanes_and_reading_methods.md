@@ -317,9 +317,12 @@ CreateTableOne(vars = tab1_vars, data = analysis, strata = "Sex",
 - Name the row-set label and say why it is there: the full reconstructed file is 6,371.
 
 ## Slide 22 — What the funnel reveals (3 min)
-- The published paper reports **~6,300** participants with MASLD; this pipeline yields
-  **6,048** mortality-linked participants. *Analysis set: locked mortality-linked cohort,
-  N = 6,048.* The two should not be presented as the same cohort.
+- The published paper reports **~6,300** participants with MASLD; the comparable file here
+  is the full reconstructed analytic file, **6,371** (Week 3 works through the difference).
+  The funnel's **6,048** is a further subset, those with a valid fasting weight, which the
+  design-aware analyses use. *Analysis set: full reconstructed analytic file, N = 6,371;
+  locked mortality-linked cohort, N = 6,048.* The paper's ~6,300 and our 6,371 should not
+  be presented as the same cohort.
 - The paper states eligibility as **age > 18**; this reproduction uses **age ≥ 18**. Small
   implementation differences are **recorded, not silently harmonised**.
 - Tie back to Slide 16: they have just seen three age rules on one slide. A reproduction
@@ -420,8 +423,12 @@ CreateTableOne(vars = tab1_vars, data = analysis, strata = "Sex",
   question the adjustment set need not be confounders at all.
 
 ## Slide 31 — What a crude-to-adjusted change establishes (5 min)
-- Group IV all-cause HR ≈ **15.1 crude → ≈ 2.9 adjusted**.
-  *Analysis set: full reconstructed analytic file, N = 6,371.*
+- Group IV vs Group I, all-cause HR ≈ **15.1 crude → ≈ 2.9 with the paper's Model 2
+  covariates**, both unweighted, as in the paper.
+  *Analysis set: full reconstructed analytic file, N = 6,371; Model 2 drops rows missing
+  one of its covariates, so the rows change slightly too.*
+- This is the paper replication: the paper's contrast and its model. Week 4 makes the same
+  kind of move on other contrasts and adjustment sets, so its numbers differ.
 - Conditioning on the adjustment set moves the estimate enormously. What that movement
   **means** — confounding controlled, mediation removed, a collider opened — depends on the
   goal and on the causal role of those variables.
@@ -432,13 +439,17 @@ CreateTableOne(vars = tab1_vars, data = analysis, strata = "Sex",
 
 ## Slide 32 — Five NHANES traps, each of which has bitten this project (3 min)
 - **`ALQ130` is drinks per *drinking day*, not drinks per day.** The paper's ">2 drinks a
-  day" is an average intake — frequency × quantity. Applying the rule to `ALQ130` directly
-  over-excluded roughly **2,000** people here. **Week 3 owns the full demonstration.**
+  day" is an average intake — frequency × quantity. Applied to `ALQ130` directly, the rule
+  removes **2,063** people here; the average-intake rule removes **427**, all of whom the
+  direct rule also removes, so the direct rule over-excludes about **1,600** (1,636).
+  *Analysis set: full reconstructed analytic file, N = 6,371.* **Week 3 owns the full
+  demonstration.**
 - **777 = refused, 999 = don't know.** Codes, not counts. Left inside a threshold rule they
-  reclassified **nine** refusals as heavy drinkers (the exclusion moves 2,063 → 2,072).
+  reclassified **nine** records (refused or don't know) as heavy drinkers (the exclusion
+  moves 2,063 → 2,072).
 - Keep those two bullets **separate**. An earlier version of this slide fused them and
-  attached the 2,000 to the reserved codes — wrong by a factor of two hundred, and the sort
-  of error this course exists to catch.
+  attached the direct rule's ~2,000 removals to the reserved codes — wrong by a factor of
+  about two hundred, and the sort of error this course exists to catch.
 - **`RIDRETH3` does not exist before 2011.** It identifies Asian participants for the lower
   BMI threshold, so the first two cycles cannot apply the paper's own rule. A definition
   that cannot be applied in a third of your cycles is a finding, not a nuisance.
@@ -453,9 +464,10 @@ CreateTableOne(vars = tab1_vars, data = analysis, strata = "Sex",
   **first reading is excluded** whenever more than one was obtained; an **all-zero diastolic
   set averages to zero**, because a diastolic 0 is a measurement and a failure to obtain a
   reading is coded separately as missing; and a **zero beside a positive reading is omitted**.
-- Applying it changed derived SBP/DBP for **5,523 of 6,371** participants and moved
-  hypertension from 3,444 to 3,448, while adjusted hazard ratios shifted only in the third
-  significant figure. *Analysis set: full reconstructed analytic file, N = 6,371.*
+- Applying it changed the derived diastolic pressure for **5,523 of 6,371** participants
+  and moved hypertension from 3,444 to 3,448, while the Model 1 and Model 2 hazard ratios
+  of the reproduced Table 2 shifted only in the third significant figure. *Analysis set:
+  full reconstructed analytic file, N = 6,371.*
 - **A coding error can be real, and worth fixing, even when the headline estimate survives.**
 - The paper does not specify its own averaging in enough detail to establish that it used
   this algorithm, so ours is a documentation-informed choice, not a claim of exact
@@ -474,8 +486,10 @@ CreateTableOne(vars = tab1_vars, data = analysis, strata = "Sex",
   The single most common survey-analysis error, worth planting now.
 
 ## Slide 35 — Designed subsampling is not missingness (4 min)
-- The fasting subsample is **statistically designed**, not self-selected, and carries a
-  weight built to keep it nationally representative.
+- Sampling into the fasting subsample is **statistically designed**, and it carries a
+  weight built to keep it nationally representative. It is not purely design, though:
+  **2,031** adults carry a fasting weight of exactly 0, and fasting compliance and
+  laboratory nonresponse can also affect who has a positive weight (Week 3 says the same).
 - Check it rather than assume: adults in and out of it differ by **0.2 years of age,
   0.02 kg/m² of BMI and 0.07 cm of waist**. It is balanced on the very measurements this
   paper's exposure is built from. *Analysis set: all NHANES adults 2007–2018, N = 36,580.*

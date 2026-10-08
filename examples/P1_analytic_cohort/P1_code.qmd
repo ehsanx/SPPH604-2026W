@@ -169,6 +169,10 @@ cat("Full cohort:", nrow(coh), " | complete-case on covariates:", nrow(cc),
     " | missing serum creatinine:", sum(is.na(coh$LBXSCR)), "\n")
 ```
 
+These counts do not account for the residual gap. Our N is *above* the paper's ~6,300,
+and dropping rows with incomplete covariates would take it below. We report the +71 as
+unresolved rather than attribute it.
+
 ## Results for M1
 
 M1 cites these by name; it does not re-run this file. Every number is formatted

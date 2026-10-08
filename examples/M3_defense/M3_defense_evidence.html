@@ -2241,7 +2241,7 @@ vertical-align: -.125em;
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Adjusted group x sex interaction p =&quot;</span>, <span class="fu">round</span>(adj_p,<span class="dv">3</span>),</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;-&gt; no evidence of MULTIPLICATIVE interaction on this multi-df test.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Adjusted group x sex interaction p = 0.571 -&gt; no evidence of MULTIPLICATIVE interaction on this multi-df test.</code></pre>
+<pre><code>Adjusted group x sex interaction p = 0.572 -&gt; no evidence of MULTIPLICATIVE interaction on this multi-df test.</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;   Not evidence of homogeneity: the test is underpowered, and it is not the locked</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -2280,7 +2280,7 @@ Group IV: unweighted 16.96 (6.24-46.05) -&gt; fasting-weighted 12.40 (2.69-57.15
 <section id="q-self-initiated-could-incomplete-cancer-status-explain-the-locked-result" class="level2">
 <h2 class="anchored" data-anchor-id="q-self-initiated-could-incomplete-cancer-status-explain-the-locked-result">Q (self-initiated): could incomplete cancer status explain the locked result?</h2>
 <blockquote class="blockquote">
-<p><strong>No reviewer asked for this.</strong> We ran it because cancer status is the only Model-1 covariate with any missingness, and a result that rests on dropping people is worth testing before we defend it. The adjustment set is the paper’s Model 1 exactly — we did <strong>not</strong> widen it to manufacture a comparison. The contrast is our locked one, IV vs III, design-aware, so the sensitivity analysis interrogates the estimate we actually defend.</p>
+<p><strong>No reviewer asked for this.</strong> We ran it because cancer status is the only Model-1 covariate with any missingness, and a result that rests on dropping people is worth testing before we defend it. The adjustment set is the paper’s Model 1 exactly — we did <strong>not</strong> widen it to manufacture a comparison. The contrast is our locked one, IV vs III, design-aware, so the sensitivity analysis interrogates the estimate we actually defend. Complete case uses the rows complete on Model 1; the extreme assignments and MI keep every row of the locked domain.</p>
 </blockquote>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(repro, <span class="st">&quot;data/derived/merged_all.rds&quot;</span>))</span>
@@ -2337,18 +2337,18 @@ subset(svydesign(ids = ~SDMVPSU, strata = ~SDMVSTRA, weights = ~wt,
 <tr class="odd">
 <td style="text-align: left;">complete case</td>
 <td style="text-align: right;">1.29</td>
-<td style="text-align: right;">0.90</td>
+<td style="text-align: right;">0.89</td>
 <td style="text-align: right;">1.86</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">all missing assigned NO cancer</td>
-<td style="text-align: right;">1.29</td>
+<td style="text-align: right;">1.28</td>
 <td style="text-align: right;">0.89</td>
 <td style="text-align: right;">1.85</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">all missing assigned CANCER</td>
-<td style="text-align: right;">1.29</td>
+<td style="text-align: right;">1.28</td>
 <td style="text-align: right;">0.89</td>
 <td style="text-align: right;">1.85</td>
 </tr>
@@ -2377,35 +2377,39 @@ subset(svydesign(ids = ~SDMVPSU, strata = ~SDMVSTRA, weights = ~wt,
 <pre><code>Multiple imputation results:
       MIcombine.default(fits)
                  results          se      (lower      upper) missInfo
-groupI       -0.84147707 0.740938884 -2.29369060  0.61073646      0 %
-groupII      -0.02027419 0.173646956 -0.36061597  0.32006759      0 %
-groupIV       0.25194765 0.186440288 -0.11346860  0.61736390      0 %
-age           0.06767331 0.005468658  0.05695494  0.07839169      0 %
-female       -0.44581264 0.129874688 -0.70036235 -0.19126293      0 %
-dyslip        0.10006722 0.135163712 -0.16484879  0.36498323      0 %
-htn           0.06463428 0.238820055 -0.40344442  0.53271299      0 %
-t2dm          0.29517835 0.174367616 -0.04657590  0.63693259      0 %
-ckd           0.88799719 0.120843175  0.65114892  1.12484546      0 %
-mi            0.54019682 0.151563330  0.24313815  0.83725549      0 %
-cancer        0.10982895 0.136723344 -0.15814388  0.37780178      0 %
-on_htn_med   -0.09375076 0.191815971 -0.46970315  0.28220164      0 %
-on_dm_med     0.11793668 0.164167281 -0.20382528  0.43969863      0 %
-on_lipid_med -0.21730227 0.168173627 -0.54691652  0.11231198      0 %</code></pre>
+groupI       -0.84556803 0.741224004 -2.29834039  0.60720432      0 %
+groupII      -0.02362932 0.173237813 -0.36316920  0.31591055      0 %
+groupIV       0.24952442 0.186700778 -0.11640238  0.61545122      0 %
+age           0.06764454 0.005422335  0.05701696  0.07827212      0 %
+female       -0.44538653 0.129727191 -0.69964716 -0.19112591      0 %
+dyslip        0.09585611 0.135392950 -0.16950919  0.36122142      0 %
+htn           0.11525235 0.229042886 -0.33366346  0.56416815      0 %
+t2dm          0.29255642 0.174595221 -0.04964393  0.63475676      0 %
+ckd           0.88356024 0.120471499  0.64744044  1.11968004      0 %
+mi            0.53979621 0.151724807  0.24242105  0.83717137      0 %
+cancer        0.11064838 0.136939861 -0.15774881  0.37904558      0 %
+on_htn_med   -0.12608022 0.185987246 -0.49060852  0.23844809      0 %
+on_dm_med     0.12184895 0.164464946 -0.20049642  0.44419432      0 %
+on_lipid_med -0.21377285 0.166595894 -0.54029480  0.11274910      0 %</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;MI (m=10), locked contrast: IV vs III = %.2f (%.2f-%.2f)</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>            <span class="fu">exp</span>(po[[<span class="st">&quot;results&quot;</span>]]), <span class="fu">exp</span>(po[[<span class="st">&quot;(lower&quot;</span>]]), <span class="fu">exp</span>(po[[<span class="st">&quot;upper)&quot;</span>]])))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>MI (m=10), locked contrast: IV vs III = 1.29 (0.89-1.85)</code></pre>
+<pre><code>MI (m=10), locked contrast: IV vs III = 1.28 (0.89-1.85)</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Complete case, both extreme assignments and MI agree to the displayed precision.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Complete case, both extreme assignments and MI differ by at most a hundredth in the</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Complete case, both extreme assignments and MI agree to the displayed precision.</code></pre>
+<pre><code>Complete case, both extreme assignments and MI differ by at most a hundredth in the</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;That is the finding. It is evidence that incomplete cancer status does not explain</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;point estimate, far less than the width of any of the intervals.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>point estimate, far less than the width of any of the intervals.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;That is the finding. It is evidence that incomplete cancer status does not explain</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>That is the finding. It is evidence that incomplete cancer status does not explain</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;the locked estimate -- it says nothing about who the estimate generalises to.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;the locked estimate -- it says nothing about who the estimate generalises to.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>the locked estimate -- it says nothing about who the estimate generalises to.</code></pre>
 </div>
@@ -2417,22 +2421,22 @@ on_lipid_med -0.21730227 0.168173627 -0.54691652  0.11231198      0 %</code></pr
 <p>Our M2 reviewers named selection into the cohort as the dominant threat. Their slide treats it as one mechanism. It is <strong>two</strong>, and they bound different things, so we separate them before answering.</p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>adults <span class="ot">&lt;-</span> m <span class="sc">%&gt;%</span> <span class="fu">filter</span>(age <span class="sc">&gt;=</span> <span class="dv">18</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>fast_a <span class="ot">&lt;-</span> adults <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(WTSAF2YR), WTSAF2YR <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>fli_ok <span class="ot">&lt;-</span> fast_a <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(fli))</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;adults 18+                                  %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(adults)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>adults <span class="ot">&lt;-</span> m <span class="sc">%&gt;%</span> <span class="fu">filter</span>(age <span class="sc">&gt;=</span> <span class="dv">18</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>fast_a <span class="ot">&lt;-</span> adults <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(WTSAF2YR), WTSAF2YR <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>fli_ok <span class="ot">&lt;-</span> fast_a <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(fli))</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;adults 18+                                  %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(adults)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>adults 18+                                   36580</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;  (1) sampled into the fasting subsample    %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(fast_a)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;  (1) sampled into the fasting subsample    %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(fast_a)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  (1) sampled into the fasting subsample     14962</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;  (2) of those, FLI computable              %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(fli_ok)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;  (2) of those, FLI computable              %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(fli_ok)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  (2) of those, FLI computable               14170</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;      lost at step (2)                      %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(fast_a) <span class="sc">-</span> <span class="fu">nrow</span>(fli_ok)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;      lost at step (2)                      %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(fast_a) <span class="sc">-</span> <span class="fu">nrow</span>(fli_ok)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      lost at step (2)                         792</code></pre>
 </div>
@@ -2441,7 +2445,7 @@ on_lipid_med -0.21730227 0.168173627 -0.54691652  0.11231198      0 %</code></pr
 <li><strong>(1) is selection by design.</strong> NHANES chose who was asked to fast. It is known, planned, and it is what <code>WTSAF2YR</code> exists to account for — which is why we weight by it and subset the design rather than the rows. Under the survey design this step is <em>handled</em>, not merely acknowledged.</li>
 <li><strong>(2) is item-level availability.</strong> Among people who were sampled to fast, FLI still needs triglycerides, GGT, BMI and waist all present. Nothing in the design weights accounts for that, and whether it is ignorable depends on why those measurements are absent — which we cannot verify from the public files.</li>
 </ul>
-<p><strong>What each one bounds.</strong> (1) bounds the <em>target population</em>: our estimate speaks to fasting-sampled US adults, and the weights carry it there. (2) is a potential selection bias <em>within</em> that population, and it is the one that could distort the contrast itself.</p>
+<p><strong>What each one bounds.</strong> (1) bears on the <em>target population</em>, and the weights handle it: <code>WTSAF2YR</code> is built so that the fasting subsample represents the US civilian non-institutionalized population, so the weighted estimate speaks to US adults meeting the MASLD criteria, not only to those sampled to fast. (2) is a potential selection bias <em>within</em> that population, and it is the one that could distort the contrast itself.</p>
 <p><strong>Our answer to the reviewers.</strong> We accept the distinction matters and have adopted it. We do not accept that stability of the estimate answers it: the missing-data work above concerns incomplete <strong>cancer status among people already in the cohort</strong>, and tells us nothing about the adults who never reach the cohort at all – the two steps counted above. Those are different questions and we now report them separately.</p>
 </section>
 <section id="results-manifest-the-chains-single-source-of-truth" class="level2">
@@ -2450,24 +2454,24 @@ on_lipid_med -0.21730227 0.168173627 -0.54691652  0.11231198      0 %</code></pr
 <p>M2, M3 and M4 are plain markdown and are <strong>not</strong> run through the deck generator, so any number typed into them could drift from the code. This chunk emits the canonical values; the build fails if any of those artifacts states a locked-contrast hazard ratio that is not the one recorded here.</p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>cc <span class="ot">&lt;-</span> <span class="fu">fitL</span>(<span class="cn">NA</span>, <span class="st">&quot;cc&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>cc <span class="ot">&lt;-</span> <span class="fu">fitL</span>(<span class="cn">NA</span>, <span class="st">&quot;cc&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Stratified 1 - level Cluster Sampling design (with replacement)
 With (184) clusters.
 subset(svydesign(ids = ~SDMVPSU, strata = ~SDMVSTRA, weights = ~wt, 
     data = rl3(fk), nest = TRUE), in_analysis)</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>mi_hr <span class="ot">&lt;-</span> <span class="fu">exp</span>(po[[<span class="st">&quot;results&quot;</span>]]); mi_lo <span class="ot">&lt;-</span> <span class="fu">exp</span>(po[[<span class="st">&quot;(lower&quot;</span>]]); mi_hi <span class="ot">&lt;-</span> <span class="fu">exp</span>(po[[<span class="st">&quot;upper)&quot;</span>]])</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">emit_results</span>(<span class="st">&quot;chain&quot;</span>, <span class="fu">list</span>(</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_hr      =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f&quot;</span>, cc<span class="sc">$</span>HR),</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_ci      =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f–%.2f&quot;</span>, cc<span class="sc">$</span>lo, cc<span class="sc">$</span>hi),</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_full    =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f–%.2f)&quot;</span>, cc<span class="sc">$</span>HR, cc<span class="sc">$</span>lo, cc<span class="sc">$</span>hi),</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_mi_full =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f–%.2f)&quot;</span>, mi_hr, mi_lo, mi_hi),</span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_adults       =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(adults), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>),</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_fasting      =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(fast_a), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>),</span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_fli          =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(fli_ok), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>),</span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_lost_step2   =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(fast_a) <span class="sc">-</span> <span class="fu">nrow</span>(fli_ok), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>mi_hr <span class="ot">&lt;-</span> <span class="fu">exp</span>(po[[<span class="st">&quot;results&quot;</span>]]); mi_lo <span class="ot">&lt;-</span> <span class="fu">exp</span>(po[[<span class="st">&quot;(lower&quot;</span>]]); mi_hi <span class="ot">&lt;-</span> <span class="fu">exp</span>(po[[<span class="st">&quot;upper)&quot;</span>]])</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">emit_results</span>(<span class="st">&quot;chain&quot;</span>, <span class="fu">list</span>(</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_hr      =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f&quot;</span>, cc<span class="sc">$</span>HR),</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_ci      =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f–%.2f&quot;</span>, cc<span class="sc">$</span>lo, cc<span class="sc">$</span>hi),</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_full    =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f–%.2f)&quot;</span>, cc<span class="sc">$</span>HR, cc<span class="sc">$</span>lo, cc<span class="sc">$</span>hi),</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_mi_full =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f–%.2f)&quot;</span>, mi_hr, mi_lo, mi_hi),</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_adults       =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(adults), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>),</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_fasting      =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(fast_a), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>),</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_fli          =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(fli_ok), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>),</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_lost_step2   =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(fast_a) <span class="sc">-</span> <span class="fu">nrow</span>(fli_ok), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>wrote ../_results/chain.json  (8 facts, 0 tables)</code></pre>
 </div>
@@ -2928,186 +2932,191 @@ subset(svydesign(ids = ~SDMVPSU, strata = ~SDMVSTRA, weights = ~wt,
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class>
-<div class="sourceCode" id="cb36" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;M3 — Defense evidence pack: reproducible numbers behind the Q&amp;A&quot;</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> &quot;SPPH 604 · demonstration paper (Kueh et al., BMJ Open 2026;16:e113719)&quot;</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="co">    df-print: kable</span></span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The individual defense is not a slide-reading exercise — every number you may be</span></span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; asked to justify is re-derived here so you can answer from evidence, live.</span></span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup}</span></span>
-<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;../_shared/paths.R&quot;</span>)   <span class="co"># find_repro(), emit_results(), ci(), fmtn(), endash()</span></span>
-<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>repro <span class="ot">&lt;-</span> <span class="fu">find_repro</span>()</span>
-<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({<span class="fu">library</span>(dplyr); <span class="fu">library</span>(survival); <span class="fu">library</span>(survey); <span class="fu">library</span>(mice)})</span>
-<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;adjust&quot;</span>)</span>
-<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(repro, <span class="st">&quot;data/derived/masld_analytic.rds&quot;</span>))</span>
-<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>hr <span class="ot">&lt;-</span> <span class="cf">function</span>(m,g){s<span class="ot">&lt;-</span><span class="fu">summary</span>(m); <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f-%.2f)&quot;</span>,</span>
-<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>        s<span class="sc">$</span>conf.int[g,<span class="dv">1</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;lower .95&quot;</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;upper .95&quot;</span>])}</span>
-<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## Q (P1): the cohort/N discrepancy</span></span>
-<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{r q1}</span></span>
-<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Our N =&quot;</span>, <span class="fu">nrow</span>(d), <span class="st">&quot;vs paper 6300; complete-case =&quot;</span>,</span>
-<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nrow</span>(<span class="fu">filter</span>(d,<span class="sc">!</span><span class="fu">is.na</span>(cancer),<span class="sc">!</span><span class="fu">is.na</span>(stroke),<span class="sc">!</span><span class="fu">is.na</span>(hf),<span class="sc">!</span><span class="fu">is.na</span>(LBXSCR))),</span>
-<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;; missing creatinine =&quot;</span>, <span class="fu">sum</span>(<span class="fu">is.na</span>(d<span class="sc">$</span>LBXSCR)), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-36"><a href="#cb36-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## Q (P3): is the sex &quot;interaction&quot; real, or baseline risk?</span></span>
-<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a><span class="in">```{r q3}</span></span>
-<span id="cb36-39"><a href="#cb36-39" aria-hidden="true" tabindex="-1"></a>cov <span class="ot">&lt;-</span> <span class="st">&quot;age + dyslip + htn + t2dm + ckd + mi + cancer + on_htn_med + on_dm_med + on_lipid_med&quot;</span></span>
-<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a>adj_p <span class="ot">&lt;-</span> <span class="fu">anova</span>(<span class="fu">coxph</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Surv(time_yr,dead)~group+female+&quot;</span>,cov)),d),</span>
-<span id="cb36-41"><a href="#cb36-41" aria-hidden="true" tabindex="-1"></a>               <span class="fu">coxph</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Surv(time_yr,dead)~group*female+&quot;</span>,cov)),d))[<span class="dv">2</span>,<span class="st">&quot;Pr(&gt;|Chi|)&quot;</span>]</span>
-<span id="cb36-42"><a href="#cb36-42" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Adjusted group x sex interaction p =&quot;</span>, <span class="fu">round</span>(adj_p,<span class="dv">3</span>),</span>
-<span id="cb36-43"><a href="#cb36-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;-&gt; no evidence of MULTIPLICATIVE interaction on this multi-df test.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb36-44"><a href="#cb36-44" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;   Not evidence of homogeneity: the test is underpowered, and it is not the locked</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb36-45"><a href="#cb36-45" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;   1-df IV-vs-III contrast (see ../P3_effect_modification/P3_code.qmd).&quot;</span>,</span>
-<span id="cb36-46"><a href="#cb36-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Additive scale untested.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb36-47"><a href="#cb36-47" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-48"><a href="#cb36-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-49"><a href="#cb36-49" aria-hidden="true" tabindex="-1"></a><span class="fu">## Q (P4): which weight, and what does it do?</span></span>
-<span id="cb36-50"><a href="#cb36-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-51"><a href="#cb36-51" aria-hidden="true" tabindex="-1"></a><span class="in">```{r q4}</span></span>
-<span id="cb36-52"><a href="#cb36-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Week 6 cardinal rule: build the design on the FULL fasting frame, then subset the design</span></span>
-<span id="cb36-53"><a href="#cb36-53" aria-hidden="true" tabindex="-1"></a><span class="co"># object. Filtering rows first and re-declaring svydesign() on the survivors throws away</span></span>
-<span id="cb36-54"><a href="#cb36-54" aria-hidden="true" tabindex="-1"></a><span class="co"># the strata/PSU information the non-selected units contribute to the variance.</span></span>
-<span id="cb36-55"><a href="#cb36-55" aria-hidden="true" tabindex="-1"></a>fr <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(repro,<span class="st">&quot;data/derived/merged_all.rds&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb36-56"><a href="#cb36-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(WTSAF2YR) <span class="sc">&amp;</span> WTSAF2YR<span class="sc">&gt;</span><span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">wt=</span>WTSAF2YR<span class="sc">/</span><span class="dv">6</span>)</span>
-<span id="cb36-57"><a href="#cb36-57" aria-hidden="true" tabindex="-1"></a>fr<span class="sc">$</span>group       <span class="ot">&lt;-</span> <span class="fu">factor</span>(fr<span class="sc">$</span>group, <span class="at">levels=</span><span class="fu">c</span>(<span class="st">&quot;I&quot;</span>,<span class="st">&quot;II&quot;</span>,<span class="st">&quot;III&quot;</span>,<span class="st">&quot;IV&quot;</span>))</span>
-<span id="cb36-58"><a href="#cb36-58" aria-hidden="true" tabindex="-1"></a>fr<span class="sc">$</span>in_analysis <span class="ot">&lt;-</span> fr<span class="sc">$</span>SEQN <span class="sc">%in%</span> d<span class="sc">$</span>SEQN</span>
-<span id="cb36-59"><a href="#cb36-59" aria-hidden="true" tabindex="-1"></a>des_full <span class="ot">&lt;-</span> <span class="fu">svydesign</span>(<span class="at">ids=</span><span class="sc">~</span>SDMVPSU, <span class="at">strata=</span><span class="sc">~</span>SDMVSTRA, <span class="at">weights=</span><span class="sc">~</span>wt, <span class="at">data=</span>fr, <span class="at">nest=</span><span class="cn">TRUE</span>)</span>
-<span id="cb36-60"><a href="#cb36-60" aria-hidden="true" tabindex="-1"></a>des <span class="ot">&lt;-</span> <span class="fu">subset</span>(des_full, in_analysis)      <span class="co"># domain analysis, not a re-declared design</span></span>
-<span id="cb36-61"><a href="#cb36-61" aria-hidden="true" tabindex="-1"></a>dd  <span class="ot">&lt;-</span> fr[fr<span class="sc">$</span>in_analysis, ]</span>
-<span id="cb36-62"><a href="#cb36-62" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Group IV: unweighted&quot;</span>, <span class="fu">hr</span>(<span class="fu">coxph</span>(<span class="fu">Surv</span>(time_yr,dead)<span class="sc">~</span>group,dd),<span class="st">&quot;groupIV&quot;</span>),</span>
-<span id="cb36-63"><a href="#cb36-63" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;-&gt; fasting-weighted&quot;</span>, <span class="fu">hr</span>(<span class="fu">svycoxph</span>(<span class="fu">Surv</span>(time_yr,dead)<span class="sc">~</span>group,<span class="at">design=</span>des),<span class="st">&quot;groupIV&quot;</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb36-64"><a href="#cb36-64" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-65"><a href="#cb36-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-66"><a href="#cb36-66" aria-hidden="true" tabindex="-1"></a><span class="fu">## Q (self-initiated): could incomplete cancer status explain the locked result?</span></span>
-<span id="cb36-67"><a href="#cb36-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-68"><a href="#cb36-68" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **No reviewer asked for this.** We ran it because cancer status is the only Model-1</span></span>
-<span id="cb36-69"><a href="#cb36-69" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; covariate with any missingness, and a result that rests on dropping people is worth</span></span>
-<span id="cb36-70"><a href="#cb36-70" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; testing before we defend it. The adjustment set is the paper&#39;s Model 1 exactly — we did</span></span>
-<span id="cb36-71"><a href="#cb36-71" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **not** widen it to manufacture a comparison. The contrast is our locked one, IV vs III,</span></span>
-<span id="cb36-72"><a href="#cb36-72" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; design-aware, so the sensitivity analysis interrogates the estimate we actually defend.</span></span>
-<span id="cb36-73"><a href="#cb36-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-74"><a href="#cb36-74" aria-hidden="true" tabindex="-1"></a><span class="in">```{r q5}</span></span>
-<span id="cb36-75"><a href="#cb36-75" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(repro, <span class="st">&quot;data/derived/merged_all.rds&quot;</span>))</span>
-<span id="cb36-76"><a href="#cb36-76" aria-hidden="true" tabindex="-1"></a>m<span class="sc">$</span>in_analysis <span class="ot">&lt;-</span> m<span class="sc">$</span>SEQN <span class="sc">%in%</span> d<span class="sc">$</span>SEQN</span>
-<span id="cb36-77"><a href="#cb36-77" aria-hidden="true" tabindex="-1"></a>m<span class="sc">$</span>group <span class="ot">&lt;-</span> <span class="fu">factor</span>(m<span class="sc">$</span>group, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;I&quot;</span>, <span class="st">&quot;II&quot;</span>, <span class="st">&quot;III&quot;</span>, <span class="st">&quot;IV&quot;</span>))</span>
-<span id="cb36-78"><a href="#cb36-78" aria-hidden="true" tabindex="-1"></a>fast <span class="ot">&lt;-</span> m <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(WTSAF2YR), WTSAF2YR <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">wt =</span> WTSAF2YR <span class="sc">/</span> <span class="dv">6</span>)</span>
-<span id="cb36-79"><a href="#cb36-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-80"><a href="#cb36-80" aria-hidden="true" tabindex="-1"></a>COV <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;age&quot;</span>,<span class="st">&quot;female&quot;</span>,<span class="st">&quot;dyslip&quot;</span>,<span class="st">&quot;htn&quot;</span>,<span class="st">&quot;t2dm&quot;</span>,<span class="st">&quot;ckd&quot;</span>,<span class="st">&quot;mi&quot;</span>,<span class="st">&quot;cancer&quot;</span>,</span>
-<span id="cb36-81"><a href="#cb36-81" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;on_htn_med&quot;</span>,<span class="st">&quot;on_dm_med&quot;</span>,<span class="st">&quot;on_lipid_med&quot;</span>)            <span class="co"># the paper&#39;s Model 1. Nothing else.</span></span>
-<span id="cb36-82"><a href="#cb36-82" aria-hidden="true" tabindex="-1"></a>f1  <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Surv(time_yr,dead) ~ group +&quot;</span>, <span class="fu">paste</span>(COV, <span class="at">collapse =</span> <span class="st">&quot; + &quot;</span>)))</span>
-<span id="cb36-83"><a href="#cb36-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-84"><a href="#cb36-84" aria-hidden="true" tabindex="-1"></a><span class="co"># locked contrast: Group III is the reference, so groupIV is IV-vs-III</span></span>
-<span id="cb36-85"><a href="#cb36-85" aria-hidden="true" tabindex="-1"></a>rl3  <span class="ot">&lt;-</span> <span class="cf">function</span>(x) { x<span class="sc">$</span>group <span class="ot">&lt;-</span> <span class="fu">relevel</span>(x<span class="sc">$</span>group, <span class="st">&quot;III&quot;</span>); x }</span>
-<span id="cb36-86"><a href="#cb36-86" aria-hidden="true" tabindex="-1"></a>desL <span class="ot">&lt;-</span> <span class="cf">function</span>(fk) <span class="fu">subset</span>(<span class="fu">svydesign</span>(<span class="at">ids =</span> <span class="sc">~</span>SDMVPSU, <span class="at">strata =</span> <span class="sc">~</span>SDMVSTRA, <span class="at">weights =</span> <span class="sc">~</span>wt,</span>
-<span id="cb36-87"><a href="#cb36-87" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">data =</span> <span class="fu">rl3</span>(fk), <span class="at">nest =</span> <span class="cn">TRUE</span>), in_analysis)</span>
-<span id="cb36-88"><a href="#cb36-88" aria-hidden="true" tabindex="-1"></a>gv   <span class="ot">&lt;-</span> <span class="cf">function</span>(f) { s <span class="ot">&lt;-</span> <span class="fu">summary</span>(f); <span class="fu">c</span>(s<span class="sc">$</span>conf.int[<span class="st">&quot;groupIV&quot;</span>, <span class="dv">1</span>],</span>
-<span id="cb36-89"><a href="#cb36-89" aria-hidden="true" tabindex="-1"></a>                                         s<span class="sc">$</span>conf.int[<span class="st">&quot;groupIV&quot;</span>, <span class="dv">3</span>], s<span class="sc">$</span>conf.int[<span class="st">&quot;groupIV&quot;</span>, <span class="dv">4</span>]) }</span>
-<span id="cb36-90"><a href="#cb36-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-91"><a href="#cb36-91" aria-hidden="true" tabindex="-1"></a>fitL <span class="ot">&lt;-</span> <span class="cf">function</span>(val, lbl) {</span>
-<span id="cb36-92"><a href="#cb36-92" aria-hidden="true" tabindex="-1"></a>  fk <span class="ot">&lt;-</span> fast</span>
-<span id="cb36-93"><a href="#cb36-93" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(val)) fk<span class="sc">$</span>cancer[fk<span class="sc">$</span>in_analysis <span class="sc">&amp;</span> <span class="fu">is.na</span>(fk<span class="sc">$</span>cancer)] <span class="ot">&lt;-</span> val</span>
-<span id="cb36-94"><a href="#cb36-94" aria-hidden="true" tabindex="-1"></a>  g <span class="ot">&lt;-</span> <span class="fu">gv</span>(<span class="fu">svycoxph</span>(f1, <span class="at">design =</span> <span class="fu">desL</span>(fk)))</span>
-<span id="cb36-95"><a href="#cb36-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">scenario =</span> lbl, <span class="at">HR =</span> <span class="fu">round</span>(g[<span class="dv">1</span>], <span class="dv">2</span>), <span class="at">lo =</span> <span class="fu">round</span>(g[<span class="dv">2</span>], <span class="dv">2</span>), <span class="at">hi =</span> <span class="fu">round</span>(g[<span class="dv">3</span>], <span class="dv">2</span>))</span>
-<span id="cb36-96"><a href="#cb36-96" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb36-97"><a href="#cb36-97" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(<span class="fu">fitL</span>(<span class="cn">NA</span>, <span class="st">&quot;complete case&quot;</span>),</span>
-<span id="cb36-98"><a href="#cb36-98" aria-hidden="true" tabindex="-1"></a>      <span class="fu">fitL</span>(<span class="dv">0</span>,  <span class="st">&quot;all missing assigned NO cancer&quot;</span>),</span>
-<span id="cb36-99"><a href="#cb36-99" aria-hidden="true" tabindex="-1"></a>      <span class="fu">fitL</span>(<span class="dv">1</span>,  <span class="st">&quot;all missing assigned CANCER&quot;</span>))</span>
-<span id="cb36-100"><a href="#cb36-100" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-101"><a href="#cb36-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-102"><a href="#cb36-102" aria-hidden="true" tabindex="-1"></a><span class="in">```{r q5mi}</span></span>
-<span id="cb36-103"><a href="#cb36-103" aria-hidden="true" tabindex="-1"></a><span class="co"># MI with the outcome in the imputation model (Week 7 / White &amp; Royston): keep the event</span></span>
-<span id="cb36-104"><a href="#cb36-104" aria-hidden="true" tabindex="-1"></a><span class="co"># indicator and a Nelson-Aalen cumulative hazard, exclude only raw follow-up time.</span></span>
-<span id="cb36-105"><a href="#cb36-105" aria-hidden="true" tabindex="-1"></a>dom  <span class="ot">&lt;-</span> fast <span class="sc">%&gt;%</span> <span class="fu">filter</span>(in_analysis)</span>
-<span id="cb36-106"><a href="#cb36-106" aria-hidden="true" tabindex="-1"></a>idat <span class="ot">&lt;-</span> dom[, <span class="fu">c</span>(COV, <span class="st">&quot;group&quot;</span>, <span class="st">&quot;dead&quot;</span>, <span class="st">&quot;time_yr&quot;</span>, <span class="st">&quot;wt&quot;</span>, <span class="st">&quot;SDMVSTRA&quot;</span>)]</span>
-<span id="cb36-107"><a href="#cb36-107" aria-hidden="true" tabindex="-1"></a>idat<span class="sc">$</span>na_cumhaz <span class="ot">&lt;-</span> mice<span class="sc">::</span><span class="fu">nelsonaalen</span>(idat, time_yr, dead)</span>
-<span id="cb36-108"><a href="#cb36-108" aria-hidden="true" tabindex="-1"></a>ini <span class="ot">&lt;-</span> <span class="fu">mice</span>(idat, <span class="at">maxit =</span> <span class="dv">0</span>, <span class="at">printFlag =</span> <span class="cn">FALSE</span>); pr <span class="ot">&lt;-</span> ini<span class="sc">$</span>predictorMatrix</span>
-<span id="cb36-109"><a href="#cb36-109" aria-hidden="true" tabindex="-1"></a>pr[, <span class="st">&quot;time_yr&quot;</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb36-110"><a href="#cb36-110" aria-hidden="true" tabindex="-1"></a>pr[<span class="fu">c</span>(<span class="st">&quot;time_yr&quot;</span>,<span class="st">&quot;dead&quot;</span>,<span class="st">&quot;na_cumhaz&quot;</span>,<span class="st">&quot;wt&quot;</span>,<span class="st">&quot;SDMVSTRA&quot;</span>), ] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb36-111"><a href="#cb36-111" aria-hidden="true" tabindex="-1"></a>imp <span class="ot">&lt;-</span> <span class="fu">mice</span>(idat, <span class="at">m =</span> <span class="dv">10</span>, <span class="at">predictorMatrix =</span> pr, <span class="at">printFlag =</span> <span class="cn">FALSE</span>, <span class="at">seed =</span> <span class="dv">604</span>)</span>
-<span id="cb36-112"><a href="#cb36-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-113"><a href="#cb36-113" aria-hidden="true" tabindex="-1"></a>fits <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="cf">function</span>(i) {</span>
-<span id="cb36-114"><a href="#cb36-114" aria-hidden="true" tabindex="-1"></a>  fk <span class="ot">&lt;-</span> fast; fk[fk<span class="sc">$</span>in_analysis, COV] <span class="ot">&lt;-</span> <span class="fu">complete</span>(imp, i)[, COV]</span>
-<span id="cb36-115"><a href="#cb36-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">svycoxph</span>(f1, <span class="at">design =</span> <span class="fu">desL</span>(fk))</span>
-<span id="cb36-116"><a href="#cb36-116" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb36-117"><a href="#cb36-117" aria-hidden="true" tabindex="-1"></a>po <span class="ot">&lt;-</span> <span class="fu">summary</span>(mitools<span class="sc">::</span><span class="fu">MIcombine</span>(fits))[<span class="st">&quot;groupIV&quot;</span>, ]</span>
-<span id="cb36-118"><a href="#cb36-118" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;MI (m=10), locked contrast: IV vs III = %.2f (%.2f-%.2f)</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb36-119"><a href="#cb36-119" aria-hidden="true" tabindex="-1"></a>            <span class="fu">exp</span>(po[[<span class="st">&quot;results&quot;</span>]]), <span class="fu">exp</span>(po[[<span class="st">&quot;(lower&quot;</span>]]), <span class="fu">exp</span>(po[[<span class="st">&quot;upper)&quot;</span>]])))</span>
-<span id="cb36-120"><a href="#cb36-120" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Complete case, both extreme assignments and MI agree to the displayed precision.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb36-121"><a href="#cb36-121" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;That is the finding. It is evidence that incomplete cancer status does not explain</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb36-122"><a href="#cb36-122" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;the locked estimate -- it says nothing about who the estimate generalises to.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb36-123"><a href="#cb36-123" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-124"><a href="#cb36-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-125"><a href="#cb36-125" aria-hidden="true" tabindex="-1"></a><span class="fu">## Q (reviewer-prompted): what exactly is the selection, and what does it bound?</span></span>
-<span id="cb36-126"><a href="#cb36-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-127"><a href="#cb36-127" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Our M2 reviewers named selection into the cohort as the dominant threat. Their slide</span></span>
-<span id="cb36-128"><a href="#cb36-128" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; treats it as one mechanism. It is **two**, and they bound different things, so we</span></span>
-<span id="cb36-129"><a href="#cb36-129" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; separate them before answering.</span></span>
-<span id="cb36-130"><a href="#cb36-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-131"><a href="#cb36-131" aria-hidden="true" tabindex="-1"></a><span class="in">```{r q6}</span></span>
-<span id="cb36-132"><a href="#cb36-132" aria-hidden="true" tabindex="-1"></a>adults <span class="ot">&lt;-</span> m <span class="sc">%&gt;%</span> <span class="fu">filter</span>(age <span class="sc">&gt;=</span> <span class="dv">18</span>)</span>
-<span id="cb36-133"><a href="#cb36-133" aria-hidden="true" tabindex="-1"></a>fast_a <span class="ot">&lt;-</span> adults <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(WTSAF2YR), WTSAF2YR <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb36-134"><a href="#cb36-134" aria-hidden="true" tabindex="-1"></a>fli_ok <span class="ot">&lt;-</span> fast_a <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(fli))</span>
-<span id="cb36-135"><a href="#cb36-135" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;adults 18+                                  %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(adults)))</span>
-<span id="cb36-136"><a href="#cb36-136" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;  (1) sampled into the fasting subsample    %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(fast_a)))</span>
-<span id="cb36-137"><a href="#cb36-137" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;  (2) of those, FLI computable              %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(fli_ok)))</span>
-<span id="cb36-138"><a href="#cb36-138" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;      lost at step (2)                      %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(fast_a) <span class="sc">-</span> <span class="fu">nrow</span>(fli_ok)))</span>
-<span id="cb36-139"><a href="#cb36-139" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-140"><a href="#cb36-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-141"><a href="#cb36-141" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**(1) is selection by design.** NHANES chose who was asked to fast. It is known,</span>
-<span id="cb36-142"><a href="#cb36-142" aria-hidden="true" tabindex="-1"></a>  planned, and it is what <span class="in">`WTSAF2YR`</span> exists to account for — which is why we weight by it</span>
-<span id="cb36-143"><a href="#cb36-143" aria-hidden="true" tabindex="-1"></a>  and subset the design rather than the rows. Under the survey design this step is</span>
-<span id="cb36-144"><a href="#cb36-144" aria-hidden="true" tabindex="-1"></a>  *handled*, not merely acknowledged.</span>
-<span id="cb36-145"><a href="#cb36-145" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**(2) is item-level availability.** Among people who were sampled to fast, FLI still</span>
-<span id="cb36-146"><a href="#cb36-146" aria-hidden="true" tabindex="-1"></a>  needs triglycerides, GGT, BMI and waist all present. Nothing in the design weights</span>
-<span id="cb36-147"><a href="#cb36-147" aria-hidden="true" tabindex="-1"></a>  accounts for that, and whether it is ignorable depends on why those measurements are</span>
-<span id="cb36-148"><a href="#cb36-148" aria-hidden="true" tabindex="-1"></a>  absent — which we cannot verify from the public files.</span>
-<span id="cb36-149"><a href="#cb36-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-150"><a href="#cb36-150" aria-hidden="true" tabindex="-1"></a>**What each one bounds.** (1) bounds the *target population*: our estimate speaks to</span>
-<span id="cb36-151"><a href="#cb36-151" aria-hidden="true" tabindex="-1"></a>fasting-sampled US adults, and the weights carry it there. (2) is a potential selection</span>
-<span id="cb36-152"><a href="#cb36-152" aria-hidden="true" tabindex="-1"></a>bias *within* that population, and it is the one that could distort the contrast itself.</span>
-<span id="cb36-153"><a href="#cb36-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-154"><a href="#cb36-154" aria-hidden="true" tabindex="-1"></a>**Our answer to the reviewers.** We accept the distinction matters and have adopted it.</span>
-<span id="cb36-155"><a href="#cb36-155" aria-hidden="true" tabindex="-1"></a>We do not accept that stability of the estimate answers it: the missing-data work above</span>
-<span id="cb36-156"><a href="#cb36-156" aria-hidden="true" tabindex="-1"></a>concerns incomplete **cancer status among people already in the cohort**, and tells us</span>
-<span id="cb36-157"><a href="#cb36-157" aria-hidden="true" tabindex="-1"></a>nothing about the adults who never reach the cohort at all -- the two steps counted above. Those are different questions and we</span>
-<span id="cb36-158"><a href="#cb36-158" aria-hidden="true" tabindex="-1"></a>now report them separately.</span>
-<span id="cb36-159"><a href="#cb36-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-160"><a href="#cb36-160" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results manifest — the chain&#39;s single source of truth</span></span>
-<span id="cb36-161"><a href="#cb36-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-162"><a href="#cb36-162" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; M2, M3 and M4 are plain markdown and are **not** run through the deck generator, so any</span></span>
-<span id="cb36-163"><a href="#cb36-163" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; number typed into them could drift from the code. This chunk emits the canonical values;</span></span>
-<span id="cb36-164"><a href="#cb36-164" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="at">the build fails if any of those artifacts states a locked-contrast hazard</span></span>
-<span id="cb36-165"><a href="#cb36-165" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; ratio that is not the one recorded here.</span></span>
-<span id="cb36-166"><a href="#cb36-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-167"><a href="#cb36-167" aria-hidden="true" tabindex="-1"></a><span class="in">```{r emit}</span></span>
-<span id="cb36-168"><a href="#cb36-168" aria-hidden="true" tabindex="-1"></a>cc <span class="ot">&lt;-</span> <span class="fu">fitL</span>(<span class="cn">NA</span>, <span class="st">&quot;cc&quot;</span>)</span>
-<span id="cb36-169"><a href="#cb36-169" aria-hidden="true" tabindex="-1"></a>mi_hr <span class="ot">&lt;-</span> <span class="fu">exp</span>(po[[<span class="st">&quot;results&quot;</span>]]); mi_lo <span class="ot">&lt;-</span> <span class="fu">exp</span>(po[[<span class="st">&quot;(lower&quot;</span>]]); mi_hi <span class="ot">&lt;-</span> <span class="fu">exp</span>(po[[<span class="st">&quot;upper)&quot;</span>]])</span>
-<span id="cb36-170"><a href="#cb36-170" aria-hidden="true" tabindex="-1"></a><span class="fu">emit_results</span>(<span class="st">&quot;chain&quot;</span>, <span class="fu">list</span>(</span>
-<span id="cb36-171"><a href="#cb36-171" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_hr      =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f&quot;</span>, cc<span class="sc">$</span>HR),</span>
-<span id="cb36-172"><a href="#cb36-172" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_ci      =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f–%.2f&quot;</span>, cc<span class="sc">$</span>lo, cc<span class="sc">$</span>hi),</span>
-<span id="cb36-173"><a href="#cb36-173" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_full    =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f–%.2f)&quot;</span>, cc<span class="sc">$</span>HR, cc<span class="sc">$</span>lo, cc<span class="sc">$</span>hi),</span>
-<span id="cb36-174"><a href="#cb36-174" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_mi_full =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f–%.2f)&quot;</span>, mi_hr, mi_lo, mi_hi),</span>
-<span id="cb36-175"><a href="#cb36-175" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_adults       =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(adults), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>),</span>
-<span id="cb36-176"><a href="#cb36-176" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_fasting      =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(fast_a), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>),</span>
-<span id="cb36-177"><a href="#cb36-177" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_fli          =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(fli_ok), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>),</span>
-<span id="cb36-178"><a href="#cb36-178" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_lost_step2   =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(fast_a) <span class="sc">-</span> <span class="fu">nrow</span>(fli_ok), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
-<span id="cb36-179"><a href="#cb36-179" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb36-180"><a href="#cb36-180" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;M3 — Defense evidence pack: reproducible numbers behind the Q&amp;A&quot;</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> &quot;SPPH 604 · demonstration paper (Kueh et al., BMJ Open 2026;16:e113719)&quot;</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="co">    df-print: kable</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The individual defense is not a slide-reading exercise — every number you may be</span></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; asked to justify is re-derived here so you can answer from evidence, live.</span></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup}</span></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;../_shared/paths.R&quot;</span>)   <span class="co"># find_repro(), emit_results(), ci(), fmtn(), endash()</span></span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>repro <span class="ot">&lt;-</span> <span class="fu">find_repro</span>()</span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({<span class="fu">library</span>(dplyr); <span class="fu">library</span>(survival); <span class="fu">library</span>(survey); <span class="fu">library</span>(mice)})</span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;adjust&quot;</span>)</span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(repro, <span class="st">&quot;data/derived/masld_analytic.rds&quot;</span>))</span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>hr <span class="ot">&lt;-</span> <span class="cf">function</span>(m,g){s<span class="ot">&lt;-</span><span class="fu">summary</span>(m); <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f-%.2f)&quot;</span>,</span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a>        s<span class="sc">$</span>conf.int[g,<span class="dv">1</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;lower .95&quot;</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;upper .95&quot;</span>])}</span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## Q (P1): the cohort/N discrepancy</span></span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{r q1}</span></span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Our N =&quot;</span>, <span class="fu">nrow</span>(d), <span class="st">&quot;vs paper 6300; complete-case =&quot;</span>,</span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nrow</span>(<span class="fu">filter</span>(d,<span class="sc">!</span><span class="fu">is.na</span>(cancer),<span class="sc">!</span><span class="fu">is.na</span>(stroke),<span class="sc">!</span><span class="fu">is.na</span>(hf),<span class="sc">!</span><span class="fu">is.na</span>(LBXSCR))),</span>
+<span id="cb38-33"><a href="#cb38-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;; missing creatinine =&quot;</span>, <span class="fu">sum</span>(<span class="fu">is.na</span>(d<span class="sc">$</span>LBXSCR)), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb38-34"><a href="#cb38-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb38-35"><a href="#cb38-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-36"><a href="#cb38-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## Q (P3): is the sex &quot;interaction&quot; real, or baseline risk?</span></span>
+<span id="cb38-37"><a href="#cb38-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-38"><a href="#cb38-38" aria-hidden="true" tabindex="-1"></a><span class="in">```{r q3}</span></span>
+<span id="cb38-39"><a href="#cb38-39" aria-hidden="true" tabindex="-1"></a>cov <span class="ot">&lt;-</span> <span class="st">&quot;age + dyslip + htn + t2dm + ckd + mi + cancer + on_htn_med + on_dm_med + on_lipid_med&quot;</span></span>
+<span id="cb38-40"><a href="#cb38-40" aria-hidden="true" tabindex="-1"></a>adj_p <span class="ot">&lt;-</span> <span class="fu">anova</span>(<span class="fu">coxph</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Surv(time_yr,dead)~group+female+&quot;</span>,cov)),d),</span>
+<span id="cb38-41"><a href="#cb38-41" aria-hidden="true" tabindex="-1"></a>               <span class="fu">coxph</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Surv(time_yr,dead)~group*female+&quot;</span>,cov)),d))[<span class="dv">2</span>,<span class="st">&quot;Pr(&gt;|Chi|)&quot;</span>]</span>
+<span id="cb38-42"><a href="#cb38-42" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Adjusted group x sex interaction p =&quot;</span>, <span class="fu">round</span>(adj_p,<span class="dv">3</span>),</span>
+<span id="cb38-43"><a href="#cb38-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;-&gt; no evidence of MULTIPLICATIVE interaction on this multi-df test.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb38-44"><a href="#cb38-44" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;   Not evidence of homogeneity: the test is underpowered, and it is not the locked</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb38-45"><a href="#cb38-45" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;   1-df IV-vs-III contrast (see ../P3_effect_modification/P3_code.qmd).&quot;</span>,</span>
+<span id="cb38-46"><a href="#cb38-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Additive scale untested.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb38-47"><a href="#cb38-47" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb38-48"><a href="#cb38-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-49"><a href="#cb38-49" aria-hidden="true" tabindex="-1"></a><span class="fu">## Q (P4): which weight, and what does it do?</span></span>
+<span id="cb38-50"><a href="#cb38-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-51"><a href="#cb38-51" aria-hidden="true" tabindex="-1"></a><span class="in">```{r q4}</span></span>
+<span id="cb38-52"><a href="#cb38-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Week 6 cardinal rule: build the design on the FULL fasting frame, then subset the design</span></span>
+<span id="cb38-53"><a href="#cb38-53" aria-hidden="true" tabindex="-1"></a><span class="co"># object. Filtering rows first and re-declaring svydesign() on the survivors throws away</span></span>
+<span id="cb38-54"><a href="#cb38-54" aria-hidden="true" tabindex="-1"></a><span class="co"># the strata/PSU information the non-selected units contribute to the variance.</span></span>
+<span id="cb38-55"><a href="#cb38-55" aria-hidden="true" tabindex="-1"></a>fr <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(repro,<span class="st">&quot;data/derived/merged_all.rds&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb38-56"><a href="#cb38-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(WTSAF2YR) <span class="sc">&amp;</span> WTSAF2YR<span class="sc">&gt;</span><span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">wt=</span>WTSAF2YR<span class="sc">/</span><span class="dv">6</span>)</span>
+<span id="cb38-57"><a href="#cb38-57" aria-hidden="true" tabindex="-1"></a>fr<span class="sc">$</span>group       <span class="ot">&lt;-</span> <span class="fu">factor</span>(fr<span class="sc">$</span>group, <span class="at">levels=</span><span class="fu">c</span>(<span class="st">&quot;I&quot;</span>,<span class="st">&quot;II&quot;</span>,<span class="st">&quot;III&quot;</span>,<span class="st">&quot;IV&quot;</span>))</span>
+<span id="cb38-58"><a href="#cb38-58" aria-hidden="true" tabindex="-1"></a>fr<span class="sc">$</span>in_analysis <span class="ot">&lt;-</span> fr<span class="sc">$</span>SEQN <span class="sc">%in%</span> d<span class="sc">$</span>SEQN</span>
+<span id="cb38-59"><a href="#cb38-59" aria-hidden="true" tabindex="-1"></a>des_full <span class="ot">&lt;-</span> <span class="fu">svydesign</span>(<span class="at">ids=</span><span class="sc">~</span>SDMVPSU, <span class="at">strata=</span><span class="sc">~</span>SDMVSTRA, <span class="at">weights=</span><span class="sc">~</span>wt, <span class="at">data=</span>fr, <span class="at">nest=</span><span class="cn">TRUE</span>)</span>
+<span id="cb38-60"><a href="#cb38-60" aria-hidden="true" tabindex="-1"></a>des <span class="ot">&lt;-</span> <span class="fu">subset</span>(des_full, in_analysis)      <span class="co"># domain analysis, not a re-declared design</span></span>
+<span id="cb38-61"><a href="#cb38-61" aria-hidden="true" tabindex="-1"></a>dd  <span class="ot">&lt;-</span> fr[fr<span class="sc">$</span>in_analysis, ]</span>
+<span id="cb38-62"><a href="#cb38-62" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Group IV: unweighted&quot;</span>, <span class="fu">hr</span>(<span class="fu">coxph</span>(<span class="fu">Surv</span>(time_yr,dead)<span class="sc">~</span>group,dd),<span class="st">&quot;groupIV&quot;</span>),</span>
+<span id="cb38-63"><a href="#cb38-63" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;-&gt; fasting-weighted&quot;</span>, <span class="fu">hr</span>(<span class="fu">svycoxph</span>(<span class="fu">Surv</span>(time_yr,dead)<span class="sc">~</span>group,<span class="at">design=</span>des),<span class="st">&quot;groupIV&quot;</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb38-64"><a href="#cb38-64" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb38-65"><a href="#cb38-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-66"><a href="#cb38-66" aria-hidden="true" tabindex="-1"></a><span class="fu">## Q (self-initiated): could incomplete cancer status explain the locked result?</span></span>
+<span id="cb38-67"><a href="#cb38-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-68"><a href="#cb38-68" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **No reviewer asked for this.** We ran it because cancer status is the only Model-1</span></span>
+<span id="cb38-69"><a href="#cb38-69" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; covariate with any missingness, and a result that rests on dropping people is worth</span></span>
+<span id="cb38-70"><a href="#cb38-70" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; testing before we defend it. The adjustment set is the paper&#39;s Model 1 exactly — we did</span></span>
+<span id="cb38-71"><a href="#cb38-71" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **not** widen it to manufacture a comparison. The contrast is our locked one, IV vs III,</span></span>
+<span id="cb38-72"><a href="#cb38-72" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; design-aware, so the sensitivity analysis interrogates the estimate we actually defend.</span></span>
+<span id="cb38-73"><a href="#cb38-73" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Complete case uses the rows complete on Model 1; the extreme assignments and MI keep</span></span>
+<span id="cb38-74"><a href="#cb38-74" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; every row of the locked domain.</span></span>
+<span id="cb38-75"><a href="#cb38-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-76"><a href="#cb38-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{r q5}</span></span>
+<span id="cb38-77"><a href="#cb38-77" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(repro, <span class="st">&quot;data/derived/merged_all.rds&quot;</span>))</span>
+<span id="cb38-78"><a href="#cb38-78" aria-hidden="true" tabindex="-1"></a>m<span class="sc">$</span>in_analysis <span class="ot">&lt;-</span> m<span class="sc">$</span>SEQN <span class="sc">%in%</span> d<span class="sc">$</span>SEQN</span>
+<span id="cb38-79"><a href="#cb38-79" aria-hidden="true" tabindex="-1"></a>m<span class="sc">$</span>group <span class="ot">&lt;-</span> <span class="fu">factor</span>(m<span class="sc">$</span>group, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;I&quot;</span>, <span class="st">&quot;II&quot;</span>, <span class="st">&quot;III&quot;</span>, <span class="st">&quot;IV&quot;</span>))</span>
+<span id="cb38-80"><a href="#cb38-80" aria-hidden="true" tabindex="-1"></a>fast <span class="ot">&lt;-</span> m <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(WTSAF2YR), WTSAF2YR <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">wt =</span> WTSAF2YR <span class="sc">/</span> <span class="dv">6</span>)</span>
+<span id="cb38-81"><a href="#cb38-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-82"><a href="#cb38-82" aria-hidden="true" tabindex="-1"></a>COV <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;age&quot;</span>,<span class="st">&quot;female&quot;</span>,<span class="st">&quot;dyslip&quot;</span>,<span class="st">&quot;htn&quot;</span>,<span class="st">&quot;t2dm&quot;</span>,<span class="st">&quot;ckd&quot;</span>,<span class="st">&quot;mi&quot;</span>,<span class="st">&quot;cancer&quot;</span>,</span>
+<span id="cb38-83"><a href="#cb38-83" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;on_htn_med&quot;</span>,<span class="st">&quot;on_dm_med&quot;</span>,<span class="st">&quot;on_lipid_med&quot;</span>)            <span class="co"># the paper&#39;s Model 1. Nothing else.</span></span>
+<span id="cb38-84"><a href="#cb38-84" aria-hidden="true" tabindex="-1"></a>f1  <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Surv(time_yr,dead) ~ group +&quot;</span>, <span class="fu">paste</span>(COV, <span class="at">collapse =</span> <span class="st">&quot; + &quot;</span>)))</span>
+<span id="cb38-85"><a href="#cb38-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-86"><a href="#cb38-86" aria-hidden="true" tabindex="-1"></a><span class="co"># locked contrast: Group III is the reference, so groupIV is IV-vs-III</span></span>
+<span id="cb38-87"><a href="#cb38-87" aria-hidden="true" tabindex="-1"></a>rl3  <span class="ot">&lt;-</span> <span class="cf">function</span>(x) { x<span class="sc">$</span>group <span class="ot">&lt;-</span> <span class="fu">relevel</span>(x<span class="sc">$</span>group, <span class="st">&quot;III&quot;</span>); x }</span>
+<span id="cb38-88"><a href="#cb38-88" aria-hidden="true" tabindex="-1"></a>desL <span class="ot">&lt;-</span> <span class="cf">function</span>(fk) <span class="fu">subset</span>(<span class="fu">svydesign</span>(<span class="at">ids =</span> <span class="sc">~</span>SDMVPSU, <span class="at">strata =</span> <span class="sc">~</span>SDMVSTRA, <span class="at">weights =</span> <span class="sc">~</span>wt,</span>
+<span id="cb38-89"><a href="#cb38-89" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">data =</span> <span class="fu">rl3</span>(fk), <span class="at">nest =</span> <span class="cn">TRUE</span>), in_analysis)</span>
+<span id="cb38-90"><a href="#cb38-90" aria-hidden="true" tabindex="-1"></a>gv   <span class="ot">&lt;-</span> <span class="cf">function</span>(f) { s <span class="ot">&lt;-</span> <span class="fu">summary</span>(f); <span class="fu">c</span>(s<span class="sc">$</span>conf.int[<span class="st">&quot;groupIV&quot;</span>, <span class="dv">1</span>],</span>
+<span id="cb38-91"><a href="#cb38-91" aria-hidden="true" tabindex="-1"></a>                                         s<span class="sc">$</span>conf.int[<span class="st">&quot;groupIV&quot;</span>, <span class="dv">3</span>], s<span class="sc">$</span>conf.int[<span class="st">&quot;groupIV&quot;</span>, <span class="dv">4</span>]) }</span>
+<span id="cb38-92"><a href="#cb38-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-93"><a href="#cb38-93" aria-hidden="true" tabindex="-1"></a>fitL <span class="ot">&lt;-</span> <span class="cf">function</span>(val, lbl) {</span>
+<span id="cb38-94"><a href="#cb38-94" aria-hidden="true" tabindex="-1"></a>  fk <span class="ot">&lt;-</span> fast</span>
+<span id="cb38-95"><a href="#cb38-95" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(val)) fk<span class="sc">$</span>cancer[fk<span class="sc">$</span>in_analysis <span class="sc">&amp;</span> <span class="fu">is.na</span>(fk<span class="sc">$</span>cancer)] <span class="ot">&lt;-</span> val</span>
+<span id="cb38-96"><a href="#cb38-96" aria-hidden="true" tabindex="-1"></a>  g <span class="ot">&lt;-</span> <span class="fu">gv</span>(<span class="fu">svycoxph</span>(f1, <span class="at">design =</span> <span class="fu">desL</span>(fk)))</span>
+<span id="cb38-97"><a href="#cb38-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">scenario =</span> lbl, <span class="at">HR =</span> <span class="fu">round</span>(g[<span class="dv">1</span>], <span class="dv">2</span>), <span class="at">lo =</span> <span class="fu">round</span>(g[<span class="dv">2</span>], <span class="dv">2</span>), <span class="at">hi =</span> <span class="fu">round</span>(g[<span class="dv">3</span>], <span class="dv">2</span>))</span>
+<span id="cb38-98"><a href="#cb38-98" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb38-99"><a href="#cb38-99" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(<span class="fu">fitL</span>(<span class="cn">NA</span>, <span class="st">&quot;complete case&quot;</span>),</span>
+<span id="cb38-100"><a href="#cb38-100" aria-hidden="true" tabindex="-1"></a>      <span class="fu">fitL</span>(<span class="dv">0</span>,  <span class="st">&quot;all missing assigned NO cancer&quot;</span>),</span>
+<span id="cb38-101"><a href="#cb38-101" aria-hidden="true" tabindex="-1"></a>      <span class="fu">fitL</span>(<span class="dv">1</span>,  <span class="st">&quot;all missing assigned CANCER&quot;</span>))</span>
+<span id="cb38-102"><a href="#cb38-102" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb38-103"><a href="#cb38-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-104"><a href="#cb38-104" aria-hidden="true" tabindex="-1"></a><span class="in">```{r q5mi}</span></span>
+<span id="cb38-105"><a href="#cb38-105" aria-hidden="true" tabindex="-1"></a><span class="co"># MI with the outcome in the imputation model (Week 7 / White &amp; Royston): keep the event</span></span>
+<span id="cb38-106"><a href="#cb38-106" aria-hidden="true" tabindex="-1"></a><span class="co"># indicator and a Nelson-Aalen cumulative hazard, exclude only raw follow-up time.</span></span>
+<span id="cb38-107"><a href="#cb38-107" aria-hidden="true" tabindex="-1"></a>dom  <span class="ot">&lt;-</span> fast <span class="sc">%&gt;%</span> <span class="fu">filter</span>(in_analysis)</span>
+<span id="cb38-108"><a href="#cb38-108" aria-hidden="true" tabindex="-1"></a>idat <span class="ot">&lt;-</span> dom[, <span class="fu">c</span>(COV, <span class="st">&quot;group&quot;</span>, <span class="st">&quot;dead&quot;</span>, <span class="st">&quot;time_yr&quot;</span>, <span class="st">&quot;wt&quot;</span>, <span class="st">&quot;SDMVSTRA&quot;</span>)]</span>
+<span id="cb38-109"><a href="#cb38-109" aria-hidden="true" tabindex="-1"></a>idat<span class="sc">$</span>na_cumhaz <span class="ot">&lt;-</span> mice<span class="sc">::</span><span class="fu">nelsonaalen</span>(idat, time_yr, dead)</span>
+<span id="cb38-110"><a href="#cb38-110" aria-hidden="true" tabindex="-1"></a>ini <span class="ot">&lt;-</span> <span class="fu">mice</span>(idat, <span class="at">maxit =</span> <span class="dv">0</span>, <span class="at">printFlag =</span> <span class="cn">FALSE</span>); pr <span class="ot">&lt;-</span> ini<span class="sc">$</span>predictorMatrix</span>
+<span id="cb38-111"><a href="#cb38-111" aria-hidden="true" tabindex="-1"></a>pr[, <span class="st">&quot;time_yr&quot;</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb38-112"><a href="#cb38-112" aria-hidden="true" tabindex="-1"></a>pr[<span class="fu">c</span>(<span class="st">&quot;time_yr&quot;</span>,<span class="st">&quot;dead&quot;</span>,<span class="st">&quot;na_cumhaz&quot;</span>,<span class="st">&quot;wt&quot;</span>,<span class="st">&quot;SDMVSTRA&quot;</span>), ] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb38-113"><a href="#cb38-113" aria-hidden="true" tabindex="-1"></a>imp <span class="ot">&lt;-</span> <span class="fu">mice</span>(idat, <span class="at">m =</span> <span class="dv">10</span>, <span class="at">predictorMatrix =</span> pr, <span class="at">printFlag =</span> <span class="cn">FALSE</span>, <span class="at">seed =</span> <span class="dv">604</span>)</span>
+<span id="cb38-114"><a href="#cb38-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-115"><a href="#cb38-115" aria-hidden="true" tabindex="-1"></a>fits <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="cf">function</span>(i) {</span>
+<span id="cb38-116"><a href="#cb38-116" aria-hidden="true" tabindex="-1"></a>  fk <span class="ot">&lt;-</span> fast; fk[fk<span class="sc">$</span>in_analysis, COV] <span class="ot">&lt;-</span> <span class="fu">complete</span>(imp, i)[, COV]</span>
+<span id="cb38-117"><a href="#cb38-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">svycoxph</span>(f1, <span class="at">design =</span> <span class="fu">desL</span>(fk))</span>
+<span id="cb38-118"><a href="#cb38-118" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb38-119"><a href="#cb38-119" aria-hidden="true" tabindex="-1"></a>po <span class="ot">&lt;-</span> <span class="fu">summary</span>(mitools<span class="sc">::</span><span class="fu">MIcombine</span>(fits))[<span class="st">&quot;groupIV&quot;</span>, ]</span>
+<span id="cb38-120"><a href="#cb38-120" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;MI (m=10), locked contrast: IV vs III = %.2f (%.2f-%.2f)</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb38-121"><a href="#cb38-121" aria-hidden="true" tabindex="-1"></a>            <span class="fu">exp</span>(po[[<span class="st">&quot;results&quot;</span>]]), <span class="fu">exp</span>(po[[<span class="st">&quot;(lower&quot;</span>]]), <span class="fu">exp</span>(po[[<span class="st">&quot;upper)&quot;</span>]])))</span>
+<span id="cb38-122"><a href="#cb38-122" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Complete case, both extreme assignments and MI differ by at most a hundredth in the</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb38-123"><a href="#cb38-123" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;point estimate, far less than the width of any of the intervals.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb38-124"><a href="#cb38-124" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;That is the finding. It is evidence that incomplete cancer status does not explain</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb38-125"><a href="#cb38-125" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;the locked estimate -- it says nothing about who the estimate generalises to.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb38-126"><a href="#cb38-126" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb38-127"><a href="#cb38-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-128"><a href="#cb38-128" aria-hidden="true" tabindex="-1"></a><span class="fu">## Q (reviewer-prompted): what exactly is the selection, and what does it bound?</span></span>
+<span id="cb38-129"><a href="#cb38-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-130"><a href="#cb38-130" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Our M2 reviewers named selection into the cohort as the dominant threat. Their slide</span></span>
+<span id="cb38-131"><a href="#cb38-131" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; treats it as one mechanism. It is **two**, and they bound different things, so we</span></span>
+<span id="cb38-132"><a href="#cb38-132" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; separate them before answering.</span></span>
+<span id="cb38-133"><a href="#cb38-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-134"><a href="#cb38-134" aria-hidden="true" tabindex="-1"></a><span class="in">```{r q6}</span></span>
+<span id="cb38-135"><a href="#cb38-135" aria-hidden="true" tabindex="-1"></a>adults <span class="ot">&lt;-</span> m <span class="sc">%&gt;%</span> <span class="fu">filter</span>(age <span class="sc">&gt;=</span> <span class="dv">18</span>)</span>
+<span id="cb38-136"><a href="#cb38-136" aria-hidden="true" tabindex="-1"></a>fast_a <span class="ot">&lt;-</span> adults <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(WTSAF2YR), WTSAF2YR <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb38-137"><a href="#cb38-137" aria-hidden="true" tabindex="-1"></a>fli_ok <span class="ot">&lt;-</span> fast_a <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(fli))</span>
+<span id="cb38-138"><a href="#cb38-138" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;adults 18+                                  %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(adults)))</span>
+<span id="cb38-139"><a href="#cb38-139" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;  (1) sampled into the fasting subsample    %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(fast_a)))</span>
+<span id="cb38-140"><a href="#cb38-140" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;  (2) of those, FLI computable              %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(fli_ok)))</span>
+<span id="cb38-141"><a href="#cb38-141" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;      lost at step (2)                      %6d</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">nrow</span>(fast_a) <span class="sc">-</span> <span class="fu">nrow</span>(fli_ok)))</span>
+<span id="cb38-142"><a href="#cb38-142" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb38-143"><a href="#cb38-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-144"><a href="#cb38-144" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**(1) is selection by design.** NHANES chose who was asked to fast. It is known,</span>
+<span id="cb38-145"><a href="#cb38-145" aria-hidden="true" tabindex="-1"></a>  planned, and it is what <span class="in">`WTSAF2YR`</span> exists to account for — which is why we weight by it</span>
+<span id="cb38-146"><a href="#cb38-146" aria-hidden="true" tabindex="-1"></a>  and subset the design rather than the rows. Under the survey design this step is</span>
+<span id="cb38-147"><a href="#cb38-147" aria-hidden="true" tabindex="-1"></a>  *handled*, not merely acknowledged.</span>
+<span id="cb38-148"><a href="#cb38-148" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**(2) is item-level availability.** Among people who were sampled to fast, FLI still</span>
+<span id="cb38-149"><a href="#cb38-149" aria-hidden="true" tabindex="-1"></a>  needs triglycerides, GGT, BMI and waist all present. Nothing in the design weights</span>
+<span id="cb38-150"><a href="#cb38-150" aria-hidden="true" tabindex="-1"></a>  accounts for that, and whether it is ignorable depends on why those measurements are</span>
+<span id="cb38-151"><a href="#cb38-151" aria-hidden="true" tabindex="-1"></a>  absent — which we cannot verify from the public files.</span>
+<span id="cb38-152"><a href="#cb38-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-153"><a href="#cb38-153" aria-hidden="true" tabindex="-1"></a>**What each one bounds.** (1) bears on the *target population*, and the weights handle</span>
+<span id="cb38-154"><a href="#cb38-154" aria-hidden="true" tabindex="-1"></a>it: <span class="in">`WTSAF2YR`</span> is built so that the fasting subsample represents the US civilian</span>
+<span id="cb38-155"><a href="#cb38-155" aria-hidden="true" tabindex="-1"></a>non-institutionalized population, so the weighted estimate speaks to US adults meeting the</span>
+<span id="cb38-156"><a href="#cb38-156" aria-hidden="true" tabindex="-1"></a>MASLD criteria, not only to those sampled to fast. (2) is a potential selection bias</span>
+<span id="cb38-157"><a href="#cb38-157" aria-hidden="true" tabindex="-1"></a>*within* that population, and it is the one that could distort the contrast itself.</span>
+<span id="cb38-158"><a href="#cb38-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-159"><a href="#cb38-159" aria-hidden="true" tabindex="-1"></a>**Our answer to the reviewers.** We accept the distinction matters and have adopted it.</span>
+<span id="cb38-160"><a href="#cb38-160" aria-hidden="true" tabindex="-1"></a>We do not accept that stability of the estimate answers it: the missing-data work above</span>
+<span id="cb38-161"><a href="#cb38-161" aria-hidden="true" tabindex="-1"></a>concerns incomplete **cancer status among people already in the cohort**, and tells us</span>
+<span id="cb38-162"><a href="#cb38-162" aria-hidden="true" tabindex="-1"></a>nothing about the adults who never reach the cohort at all -- the two steps counted above. Those are different questions and we</span>
+<span id="cb38-163"><a href="#cb38-163" aria-hidden="true" tabindex="-1"></a>now report them separately.</span>
+<span id="cb38-164"><a href="#cb38-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-165"><a href="#cb38-165" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results manifest — the chain&#39;s single source of truth</span></span>
+<span id="cb38-166"><a href="#cb38-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-167"><a href="#cb38-167" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; M2, M3 and M4 are plain markdown and are **not** run through the deck generator, so any</span></span>
+<span id="cb38-168"><a href="#cb38-168" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; number typed into them could drift from the code. This chunk emits the canonical values;</span></span>
+<span id="cb38-169"><a href="#cb38-169" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span>the build<span class="at"> fails if any of those artifacts states a locked-contrast hazard</span></span>
+<span id="cb38-170"><a href="#cb38-170" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; ratio that is not the one recorded here.</span></span>
+<span id="cb38-171"><a href="#cb38-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-172"><a href="#cb38-172" aria-hidden="true" tabindex="-1"></a><span class="in">```{r emit}</span></span>
+<span id="cb38-173"><a href="#cb38-173" aria-hidden="true" tabindex="-1"></a>cc <span class="ot">&lt;-</span> <span class="fu">fitL</span>(<span class="cn">NA</span>, <span class="st">&quot;cc&quot;</span>)</span>
+<span id="cb38-174"><a href="#cb38-174" aria-hidden="true" tabindex="-1"></a>mi_hr <span class="ot">&lt;-</span> <span class="fu">exp</span>(po[[<span class="st">&quot;results&quot;</span>]]); mi_lo <span class="ot">&lt;-</span> <span class="fu">exp</span>(po[[<span class="st">&quot;(lower&quot;</span>]]); mi_hi <span class="ot">&lt;-</span> <span class="fu">exp</span>(po[[<span class="st">&quot;upper)&quot;</span>]])</span>
+<span id="cb38-175"><a href="#cb38-175" aria-hidden="true" tabindex="-1"></a><span class="fu">emit_results</span>(<span class="st">&quot;chain&quot;</span>, <span class="fu">list</span>(</span>
+<span id="cb38-176"><a href="#cb38-176" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_hr      =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f&quot;</span>, cc<span class="sc">$</span>HR),</span>
+<span id="cb38-177"><a href="#cb38-177" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_ci      =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f–%.2f&quot;</span>, cc<span class="sc">$</span>lo, cc<span class="sc">$</span>hi),</span>
+<span id="cb38-178"><a href="#cb38-178" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_full    =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f–%.2f)&quot;</span>, cc<span class="sc">$</span>HR, cc<span class="sc">$</span>lo, cc<span class="sc">$</span>hi),</span>
+<span id="cb38-179"><a href="#cb38-179" aria-hidden="true" tabindex="-1"></a>  <span class="at">locked_mi_full =</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f–%.2f)&quot;</span>, mi_hr, mi_lo, mi_hi),</span>
+<span id="cb38-180"><a href="#cb38-180" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_adults       =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(adults), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>),</span>
+<span id="cb38-181"><a href="#cb38-181" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_fasting      =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(fast_a), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>),</span>
+<span id="cb38-182"><a href="#cb38-182" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_fli          =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(fli_ok), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>),</span>
+<span id="cb38-183"><a href="#cb38-183" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_lost_step2   =</span> <span class="fu">format</span>(<span class="fu">nrow</span>(fast_a) <span class="sc">-</span> <span class="fu">nrow</span>(fli_ok), <span class="at">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb38-184"><a href="#cb38-184" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb38-185"><a href="#cb38-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

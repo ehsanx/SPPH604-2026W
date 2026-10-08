@@ -333,11 +333,11 @@ file. If you retime a slide, retime it in the deck’s notes too; this
 plan copies their minutes.</p>
 </blockquote>
 <blockquote>
-<p><strong>Built on Week 4.</strong> Same rows (<strong>5,911</strong>),
-same pre-exposure adjustment set L (age, sex, race/ethnicity, smoking,
-sedentary time), same DAG style, Week 4’s collapsibility table reread
-for modification (Slide 13), and Week 4’s g-computation idea extended to
-standardised survival (Slides 23–26).</p>
+<p><strong>Built on Week 4.</strong> Same rows (<strong>5,911; 534
+deaths</strong>), same pre-exposure adjustment set L (age, sex,
+race/ethnicity, smoking, sedentary time), same DAG style, Week 4’s
+collapsibility table reread for modification (Slide 13), and Week 4’s
+g-computation idea extended to standardised survival (Slides 23–26).</p>
 </blockquote>
 <blockquote>
 <p><strong>Row-set discipline.</strong> Every quantitative slide names
@@ -346,16 +346,20 @@ complete on every covariate of the paper’s Model 2 and the pre-exposure
 set. All of the MASLD analysis in Part 3 and Part 4’s interaction
 slides. - <strong>6,048</strong> — the locked domain itself: only the
 crude IV-vs-I table by sex (Slides 33–35), the rows P3’s code uses. -
-<strong>1,296</strong> — P3’s rows (Groups III + IV complete on Model 1)
-and <strong>1,291</strong> (Groups III + IV within the 5,911): the sex
-test on Slide 36.</p>
+<strong>1,296</strong> — P3’s rows, from the paper replication (Groups
+III + IV of the 6,048 complete on the paper’s Model 1 covariates): Slide
+36’s crude and Model 1 ratios and its six-year RDs, and M1’s
+design-weighted hand-off on Slide 40. <strong>1,291</strong> (Groups III
++ IV within the 5,911): this lecture’s set-L sex test on Slide 36
+(<strong>168 deaths</strong>). These model sample sizes and event counts
+are emitted directly from the fitted Cox objects.</p>
 </blockquote>
 <blockquote>
 <p><strong>What this week does NOT do.</strong> Survey weights are Week
-6: every number here is <strong>unweighted</strong>. RERI, AP and S are
-in the appendix and the lab, not the core lecture. Propensity-score
-methods for subgroup effects (Karim, ch. 8, §8.6) come after the
-propensity-score weeks.</p>
+6: every number here is <strong>unweighted</strong>, apart from Slide
+40’s pointer to Week 6. RERI, AP and S are in the appendix and the lab,
+not the core lecture. Propensity-score methods for subgroup effects
+(Karim, ch. 8, §8.6) come after the propensity-score weeks.</p>
 </blockquote>
 <h2 id="learning-objectives">Learning objectives</h2>
 <p>By the end, students answer the deck’s five questions, in order
@@ -576,10 +580,15 @@ students reuse in P3.</li>
 <ul>
 <li><code>fit &lt;- coxph(... ~ obese * central + L)</code>. Not obese:
 <strong>1.09 (0.79–1.50)</strong>; obese: <strong>2.99
-(1.11–8.09)</strong>; ratio <strong>2.74 (0.97–7.71)</strong>;
-likelihood-ratio p = 0.03. The product term re-parameterises the same
-four cells; it does not create information where Group I has four
-deaths.</li>
+(1.11–8.09)</strong>; ratio <strong>2.74 (0.97–7.71)</strong>, with
+normal Wald 95% CIs. The matching Wald p = 0.06; likelihood-ratio p =
+0.03, paired with the profile-likelihood 95% CI
+<strong>1.10–9.18</strong>. Both test the same product-term restriction
+on <strong>5,911 rows and 534 deaths</strong>. The product term
+re-parameterises the same four cells. The Wald and profile methods
+differ here; Group I’s four deaths warrant caution with both
+large-sample approximations. Avoid making the conclusion depend on a
+0.05 threshold.</li>
 </ul>
 <h2 id="slide-22-in-r-recover-both-hrs-and-test-the-product-term-4-min">Slide
 22 — In R: recover both HRs and test the product term (4 min)</h2>
@@ -696,19 +705,25 @@ In R: now count the reference events (2 min)</h2>
 <h2 id="slide-36-ask-the-subgroup-question-cleanly-4-min">Slide 36 — Ask
 the subgroup question cleanly (4 min)</h2>
 <ul>
-<li>The locked IV-vs-III contrast with sex as the modifier: crude
-<strong>0.62 (0.26–1.43)</strong>, p 0.278 (P3); the paper’s Model 1
-<strong>1.00 (0.42–2.35)</strong>, p 0.993 (P3); Week 4’s pre-exposure
-set <strong>1.13 (0.48–2.66)</strong>, p 0.78. Six-year RDs about +0.8
-points in men and +0.5 in women. “No evidence” is not “evidence of no
-difference”.</li>
+<li>The locked IV-vs-III contrast with sex as the modifier, all
+unweighted. From the paper replication (P3, 1,296 rows): crude
+<strong>0.62 (0.26–1.43)</strong>, p 0.278; the paper’s Model 1
+<strong>1.00 (0.42–2.35)</strong>, p 0.993; six-year RDs (Model 1) about
++0.8 points in men and +0.7 in women. From this lecture’s analysis
+(1,291 rows): Week 4’s pre-exposure set <strong>1.13
+(0.48–2.66)</strong>, p 0.78. The set-L row changes the rows as well as
+the adjustment set. All reported HR-ratio intervals are normal Wald 95%
+CIs; this table’s p-values are likelihood-ratio tests. The set-L models
+use the same <strong>1,291 rows and 168 deaths</strong>. “No evidence”
+is not “evidence of no difference”.</li>
 </ul>
 <h2 id="slide-37-in-r-one-test-for-sex-modification-on-the-locked-contrast-3-min">Slide
 37 — In R: one test for sex modification on the locked contrast (3
 min)</h2>
 <ul>
 <li>Restrict to III + IV; <code>IV * female</code> with L; ratio 1.13
-(0.48–2.66), likelihood-ratio p 0.78.</li>
+(0.48–2.66), Wald 95% CI, likelihood-ratio p 0.78. The fitted Wald p is
+also 0.78 at this precision.</li>
 </ul>
 <h2 id="slide-38-honest-subgroup-reporting-3-min">Slide 38 — Honest
 subgroup reporting (3 min)</h2>
@@ -728,8 +743,12 @@ min)</h2>
 <ul>
 <li>Six takeaways; exit question: <em>one modifier for your own paper,
 and one sentence on why your exposure cannot change it.</em>
-<strong>Next:</strong> Week 6, survey weights — design-aware, P3’s Model
-1 sex ratio becomes <strong>2.53 (0.92–6.98)</strong> (M1).</li>
+<strong>Next (say this; it is not on the slide):</strong> Week 6, survey
+weights — design-weighted on the same 1,296 rows and paper Model 1
+adjustment set, P3’s sex ratio 1.00 becomes <strong>2.54
+(0.92–7.03)</strong> (M1, paper replication). Both intervals use the
+normal Wald method; this comparison changes weighting and variance
+estimation while holding the model and rows fixed.</li>
 </ul>
 <h2 id="appendix-uncounted">Appendix (uncounted)</h2>
 <ul>

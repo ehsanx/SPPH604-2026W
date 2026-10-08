@@ -16,5 +16,23 @@
     "twoways": "fit_joint <- coxph(Surv(time_yr, dead) ~ group +\n                     age + female + race + smk_current + sed, data = d)\nfit_prod  <- coxph(Surv(time_yr, dead) ~ obese * central +\n                     age + female + race + smk_current + sed, data = d)\nall.equal(fit_joint$loglik, fit_prod$loglik)\n#> [1] TRUE\n\nround(exp(coef(fit_prod))[c(\"obese\", \"central\", \"obese:central\")], 2)\n#>         obese       central obese:central\n#>          0.34          1.09          2.74",
     "diabetes_tab": "tab <- table(diabetes = d$t2dm, high_waist = d$central)\nround(100 * prop.table(tab, 2))\n#>         high_waist\n#> diabetes  0  1\n#>        0 87 72\n#>        1 13 28",
     "dm_models": "f_no  <- coxph(Surv(time_yr, dead) ~ central + obese + age + female +\n                 race + smk_current + sed, data = subset(d, t2dm == 0))\nf_yes <- coxph(Surv(time_yr, dead) ~ central + obese + age + female +\n                 race + smk_current + sed, data = subset(d, t2dm == 1))"
+  },
+  "model_diagnostics": {
+    "product": {
+      "n": 5911,
+      "events": 534
+    },
+    "no_product": {
+      "n": 5911,
+      "events": 534
+    },
+    "sex": {
+      "n": 1291,
+      "events": 168
+    },
+    "sex_no_product": {
+      "n": 1291,
+      "events": 168
+    }
   }
 }

@@ -24,9 +24,9 @@ know what they will do with any of this at M3.*
 
 Speaker notes: Open with the verdict. Note what we are *not* doing: we are not
 manufacturing a missingness objection, because Slide 6 already shows the locked estimate
-is unchanged under complete case, both extreme assignments and MI. Re-litigating a
-question the authors already answered would be padding, and reviewers who pad get read
-less carefully on the points that matter.
+moving by a hundredth at most across complete case, both extreme assignments and MI.
+Re-litigating a question the authors already answered would be padding, and reviewers who
+pad get read less carefully on the points that matter.
 
 ---
 
@@ -39,9 +39,10 @@ less carefully on the points that matter.
   than filtering rows before `svydesign()`. We looked specifically because this is the most
   common NHANES error in the applied literature; they did not make it.
 - **Their numbers are not typed into the deck.** Every figure is substituted at build time
-  from emitted result objects, so a stale number cannot survive a rebuild. We could not
-  produce a discrepancy between deck and code because the deck cannot disagree with the
-  code by construction.
+  from emitted result objects, so none can be mistyped. That prevents retyping errors, not
+  stale results: if the data change and the result objects are not re-emitted, the deck
+  still shows the old values. We re-ran the increments before comparing, so the match
+  above is against freshly emitted results.
 - **One gap:** their README does not list every package the pipeline loads, so a clean
   install stops twice before completing.
 
@@ -60,8 +61,9 @@ been verified.
 - Their own detail note concedes the interval for that implied ratio **cannot be
   recovered**, because the covariance of the two published coefficients is not reported.
 - So the deck cites a point estimate with **no uncertainty statement** as corroboration for
-  a claim about compatibility with no difference. Two hazard ratios rounded to three
-  figures can imply a ratio near 1.00 across a wide range of underlying values.
+  a claim about compatibility with no difference. Two point estimates can imply a ratio
+  near 1.00 whether that ratio's own interval is narrow or wide, and the interval depends
+  on a covariance that is not reported.
 - **What we are asking for:** keep the observation, demote the claim. "The published table
   is consistent with our estimate" is defensible; "the paper's own Table 2 points the same
   way" reads as independent confirmation, and it is not independent — it is the same data,
@@ -101,9 +103,10 @@ it would resolve the dominant threat, and it would not.
 - But an unstated estimand is a **reporting** gap, and it is repairable by the authors
   in a sentence. We think a **structural** limitation outranks it.
 - **Our nomination: selection into the analytic cohort.** The cohort is reachable only
-  through the fasting subsample — of roughly **36,580** adults, about **14,989** have a
-  computable FLI, and everything downstream is conditioned on that. Fasting status is not
-  a random subsample of the population the conclusion is addressed to.
+  through the fasting subsample — of roughly **36,580** adults, **14,962** were sampled to
+  fast and about **14,170** of those have a computable FLI, and everything downstream is
+  conditioned on that. The deck does not show that the people who end up with a computable
+  FLI represent the population the conclusion is addressed to.
 - That is not fixable by relabelling the estimand. It bounds what any contrast estimated
   here can be said to be about, including the locked one.
 - **Why this outranks alignment:** naming the target quantity makes the estimate

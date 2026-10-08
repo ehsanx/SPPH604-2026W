@@ -433,6 +433,8 @@ That is an **effect-modification** question: one exposure changes; obesity defin
 The paper itself asked a **prognostic phenotype** question; this causal re-reading is ours.
 :::
 
+[This lecture's analysis: the same 5,911 rows as Week 4, adjusted for L, unweighted (weights are Week 6). Slides that use other rows say so.]{.foot}
+
 ::: {.notes}
 2 min. Only now introduce the running example formally. Be explicit that the paper was designed to
 compare prognosis across BMI/WHtR phenotypes, not to identify the causal effect of changing waist fat.
@@ -553,8 +555,8 @@ fit <- coxph(Surv(time_yr, dead) ~ obese * central +
 
 - Among the **not obese**: HR for high vs lower waist fat = **1.09 (0.79–1.50)**
 - Among the **obese**: HR = **2.99 (1.11–8.09)**
-- Ratio of HRs = **2.74 (0.97–7.71)**
-- Likelihood-ratio test for allowing the HR to differ: **p = 0.03**
+- Ratio of HRs = **2.74 (0.97–7.71)** (Wald 95% CI)
+- Tests for allowing the HR to differ: **Wald p = 0.06; likelihood-ratio p = 0.03**
 
 $$
 \exp(\beta_{A\times M})
@@ -850,6 +852,8 @@ The apparent 36-versus-4 gap is dramatic, but each reference survival experience
 **two deaths**, and both confidence intervals are extremely wide. Do not build a biological story from it.
 :::
 
+[Crude, unweighted, on the 6,048-row locked domain (`dom` in the code), so Group I has 375 people here, not the 355 of the 5,911.]{.foot}
+
 ::: {.notes}
 3 min. Reinforce two problems at once: IV vs I changes both obesity and waist fat, and the reference
 cell is exceptionally sparse after stratifying by sex.
@@ -910,23 +914,27 @@ the modifier.
 
 ## Ask the subgroup question cleanly
 
-For the locked waist-fat contrast **IV vs III**, with sex as the modifier:
+For the locked waist-fat contrast **IV vs III**, with sex as the modifier (all unweighted):
 
-| Model | Ratio of HRs, women ÷ men | p |
-|---|---:|---:|
-| Crude | 0.62 (0.26–1.43) | 0.278 |
-| Paper's Model 1 | 1.00 (0.42–2.35) | 0.993 |
-| Week 4 pre-exposure set | **1.13 (0.48–2.66)** | **0.78** |
+| Model | Ratio of HRs, women ÷ men | LRT p | Rows |
+|---|---:|---:|---:|
+| Crude | 0.62 (0.26–1.43) | 0.278 | 1,296 |
+| Paper's Model 1 | 1.00 (0.42–2.35) | 0.993 | 1,296 |
+| Week 4 pre-exposure set | **1.13 (0.48–2.66)** | **0.78** | 1,291 |
 
-Additive six-year RDs are also imprecise: about **+0.8 points in men** and **+0.5 in women**.
+Additive six-year RDs are also imprecise: about **+0.8 points in men** and **+0.7 in women** (P3, Model 1).
 
 ::: {.plain}
 At this precision there is **no clear evidence of sex modification**, but the interval still allows
 important differences in either direction.
 :::
 
+[1,296: P3's paper-replication refits (Groups III + IV complete on the paper's Model 1). 1,291 (168 deaths): Groups III + IV of our 5,911. CIs use Wald; p-values use likelihood-ratio tests.]{.foot}
+
 ::: {.notes}
-4 min. "No evidence" is not "evidence of no difference". The interval is the message.
+4 min. "No evidence" is not "evidence of no difference". The interval is the message. The first two
+rows are P3's refits on the same 1,296 rows, so they differ only in adjustment; the set-L row is this
+lecture's analysis and also changes the rows, so do not read 1.00 vs 1.13 as the adjustment set alone.
 :::
 
 ## In R: one test for sex modification on the locked contrast

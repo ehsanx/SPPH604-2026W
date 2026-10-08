@@ -15,9 +15,11 @@ analysis of NHANES, 2007–2018.* **BMJ Open** 2026;16:e113719.
 > The findings below stand as recorded; this note frames how to read them, not
 > whether they hold.
 
-**Verdict:** **Table 1, Table 2 and Figure 1 reproduce closely** from the public
-data — analytic cohort, group sizes, death counts, hazard ratios and
-number-at-risk all match the publication to within a few tenths of a percent.
+**Verdict:** **Table 1, Table 2 and Figure 1 reproduce closely, though not exactly,** from
+the public data. The analytic cohort is 1.1% larger than the paper's (6,371 against about
+6,300; the gap is unresolved, §6), group sizes differ by at most 2.3% (Group III, 787
+against 769), there is one extra death (586 against 585), Group IV's numbers at risk are
+within about 1% (§4), and the hazard ratios compared in §3 agree to within a few percent.
 **Figure 2 reproduces for BMI (panel a) but not for WHtR (panel b)**, where our
 curve turns down above WHtR ≈ 0.75 while the published curve keeps rising; the
 paper does not report the spline specification, so the difference cannot be
@@ -125,14 +127,20 @@ uses composites, not pure self-report):
 
 ## 3. Table 2 — Cox regression (HR, 95% CI)
 
+Every reproduced estimate in this section is unweighted and drawn from the full analytic
+file (6,371 rows, §1), with each group compared against Group I. The unadjusted fits use
+all 6,371 rows; the Model 1 and Model 2 fits are complete case: they keep only the rows
+with every covariate in that model, a little under 6,371 (`04_table2_cox.R` does not
+print the exact N).
+
 **All-cause mortality**
 
 | Group | Events (repro / paper) | Unadjusted (repro) | Unadjusted (paper) | Model 2 (repro) | Model 2 (paper) |
 |---|---|---|---|---|---|
 | I | 5 / 5 | Reference | Reference | Reference | Reference |
-| II | 389 / 388 | 6.68 (2.76–16.14) | 6.66 (2.76–16.09) | 2.37 (0.97–5.76) | 2.30 (0.94–5.60) |
-| III | 74 / 74 | 6.23 (2.52–15.41) | 6.25 (2.53–15.47) | 2.99 (1.20–7.43) | 3.03 (1.22–7.53) |
-| IV | 118 / 118 | 15.14 (6.19–37.04) | 15.13 (6.18–37.02) | 2.91 (1.18–7.20) | 2.89 (1.17–7.17) |
+| II | 389 / 388 | 6.68 (2.76–16.14) | 6.66 (2.76–16.09) | 2.37 (0.97–5.77) | 2.30 (0.94–5.60) |
+| III | 74 / 74 | 6.23 (2.52–15.41) | 6.25 (2.53–15.47) | 3.00 (1.21–7.45) | 3.03 (1.22–7.53) |
+| IV | 118 / 118 | 15.14 (6.19–37.04) | 15.13 (6.18–37.02) | 2.91 (1.18–7.21) | 2.89 (1.17–7.17) |
 
 **Cardiovascular mortality** (CV death = underlying cause = *diseases of heart*)
 
@@ -143,8 +151,10 @@ uses composites, not pure self-report):
 | III | 19 / 19 | 8.08 (1.08–60.38) | 8.11 (1.09–60.61) |
 | IV | 26 / 26 | 16.75 (2.27–123.5) | 16.75 (2.27–123.4) |
 
-Event counts match **exactly**; HRs agree to the 2nd–3rd significant figure.
-Full three-model table in `output/tables/table2_reproduced.csv`.
+Event counts match exactly except all-cause Group II (389 against 388, so 586 deaths
+against 585); the cardiovascular counts match exactly (158). The unadjusted HRs agree to
+the 2nd–3rd significant figure; the Model 2 HRs differ by up to about 3% (Group II, 2.37
+against 2.30). Full three-model table in `output/tables/table2_reproduced.csv`.
 
 - **Model 1:** age, sex, dyslipidaemia, hypertension, T2DM, CKD, MI, cancer,
   antihypertensive / antidiabetic / lipid-lowering medication use.
@@ -191,12 +201,16 @@ Full three-model table in `output/tables/table2_reproduced.csv`.
    sentence may reconcile them.*
 
 3. **CV mortality = "diseases of heart" only.** Using heart + cerebrovascular gives
-   185 CV deaths; heart-only gives exactly the paper's **158**.
+   185 CV deaths; heart-only gives exactly the paper's **158**. Table 2 uses the
+   heart-only definition, built inside `04_table2_cox.R`. The `cv_death` variable saved
+   in `masld_analytic.rds` is still the broader heart + cerebrovascular one (185), so it
+   does not reproduce Table 2 if used directly.
 
 4. **FLI circularity (Reviewer 1's point).** FLI uses BMI and waist circumference,
    which also define the BMI/WHtR exposure groups — exposure and steatosis
    ascertainment share inputs. The paper's TyG-index sensitivity analysis addresses
-   this; it is the single most important methodological threat to interrogate.
+   this; it is one of the main methodological threats to interrogate, and one of the
+   candidates for the dominant threat discussed in §7.
 
 5. **Complex survey design not applied.** The paper (and this reproduction) treat NHANES
    as a simple cohort — no `svydesign`, weights, strata, or PSUs. Defensible for
@@ -225,7 +239,13 @@ Full three-model table in `output/tables/table2_reproduced.csv`.
   not required for the primary results).
 - Residual ±1–3 pt differences in HTN/T2DM/dyslipidaemia/CKD reflect the paper's
   under-specified composite definitions ("as previously described").
-- N differs by +71 (1.1%), almost entirely the alcohol-exclusion ambiguity above.
+- N differs by +71 (1.1%), and the gap is unresolved. The alcohol exclusion does not
+  explain it: applying the exclusion overshoots, taking N to 5,944, well below the paper's
+  approximately 6,300 (§5, finding #2). Reading the paper's age criterion strictly as
+  `> 18` gives 6,301 with 585 deaths, close to the published totals though not to every
+  group cell, but the paper's Table 1 mean age, 51.0 (16.6), matches our `≥ 18` cohort
+  instead (§2). The evidence conflicts, and
+  the +71 cannot be attributed to either reading from what is published.
 - **Blood pressure follows the documented NHANES averaging protocol, not a plain mean.**
   The Blood Pressure Procedures Manual (s3.1.7.3) excludes the first reading whenever more
   than one was obtained, treats an all-zero diastolic set as zero, and omits a zero that
@@ -233,11 +253,12 @@ Full three-model table in `output/tables/table2_reproduced.csv`.
   averaging implementation in enough detail to establish that it used the same algorithm,
   so this is a **documentation-informed analytic choice, not a claim of exact computational
   reproduction** - the same status as the alcohol-exclusion switch above.
-  Correcting it changed the derived SBP/DBP for 5,523 of 6,371 participants and moved
-  hypertension from 3,444 to 3,448. Cohort N, phenotype cell counts and deaths did not
-  move, and the adjusted hazard ratios shifted only in the third significant figure
-  (Group IV Model 2: 2.91 (1.18-7.20) -> 2.91 (1.18-7.21)). A coding error can be real and
-  worth fixing even when the headline estimate turns out to be robust to it.
+  Correcting it changed the derived diastolic BP for 5,523 of 6,371 participants (and the
+  systolic BP for a similar number) and moved hypertension from 3,444 to 3,448. Cohort N,
+  phenotype cell counts and deaths did not move, and the Model 1 and Model 2 hazard
+  ratios shifted only in the third significant figure (Group IV Model 2:
+  2.91 (1.18-7.20) -> 2.91 (1.18-7.21)). A coding error can be real and worth fixing
+  even when the headline estimate turns out to be robust to it.
 
 ---
 
@@ -252,7 +273,7 @@ five increments, a worked example of what the increment has to *repair*:
 | **P2 — Confounding diagnostic (Table 1)** | Table 1, variable roles, crude vs adjusted | `03_table1.R` and §2; the BMI cut-point labelling discrepancy (#1) and the composite comorbidity definitions are the P2 interrogation targets |
 | **P3 — Effect modification** | stratum-specific estimates plus a formal interaction test, on the locked contrast | **not in this pipeline** — no script here fits an interaction. P3 is where a group adds one |
 | **P4 — Design-aware main estimate** | replicate the headline, then re-estimate the way the design demands | `04_table2_cox.R` replicates the *unweighted* headline; the survey-design omission (#5) is precisely what P4 repairs, using `WTSAF2YR` on the locked domain (§1) |
-| **P5 — Missing-data sensitivity** | analyse the genuine missingness, and scope the rest | the **792 FLI item-nonresponse losses** and the complete-case covariate loss in Models 1–2 (§1). The fasting-subsample restriction is **DESIGN**, not missingness: it is answered by the P4 weight and by a sentence naming the population it leaves you with, never by imputation |
+| **P5 — Missing-data sensitivity** | analyse the genuine missingness, and scope the rest | the **792 FLI item-nonresponse losses** (§1) and the complete-case covariate loss in Models 1–2 (§3). The fasting-subsample restriction is **DESIGN**, not missingness: it is answered by the P4 weight and by a sentence naming the population it leaves you with, never by imputation |
 
 Naming the **single dominant threat** is not a weekly increment; it is the
 analytic-judgment core of **M1**. The candidates this reproduction surfaces are FLI
@@ -262,13 +283,19 @@ circularity (#4), the survey-design omission (#5), and the under-specified WHtR 
 **What this reproduction does and does not establish.** The pipeline reproduces the
 paper's analysis, and the discrepancies above are documented rather than tuned away.
 Read crudely, Group IV has the poorest observed survival, and the paper reports exactly
-that — **that descriptive claim does follow**. Read adjusted, the picture is different:
-the Model 2 estimates for Groups III and IV are near enough to each other to be
-indistinguishable (repro 2.99 vs 2.91; paper 3.03 vs 2.89, both against Group I), so the
-adjusted results **do not provide clear evidence** that Group IV has higher mortality
-than Group III. Estimated directly on the locked domain, that contrast is
-compatible with no difference as well as with a meaningful increase — 1.06 (0.77–1.45)
-unweighted and 1.29 (0.90–1.86) design-aware (course increments P2 and P4).
+that — **that descriptive claim does follow**. Read with the paper's Model 2 adjustment,
+the picture is different: the Model 2 estimates for Groups III and IV are near enough to
+each other to be indistinguishable (repro 3.00 vs 2.91, §3; paper 3.03 vs 2.89; all
+unweighted and against Group I), so the Model 2 results **do not provide clear
+evidence** that Group IV has higher mortality than Group III. Estimated directly as
+Group IV against Group III, that contrast is compatible with no difference as well as
+with a meaningful increase — 1.05 (0.77–1.45) unweighted and 1.29 (0.89–1.86)
+design-weighted (`WTSAF2YR`/6, strata and PSU; course increments P2 and P4). These two
+are adjusted for Model 1, not Model 2, and both are fitted on the 5,939 locked-domain
+rows complete on the Model 1 covariates, so they differ from each other only in the
+weighting. They belong to the course's paper replication (the paper's four groups and
+covariates); the Week 4–7 lectures adjust for a different covariate set, so their
+estimates for related contrasts differ.
 
 So the replication succeeds, and the disagreement is not with the authors' arithmetic
 but with which contrast supports the stated conclusion. Do not report this reproduction

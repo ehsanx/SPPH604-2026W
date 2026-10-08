@@ -71,7 +71,6 @@ models, which were given the artifacts and asked to find errors. That review is 
 reason for, among other things: the split of the cohort funnel into typed steps; the
 withdrawal of a claim that the crude sex difference was "confounding, not true
 modification"; the separation of the full analytic file (6,371) from the locked domain
-
 (6,048); and the rebuild of `M1_code.qmd` as an assembly notebook after a reviewer
 noticed the deck quoted a design-aware interaction that no increment computed.
 
@@ -112,7 +111,10 @@ that must be found in the paper's PDF; a failed check fails the render.
 
 What this guarantees is that every number shown was produced by the named field of a
 named result object. It does **not** guarantee that the surrounding prose describes that
-number correctly — numeric drift is prevented structurally, interpretive drift is not.
+number correctly — drift from retyping is prevented structurally, interpretive drift is
+not. Nor does it guarantee that a result object is current: when the underlying data are
+rebuilt, each increment has to be re-run so that it re-emits its facts before the deck is
+rebuilt, or the deck will faithfully show the old values.
 
 The two analyses M1 runs itself are stated in the notebook: the replication table, and
 the design-aware interaction that P3 explicitly deferred to M1.

@@ -403,7 +403,8 @@ by 323 records, and the difference is not an error in either. The paper
 is unweighted, so the <strong>full analytic file is the one that
 reproduces it</strong>: Table 1, Table 2 and the figures in
 <code>output/</code> are built on 6,371 against the paper’s
-approximately 6,300. Its own FLI step is the 14,989 that
+approximately 6,300 (Table 2’s Model 1 and Model 2 columns use the
+complete cases among those rows). Its own FLI step is the 14,989 that
 <code>logs/sample_funnel.csv</code> records, and 14,989 exceeds the
 14,962 adults in the fasting-weight frame because 819 adults have all
 four FLI inputs without carrying a valid <code>WTSAF2YR</code>. The
@@ -513,10 +514,12 @@ different problem from the 792 lost at <strong>FLI computable</strong>,
 who were sampled and still lack an input. Collapsing the two into a
 single “FLI computable” step is the error the typed funnel above exists
 to prevent. And it changes how a design-aware analysis has to be built:
-you construct the survey design on the <strong>full frame</strong> and
-then <code>subset()</code> to the fasting sample. Filtering the data
-<em>before</em> building the design discards the information the
-variance estimator needs, and the standard errors come out wrong.</p>
+you construct the survey design on <strong>everyone with a valid fasting
+weight</strong>, not on the MASLD cohort, and then <code>subset()</code>
+to the analysis domain, as the P4 exemplar does. Filtering the data to
+the analysis cohort <em>before</em> building the design discards the
+information the variance estimator needs, and the standard errors can
+come out wrong.</p>
 <p>This pipeline uses the variable for one thing only: separating those
 two funnel steps and marking the locked domain. It never weights with
 it. <strong>Doing something design-aware with it is P4’s job</strong>,
@@ -527,14 +530,15 @@ own</h3>
 <p><code>ALQ130</code> is <em>drinks per drinking-day</em>, not
 consumption. Significant alcohol intake needs <strong>frequency ×
 quantity</strong> — <code>ALQ120Q</code> / <code>ALQ120U</code> combined
-with <code>ALQ130</code>. Using <code>ALQ130</code> alone over-excludes
-roughly 2,000 people.</p>
+with <code>ALQ130</code>. Using <code>ALQ130</code> alone removes 2,063
+people from the full analytic file, where frequency × quantity removes
+427, so it over-excludes about 1,600.</p>
 <p>Worse, both variables use <strong>777 and 999 as reserved
 codes</strong> for “refused” and “don’t know”. Leave them in and a
-refusal becomes someone reporting 777 drinks — reclassifying nine
-refusals as heavy drinkers. They must be set to <code>NA</code> before
-any threshold rule is applied. The code does this for both variables
-before combining them.</p>
+refusal becomes someone reporting 777 drinks — reclassifying nine people
+who refused or answered “don’t know” as heavy drinkers. They must be set
+to <code>NA</code> before any threshold rule is applied. The code does
+this for both variables before combining them.</p>
 <p>The general lesson: in NHANES, <strong>check the codebook for
 reserved values before you compare a variable to a number.</strong> A
 silent misclassification of nine people is exactly the kind of error a

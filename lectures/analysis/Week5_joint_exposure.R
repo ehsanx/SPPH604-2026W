@@ -99,9 +99,11 @@ nonob <- lc(fp, W(central = 1))                            # IV vs III
 ob    <- lc(fp, W(central = 1, `obese:central` = 1))       # II vs I
 mult  <- lc(fp, W(`obese:central` = 1))                    # (II vs I) / (IV vs III)
 p_mult <- summary(fp)$coefficients["obese:central", "Pr(>|z|)"]
-## Group I's 4 deaths make the Wald test the weaker guide, so also the likelihood-ratio
-## test (what P3's code uses) and a profile-likelihood interval for the ratio.
+## Both methods are large-sample approximations. Group I's 4 deaths make their
+## difference worth showing, with each interval paired to its own test.
 fa <- coxph(as.formula(paste("Surv(time_yr, dead) ~ obese + central +", pre)), data = d)
+stopifnot(identical(rownames(fa$y), rownames(fp$y)),
+          fa$n == fp$n, fp$n == nrow(d), fp$nevent == sum(d$dead))
 p_lrt <- anova(fa, fp)$`Pr(>|Chi|)`[2]
 d$oc <- d$obese * d$central
 prof <- function(b) {
@@ -122,6 +124,8 @@ bb <- coef(fb)
 facts <- c(facts, list(
   hr_whtr_nonobese = fci(nonob["est"], nonob["lo"], nonob["hi"]),
   hr_whtr_obese    = fci(ob["est"], ob["lo"], ob["hi"]),
+  n_model         = fmtn(fp$n),
+  events_model    = fmtn(fp$nevent),
   rhr_whtr         = fci(mult["est"], mult["lo"], mult["hi"]),
   p_rhr_whtr       = sprintf("%.2f", p_mult),
   p_lrt_whtr       = sprintf("%.2f", p_lrt),
@@ -242,13 +246,17 @@ s34 <- d[d$group %in% c("III", "IV"), ]
 s34$IV <- as.integer(s34$group == "IV")
 pre_ns <- paste(setdiff(PRE, "female"), collapse = " + ")
 fs <- coxph(as.formula(paste("Surv(time_yr, dead) ~ IV * female +", pre_ns)), data = s34)
+fs0 <- coxph(as.formula(paste("Surv(time_yr, dead) ~ IV + female +", pre_ns)), data = s34)
+stopifnot(identical(rownames(fs0$y), rownames(fs$y)),
+          fs0$n == fs$n, fs$n == nrow(s34), fs$nevent == sum(s34$dead))
 rs <- lc(fs, W(`IV:female` = 1))
 men <- lc(fs, W(IV = 1)); wom <- lc(fs, W(IV = 1, `IV:female` = 1))
 facts <- c(facts, list(
-  n_sex34 = fmtn(nrow(s34)),
+  n_sex34 = fmtn(fs$n),
+  events_sex34 = fmtn(fs$nevent),
   rhr_sex_pre = fci(rs["est"], rs["lo"], rs["hi"]),
-  p_sex_pre   = sprintf("%.2f", anova(coxph(as.formula(paste("Surv(time_yr, dead) ~ IV + female +",
-                                     pre_ns)), data = s34), fs)$`Pr(>|Chi|)`[2]),   # LRT, as P3
+  p_sex_pre   = sprintf("%.2f", anova(fs0, fs)$`Pr(>|Chi|)`[2]),   # LRT, as P3
+  p_sex_pre_wald = sprintf("%.2f", summary(fs)$coefficients["IV:female", "Pr(>|z|)"]),
   hr_IVvIII_men_pre   = fci(men["est"], men["lo"], men["hi"]),
   hr_IVvIII_women_pre = fci(wom["est"], wom["lo"], wom["hi"])))
 
@@ -279,6 +287,20 @@ out <- list(emitted_by = "Week5_joint_exposure", facts = facts,
                           product = paste("obese * central +", pre),
                           sex = paste("IV * female +", pre_ns, "(Groups III and IV)"),
                           retired = "group, crude, within each sex (6,048-row domain)"),
+            model_diagnostics = list(
+              joint = list(n = fj$n, events = fj$nevent),
+              product = list(n = fp$n, events = fp$nevent),
+              no_product = list(n = fa$n, events = fa$nevent),
+              sex = list(n = fs$n, events = fs$nevent),
+              sex_no_product = list(n = fs0$n, events = fs0$nevent)),
+            inference = list(
+              hazard_ratio_CI = "normal Wald 95% CI on the log-HR scale",
+              p_rhr_whtr = "two-sided normal Wald test of obese:central = 0",
+              p_lrt_whtr = "1-df likelihood-ratio test of product versus no-product model, identical rows",
+              rhr_whtr_profile = "95% profile partial-likelihood interval paired with the likelihood-ratio test",
+              p_sex_pre = "1-df likelihood-ratio test of IV:female = 0, identical rows",
+              p_sex_pre_wald = "two-sided normal Wald test of IV:female = 0",
+              risk_difference_CI = "percentile interval from 500 individual bootstrap resamples"),
             bootstrap = list(B = B, seed = 605, horizon_years = 6))
 writeLines(toJSON(out, auto_unbox = TRUE, pretty = TRUE), "Week5_joint_exposure.json", useBytes = TRUE)
 for (k in names(facts)) cat(sprintf("%-24s %s\n", k, facts[[k]]))

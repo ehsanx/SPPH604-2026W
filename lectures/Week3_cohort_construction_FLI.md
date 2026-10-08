@@ -152,8 +152,9 @@ touched.
   thresholded and sexed separately. A student coding from a bullet that says
   "dyslipidaemia" writes one indicator where the definition needs two. This is the level-of-
   abstraction error the slide exists to prevent.
-- ≥ 1 criterion drops **2 people (6,052 → 6,050)** here. Reassuring for this cohort,
-  dangerous as a habit: a non-binding filter is still a reported filter.
+- ≥ 1 criterion drops **2 people (6,052 → 6,050)** in the locked domain's funnel
+  (6,376 → 6,374 in the full reconstruction). Reassuring for this cohort, dangerous as a
+  habit: a non-binding filter is still a reported filter.
 
 ## Part 2 — Eligibility as executable logic · 33 minutes across the slides below
 
@@ -189,12 +190,15 @@ touched.
   the evidence, and it lets the room draw the inference rather than being told it.
 - State the claim at the strength the numbers support: the published figures are **far more
   compatible with no effective exclusion** than with either other reading. **Do not say
-  they "match"** — 6,371 is not 6,300, and the residual +71 is accounted for on Slide 17.
+  they "match"** — 6,371 is not 6,300, and the residual +71 is unresolved: a strict
+  "aged > 18" reading gives 6,301 with 585 deaths, but the paper's Table 1 mean age,
+  51.0 (16.6), matches ≥ 18 (the deck's age-sensitivity slide).
 - Resist supplying a resolution. There isn't one available from the paper.
 
 ## Slide 13 — The trap inside the trap: reserved codes (5 min)
 - `777` = refused, `999` = don't know. Strip before any threshold rule.
-- Left in, `ALQ130 > 2` reclassifies nine refusals as heavy drinkers: 2,063 → 2,072.
+- Left in, `ALQ130 > 2` reclassifies nine refused or don't-know answers as heavy drinkers:
+  2,063 → 2,072.
 - **Say explicitly which trap owns which number.** The ~2,000 belongs to the
   drinks-per-drinking-day error; the nine belong to the reserved codes. An earlier version
   of this course fused them and was wrong by a factor of two hundred.
@@ -229,9 +233,10 @@ touched.
 
 ## Slide 17 — Two row sets, and they are not interchangeable (7 min)
 - Read the two columns as two different objects, not as a right answer and a near miss.
-- Read the paper's row separately, and say the group counts **in pairs** — 386/391,
-  4,541/4,585, 769/787, 604/608, deaths 585/586 — so that when these anchors reappear in
-  the survival weeks nobody hears ours as theirs.
+- Read the paper's row separately, and say the group counts **in pairs**, paper first and
+  the full 6,371-row reconstruction second — 386/391, 4,541/4,585, 769/787, 604/608,
+  deaths 585/586 — so that when these anchors reappear in the survival weeks nobody hears
+  ours as theirs.
 - The habit being built is the row-set label, which every quantitative slide carries.
 
 ## Slide 18 — What the funnel reveals (5 min)

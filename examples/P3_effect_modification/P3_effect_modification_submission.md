@@ -4,7 +4,7 @@
 
 ## The candidate modifier and why we chose it
 
-We test **sex** as an effect modifier of the phenotype–mortality association. Sex is the strongest candidate here for two reasons. First, it is clinically plausible: men and women differ in fat distribution, in the visceral-adiposity thresholds at which cardiometabolic risk rises, and in baseline all-cause mortality — so a WHtR-defined "high central adiposity" contrast could act differently across sexes. Second, and more decisively for us, **sex is entangled with the exposure itself**. The four phenotype groups are far from sex-balanced: Group II (obese, high central) is 56% female while Group I (obese, low central, our reference) is only 15% female. When the composition of the comparison groups shifts with sex, any crude between-group contrast partly reflects who is in each group rather than the effect of central adiposity — exactly the situation where a stratified analysis can mislead and a formal interaction test is required.
+We test **sex** as an effect modifier of the phenotype–mortality association. Sex is the strongest candidate here for two reasons. First, it is clinically plausible: men and women differ in fat distribution, in the visceral-adiposity thresholds at which cardiometabolic risk rises, and in baseline all-cause mortality — so a WHtR-defined "high central adiposity" contrast could act differently across sexes. Second, and more decisively for us, **sex is entangled with the exposure itself**. The four phenotype groups are far from sex-balanced: Group II (obese, high central) is 56% female while Group I (obese, low central, the paper's reference) is only 15% female. When the composition of the comparison groups shifts with sex, any crude between-group contrast partly reflects who is in each group rather than the effect of central adiposity — exactly the situation where a stratified analysis can mislead and a formal interaction test is required.
 
 ## Diagnostic only — the retired IV-vs-I stratification
 
@@ -17,7 +17,7 @@ Refitting the crude Cox model within each sex against Group I (Table P3.1), the
 all-cause HRs are dramatically larger in men.
 
 **Table P3.1. Crude sex-stratified all-cause HR (95% CI), Group I = reference.**
-*Locked domain, N = 6,048 — the rows `P3_code` fits. Group I holds 4 deaths: 2 of 317 men
+*Locked domain, N = 6,048, unweighted — the rows `P3_code` fits. Group I holds 4 deaths: 2 of 317 men
 and 2 of 58 women.*
 
 | Group | Men | Women |
@@ -37,15 +37,16 @@ adjusted) answered that broader question and are **retired**, not carried forwar
 
 To test our estimand we restrict to Groups III and IV, making the interaction term
 exactly **1 df for the contrast we care about**. Crude and adjusted are fit on the
-**same Model-1 complete-case rows** (n = 1,296 of 1,306; 937 men, 359 women), so any
-difference between them is attributable to adjustment rather than to sample change.
+**same Model-1 complete-case rows** (n = 1,296 of 1,306; 937 men, 359 women), unweighted,
+so any difference between them is attributable to adjustment rather than to sample change.
 
 | | ratio of HRs (women / men) | p |
 |---|---|---|
 | Crude | 0.62 (0.26–1.43) | 0.278 |
 | Model 1 adjusted | **1.00 (0.42–2.35)** | **0.993** |
 
-Sex-specific adjusted IV vs III hazard ratios (Model 1, fitted within each sex):
+Sex-specific IV vs III hazard ratios (Model 1 without sex, unweighted, fitted within
+each sex on the same 1,296 rows; `P3_code.qmd` emits them as `hr_men` and `hr_women`):
 
 | | n | HR (95% CI) |
 |---|---:|---|
@@ -65,14 +66,15 @@ intervals are from 300 bootstrap resamples within stratum.
 
 | | 6-yr risk, Group III | 6-yr risk, Group IV | Risk difference |
 |---|---:|---:|---|
-| Men | 0.097 | 0.105 | **+0.008 (−0.033 to 0.042)** |
-| Women | 0.101 | 0.106 | **+0.005 (−0.073 to 0.076)** |
+| Men | 0.097 | 0.105 | **+0.008 (−0.032 to 0.042)** |
+| Women | 0.100 | 0.107 | **+0.007 (−0.072 to 0.076)** |
 
-Difference in risk differences (women − men): **−0.003**.
+Difference in risk differences (women − men): **close to zero** (+0.007 against +0.008);
+no interval is computed for this difference.
 
 ## Interpretation
 
-**What we can say.** On the multiplicative scale, the adjusted ratio of hazard ratios is
+**What we can say.** On the multiplicative scale, the Model-1 ratio of hazard ratios is
 1.00, and on the additive scale both six-year risk differences are under one percentage
 point. The data are **compatible with little or no interaction by sex** for our locked
 contrast.
@@ -89,7 +91,7 @@ non-obese strata, this study is not powered to resolve the question.
 "refuted" modification. Neither follows. A p-value that moves when covariates enter
 tells you the *estimate* changed; it does not establish **what generated** the crude
 difference, and a non-significant test is not evidence of absence. The crude ratio of
-0.62 and the adjusted ratio of 1.00 are both imprecise; the change between them is
+0.62 and the Model-1 ratio of 1.00 are both imprecise; the change between them is
 within their joint uncertainty.
 
 ## Method note — what we did and did not avoid
@@ -106,15 +108,17 @@ that respects time-to-event.
 stratum triggered Cox convergence warnings — with 359 women and sparse events, some
 resamples separate — so the female interval is wide and should be read as
 order-of-magnitude. And all of this is **unweighted**: P3 precedes the survey-design
-increment. P4 shows that design materially changes inference for the main estimate, so
-whether the design-aware interaction gives the same qualitative answer is an open
-question, and one M1 should check rather than assume.
+increment. P4 shows that design changes inference for the paper's IV-vs-I contrast and
+moves the locked IV-vs-III point estimate (Model 1 on 5,939 rows: 1.05 unweighted, 1.29
+weighted) without changing its conclusion, so whether the design-aware interaction gives
+the same qualitative answer is an open question, and one M1 should check rather than
+assume.
 
 ## Bottom line
 
 For the locked IV-vs-III contrast, sex does not show evidence of effect modification on
-either scale at the precision this study affords — adjusted ratio of hazard ratios 1.00
-(0.42–2.35), six-year risk differences +0.008 in men and +0.005 in women. The eye-
-catching crude stratified gap reported by an earlier draft came from a different
-contrast (IV vs I) and a broader test. This is a null reported with its uncertainty
+either scale at the precision this study affords — Model-1 ratio of hazard ratios 1.00
+(0.42–2.35), six-year risk differences +0.008 in men and +0.007 in women (Model 1,
+unweighted, 1,296 rows). The eye-catching crude stratified gap reported by an earlier
+draft came from a different contrast (IV vs I) and a broader test. This is a null reported with its uncertainty
 attached, not a demonstration that sex is irrelevant.

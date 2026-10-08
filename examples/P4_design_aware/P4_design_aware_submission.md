@@ -14,9 +14,9 @@
 
 ## The estimand, stated before the model
 
-We fix the target of inference first, because "the association" is under-specified until we name a population. Our contrast is the all-cause mortality hazard of phenotype **Group IV** (non-obese by BMI, high central adiposity WHtR≥0.6) relative to **Group I** (obese, low central adiposity), among adults who meet FLI-based MASLD criteria, over follow-up censored 31 December 2019 (median 6.7 years). The measure is a hazard ratio.
+We fix the target of inference first, because "the association" is under-specified until we name a population. Our contrast is the all-cause mortality hazard of phenotype **Group IV** (non-obese by BMI, high central adiposity WHtR≥0.6) relative to **Group I** (obese, low central adiposity), among adults who meet FLI-based MASLD criteria, over follow-up censored 31 December 2019 (median 6.7 years). The measure is a hazard ratio. We state it for the replication contrast (IV vs I); the matrix below treats the locked IV-vs-III contrast in the same way.
 
-The design question is *which* population that HR describes. The paper's unweighted Cox model estimates a **sample-conditional** association inside the 6,371 people who happened to be sampled. But NHANES is a stratified, clustered, unequal-probability survey; without weights the estimate is not a statement about US adults with MASLD. Making the estimand *population-average* — the target-of-inference we think the paper actually wants — requires the survey machinery. So P4 is not "add weights and see if the number moves." It is a change of estimand, and we report both because both are legitimate answers to *different* questions.
+The design question is *which* population that HR describes. The paper's unweighted Cox model estimates a **sample-conditional** association inside the people who happened to be sampled (6,371 in our reproduction of its cohort). But NHANES is a stratified, clustered, unequal-probability survey; without weights the estimate is not a statement about US adults with MASLD. Making the estimand *population-average* — the target-of-inference we think the paper actually wants — requires the survey machinery. So P4 is not "add weights and see if the number moves." It is a change of estimand, and we report both because both are legitimate answers to *different* questions.
 
 ## Replicate: the unweighted Cox model
 
@@ -25,16 +25,16 @@ We first reproduce the paper's Table 2 on the full cohort (n=6,371; 586 all-caus
 | Model | Group II | Group III | **Group IV** |
 |---|---|---|---|
 | Unadjusted | 6.68 (2.76–16.14) | 6.23 (2.52–15.41) | **15.14 (6.19–37.04)** |
-| Model 1 (clinical) | 2.50 (1.03–6.09) | 3.23 (1.30–8.01) | **3.28 (1.33–8.11)** |
-| Model 2 (+ smoking, sedentary) | 2.37 (0.97–5.76) | 2.99 (1.20–7.43) | **2.91 (1.18–7.20)** |
+| Model 1 (clinical) | 2.51 (1.03–6.10) | 3.24 (1.31–8.04) | **3.29 (1.33–8.14)** |
+| Model 2 (+ smoking, sedentary) | 2.37 (0.97–5.77) | 3.00 (1.21–7.45) | **2.91 (1.18–7.21)** |
 
-These match the publication to rounding (paper IV: 15.13 unadjusted, 2.89 in Model 2). The replication is clean: the fifteen-fold crude hazard collapses to roughly three-fold once age and cardiometabolic burden are adjusted — most of the crude signal is confounding by who lands in each phenotype — but Group IV remains the worst group and its Model-2 confidence interval still excludes 1.
+These are close to the publication without matching every cell. The unadjusted Group IV estimate agrees closely (15.14 against the paper's 15.13); our adjusted Group IV estimates sit slightly above the paper's (Model 1 3.29 against 3.155; Model 2 2.91 against 2.893). The fifteen-fold crude hazard falls to roughly three-fold once the Model 1 or Model 2 covariates are added. As P2 sets out, that attenuation cannot by itself tell us how much of the crude signal was confounding: Model 1 contains candidate mediators, and hazard ratios are non-collapsible. Group IV's Model-2 confidence interval still excludes 1, but after adjustment Groups III and IV are close (Model 2: 3.00 and 2.91).
 
 ## Improve: a design-aware estimate
 
-The analytic cohort is the NHANES **fasting subsample**, because the FLI needs fasting triglycerides. The correct weight is therefore the pooled fasting-subsample weight, WTSAF2YR divided by 6 (six two-year cycles), with SDMVSTRA strata and SDMVPSU clusters. Valid weights exist for **n=6,048 across 184 clusters**. On that same subset the unweighted IV HR is 16.96 (slightly higher than the full-cohort 15.14 — the weight-eligible subset is not identical to the full cohort, which itself matters).
+The analytic cohort is the NHANES **fasting subsample**, because the FLI needs fasting triglycerides. The correct weight is therefore the pooled fasting-subsample weight, WTSAF2YR divided by 6 (six two-year cycles), with SDMVSTRA strata and SDMVPSU clusters. Valid weights exist for **n=6,048 across 184 clusters**. On that same subset the unweighted crude IV-vs-I HR is 16.96 (6.24–46.05), slightly higher than the full-cohort 15.14 — the weight-eligible subset is not identical to the full cohort, which itself matters.
 
-Survey-weighted, all-cause, Group I reference:
+Survey-weighted (`WTSAF2YR`/6, strata, PSU), crude, all-cause, Group I reference, on the 6,048 rows:
 
 | Group | Weighted HR (95% CI) |
 |---|---|
@@ -42,40 +42,44 @@ Survey-weighted, all-cause, Group I reference:
 | III | 4.04 (0.89–18.34) |
 | **IV** | **12.40 (2.69–57.15)** |
 
-Because Group I is a tiny, low-event reference (n=391, 5 deaths), the vs-I contrasts are unstable in either weighting scheme. So we also estimate **weighted direct contrasts** against the other high-risk groups, which is the comparison a clinician actually cares about:
+Because Group I is a tiny, low-event reference (375 people and 4 deaths on these 6,048 rows), the vs-I contrasts are unstable in either weighting scheme. So we also estimate **weighted direct contrasts** against the other high-risk groups, which is the comparison a clinician actually cares about:
 
 - **IV vs III: 3.07 (2.11–4.46)** — non-obese/high-central vs non-obese/low-central
-- **IV vs II: 2.30 (1.76–3.02)** — non-obese/high-central vs obese/low-central
+- **IV vs II: 2.30 (1.76–3.02)** — non-obese/high-central vs obese/high-central
 
-*Those three are **crude** survey-weighted estimates. The adjusted versions, and the
-comparison that separates adjustment from design, are in the matrix below.*
+*The table and both contrasts above are **crude** survey-weighted estimates on the
+6,048-row locked domain. The matrix below uses the 5,939 complete-case rows, which is why
+its weighted crude IV vs III has a slightly different interval. The adjusted versions,
+and the comparison that separates adjustment from design, are in the matrix below.*
 
 ## The matrix that separates adjustment from design
 
 The running ledger of `15.1 → 2.9 → 12.4` mixes crude and adjusted models on different
-row sets, so it is not a sequence of successive corrections and should not be read as
-one. To separate **adjustment** from **survey design** the rows must be held fixed.
+row sets (6,371 rows for the first two, 6,048 for the third), so it is not a sequence of
+successive corrections and should not be read as one. To separate **adjustment** from
+**survey design** the rows must be held fixed.
 
 All four cells below use the **same 5,939 Model-1 complete-case rows** inside the locked
-domain.
+domain; "weighted" means `WTSAF2YR`/6 with strata and PSU, the design built on the full
+fasting frame and then subset to these rows.
 
 | | IV vs I *(replication)* | IV vs III *(locked)* |
 |---|---|---|
 | unweighted, crude | 16.05 (5.91–43.58) | 2.34 (1.72–3.18) |
-| unweighted, Model 1 | 3.79 (1.38–10.39) | 1.06 (0.77–1.45) |
+| unweighted, Model 1 | 3.81 (1.39–10.43) | 1.05 (0.77–1.45) |
 | weighted, crude | 11.93 (2.60–54.84) | 3.07 (2.11–4.48) |
-| **weighted, Model 1** | **2.97 (0.69–12.79)** | **1.29 (0.90–1.86)** |
+| **weighted, Model 1** | **2.98 (0.69–12.82)** | **1.29 (0.89–1.86)** |
 
 Read down a column for what **adjustment** does; read across a row for what **design**
 does.
 
-- **On the locked estimand, adjustment dominates design.** Adjustment moves 2.34 to 1.06
-  unweighted and 3.07 to 1.29 weighted. Design moves 2.34 to 3.07 crude and 1.06 to 1.29
-  adjusted — in the *opposite* direction, and by less.
-- **Design changes no conclusion on the locked estimand.** Both adjusted intervals include
-  1 (0.77–1.45 and 0.90–1.86).
+- **On the locked estimand, adjustment dominates design.** Adjustment moves 2.34 to 1.05
+  unweighted and 3.07 to 1.29 weighted. Design moves 2.34 to 3.07 crude and 1.05 to 1.29
+  under Model 1 — in the *opposite* direction, and by less.
+- **Design changes no conclusion on the locked estimand.** Both Model-1 intervals include
+  1 (0.77–1.45 and 0.89–1.86).
 - **Design does change the conclusion on the replication estimand.** Unweighted Model 1 is
-  3.79 (1.38–10.39), excluding 1; weighted Model 1 is 2.97 (0.69–12.79), which does not.
+  3.81 (1.39–10.43), excluding 1; weighted Model 1 is 2.98 (0.69–12.82), which does not.
 - So "survey design matters" is true **of the paper's own contrast**, and much weaker for
   the question we locked. Anyone ranking design as the dominant threat has to say which
   estimand they mean.
@@ -84,9 +88,9 @@ does.
 
 ## Interpretation
 
-Two things happen when we move from sample-conditional to population-average. First, the point estimate **attenuates** (IV 16.96 → 12.40): weighting changes how much each respondent contributes according to the sampling design, so representative estimation pulls the number down. Second, the confidence intervals **widen** (IV upper bound 37 → 57). That widening is the **widening of the survey-aware interval** — clustering within 184 PSUs and unequal weights reduce the *effective* sample size below the nominal 6,048, so the honest CI is wider than the unweighted one pretends. The unweighted model was over-confident, not more precise.
+Two things happen when we move from sample-conditional to population-average. Hold the rows and the model fixed (the crude IV-vs-I estimate on the 6,048-row locked domain) and change only the weighting: unweighted 16.96 (6.24–46.05), weighted 12.40 (2.69–57.15). First, the point estimate **moves**. Weighting changes how much each respondent contributes according to the sampling design, and it has no fixed direction: here the estimate falls, but on the same rows the crude IV-vs-III estimate rises (2.33 → 3.07), as it does in the matrix above. Second, the confidence interval **widens**. In the course's checks, most of such a cost comes from the unequal weights, which reduce the *effective* sample size below the nominal number of rows, rather than from clustering: in the Week 6 lecture's exposure analysis (set L, 5,911 rows), the strata and PSUs alone raise the variance of its waist-fat estimate among the non-obese by about 5%, and the weights alone by about 56%. That check was made on a different estimate in the lecture's analysis; we have not repeated it for this one. The unweighted interval is not wrong. It is a valid interval for the sample-conditional estimand; the wider weighted interval belongs to the population-average estimand.
 
-**What the matrix actually supports.** For the **locked IV-vs-III** estimand, adjustment is consequential and survey weighting changes the point estimate modestly (1.06 → 1.29) *without* altering the inferential conclusion — both adjusted intervals include 1, so there is **no clear evidence of a higher hazard at the available precision**. For the **replication IV-vs-I** estimand, weighting materially changes the uncertainty and whether the interval excludes 1 (3.79, 1.38–10.39 becomes 2.97, 0.69–12.79). Group IV having the largest point estimate describes an *ordering*; it does not establish that central adiposity carries excess mortality among non-obese adults after adjustment.
+**What the matrix actually supports.** For the **locked IV-vs-III** estimand, adjustment is consequential and survey weighting changes the point estimate modestly (Model 1 on 5,939 rows: 1.05 → 1.29) *without* altering the inferential conclusion — both Model-1 intervals include 1, so there is **no clear evidence of a higher hazard at the available precision**. For the **replication IV-vs-I** estimand, weighting materially changes the uncertainty and whether the interval excludes 1 (3.81, 1.39–10.43 becomes 2.98, 0.69–12.82). Group IV having the largest point estimate describes an *ordering*; it does not establish that central adiposity carries excess mortality among non-obese adults after adjustment.
 
 ## Which weight: a rule, not a judgment call
 
@@ -94,4 +98,4 @@ An earlier draft of this submission called the weight choice "a genuine puzzle w
 
 CDC's guidance is the **least common denominator rule**: when an analysis draws on variables measured in different components, use the weight belonging to the **smallest** applicable subsample. FLI requires fasting triglycerides, so `WTSAF2YR` governs — even though GGT and anthropometry are available MEC-wide. The rule exists precisely because analyses routinely straddle frames; it is not a tie to be broken by argument.
 
-The MEC weight is not a defensible alternative here: it would weight to a population in which the exposure cannot be constructed at all. There is no sensitivity axis to carry into M2 on this point.
+The MEC weight is not a defensible primary here. Both weights refer to the same population, but `WTMEC2YR` applied to fasting rows leaves out the fasting subsample's own selection and nonresponse adjustment, which `WTSAF2YR` carries. The P4 handout asks for a `WTMEC2YR`-weighted run beside the primary, labelled as a sensitivity analysis; this submission does not include one, so that comparison remains open for M1.

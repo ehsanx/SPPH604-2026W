@@ -1,7 +1,10 @@
 # P5 — Missing Data (Lab 6)
 
 *Model submission — demonstration paper (Kueh et al., BMJ Open 2026;16:e113719).
-Every number below is produced by `P5_code.qmd`; none is typed in.*
+The numbers below are typed, copied from the rendered output of `P5_code.qmd`
+(`P5_code.html`) unless a line names another source, so they must be re-copied whenever
+the code is re-run. The approximate income and blood-pressure figures in the section on a
+sensitivity analysis we did not run are stated in `P5_code.qmd` but not computed there.*
 
 ## Three kinds of downward step, and only one of them is missing data
 
@@ -67,13 +70,15 @@ cumulative-hazard term.
 
 | | Group IV vs III HR (95% CI) | n |
 |---|---|---:|
-| complete case | **1.29 (0.90–1.86)** | 5,939 |
-| all 109 assigned **no cancer** | 1.29 (0.89–1.85) | 6,048 |
-| all 109 assigned **cancer** | 1.29 (0.89–1.85) | 6,048 |
-| MI (m = 10) | **1.29 (0.89–1.85)** | 6,048 |
+| complete case | **1.29 (0.89–1.86)** | 5,939 |
+| all 109 assigned **no cancer** | 1.28 (0.89–1.85) | 6,048 |
+| all 109 assigned **cancer** | 1.28 (0.89–1.85) | 6,048 |
+| MI (m = 10) | **1.28 (0.89–1.85)** | 6,048 |
 
-Every approach returns **1.29**. On the contrast the term is built around, the residual
-missingness changes nothing at all, and the interval includes 1 throughout.
+Complete case gives **1.29 (0.89–1.86)**; both extreme assignments and MI give **1.28
+(0.89–1.85)**, a difference of 0.01, far smaller than the interval. On the contrast the
+term is built around, the residual missingness does not change the estimate in any
+meaningful way, and the interval includes 1 throughout.
 
 ### Replication estimand — IV vs I, weighted Model 1
 
@@ -83,14 +88,14 @@ values to one extreme, then the other.
 
 | | Group IV HR (95% CI) | n |
 |---|---|---:|
-| weighted, complete case | **2.97 (0.69–12.79)** | 5,939 |
-| weighted, all 109 assigned **no cancer** | 2.98 (0.69–12.86) | 6,048 |
-| weighted, all 109 assigned **cancer** | 2.99 (0.69–12.87) | 6,048 |
-| weighted, MI (m = 10) | **2.98 (0.69–12.86)** | 6,048 |
-| *unweighted, complete case* | *3.79 (1.38–10.39)* | *5,939* |
+| weighted, complete case | **2.98 (0.69–12.82)** | 5,939 |
+| weighted, all 109 assigned **no cancer** | 2.99 (0.69–12.89) | 6,048 |
+| weighted, all 109 assigned **cancer** | 2.99 (0.69–12.90) | 6,048 |
+| weighted, MI (m = 10) | **2.99 (0.69–12.89)** | 6,048 |
+| *unweighted, complete case* | *3.81 (1.39–10.43)* | *5,939* |
 
-Every approach lands between **2.97 and 2.99** — a total range of **0.02** on the
-hazard ratio. The extremes are a transparent stress test, not formal bounds: they do
+Every weighted approach lands between **2.98 and 2.99** — a total range of **0.01** on
+the hazard ratio. The extremes are a transparent stress test, not formal bounds: they do
 not identify the missing values, they show what happens under two transparent global
 scenarios. Uniform assignments do not necessarily maximise or minimise the exposure
 coefficient, so this bounds nothing — it stress-tests.
@@ -98,7 +103,7 @@ coefficient, so this bounds nothing — it stress-tests.
 Difference between complete case and MI: **0.012**. The pooled fraction of missing
 information prints as 0%, but that is *approximately* zero at the displayed precision,
 not literally zero — the between-imputation variance of the Group IV log-HR is
-7.6e-12. The imputed values genuinely differ between completions; they have almost
+3.3e-11. The imputed values genuinely differ between completions; they have almost
 no leverage on the coefficient.
 
 ## What this shows
@@ -119,10 +124,14 @@ paper's conclusion needs all five increments, and that judgment belongs to M1.
 **Methodological importance is measured, not presumed.** A sensitivity analysis whose
 answer is "no material change" is a result, not a failure.
 
-**What moves the conclusion is the design, not the missing data.** Compare the two
-complete-case rows: unweighted, the adjusted interval excludes 1; correctly weighted,
-it does not. Respecting the sampling design changes what can be claimed here.
-Imputing 1.8% of one covariate does not.
+**On the paper's contrast, what moves the conclusion is the design, not the missing
+data.** Compare the two complete-case rows of the IV-vs-I table (Model 1, 5,939 rows):
+unweighted, the interval excludes 1; weighted to the population, it does not. On the
+locked IV-vs-III contrast neither interval excludes 1 (1.05 (0.77–1.45) unweighted, in
+P4; 1.29 (0.89–1.86) weighted), so there the design moves the point estimate but not the
+conclusion. The unweighted intervals are valid for the sample-conditional question; the
+weighted ones answer the population question. Imputing 1.8% of one covariate does not
+change what can be claimed on either contrast.
 
 ## A sensitivity analysis we deliberately did not run
 
@@ -139,8 +148,8 @@ Adults with MASLD in the NHANES fasting subsample, 2007–2018, for whom a Fatty
 Index can be computed. `WTSAF2YR` carries the estimate to the fasting-sampled population;
 the steatosis and cardiometabolic criteria are the target population rather than a loss;
 and the 5.3% item nonresponse on the FLI inputs narrows it further, with no weight
-accounting for that step. Stating this is not a hedge — it is the population the 1.29
-belongs to.
+accounting for that step. Stating this is not a hedge — it is the population the locked
+estimate (1.29, complete case) belongs to.
 
 ## Limitations
 
@@ -153,6 +162,7 @@ belongs to.
 - The imputation is **not fully survey-modelled**. The sampling weight and stratum are
   entered as predictors and the design is reintroduced when each completed dataset is
   refitted; a fully design-aware imputation would model the sampling structure inside
-  the imputation itself. We checked whether the shortcut mattered: imputing with no
-  design information, with the weight, and with weight plus stratum all return
-  IV = 2.9845. Immaterial here; not a general licence.
+  the imputation itself. We did not fit that fuller model. What `P5_code.qmd` does show
+  is that the imputed cancer values have almost no leverage on the Group IV coefficient
+  (between-imputation variance 3.3e-11), so how the design enters the imputation model
+  can make little difference here. Immaterial here; not a general licence.

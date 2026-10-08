@@ -13,6 +13,22 @@ format:
     height: 720
     fig-align: center
     smaller: true
+  beamer:
+    fontsize: 8pt
+    # As in the Week 3 deck: the default beamer font has no glyph for these symbols, so the
+    # static PDF would drop them (it printed "age  18" for "age >= 18"). Map them to symbols
+    # every LaTeX install already has.
+    header-includes: |
+      \usepackage{newunicodechar}
+      \newunicodechar{≥}{\ensuremath{\geq}}
+      \newunicodechar{≤}{\ensuremath{\leq}}
+      \newunicodechar{×}{\ensuremath{\times}}
+      \newunicodechar{÷}{\ensuremath{\div}}
+      \newunicodechar{·}{\textperiodcentered}
+      \newunicodechar{≠}{\ensuremath{\neq}}
+      \newunicodechar{≈}{\ensuremath{\approx}}
+      \newunicodechar{→}{\ensuremath{\rightarrow}}
+      \newunicodechar{²}{\textsuperscript{2}}
 ---
 
 ## Week 2 {.center}
@@ -315,7 +331,8 @@ analysis <- stacked %>%
          RaceEthnicity = RIDRETH3, BMI = BMXBMI) %>%
   filter(Age >= 20) %>%
   mutate(BMICat = cut(BMI, c(0, 18.5, 25, 30, Inf), right = FALSE,
-                      labels = c("Underweight", "Normal weight", "Overweight", "Obese")))
+                      labels = c("Underweight", "Normal weight",
+                                 "Overweight", "Obese")))
 ```
 
 - Every rename is a **decision you have to be able to defend**, not cosmetics
@@ -442,20 +459,23 @@ cohort.
 ## What the funnel reveals
 
 **Reproducibility note.** The published paper reports **~6,300** participants with MASLD;
-this pipeline yields **6,048** mortality-linked participants.
-*Analysis set: locked mortality-linked cohort, N = 6,048.*
+this pipeline's full reconstructed analytic file has **6,371**. The funnel's **6,048** is a
+further subset, those with a valid fasting weight.
+*Analysis set: full reconstructed analytic file, N = 6,371; locked cohort, N = 6,048.*
 
-The two numbers should not be presented as if they described the same cohort.
+The paper's ~6,300 and our 6,371 should not be presented as if they described the same
+cohort.
 
 The paper also states eligibility as **age > 18**, while this reproduction uses
 **age ≥ 18**. Small implementation differences like this are **recorded, not silently
 harmonised**.
 
 ::: {.notes}
-(3 min) Tie back to the lab preview: they have just seen three different age rules on one
-slide. Here is what that costs. The discipline being taught is recording the difference,
-not resolving it — a reproduction that quietly adopts the other rule has destroyed its own
-evidence.
+(3 min) Compare the paper with 6,371, not with 6,048: the 6,048 is the subset the
+design-aware analyses use, and Week 3 works through the +71. Tie back to the lab preview:
+they have just seen three different age rules on one slide. Here is what that costs. The
+discipline being taught is recording the difference, not resolving it — a reproduction
+that quietly adopts the other rule has destroyed its own evidence.
 :::
 
 # Q3 — Exposure and comparison
@@ -611,15 +631,19 @@ index factor has to earn its place beyond them.
 
 ## What a crude-to-adjusted change establishes
 
-- Group IV all-cause HR ≈ **15.1 crude → ≈ 2.9 adjusted**
+- Group IV vs I all-cause HR ≈ **15.1 crude → ≈ 2.9 with the paper's Model 2**
 - Conditioning on the adjustment set moves the estimate **enormously**
 - What that movement *means* — confounding controlled, mediation removed, a collider
   opened — depends on the goal and the causal role of those variables
 
-*Analysis set: full reconstructed analytic file, N = 6,371.*
+*Analysis set: full reconstructed analytic file, N = 6,371 (Model 2 on its complete cases);
+unweighted, as in the paper.*
 
 ::: {.notes}
-(5 min) **Week 4 does this work.** Today it is enough that the size of a move is not itself
+(5 min) This is the paper replication: the paper's contrast (IV vs I) and its Model 2.
+Model 2 drops rows missing one of its covariates, so the rows change slightly too.
+Week 4 makes the same kind of move on other contrasts and adjustment sets, so its numbers
+differ. **Week 4 does this work.** Today it is enough that the size of a move is not itself
 an interpretation. **Vote and argue:** what would you need to know to call this
 confounding? Collect answers, resist supplying one — Week 4 is where the DAG logic arrives.
 :::
@@ -627,26 +651,30 @@ confounding? Collect answers, resist supplying one — Week 4 is where the DAG l
 ## Five NHANES traps — each has bitten this project
 
 - **`ALQ130` is drinks per *drinking day*, not drinks per day.** A ">2 a day" rule applied
-  to it directly over-excluded roughly **2,000** people here — average intake needs
-  frequency × quantity. **Week 3 owns this one**
+  to it directly removes **2,063** people here, against **427** for average intake
+  (frequency × quantity): about **1,600** over-excluded. **Week 3 owns this one**
 - **777 = refused, 999 = don't know — codes, not counts.** Left inside a threshold rule
-  they reclassified **nine** refusals as heavy drinkers. Two traps on one variable, a
-  factor of two hundred apart
+  they reclassified **nine** such records as heavy drinkers. Two traps on one variable, a
+  factor of about two hundred apart
 - **`RIDRETH3` does not exist before 2011.** It is what identifies Asian participants for
   the lower BMI threshold — so the first two cycles cannot apply the paper's own rule
 - **Fasting labs carry their own weight.** `LBXTR` and `LBXGLU` come from the fasting
   subsample, weighted by `WTSAF2YR`, not `WTMEC2YR`
 - **Blood pressure is not a row mean** — next slide
 
+*Analysis set: full reconstructed analytic file, N = 6,371 (the alcohol counts).*
+
 ::: {.notes}
 (3 min) Each of these cost this project real time, and each is a variable-handling
 decision, which is why they sit under Q5 rather than in a separate "tips" section. The
 first two are deliberately separated: an earlier version of this slide fused them and
-attached the 2,000 to the reserved codes, which is wrong by a factor of two hundred. The
-`RIDRETH3` one is the sharpest teaching point — a definition that cannot be applied in a
-third of your cycles is a finding about the study, not a nuisance. For the record, the
-alcohol numbers: the exclusion moves 2,063 → 2,072 when the reserved codes are left in.
-Week 3 runs the full demonstration.
+attached the direct rule's ~2,000 removals to the reserved codes, which is wrong by a
+factor of about two hundred. The `RIDRETH3` one is the sharpest teaching point — a
+definition that cannot be applied in a third of your cycles is a finding about the study,
+not a nuisance. For the record, the alcohol numbers: the 427 removed by the average-intake
+rule are all inside the direct rule's 2,063, so the over-exclusion is 1,636. The nine are
+reserved-code records, refusals (777) or don't-knows (999), not nine refusals; the
+exclusion moves 2,063 → 2,072 when they are left in. Week 3 runs the full demonstration.
 :::
 
 ## The blood pressure trap, in full
@@ -658,9 +686,9 @@ The NHANES **Blood Pressure Procedures Manual (s3.1.7.3)** specifies the averagi
   NHANES codes a failure to obtain a reading separately, as missing
 - A **zero sitting beside a positive reading is omitted** from the average
 
-Applying it changed derived SBP/DBP for **5,523 of 6,371** participants and moved
-hypertension from 3,444 to 3,448 — while the adjusted hazard ratios shifted only in the
-third significant figure. *Analysis set: full reconstructed analytic file, N = 6,371.*
+Applying it changed the derived diastolic pressure for **5,523 of 6,371** participants and
+moved hypertension from 3,444 to 3,448 — while the Model 1 and Model 2 hazard ratios shifted
+only in the third significant figure. *Analysis set: full reconstructed analytic file, N = 6,371.*
 
 > **A coding error can be real, and worth fixing, even when the headline estimate survives it.**
 
@@ -690,8 +718,8 @@ is the single most common survey-analysis error and it is worth planting now.
 
 ## Designed subsampling is not missingness
 
-- The fasting subsample is **statistically designed**, not self-selected, and carries a
-  weight built to keep it nationally representative
+- Sampling into the fasting subsample is **statistically designed**, with a weight built
+  to keep it nationally representative; compliance and lab nonresponse also play a part
 - Check rather than assume: adults in and out of it differ by **0.2 years of age,
   0.02 kg/m² BMI, 0.07 cm waist**
 - It is balanced on the very measurements this paper's exposure is built from
@@ -702,9 +730,11 @@ is the single most common survey-analysis error and it is worth planting now.
 
 ::: {.notes}
 (4 min) An earlier version of this lecture taught the fasting subsample as a preview of
-selection bias. That was wrong, and the measured balance above is why. The distinction
-worth teaching is design versus missingness — and the fact that it was checked, rather
-than assumed in either direction, is the transferable habit.
+selection bias. That was wrong, and the measured balance above is why. Do not overcorrect
+to "purely design", though: 2,031 adults carry a fasting weight of exactly 0, and fasting
+compliance and laboratory nonresponse can affect who has a positive weight (Week 3 says
+the same). The distinction worth teaching is design versus missingness — and the fact that
+it was checked, rather than assumed in either direction, is the transferable habit.
 :::
 
 ## Survey design: paper versus reproduction

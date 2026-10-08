@@ -33,7 +33,7 @@ Duration: 2 h (Thu Sept 10, 10 am–12 pm, by Zoom — the one-off opening sessi
 9. **AI is a co-pilot — you are accountable** (6 min) — allowed/encouraged; "the AI did it" is no defense; individual M3 is the backstop; disclose use in every cover note (M0, M1, M2, M4). M3 preparation needs no disclosure — there is no M3 submission; at M2, paste what is yours or public and describe what is theirs.
 10. **Reproducibility is the standard** (5 min) — runs on a fresh machine; submit a **zip of your repo** (no repo access).
 11. **Logistics** (6 min) — meeting times and modality (Tue class by Zoom; Thu lab in person, SPPH 143); OER textbooks; communication; groups vs individual defense; accommodation letters.
-12. **Our demonstration paper — the ONLY paper slide** (5 min) — Kueh et al. 2026 (MASLD/NHANES); four body-shape groups; the **non-obese, high-waist** group dies most; we rebuild + interrogate it. **MASLD hook (the whole mention):** that's the *what/why*; the *how* starts next week, distributed across the term.
+12. **Our demonstration paper — the ONLY paper slide** (5 min) — Kueh et al. 2026 (MASLD/NHANES); four body-shape groups; the paper's headline: the **non-obese, high-waist** group dies most; we rebuild + interrogate it. **MASLD hook (the whole mention):** that's the *what/why*; the *how* starts next week, distributed across the term.
 13. **This week: get set up** (5 min) — R/RStudio/Quarto + Git/GitHub; verify render + first commit; form groups; scan candidate papers.
 14. **Bridge to next week (Week 2 → L1)** (4 min) — NHANES + reading Methods critically; L1 data wrangling; begin shortlisting for M0; come with a working toolchain and 1–2 candidate papers.
 

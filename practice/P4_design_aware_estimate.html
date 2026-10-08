@@ -267,28 +267,33 @@ one.</p>
 <h2 id="worked-example-masldnhanes-demonstration">Worked example —
 MASLD/NHANES demonstration</h2>
 <ul>
-<li><strong>Replicate first — the paper is <em>unweighted</em>.</strong>
-An ordinary Cox model reproduces the headline: Group IV all-cause HR ≈
-<strong>15.1 unadjusted → ~2.9 fully adjusted</strong> (the reproduction
-matches to 2–3 significant figures). Reproducing the <em>unweighted</em>
-result is the replicate step.</li>
-<li><strong>The improvement is the design the paper does not
-apply.</strong> The cohort is the NHANES <strong>fasting
+<li><strong>Replicate first — the paper’s analysis is
+<em>unweighted</em>.</strong> An ordinary Cox model reproduces the
+paper’s Table 2: Group IV vs I all-cause HR ≈ <strong>15.1 unadjusted →
+~2.9 under the paper’s Model 2</strong> (full analytic file, 6,371 rows;
+the reproduction matches to 2–3 significant figures). Reproducing the
+<em>unweighted</em> result is the replicate step.</li>
+<li><strong>The improvement is the design the paper’s analysis does not
+use.</strong> The cohort is the NHANES <strong>fasting
 subsample</strong> (FLI needs fasting triglycerides), so a design-aware
 estimate needs the <strong>fasting-subsample weights
 (<code>WTSAF</code>)</strong> pooled across six cycles, even though FLI
-also draws on non-fasting (GGT) labs.</li>
+also draws on non-fasting (GGT) labs. Compare like with like: hold the
+rows and the model fixed and change only the weighting (in the worked
+example, Model 1 on 5,939 rows, Group IV vs I is 3.81 unweighted and
+2.98 weighted).</li>
 <li><strong>Which weight is a rule, not a judgment call.</strong> CDC’s
 least-common-denominator rule: when an analysis draws on variables from
 different components, use the weight of the <strong>smallest</strong>
 applicable subsample. If your exposure needs a fasting analyte, the
-fasting weight governs — a larger-sample weight would weight to a
-population in which your exposure cannot be constructed. The exercise is
-to <em>name the straddle and apply the rule</em>, not to argue the
-choice open. Then report a <code>WTMEC</code>-weighted run beside it,
-<strong>labelled as a sensitivity analysis</strong> — it is not a
-defensible primary, but it shows how much the rule changed the
-answer.</li>
+fasting weight governs — a larger-sample weight such as
+<code>WTMEC</code> refers to the same population but, applied to fasting
+rows, leaves out the fasting subsample’s own selection and nonresponse
+adjustment. The exercise is to <em>name the straddle and apply the
+rule</em>, not to argue the choice open. Then report a
+<code>WTMEC</code>-weighted run beside it, <strong>labelled as a
+sensitivity analysis</strong> — it is not a defensible primary, but it
+shows how much the rule changed the answer.</li>
 <li><strong>Ask the comparison the paper didn’t.</strong> Estimate Group
 IV vs <strong>II</strong> and IV vs <strong>III</strong> directly, not
 only each vs Group I.</li>

@@ -63,7 +63,7 @@ Note also that our cohort is **6,048**, not the 6,371 the pipeline reports for t
 | III — non-obese / low central | 787 | 769 |
 | IV — non-obese / high central | 608 | 604 |
 
-All four groups reproduce within ~1%. Group IV (non-obese, high central adiposity) is the paper's headline "worst survival" phenotype; our all-cause death counts (5 / 389 / 74 / 118; total 586) likewise match the paper's (5 / 388 / 74 / 118; total 585).
+All four groups reproduce within about 2% (the largest gap is Group III, 787 against 769). Group IV (non-obese, high central adiposity) is the paper's headline "worst survival" phenotype; our all-cause death counts (5 / 389 / 74 / 118; total 586) likewise match the paper's (5 / 388 / 74 / 118; total 585).
 
 ## Documented ambiguity: alcohol operationalization
 
@@ -87,7 +87,7 @@ The paper's Table headers label the non-obese groups "BMI < 25." That is inconsi
 
 ## Honest account of the residual N gap
 
-We reproduce 6,371 on the full analytic file where the paper reports **6,300**, and lock **6,048** as the analysis domain (those with a valid fasting weight). Completeness on the paper's Model-1 covariates is reported in P5, which is where it is analysed; an earlier draft quoted a 6,246 figure from an expanded covariate set that Model 1 does not contain, and that figure is withdrawn.
+We reproduce 6,371 on the full analytic file where the paper reports **6,300**, and lock **6,048** as the analysis domain (those with a valid fasting weight). We have not fully explained the remaining difference of 71: both alcohol exclusions above land further from the paper's figure than no exclusion does, so we report the gap as unresolved rather than attribute it. Completeness on the paper's Model-1 covariates is reported in P5, which is where it is analysed; an earlier draft quoted a 6,246 figure from an expanded covariate set that Model 1 does not contain, and that figure is withdrawn.
 
 ## Reproducibility notes
 

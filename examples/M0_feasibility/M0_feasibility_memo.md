@@ -107,7 +107,10 @@ reservation.
 
 ### 4. Adequate size and events — **met, with one caveat**
 
-Counted from our merged file:
+Counted from our merged file. This is the chain to the paper's own analytic file (the
+**full analytic file**), which requires a computable FLI but not a positive fasting weight,
+so the fasting-subsample step (DESIGN) and missing FLI inputs (MISSINGNESS) are fused into
+one row here:
 
 | Step | N |
 |---|---:|
@@ -118,7 +121,12 @@ Counted from our merged file:
 | MASLD (≥ 1 cardiometabolic criterion) | 6,374 |
 | Mortality-eligible and linked | **6,371** |
 
-Group sizes **391 / 4,585 / 787 / 608**; **586 deaths**.
+Criterion 6 keeps the two steps apart by counting inside the fasting subsample. Counted
+that way, the chain runs 14,962 adults sampled, 14,170 with a computable FLI, and ends at
+6,048 mortality-eligible and linked records with a valid fasting weight. The two chains
+are different row sets, not a discrepancy.
+
+On the 6,371 rows, group sizes are **391 / 4,585 / 787 / 608**; **586 deaths**.
 
 That is ample for the main analysis. **The caveat is Group I**, the reference group, at
 n = 391. A sex-stratified interaction analysis (P3) splits it further, so stratum-specific

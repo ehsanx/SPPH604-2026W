@@ -364,8 +364,9 @@ and laboratory nonresponse can still affect who has a positive weight and comple
 ::: {.notes}
 (6 min) CDC states that the fasting weight applies to participants sampled to fast who
 actually fasted for the required duration. Do not say that everyone without a positive
-weight was never asked to fast. Connect the design restriction to P4 and the 792 missing
-inputs to P5.
+weight was never asked to fast. Connect the design restriction to P4. P5 types the 792
+missing inputs as missingness, but its missing-data analysis is about a different gap: the
+109 people in the 6,048 domain with no cancer status (a Model 1 covariate).
 :::
 
 ## Two analytic row sets answer different questions
@@ -460,7 +461,8 @@ Saturday means ALQ130 equals 3, but average consumption is about 0.4 drinks per 
 Among the tested alcohol implementations, switching the exclusion off comes closest to
 the published cohort. It does not prove what the authors implemented.
 
-The age >18 sensitivity, not the alcohol rule, explains most of the remaining 71-person gap.
+The remaining 71-person gap is unresolved: a strict age >18 reading gives 6,301 with 585
+deaths, but the published mean age matches ≥18.
 
 ::: {.notes}
 (8 min) Keep the conclusion cautious. The paper does not publish operational code for
@@ -481,7 +483,8 @@ For `ALQ130`:
 qty <- ifelse(ALQ130 %in% c(777, 999), NA, ALQ130)
 ```
 
-Leaving these codes in reclassifies nine refusals as extremely heavy drinkers.
+Leaving these codes in reclassifies nine refused or don't-know answers as extremely heavy
+drinkers.
 
 **Missing-value codes are variable-specific. Always check the codebook.**
 
@@ -533,6 +536,8 @@ means waist-to-height ratio (WHtR) ≥0.6.
 |---|---:|---:|
 | Obesity | Group I: 391 | Group II: 4,585 |
 | No obesity | Group III: 787 | Group IV: 608 |
+
+<small>Counts are the **full reconstruction** row set (6,371).</small>
 
 The exposure shares BMI and waist inputs with FLI. M1 asks what that structural dependence
 does to interpretation.
@@ -762,14 +767,15 @@ paper, which is the evidence that it is a general property rather than a quirk.
 | P2 | Operational covariates and Table 1 |
 | P3 | An interaction analysis not present in this reproduction |
 | P4 | Fasting subsample weight, strata and primary sampling units |
-| P5 | The 792 missing FLI inputs and later complete-case losses |
+| P5 | Complete-case losses on the paper's Model 1 covariates (109 of 6,048 missing cancer status) |
 
 M1 asks which threat matters most. M2 asks what reproduced and what did not. M3 asks you
 to defend the decisions person by person.
 
 ::: {.notes}
 (6 min) Do not imply that this pipeline already completes P3. It does not. P3 is the
-student's extension. P4 uses the 6,048-person fasting-weight mortality-linked domain.
+student's extension. P4 works in the 6,048-person fasting-weight mortality-linked domain;
+its Model 1 fits use the 5,939 rows complete on Model 1.
 P5 addresses genuine missingness, not the deliberate fasting-domain restriction.
 :::
 
@@ -829,6 +835,8 @@ CDC/NCHS documentation:
 | Heart plus cerebrovascular causes | 185 |
 | Heart causes only | **158** |
 | Published Table 2 | **158** |
+
+<small>Our counts are the **full reconstruction** row set (6,371).</small>
 
 The saved analytic variable combines heart and cerebrovascular causes. The Table 2 script
 creates a separate heart-only outcome, which reproduces the published event total.

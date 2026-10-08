@@ -34,11 +34,19 @@ Every plan has the same shape:
 - **Continuity is the point.** Slide 1 of each week recaps where the project stands;
   the last slide hands off directly into the lab and the formative increment.
 - **The paper is the running example.** Concepts are taught through the MASLD
-  reproduction: Group IV HR ≈ 15 → 2.9, the sex interaction that is null unweighted
-  and moves under the design, FLI circularity, the survey-weighting attenuation, the
-  typed cohort funnel. The cohort size is the first lesson rather than a verified
-  match — the paper reports N ≈ 6,300, our full analytic file is 6,371, and
-  accounting for the difference is the skill being taught.
+  reproduction: the typed cohort funnel, FLI circularity, how far adjustment moves a
+  hazard ratio and what that move can and cannot mean, the sex interaction that is null
+  unweighted and moves under the design, and what survey weighting does to an estimate
+  (it can move it in either direction) and to its interval. The cohort size is the first
+  lesson rather than a verified match — the paper reports N ≈ 6,300, our full analytic
+  file is 6,371, and accounting for the difference is the skill being taught.
+- **Two analyses of one cohort.** The **paper replication** (Weeks 2–3, P1–P5, M0–M4)
+  keeps the paper's four phenotype groups and its Model 1 / Model 2 covariates. The
+  **lecture's exposure analysis** (Weeks 4–7) asks about obesity, and about high waist fat
+  within obesity strata, adjusted for the pre-exposure set L (age, sex, race/ethnicity,
+  current smoking, sedentary time), mostly on 5,911 rows. The two can give different
+  numbers for the same contrast, mainly because the adjustment set differs, so every MASLD
+  number is labelled with its comparison, rows, adjustment set and weighting.
 
 - **The weeks build toward M1.** The demonstration paper runs through Weeks 3–5 as
   sustained practice in replication and methodological interrogation, so the analytic
@@ -100,4 +108,6 @@ it with Quarto rather than editing the `.html`. From this directory:
 quarto render slides/Week5_interaction_slides.qmd
 ```
 
-`img/` holds the two embedded figures, copied from [`reproduction/output/figures/`](https://github.com/ehsanx/SPPH604-2026W/tree/main/reproduction/output/figures).
+`img/` holds the embedded figures. The two reproduction figures (`figure1_km.png`,
+`figure2_rcs.png`) are copied from `reproduction/output/figures/`; the `w4`–`w7` lecture
+figures accompany the lecture analyses.

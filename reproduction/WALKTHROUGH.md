@@ -64,7 +64,8 @@ subsample is the separate thing, and it is 792 people. That is the first trap, b
 These are the same two row sets the worked examples name. They differ by 323 records, and
 the difference is not an error in either. The paper is unweighted, so the **full analytic
 file is the one that reproduces it**: Table 1, Table 2 and the figures in `output/` are
-built on 6,371 against the paper's approximately 6,300. Its own FLI step is the 14,989 that
+built on 6,371 against the paper's approximately 6,300 (Table 2's Model 1 and Model 2
+columns use the complete cases among those rows). Its own FLI step is the 14,989 that
 `logs/sample_funnel.csv` records, and 14,989 exceeds the 14,962 adults in the fasting-weight
 frame because 819 adults have all four FLI inputs without carrying a valid `WTSAF2YR`. The
 locked domain is a different — and, for a design-aware estimate, the correct —
@@ -116,9 +117,11 @@ lost at **In fasting subsample** were never sampled for the measurement, not los
 and they are a different problem from the 792 lost at **FLI computable**, who were sampled
 and still lack an input. Collapsing the two into a single "FLI computable" step is the
 error the typed funnel above exists to prevent. And it changes how a design-aware analysis
-has to be built: you construct the survey design on the **full frame** and then `subset()`
-to the fasting sample. Filtering the data *before* building the design discards the
-information the variance estimator needs, and the standard errors come out wrong.
+has to be built: you construct the survey design on **everyone with a valid fasting
+weight**, not on the MASLD cohort, and then `subset()` to the analysis domain, as the P4
+exemplar does. Filtering the data to the analysis cohort *before* building the design
+discards the information the variance estimator needs, and the standard errors can come
+out wrong.
 
 This pipeline uses the variable for one thing only: separating those two funnel steps and
 marking the locked domain. It never weights with it. **Doing something design-aware with it
@@ -128,12 +131,14 @@ is P4's job**, which is why P4 exists as a separate increment.
 
 `ALQ130` is *drinks per drinking-day*, not consumption. Significant alcohol intake needs
 **frequency × quantity** — `ALQ120Q` / `ALQ120U` combined with `ALQ130`. Using `ALQ130`
-alone over-excludes roughly 2,000 people.
+alone removes 2,063 people from the full analytic file, where frequency × quantity removes
+427, so it over-excludes about 1,600.
 
 Worse, both variables use **777 and 999 as reserved codes** for "refused" and "don't know".
 Leave them in and a refusal becomes someone reporting 777 drinks — reclassifying nine
-refusals as heavy drinkers. They must be set to `NA` before any threshold rule is applied.
-The code does this for both variables before combining them.
+people who refused or answered "don't know" as heavy drinkers. They must be set to `NA`
+before any threshold rule is applied. The code does this for both variables before
+combining them.
 
 The general lesson: in NHANES, **check the codebook for reserved values before you compare
 a variable to a number.** A silent misclassification of nine people is exactly the kind of

@@ -1653,7 +1653,7 @@ display:block!important;
 </table>
 <p>Assignment to the fasting subsample is design-based. Participation, fasting compliance and laboratory nonresponse can still affect who has a positive weight and complete data.</p>
 <aside class="notes">
-<p>(6 min) CDC states that the fasting weight applies to participants sampled to fast who actually fasted for the required duration. Do not say that everyone without a positive weight was never asked to fast. Connect the design restriction to P4 and the 792 missing inputs to P5.</p>
+<p>(6 min) CDC states that the fasting weight applies to participants sampled to fast who actually fasted for the required duration. Do not say that everyone without a positive weight was never asked to fast. Connect the design restriction to P4. P5 types the 792 missing inputs as missingness, but its missing-data analysis is about a different gap: the 109 people in the 6,048 domain with no cancer status (a Model 1 covariate).</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1876,7 +1876,7 @@ display:block!important;
 </table>
 <p><small>Counts are the <strong>full reconstruction</strong> row set.</small></p>
 <p>Among the tested alcohol implementations, switching the exclusion off comes closest to the published cohort. It does not prove what the authors implemented.</p>
-<p>The age &gt;18 sensitivity, not the alcohol rule, explains most of the remaining 71-person gap.</p>
+<p>The remaining 71-person gap is unresolved: a strict age &gt;18 reading gives 6,301 with 585 deaths, but the published mean age matches ≥18.</p>
 <aside class="notes">
 <p>(8 min) Keep the conclusion cautious. The paper does not publish operational code for alcohol. The frequency-weighted rule is plausible, but missing responses are set to zero in the supplied implementation, so it remains a documented analytic choice.</p>
 <style type="text/css">
@@ -1913,7 +1913,7 @@ display:block!important;
 </tbody>
 </table>
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href></a>qty <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(ALQ130 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">777</span>, <span class="dv">999</span>), <span class="cn">NA</span>, ALQ130)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Leaving these codes in reclassifies nine refusals as extremely heavy drinkers.</p>
+<p>Leaving these codes in reclassifies nine refused or don’t-know answers as extremely heavy drinkers.</p>
 <p><strong>Missing-value codes are variable-specific. Always check the codebook.</strong></p>
 <aside class="notes">
 <p>(5 min) Contrast with a laboratory value: triglycerides of 77 mg/dL are real. There is no global NHANES rule that 7, 77 or 777 always means missing.</p>
@@ -2001,6 +2001,7 @@ display:block!important;
 </tr>
 </tbody>
 </table>
+<p><small>Counts are the <strong>full reconstruction</strong> row set (6,371).</small></p>
 <p>The exposure shares BMI and waist inputs with FLI. M1 asks what that structural dependence does to interpretation.</p>
 <aside class="notes">
 <p>(6 min) WHtR equals waist circumference divided by height, both in centimetres. The group counts use the full 6,371-person reconstruction. Group I is the reference group in the paper’s Cox models; it is not a “healthy” or unexposed population.</p>
@@ -2394,6 +2395,10 @@ display:block!important;
 <section id="the-same-cohort-work-returns-in-p1-through-p5" class="slide level2">
 <h2>The same cohort work returns in P1 through P5</h2>
 <table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Increment</th>
@@ -2419,13 +2424,13 @@ display:block!important;
 </tr>
 <tr class="odd">
 <td>P5</td>
-<td>The 792 missing FLI inputs and later complete-case losses</td>
+<td>Complete-case losses on the paper’s Model 1 covariates (109 of 6,048 missing cancer status)</td>
 </tr>
 </tbody>
 </table>
 <p>M1 asks which threat matters most. M2 asks what reproduced and what did not. M3 asks you to defend the decisions person by person.</p>
 <aside class="notes">
-<p>(6 min) Do not imply that this pipeline already completes P3. It does not. P3 is the student’s extension. P4 uses the 6,048-person fasting-weight mortality-linked domain. P5 addresses genuine missingness, not the deliberate fasting-domain restriction.</p>
+<p>(6 min) Do not imply that this pipeline already completes P3. It does not. P3 is the student’s extension. P4 works in the 6,048-person fasting-weight mortality-linked domain; its Model 1 fits use the 5,939 rows complete on Model 1. P5 addresses genuine missingness, not the deliberate fasting-domain restriction.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -2545,6 +2550,7 @@ display:block!important;
 </tr>
 </tbody>
 </table>
+<p><small>Our counts are the <strong>full reconstruction</strong> row set (6,371).</small></p>
 <p>The saved analytic variable combines heart and cerebrovascular causes. The Table 2 script creates a separate heart-only outcome, which reproduces the published event total.</p>
 <p><strong>Do not reuse a derived outcome variable without checking its definition.</strong></p>
 </section>

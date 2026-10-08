@@ -10,6 +10,18 @@ the paper's four BMI × waist groups kept for Week 5. Its numbers come from
 > same figure style, Parts and plan-slide numbers. It covers **Plan Slides 1–18 and 22**;
 > the Lab 3 bridge (**Plan Slides 19–21**) is not in the deck. Every deck slide's speaker
 > notes name its plan slide.
+>
+> **Two analyses, labelled.** The deck's numbers belong to the **lecture's exposure
+> analysis**: obesity vs not obese, with every hazard ratio on the same 5,911 rows, the
+> pre-exposure set L (age, sex, race/ethnicity, current smoking, sedentary time) as its
+> main adjustment and the paper's Model 1 and Model 2 shown beside it. This plan's
+> phenotype-group numbers (IV vs III, IV vs I) belong to the **paper replication**: the
+> paper's Model 1 covariates on 5,939 rows, from the P2 and P4 exemplars; its Table 1 and
+> full-file numbers are on 6,371 rows. The same IV-vs-III contrast differs between the two
+> mainly because the adjustment set differs, not the rows: crude it is 2.34 on 5,939 rows
+> and 2.31 on 5,911, but Model 1 gives 1.05 and set L 1.09 (P2 exemplar;
+> `lectures/analysis/Week6_design_aware.json`). Every hazard ratio in this plan and the
+> deck is unweighted, except the Week 6 pointer on Slide 22.
 
 > **Timing.** Per-slide markers below sum to **147 min including the break**, against a
 > 150-minute cap. Without Plan Slides 19–21 (15 min) the deck runs about **132 min**. **If
@@ -23,14 +35,15 @@ the paper's four BMI × waist groups kept for Week 5. Its numbers come from
 > matching *Concepts* section, EpiMethods tutorial or video, and the key paper; the deck
 > closes with a *Where to read more* slide and the full reference list.
 
-The lecture is one argument. **On the same 5,939 rows, our locked hazard ratio moves from
-2.34 to 1.06 when the paper's Model 1 covariates enter. What moved it?** There are three
-kinds of answer, and the lecture takes them in order: *which* variables were adjusted and
-what role each plays (the DAG, before the break); *how* those variables got chosen (the
-empirical criteria, and the data-driven methods that should not be used for this); and
-*what the effect measure itself does* on adjustment (collapsibility, after the break). A
-final block puts **Thursday's actual L3 exercise** on screen, so the lab reads as the
-mechanics of the second half rather than as a change of subject.
+The lecture is one argument. **On the same 5,939 rows, our locked hazard ratio (IV vs III,
+unweighted) moves from 2.34 to 1.05 when the paper's Model 1 covariates enter. What moved
+it?** There are three kinds of answer, and the lecture takes them in order: *which*
+variables were adjusted and what role each plays (the DAG, before the break); *how* those
+variables got chosen (the empirical criteria, and the data-driven methods that should not
+be used for this); and *what the effect measure itself does* on adjustment
+(collapsibility, after the break). A final block puts **Thursday's actual L3 exercise** on
+screen, so the lab reads as the mechanics of the second half rather than as a change of
+subject.
 
 > **Every DAG is drawn.** Each structural claim in this lecture has a figure in
 > `lectures/img/w4_*.png`, drawn in one visual language throughout:
@@ -45,16 +58,21 @@ mechanics of the second half rather than as a change of subject.
 > students can paste them into dagitty.net and check every adjustment-set statement
 > themselves.
 
-> **Row-set discipline.** Every quantitative slide names the rows it quotes. **Three** sets
-> appear today, nested, and they are not interchangeable:
+> **Row-set discipline.** Every quantitative slide names the rows it quotes. **Four** sets
+> carry today's hazard ratios and counts, nested, and they are not interchangeable:
 > - the **full reconstructed analytic file, N = 6,371** — Table 1, group sizes, death
 >   counts;
 > - the **locked domain, N = 6,048** — the subset with a valid fasting weight;
 > - its **matched complete-case subset, N = 5,939** — the 6,048 less 109 people missing
->   cancer status; every crude-versus-adjusted hazard ratio is fitted here, so crude and
->   adjusted differ for one reason rather than two.
+>   cancer status; this plan's phenotype-group crude-versus-Model-1 hazard ratios are
+>   fitted here, so crude and adjusted differ for one reason rather than two;
+> - the deck's **5,911** — the 6,048 less 137 people missing a covariate of the deck's
+>   largest models (Model 2 plus race/ethnicity); every hazard ratio on the deck, and
+>   Slide 17's, is fitted on these same rows, for the same reason.
 >
-> 6,371 − 5,939 is not the complete-case loss; 109 is.
+> 6,371 − 5,939 is not the complete-case loss; 109 is (137 for the deck's rows). Slide 7's
+> collider panels use two earlier funnel sets: the 14,170 fasting-subsample adults with FLI
+> computable, and the 6,052 of them with FLI ≥ 60.
 
 > **What this week does NOT do.** Whether an effect *differs* across subgroups, including
 > whether WHtR's effect differs between the obese and the non-obese, is effect
@@ -115,7 +133,8 @@ and a student waiting for MASLD to appear on Thursday loses the first half of th
 
 ## Slide 1 — Today's question, where we are, and the words we will use (6 min)
 - Open with the question in plain words: non-obese adults with more waist fat died about
-  twice as often; after adjustment the difference almost disappears — why?
+  twice as often; after adjustment for the paper's Model 1 covariates the difference
+  almost disappears — why?
 - The arc: **Replicate → Interrogate → Improve → Defend**; Interrogate starts today. Show
   the learning objectives in one breath.
 - Walk the Tue / Thu / P2 table. First of the two places L3's different dataset is named.
@@ -127,11 +146,12 @@ and a student waiting for MASLD to appear on Thursday loses the first half of th
   rest of the lecture.
 
 ## Slide 2 — The number that moved (4 min)
-- **Locked contrast, IV vs III, matched 5,939 rows:** crude HR **2.34 (1.72–3.18)** →
-  Model 1 **1.06 (0.77–1.45)**.
-- For orientation, the replication contrast on the same rows: IV vs I, **16.05 → 3.79**.
-  On the full 6,371-row file the reproduction gives **15.14 → 3.28**, against the paper's
-  **15.13 → 3.155**; the gap from 16.05 → 3.79 is the row set, not the reproduction.
+- **Locked contrast, IV vs III, matched 5,939 rows, unweighted:** crude HR
+  **2.34 (1.72–3.18)** → Model 1 **1.05 (0.77–1.45)**.
+- For orientation, the replication contrast on the same rows: IV vs I, **16.05 → 3.81**.
+  On the full 6,371-row file the reproduction gives **15.14 → 3.29** (crude on every row,
+  Model 1 on the rows complete on its covariates), against the paper's **15.13 → 3.155**;
+  the gap from 16.05 → 3.81 is the row set, not the reproduction.
 - Ask the room: *what could make a hazard ratio move like that?* Take three or four
   answers, write them on the board, and **do not evaluate them**. Slide 13 lists five
   mechanisms, including one nobody suggests; Slide 15 demonstrates it.
@@ -255,8 +275,9 @@ and a student waiting for MASLD to appear on Thursday loses the first half of th
   IV vs III is pushed **downward** — a named bias of known direction on our own estimand.
 - Keep the two halves of the headline apart. **Descriptively**, Group IV has the poorest
   observed survival — 19.5% died against 9.6% in Group III (paper) — and the paper reports
-  that accurately. **Comparatively**, on the locked contrast the adjusted HR is
-  **1.06 (0.77–1.45)**, and the paper's own Model 1 implies about **0.99** for IV vs III.
+  that accurately. **Comparatively**, on the locked contrast (5,939 rows, unweighted) the
+  Model 1 HR is **1.05 (0.77–1.45)**, and the paper's own Model 1 implies about **0.99**
+  for IV vs III (3.155 / 3.175, on the paper's rows).
 
 ## Slide 8 — A working DAG for the locked contrast (10 min) · **do not drop**
 
@@ -349,7 +370,7 @@ and a student waiting for MASLD to appear on Thursday loses the first half of th
   it.
 
 ## Slide 11 — BREAK (10 min)
-- Leave Slide 8's DAG on screen. Restart prompt: *the number moved from 2.34 to 1.06.
+- Leave Slide 8's DAG on screen. Restart prompt: *the number moved from 2.34 to 1.05.
   Which of the board's guesses could you now rule out, and which could you not?*
 
 ## Part 4 — How covariates get chosen in practice, and what the effect measure does · 38 minutes across the slides below
@@ -388,8 +409,9 @@ and a student waiting for MASLD to appear on Thursday loses the first half of th
 - The procedure: add a covariate; if the exposure coefficient moves by more than 10%,
   call it a confounder and keep it. Purposeful selection's "confounding check" is the
   same idea.
-- On MASLD it fires wholesale: 2.34 → 1.06 on the same rows is a 55% move. Now list what
-  can produce a move, and return to the board from Slide 2:
+- On MASLD it fires wholesale: IV vs III, crude 2.34 → Model 1 1.05 on the same 5,939
+  rows, is a 55% move. Now list what can produce a move, and return to the board from
+  Slide 2:
   1. **Confounding removed** — age, sex.
   2. **Effect removed** — the mediator half of the blend.
   3. **Bias added** — adjusting the blend opens WHtR → disease-after ← disease-before →
@@ -456,9 +478,9 @@ and a student waiting for MASLD to appear on Thursday loses the first half of th
     that is withdrawn — the correct phrase is **"even without confounding"**.
 - **Size and direction.** It grows with the effect and with how strongly the covariate
   predicts the outcome — and it moves the adjusted OR or HR **away from 1** (toy: 3.45 →
-  4.00; Lab 3: 1.058 → 1.072). Our locked estimate moved **toward** 1 (2.34 → 1.06), so
-  non-collapsibility explains **none** of that drop; with the adjusted HR at 1.06 the
-  marginal HR would lie between 1 and 1.06, so if anything it offsets a sliver. The drop
+  4.00; Lab 3: 1.058 → 1.072). Our locked estimate moved **toward** 1 (2.34 → 1.05), so
+  non-collapsibility explains **none** of that drop; with the Model 1 HR at 1.05 the
+  marginal HR would lie between 1 and 1.05, so if anything it offsets a sliver. The drop
   is the other mechanisms on Slide 13, and which of those, Slide 8 says the data cannot
   tell. (An earlier draft said non-collapsibility explained "a small slice" of the drop —
   wrong direction; withdrawn.)
@@ -498,7 +520,7 @@ and a student waiting for MASLD to appear on Thursday loses the first half of th
   - Both can predict "risks" outside 0–1 (in Lab 3: Poisson up to 1.57, the linear model
     from −0.25 to 1.16). That is a known price of these models, not a coding error.
   - Naimi & Whitcomb (2020) Table 2 is the one-page reference.
-- **Back to MASLD.** Our 2.34 → 1.06 is crude versus *conditional*. Non-collapsibility
+- **Back to MASLD.** Our 2.34 → 1.05 is crude versus *conditional*. Non-collapsibility
   would push a conditional HR away from 1, so it cannot account for this drop (Slide 15). The survival analogue of standardisation is a
   standardised survival curve, or six-year risk under "everyone IV" against "everyone
   III"; Week 5's model-based absolute risks start that.
@@ -650,14 +672,16 @@ and a student waiting for MASLD to appear on Thursday loses the first half of th
 - **Selection into the cohort (FLI ≥ 60).** In principle it is blockable by adjusting
   FLI's inputs, but TG and GGT are plausibly effects of central fat, so doing so trades
   one bias for another (Week 5 Slide 18, M1).
-- **The survey design.** Week 6 re-runs the locked contrast design-aware: **1.29
-  (0.90–1.86)**, an interval that still includes 1.
+- **The survey design.** Week 6 runs the analysis design-aware (`WTSAF2YR`/6, strata,
+  PSU). Weighting moves IV vs III from 1.05 to **1.29 (0.89–1.86)** with Model 1 on the
+  5,939 rows (P4 exemplar), and from 1.09 to **1.43 (0.98–2.07)** with set L on the 5,911
+  rows (`Week6_design_aware.R`). Both intervals still include 1.
 - **Heterogeneity across subgroups** (Week 5).
 - Exit question: *write down the one arrow in your own paper's DAG you are least sure of.*
 - **Key takeaways** (one slide, six lines): assumptions as a DAG; adjust confounders, not
   mediators, colliders or instruments, and remember selection counts; the modified
   disjunctive rule when the DAG is incomplete; ORs and HRs move without confounding; one
-  exposure per model; 2.34 → 1.06 cannot be pinned on one cause.
+  exposure per model; 2.34 → 1.05 cannot be pinned on one cause.
 - **Where to read more** (one slide): the reading map below, with the EpiMethods videos and
   the EpiMethods quiz for self-testing.
 

@@ -79,10 +79,11 @@ The evidence pack counts them separately:
   whether it is ignorable depends on why those measurements are absent — which the public
   files do not tell us.
 
-**They bound different things.** (1) bounds the **target population**: our estimate speaks
-to fasting-sampled US adults, and the weights carry it there. (2) is a potential
-**selection bias within** that population, and it is the one that could distort the
-contrast itself.
+**They bound different things.** (1) bears on the **target population**, and the weights
+handle it: `WTSAF2YR` is built so that the fasting subsample represents the US civilian
+non-institutionalized population, so our weighted estimate speaks to US adults meeting the
+MASLD criteria, not only to those sampled to fast. (2) is a potential **selection bias
+within** that population, and it is the one that could distort the contrast itself.
 
 Speaker notes: This is the change we are proudest of and it came from the review. Be
 explicit that we are not conceding the ranking by adopting the distinction — adopting a
@@ -95,17 +96,20 @@ better description of a threat is not the same as agreeing it dominates.
 **No reviewer asked for this.** Cancer status is the only Model-1 covariate carrying any
 missingness, and we were not willing to defend an estimate that rests on dropping people
 without testing it. On the locked contrast, design-aware, with the paper's Model 1
-unchanged:
+unchanged; complete case uses the 5,939 rows complete on Model 1, and the other three keep
+all 6,048 rows of the locked domain:
 
-| Locked estimand, weighted Model 1 | HR (95% CI) |
+| Locked estimand (IV vs III), weighted Model 1 | HR (95% CI) |
 |---|---|
-| complete case | 1.29 (0.90–1.86) |
-| all missing assigned **no cancer** | 1.29 (0.89–1.85) |
-| all missing assigned **cancer** | 1.29 (0.89–1.85) |
-| MI (m = 10), outcome in the imputation model | 1.29 (0.89–1.85) |
+| complete case | 1.29 (0.89–1.86) |
+| all missing assigned **no cancer** | 1.28 (0.89–1.85) |
+| all missing assigned **cancer** | 1.28 (0.89–1.85) |
+| MI (m = 10), outcome in the imputation model | 1.28 (0.89–1.85) |
 
-- **All four agree to the displayed precision.** That is the finding, and it is a result:
-  the estimate we defend does not depend on how the incomplete records are handled.
+- **The four are materially indistinguishable.** Complete case gives 1.29; both extreme
+  assignments and MI give 1.28, a difference of 0.01, far smaller than the interval. That
+  is the finding, and it is a result: the estimate we defend does not depend in any
+  meaningful way on how the incomplete records are handled.
 - **We did not widen the adjustment set to produce a comparison.** Adding covariates until
   the missingness bites would have changed the estimand and answered a question nobody
   asked.
@@ -117,7 +121,7 @@ it. Stability under missing-data sensitivity is not transportability, and we are
 offering it as an answer to Slide 3.
 
 Speaker notes: The last paragraph is the one to say slowly. The tempting move is to let
-"1.29 held" absorb the reviewers' selection objection, and it does not touch it.
+"the estimate held" absorb the reviewers' selection objection, and it does not touch it.
 
 ---
 
@@ -126,8 +130,9 @@ Speaker notes: The last paragraph is the one to say slowly. The tempting move is
 - **Estimand, adjustment set, survey design and variable definitions: unchanged from M1.**
   Nothing in the critique or in our own re-analysis gave us a reason to move them, and
   changing them would have made M1 and M3 incomparable.
-- **The locked estimate stands at 1.29 (0.90–1.86)**, complete case, design-aware, with
-  three sensitivity analyses agreeing.
+- **The locked estimate stands at 1.29 (0.89–1.86)**: Group IV vs III, the paper's
+  Model 1, design-weighted, complete case on 5,939 rows. The three sensitivity analyses
+  give 1.28 (0.89–1.85).
 - **Dominant threat: we retain estimand–adjustment-set alignment**, on a narrower argument
   than M1 gave. Not "the estimand is unstated and that is bad", but: *until the target
   quantity is named, no adjustment set can be shown to be the right one, and the
@@ -145,8 +150,9 @@ changes implies the original was mostly wrong, and it was not.
 
 ## Q&A Transcript
 
-**Examiner:** Your headline number is identical across four missing-data approaches. Is
-that reassuring, or does it just mean the sensitivity analysis had nothing to work with?
+**Examiner:** Your headline number moves by a hundredth at most across four missing-data
+approaches. Is that reassuring, or does it just mean the sensitivity analysis had nothing
+to work with?
 
 **Student (AB):** Both, and the second is the honest half. Only 109 observations are
 incomplete, and only on one covariate, so no reasonable handling of them could move a

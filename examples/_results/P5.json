@@ -6,49 +6,49 @@
     "pct_w": "1.18",
     "n_vars_miss": "1",
     "n_vars": "11",
-    "locked_cc": "1.29 (0.90–1.86)",
-    "locked_no": "1.29 (0.89–1.85)",
-    "locked_yes": "1.29 (0.89–1.85)",
-    "locked_mi": "1.29 (0.89–1.85)",
+    "locked_cc": "1.29 (0.89–1.86)",
+    "locked_no": "1.28 (0.89–1.85)",
+    "locked_yes": "1.28 (0.89–1.85)",
+    "locked_mi": "1.28 (0.89–1.85)",
     "n_cc": "5,939",
     "n_full": "6,048"
   },
   "locked_estimand": [
     {
       "scenario": "complete case (109 dropped)",
-      "HR": "1.29 (0.90-1.86)",
+      "HR": "1.29 (0.89-1.86)",
       "n": 5939
     },
     {
       "scenario": "all 109 assigned NO cancer",
-      "HR": "1.29 (0.89-1.85)",
+      "HR": "1.28 (0.89-1.85)",
       "n": 6048
     },
     {
       "scenario": "all 109 assigned CANCER",
-      "HR": "1.29 (0.89-1.85)",
+      "HR": "1.28 (0.89-1.85)",
       "n": 6048
     },
     {
       "scenario": "MI (m = 10)",
-      "HR": "1.29 (0.89-1.85)",
+      "HR": "1.28 (0.89-1.85)",
       "n": 6048
     }
   ],
   "replication_estimand": [
     {
       "scenario": "complete case (109 dropped)",
-      "HR": "2.97 (0.69–12.79)",
+      "HR": "2.98 (0.69–12.82)",
       "n": 5939
     },
     {
       "scenario": "all 109 assigned NO cancer",
-      "HR": "2.98 (0.69–12.86)",
+      "HR": "2.99 (0.69–12.89)",
       "n": 6048
     },
     {
       "scenario": "all 109 assigned CANCER",
-      "HR": "2.99 (0.69–12.87)",
+      "HR": "2.99 (0.69–12.90)",
       "n": 6048
     }
   ]

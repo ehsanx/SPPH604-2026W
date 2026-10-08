@@ -14,9 +14,11 @@ returned two different kinds of finding:
   contrasts regenerated and match their deck. The check we ran deliberately — whether the
   survey design is built on the full frame and then subsetted, rather than the rows being
   filtered before the design is created — came back clean, and Slide 2 reports it as
-  clean. Their figures are substituted at build time rather than typed, so deck and code
-  cannot disagree. The one defect this pass found is a packaging one: their README does
-  not list every package the pipeline loads, so a clean install stops twice.
+  clean. Their figures are substituted at build time rather than typed, so the deck cannot
+  carry a mistyped number. It can still carry a stale one: if the data change and the
+  result objects are not re-emitted, deck and code disagree. That is why we re-ran the
+  increments before comparing. The one defect this pass found is a packaging one: their
+  README does not list every package the pipeline loads, so a clean install stops twice.
 - **Reading the argument returned both substantive objections.** Objection 1 (Slide 3):
   the paper's published Table 2 is used as corroboration without an interval, and their
   own detail note concedes that interval cannot be recovered. Objection 2 (Slide 4): the
@@ -29,6 +31,6 @@ A good critique needs both passes. Running the code without reading the argument
 that the pipeline executes, not whether it answers the question; reading the argument
 without running the code leaves you with only what the authors chose to show you.
 
-The numbers quoted here *about the demonstration paper* — the funnel, group sizes,
+The numbers quoted in the deck *about the demonstration paper* — the funnel, group sizes,
 HRs, interaction p-values — are reproduced by the `.qmd` files in the P1–P5 and M1
-subfolders of this directory.
+subfolders of this directory; the funnel counts on Slide 5 are P1's.

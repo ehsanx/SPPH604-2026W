@@ -22,7 +22,7 @@
       "Estimand": "replication  IV vs I",
       "Model": "Model 1",
       "rows": 5939,
-      "HR": "3.79 (1.38-10.39)"
+      "HR": "3.81 (1.39-10.43)"
     },
     {
       "Estimand": "locked       IV vs III",
@@ -40,7 +40,7 @@
       "Estimand": "locked       IV vs III",
       "Model": "Model 1",
       "rows": 5939,
-      "HR": "1.06 (0.77-1.45)"
+      "HR": "1.05 (0.77-1.45)"
     }
   ]
 }

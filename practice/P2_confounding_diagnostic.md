@@ -58,15 +58,18 @@ about the variables it describes.
 - Crude and adjusted estimates side by side, with a 2–3 sentence interpretation.
 
 ## Worked example — MASLD/NHANES demonstration
-- Continuous variables reproduce **exactly** (Age 51.0 (16.6), BMI 33.2, SBP/DBP
-  identical) — a good sign your cohort is right.
+- On the full analytic file (6,371 rows, the row set comparable with the paper's),
+  the continuous variables land on or very near the published values (mean age 51.0
+  (16.6) and median BMI 33.2 exactly; median SBP/DBP 124/72; median waist 110.5 against
+  111.0) — a good sign your cohort is right.
 - **Trap 1 — comorbidities are composites, not self-report.** Self-report alone
-  under-counts: hypertension needs "self-report **or** measured BP ≥140/90" to reach
-  the paper's 52.6% (54.1 reproduced); dyslipidaemia needs labs + meds to reach 57.7%.
+  under-counts: hypertension needs "self-report **or** measured BP ≥140/90" to come near
+  the paper's 52.6% (54.1 reproduced); dyslipidaemia needs labs + meds to come near
+  57.7% (60.3 reproduced).
 - **Trap 2 — printed percentages that disagree with their own counts.** The income
-  (PIR) percentages appear **interchanged**: the counts imply High 22.1% / Low 23.0%,
-  but the paper prints 23.0 / 22.1. Catching arithmetic like this is exactly the P2
-  skill.
+  (PIR) percentages appear **interchanged**: the counts on the full analytic file imply
+  High 22.1% / Low 23.0%, but the paper prints 23.0 / 22.1. Catching arithmetic like
+  this is exactly the P2 skill.
 - **The age spread is the question, not the answer:** group ages run 40 → 62 years.
   The table reports the spread. Age is a confounder here for a causal and temporal
   reason, not a numeric one: it raises phenotype membership *and* raises mortality,

@@ -178,330 +178,1151 @@ vertical-align: middle;
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
-<li><a href="#week-6-lecture-plan-complex-survey-analysis-why-nhanes-is-not-a-simple-random-sample" id="toc-week-6-lecture-plan-complex-survey-analysis-why-nhanes-is-not-a-simple-random-sample">Week
-6 Lecture Plan — Complex Survey Analysis: Why NHANES Is Not a Simple
-Random Sample</a>
+<li><a href="#week-6-complex-survey-design-the-nhanes-workflow-then-the-masld-estimates" id="toc-week-6-complex-survey-design-the-nhanes-workflow-then-the-masld-estimates">Week
+6 — Complex survey design: the NHANES workflow, then the MASLD
+estimates</a>
 <ul>
 <li><a href="#learning-objectives" id="toc-learning-objectives">Learning
 objectives</a></li>
 <li><a href="#continuity" id="toc-continuity">Continuity</a></li>
-<li><a href="#slide-1-where-we-are-in-the-project-5-min" id="toc-slide-1-where-we-are-in-the-project-5-min">Slide 1 — Where we
-are in the project (5 min)</a></li>
-<li><a href="#slide-2-the-motivating-puzzle-8-min" id="toc-slide-2-the-motivating-puzzle-8-min">Slide 2 — The motivating
-puzzle (8 min)</a></li>
-<li><a href="#slide-3-what-simple-random-sample-assumes-10-min" id="toc-slide-3-what-simple-random-sample-assumes-10-min">Slide 3 — What
-“simple random sample” assumes (10 min)</a></li>
-<li><a href="#slide-4-how-nhanes-is-actually-built-12-min" id="toc-slide-4-how-nhanes-is-actually-built-12-min">Slide 4 — How
-NHANES is actually built (12 min)</a></li>
-<li><a href="#slide-5-weights-wtint-wtmec-wtsaf-12-min" id="toc-slide-5-weights-wtint-wtmec-wtsaf-12-min">Slide 5 — Weights:
-WTINT, WTMEC, WTSAF (12 min)</a></li>
-<li><a href="#slide-6-strata-and-psus-sdmvstra-sdmvpsu-10-min" id="toc-slide-6-strata-and-psus-sdmvstra-sdmvpsu-10-min">Slide 6 —
-Strata and PSUs: SDMVSTRA, SDMVPSU (10 min)</a></li>
-<li><a href="#slide-7-pooling-weights-across-cycles-10-min" id="toc-slide-7-pooling-weights-across-cycles-10-min">Slide 7 — Pooling
-weights across cycles (10 min)</a></li>
-<li><a href="#slide-8-the-design-effect-10-min" id="toc-slide-8-the-design-effect-10-min">Slide 8 — The design effect
-(10 min)</a></li>
-<li><a href="#slide-9-short-break-5-min" id="toc-slide-9-short-break-5-min">Slide 9 — Short break (5
+<li><a href="#opening-18-minutes" id="toc-opening-18-minutes">Opening ·
+18 minutes</a></li>
+<li><a href="#slide-1-why-week-6-matters-3-min" id="toc-slide-1-why-week-6-matters-3-min">Slide 1 — Why Week 6 matters
+(3 min)</a></li>
+<li><a href="#slide-2-nhanes-stratify-first-then-sample-in-stages-3-min" id="toc-slide-2-nhanes-stratify-first-then-sample-in-stages-3-min">Slide
+2 — NHANES: stratify first, then sample in stages (3 min)</a></li>
+<li><a href="#slide-3-what-are-a-stratum-and-a-psu-3-min" id="toc-slide-3-what-are-a-stratum-and-a-psu-3-min">Slide 3 — What are a
+stratum and a PSU? (3 min)</a></li>
+<li><a href="#slide-4-what-the-public-nhanes-file-gives-you-2-min" id="toc-slide-4-what-the-public-nhanes-file-gives-you-2-min">Slide 4 —
+What the public NHANES file gives you (2 min)</a></li>
+<li><a href="#slide-5-why-sample-this-way-2-min" id="toc-slide-5-why-sample-this-way-2-min">Slide 5 — Why sample this
+way? (2 min)</a></li>
+<li><a href="#slide-6-one-set-of-rows-two-different-mixes-3-min" id="toc-slide-6-one-set-of-rows-two-different-mixes-3-min">Slide 6 — One
+set of rows, two different mixes (3 min)</a></li>
+<li><a href="#slide-7-the-workflow-for-today-2-min" id="toc-slide-7-the-workflow-for-today-2-min">Slide 7 — The workflow for
+today (2 min)</a></li>
+<li><a href="#part-1-what-a-survey-weight-does-37-minutes" id="toc-part-1-what-a-survey-weight-does-37-minutes">Part 1 · What a
+survey weight does · 37 minutes</a></li>
+<li><a href="#slide-8-a-public-health-town-younger-and-older-adults-3-min" id="toc-slide-8-a-public-health-town-younger-and-older-adults-3-min">Slide
+8 — A public-health town: younger and older adults (3 min)</a></li>
+<li><a href="#slide-9-in-r-the-toy-weight-2-min" id="toc-slide-9-in-r-the-toy-weight-2-min">Slide 9 — In R: the toy
+weight (2 min)</a></li>
+<li><a href="#slide-10-hypertension-prevalence-sample-versus-town-4-min" id="toc-slide-10-hypertension-prevalence-sample-versus-town-4-min">Slide
+10 — Hypertension prevalence: sample versus town (4 min)</a></li>
+<li><a href="#slide-11-in-r-build-the-town-sample-2-min" id="toc-slide-11-in-r-build-the-town-sample-2-min">Slide 11 — In R:
+build the town sample (2 min)</a></li>
+<li><a href="#slide-12-in-r-let-the-weights-reconstruct-the-town-2-min" id="toc-slide-12-in-r-let-the-weights-reconstruct-the-town-2-min">Slide
+12 — In R: let the weights reconstruct the town (2 min)</a></li>
+<li><a href="#slide-13-age-can-matter-for-two-different-reasons-2-min" id="toc-slide-13-age-can-matter-for-two-different-reasons-2-min">Slide
+13 — Age can matter for two different reasons (2 min)</a></li>
+<li><a href="#slide-14-back-to-nhanes-the-final-weight-is-more-than-1-probability-2-min" id="toc-slide-14-back-to-nhanes-the-final-weight-is-more-than-1-probability-2-min">Slide
+14 — Back to NHANES: the final weight is more than 1 / probability (2
 min)</a></li>
-<li><a href="#slide-10-unweighted-is-a-choice-not-a-default-10-min" id="toc-slide-10-unweighted-is-a-choice-not-a-default-10-min">Slide 10 —
-“Unweighted” is a choice, not a default (10 min)</a></li>
-<li><a href="#slide-11-what-weighting-does-to-masld-12-min" id="toc-slide-11-what-weighting-does-to-masld-12-min">Slide 11 — What
-weighting does to MASLD (12 min)</a></li>
-<li><a href="#slide-12-the-question-settled-by-cdcs-least-common-denominator-rule-fasting-vs-non-fasting-analytes-12-min" id="toc-slide-12-the-question-settled-by-cdcs-least-common-denominator-rule-fasting-vs-non-fasting-analytes-12-min">Slide
-12 — The question settled by CDC’s least-common-denominator rule:
-fasting vs non-fasting analytes (12 min)</a></li>
-<li><a href="#slide-13-subset-the-design-never-the-data-10-min" id="toc-slide-13-subset-the-design-never-the-data-10-min">Slide 13 —
-Subset the design, never the data (10 min)</a></li>
-<li><a href="#slide-14-design-aware-workflow-end-to-end-8-min" id="toc-slide-14-design-aware-workflow-end-to-end-8-min">Slide 14 —
-Design-aware workflow, end to end (8 min)</a></li>
-<li><a href="#slide-15-common-pitfalls-checklist-6-min" id="toc-slide-15-common-pitfalls-checklist-6-min">Slide 15 — Common
-pitfalls checklist (6 min)</a></li>
-<li><a href="#slide-16-bridge-to-todays-lab-l5-and-p4-7-min" id="toc-slide-16-bridge-to-todays-lab-l5-and-p4-7-min">Slide 16 — Bridge
-to today’s lab (L5) and P4 (7 min)</a></li>
+<li><a href="#slide-15-which-nhanes-weight-3-min" id="toc-slide-15-which-nhanes-weight-3-min">Slide 15 — Which NHANES
+weight? (3 min)</a></li>
+<li><a href="#slide-16-masld-follow-the-measurement-path-4-min-do-not-drop" id="toc-slide-16-masld-follow-the-measurement-path-4-min-do-not-drop">Slide
+16 — MASLD: follow the measurement path (4 min) · <strong>do not
+drop</strong></a></li>
+<li><a href="#slide-17-combining-ordinary-two-year-cycles-3-min" id="toc-slide-17-combining-ordinary-two-year-cycles-3-min">Slide 17 —
+Combining ordinary two-year cycles (3 min)</a></li>
+<li><a href="#slide-18-in-r-6-changes-totals-not-the-model-coefficient-2-min" id="toc-slide-18-in-r-6-changes-totals-not-the-model-coefficient-2-min">Slide
+18 — In R: <code>/ 6</code> changes totals, not the model coefficient (2
+min)</a></li>
+<li><a href="#slide-19-first-special-case-analyses-that-include-19992000-2-min" id="toc-slide-19-first-special-case-analyses-that-include-19992000-2-min">Slide
+19 — First special case: analyses that include 1999–2000 (2
+min)</a></li>
+<li><a href="#slide-20-in-r-pooling-19992004-1-min" id="toc-slide-20-in-r-pooling-19992004-1-min">Slide 20 — In R: pooling
+1999–2004 (1 min)</a></li>
+<li><a href="#slide-21-second-special-case-2017march-2020-is-a-3.2-year-file-2-min" id="toc-slide-21-second-special-case-2017march-2020-is-a-3.2-year-file-2-min">Slide
+21 — Second special case: 2017–March 2020 is a 3.2-year file (2
+min)</a></li>
+<li><a href="#slide-22-covid-era-example-in-code-1-min" id="toc-slide-22-covid-era-example-in-code-1-min">Slide 22 — COVID-era
+example in code (1 min)</a></li>
+<li><a href="#slide-23-three-pooling-situations-to-remember-2-min" id="toc-slide-23-three-pooling-situations-to-remember-2-min">Slide 23 —
+Three pooling situations to remember (2 min)</a></li>
+<li><a href="#part-2-weights-strata-psus-and-subpopulations-25-minutes" id="toc-part-2-weights-strata-psus-and-subpopulations-25-minutes">Part 2
+· Weights, strata, PSUs, and subpopulations · 25 minutes</a></li>
+<li><a href="#slide-24-three-design-ingredients-three-jobs-2-min" id="toc-slide-24-three-design-ingredients-three-jobs-2-min">Slide 24 —
+Three design ingredients, three jobs (2 min)</a></li>
+<li><a href="#slide-25-why-strata-and-psus-matter-2-min" id="toc-slide-25-why-strata-and-psus-matter-2-min">Slide 25 — Why strata
+and PSUs matter (2 min)</a></li>
+<li><a href="#slide-26-design-based-and-model-based-inference-the-useful-distinction-2-min" id="toc-slide-26-design-based-and-model-based-inference-the-useful-distinction-2-min">Slide
+26 — Design-based and model-based inference: the useful distinction (2
+min)</a></li>
+<li><a href="#slide-27-survey-weights-are-not-treatmentip-weights-1-min" id="toc-slide-27-survey-weights-are-not-treatmentip-weights-1-min">Slide
+27 — Survey weights are not treatment/IP weights (1 min)</a></li>
+<li><a href="#slide-28-build-the-survey-design-before-defining-the-analysis-subgroup-2-min" id="toc-slide-28-build-the-survey-design-before-defining-the-analysis-subgroup-2-min">Slide
+28 — Build the survey design before defining the analysis subgroup (2
+min)</a></li>
+<li><a href="#slide-29-a-domain-is-just-the-subgroup-you-want-to-analyse-1-min" id="toc-slide-29-a-domain-is-just-the-subgroup-you-want-to-analyse-1-min">Slide
+29 — A domain is just the subgroup you want to analyse (1 min)</a></li>
+<li><a href="#slide-30-wrong-and-right-ways-to-analyse-a-subgroup-3-min-do-not-drop" id="toc-slide-30-wrong-and-right-ways-to-analyse-a-subgroup-3-min-do-not-drop">Slide
+30 — Wrong and right ways to analyse a subgroup (3 min) · <strong>do not
+drop</strong></a></li>
+<li><a href="#slide-31-a-small-domain-shows-why-the-order-matters-3-min" id="toc-slide-31-a-small-domain-shows-why-the-order-matters-3-min">Slide
+31 — A small domain shows why the order matters (3 min)</a></li>
+<li><a href="#slide-32-complete-cases-are-another-domain---but-that-does-not-fix-missing-data-bias-2-min" id="toc-slide-32-complete-cases-are-another-domain---but-that-does-not-fix-missing-data-bias-2-min">Slide
+32 — Complete cases are another domain - but that does not fix
+missing-data bias (2 min)</a></li>
+<li><a href="#slide-33-a-weighted-estimate-can-still-be-based-on-little-information-2-min" id="toc-slide-33-a-weighted-estimate-can-still-be-based-on-little-information-2-min">Slide
+33 — A weighted estimate can still be based on little information (2
+min)</a></li>
+<li><a href="#slide-34-design-effect-and-effective-sample-size-3-min" id="toc-slide-34-design-effect-and-effective-sample-size-3-min">Slide 34
+— Design effect and effective sample size (3 min)</a></li>
+<li><a href="#slide-35-table-1-for-a-complex-survey-2-min" id="toc-slide-35-table-1-for-a-complex-survey-2-min">Slide 35 — Table 1
+for a complex survey (2 min)</a></li>
+<li><a href="#break-10-min-after-slide-35" id="toc-break-10-min-after-slide-35">BREAK (10 min), after Slide
+35</a></li>
+<li><a href="#part-3-survey-regression-in-the-masld-example-40-minutes" id="toc-part-3-survey-regression-in-the-masld-example-40-minutes">Part 3
+· Survey regression in the MASLD example · 40 minutes</a></li>
+<li><a href="#slide-36-fit-the-model-on-the-design-object-2-min" id="toc-slide-36-fit-the-model-on-the-design-object-2-min">Slide 36 —
+Fit the model on the design object (2 min)</a></li>
+<li><a href="#slide-37-tests-use-the-survey-design-too-3-min" id="toc-slide-37-tests-use-the-survey-design-too-3-min">Slide 37 — Tests
+use the survey design too (3 min)</a></li>
+<li><a href="#slide-38-weighting-changes-the-real-masld-population-mix-only-modestly-2-min" id="toc-slide-38-weighting-changes-the-real-masld-population-mix-only-modestly-2-min">Slide
+38 — Weighting changes the real MASLD population mix only modestly (2
+min)</a></li>
+<li><a href="#slide-39-what-can-we-say-about-the-published-cox-analysis-4-min-do-not-drop" id="toc-slide-39-what-can-we-say-about-the-published-cox-analysis-4-min-do-not-drop">Slide
+39 — What can we say about the published Cox analysis? (4 min) ·
+<strong>do not drop</strong></a></li>
+<li><a href="#slide-40-start-with-one-comparison-2-min" id="toc-slide-40-start-with-one-comparison-2-min">Slide 40 — Start with
+one comparison (2 min)</a></li>
+<li><a href="#slide-41-adjustment-and-survey-design-are-different-choices-4-min-do-not-drop" id="toc-slide-41-adjustment-and-survey-design-are-different-choices-4-min-do-not-drop">Slide
+41 — Adjustment and survey design are different choices (4 min) ·
+<strong>do not drop</strong></a></li>
+<li><a href="#slide-42-week-5s-effect-modification-result-redone-with-the-survey-design-4-min-do-not-drop" id="toc-slide-42-week-5s-effect-modification-result-redone-with-the-survey-design-4-min-do-not-drop">Slide
+42 — Week 5’s effect-modification result, redone with the survey design
+(4 min) · <strong>do not drop</strong></a></li>
+<li><a href="#slide-43-in-r-the-week-5-interaction-model-survey-aware-2-min" id="toc-slide-43-in-r-the-week-5-interaction-model-survey-aware-2-min">Slide
+43 — In R: the Week 5 interaction model, survey-aware (2 min)</a></li>
+<li><a href="#slide-44-the-correct-weight-is-chosen-by-the-measurement-process-3-min" id="toc-slide-44-the-correct-weight-is-chosen-by-the-measurement-process-3-min">Slide
+44 — The correct weight is chosen by the measurement process (3
+min)</a></li>
+<li><a href="#slide-45-in-r-sensitivity-to-the-exam-weight-2-min" id="toc-slide-45-in-r-sensitivity-to-the-exam-weight-2-min">Slide 45 —
+In R: sensitivity to the exam weight (2 min)</a></li>
+<li><a href="#slide-46-why-can-weighted-and-unweighted-regression-differ-2-min" id="toc-slide-46-why-can-weighted-and-unweighted-regression-differ-2-min">Slide
+46 — Why can weighted and unweighted regression differ? (2 min)</a></li>
+<li><a href="#slide-47-why-weighting-can-change-an-overall-rr-4-min-do-not-drop" id="toc-slide-47-why-weighting-can-change-an-overall-rr-4-min-do-not-drop">Slide
+47 — Why weighting can change an overall RR (4 min) · <strong>do not
+drop</strong></a></li>
+<li><a href="#slide-48-in-r-build-the-high-sodium-example-1-min" id="toc-slide-48-in-r-build-the-high-sodium-example-1-min">Slide 48 — In
+R: build the high-sodium example (1 min)</a></li>
+<li><a href="#slide-49-in-r-sample-rr-versus-town-rr-2-min" id="toc-slide-49-in-r-sample-rr-versus-town-rr-2-min">Slide 49 — In R:
+sample RR versus town RR (2 min)</a></li>
+<li><a href="#slide-50-what-survey-design-cannot-fix-3-min" id="toc-slide-50-what-survey-design-cannot-fix-3-min">Slide 50 — What
+survey design cannot fix (3 min)</a></li>
+<li><a href="#part-4-reporting-and-synthesis-8-minutes" id="toc-part-4-reporting-and-synthesis-8-minutes">Part 4 · Reporting and
+synthesis · 8 minutes</a></li>
+<li><a href="#slide-51-report-the-same-decisions-you-made-3-min" id="toc-slide-51-report-the-same-decisions-you-made-3-min">Slide 51 —
+Report the same decisions you made (3 min)</a></li>
+<li><a href="#slide-52-the-algorithm-to-take-into-your-own-paper-2-min" id="toc-slide-52-the-algorithm-to-take-into-your-own-paper-2-min">Slide
+52 — The algorithm to take into your own paper (2 min)</a></li>
+<li><a href="#slide-53-key-takeaways-3-min" id="toc-slide-53-key-takeaways-3-min">Slide 53 — Key takeaways (3
+min)</a></li>
+<li><a href="#slides-5456-sources-and-references-0-min" id="toc-slides-5456-sources-and-references-0-min">Slides 54–56 — Sources
+and references (0 min)</a></li>
+<li><a href="#appendix-uncounted-a1a18" id="toc-appendix-uncounted-a1a18">Appendix (uncounted, A1–A18)</a></li>
+<li><a href="#thursday-l5-epimethods-surveydatae-for-the-ta-and-the-instructor-not-in-the-deck" id="toc-thursday-l5-epimethods-surveydatae-for-the-ta-and-the-instructor-not-in-the-deck">Thursday
+— L5 (EpiMethods <code>surveydataE</code>) · for the TA and the
+instructor, not in the deck</a></li>
+<li><a href="#if-you-are-running-behind" id="toc-if-you-are-running-behind">If you are running behind</a></li>
+<li><a href="#reading-map-each-segment-and-where-students-can-review-it" id="toc-reading-map-each-segment-and-where-students-can-review-it">Reading
+map — each segment and where students can review it</a></li>
+<li><a href="#references" id="toc-references">References</a></li>
 </ul></li>
 </ul>
 </nav>
-<h1 id="week-6-lecture-plan-complex-survey-analysis-why-nhanes-is-not-a-simple-random-sample">Week
-6 Lecture Plan — Complex Survey Analysis: Why NHANES Is Not a Simple
-Random Sample</h1>
-<p>Duration: 2.5 h = 150 min (Tue, before the Thu lab).</p>
-<p>Timing: the Slide 1–16 markers below sum to <strong>147</strong> —
-142 min of content plus the 5-minute break at Slide 9 — leaving
-<strong>3 min of float</strong> in the session. The deck
-(<code>slides/Week6_survey_slides.qmd</code>) spends that float on its
-opening Continuity recap, which this plan does not separately budget.
-<strong>Slide 15</strong> (pitfalls checklist, 6 min) recaps material
-already covered and is the designated cut if the mechanics slides 4–8
-run long.</p>
-<h2 id="learning-objectives">Learning objectives</h2>
+<h1 id="week-6-complex-survey-design-the-nhanes-workflow-then-the-masld-estimates">Week
+6 — Complex survey design: the NHANES workflow, then the MASLD
+estimates</h1>
+<p>Duration: ~2.5 h (Tue 13 Oct, before the Thu 15 Oct lab). Deck:
+<code>lectures/slides/Week6_survey_slides.qmd</code>. Its MASLD numbers
+come from <code>lectures/analysis/Week6_design_aware.R</code> (written
+to <code>Week6_design_aware.json</code>) and from the M1 and paper
+result objects (<code>examples/_results/</code>). The code and output on
+its code slides come from
+<code>lectures/analysis/Week6_code_outputs.R</code>, which runs each
+block exactly as shown and records what R printed. The two pooling
+examples for cycles outside 2007–2018 (Slides 20 and 22, and appendix
+A13) cannot run on our data; a check runs them on a small made-up file
+and compares the weights they build with the slides’ formulas.</p>
+<blockquote>
+<p><strong>The design.</strong> Start with how NHANES actually draws its
+sample: strata first, then PSUs, segments, households and people. Then
+isolate what a weight does in a made-up town of 1,000, where the
+sample’s answer and the town’s can be checked by hand. Then the NHANES
+rules: which weight, how to pool cycles, design first and
+<code>subset()</code> second. Then MASLD as the <strong>audit</strong>:
+Weeks 4 and 5’s own estimates, redone with the design on the same
+rows.</p>
+</blockquote>
+<blockquote>
+<p><strong>Timing.</strong> The deck carries no timing marks; the
+minutes below are this plan’s. They add up to <strong>128
+minutes</strong> of content. With the 10-minute break after Slide 35 the
+total is <strong>138 minutes</strong>, leaving 12 minutes of the
+150-minute class for questions. <em>If you are running behind</em> at
+the foot of this file gives the cut order.</p>
+</blockquote>
+<blockquote>
+<p><strong>Slide numbers.</strong> Slide 1 here is the deck’s first
+content slide, “Why Week 6 matters”. The deck’s own counter also counts
+the title slide and the five section dividers, so on screen it runs
+ahead of this plan: by 1 for Slides 1–7, 2 for Slides 8–23, 3 for Slides
+24–35, 4 for Slides 36–50 and 5 for Slides 51–56. The appendix is A1–A18
+(screen 63–80).</p>
+</blockquote>
+<blockquote>
+<p><strong>Built on Weeks 4–5.</strong> Same rows
+(<strong>5,911</strong>), same pre-exposure adjustment set L (age, sex,
+race/ethnicity, smoking, sedentary time), same questions (Week 4’s
+obesity HR and Week 5’s waist-fat-by-obesity question). Week 4’s notes
+promised that Week 6 would redo its analyses with the survey weights;
+Slides 40–43 do. <code>Week6_design_aware.R</code> stops if its
+unweighted numbers differ from the ones Weeks 4 and 5 emitted.</p>
+</blockquote>
+<blockquote>
+<p><strong>Row-set discipline.</strong> Every quantitative slide names
+its rows.</p>
 <ul>
-<li>Explain why NHANES is a stratified, multistage, clustered
-probability sample — not a simple random sample — and why that breaks
-default standard errors.</li>
-<li>Identify the three design objects every NHANES analysis needs:
-weights (WTINT / WTMEC / WTSAF), strata (SDMVSTRA), and PSU
-(SDMVPSU).</li>
-<li>Choose and pool the correct weight when combining survey cycles, and
-state what design effects do to confidence intervals.</li>
-<li>Contrast the MASLD paper’s unweighted estimates with design-aware
-ones, and articulate why unweighted was a <em>choice</em>.</li>
-<li>Reason about the fasting-vs-non-fasting weight puzzle that MASLD’s
-own analyte mix creates.</li>
+<li><strong>5,911</strong>: Weeks 4–5’s rows (the locked domain,
+complete on L and on the paper’s Model 2 covariates). Every MASLD
+estimate: Slides 6, 18, 25, 30, 34–38, 40–45, 50 and the appendix except
+A7.</li>
+<li><strong>57</strong>: Group I’s women within the 5,911, the small
+domain on Slide 31.</li>
+<li><strong>1,291</strong>: Groups III + IV within the 5,911. Only the
+sex test in appendix A7.</li>
+<li><strong>5,963</strong>: complete on the nine interaction-model
+variables in the full fasting MASLD domain; mentioned under Slide 32 for
+continuity with Week 7, not used in these comparisons.</li>
+<li><strong>6,048</strong>: the MASLD adults with a valid fasting weight
+(Slide 16).</li>
+<li><strong>6,371</strong>: our full analytic file. The count on Slide
+16 and the paper-reproduction number under Slide 39.</li>
+<li><strong>The design frame</strong> is the whole fasting subsample
+(WTSAF2YR &gt; 0: 17,208 people of all ages, 90 strata, 184 PSUs). It is
+not a row set we analyse. The design is declared on it, and our rows are
+reached with <code>subset()</code>. The exam-weight sensitivity (Slides
+44–45) declares a second frame, the whole exam sample (WTMEC2YR &gt; 0),
+and reaches the same 5,911 rows the same way.</li>
+<li><strong>The town</strong> (Slides 8–12, 34 and 47–49) is made up:
+1,000 people, 200 sampled.</li>
 </ul>
+</blockquote>
+<blockquote>
+<p><strong>What this week does NOT do.</strong></p>
+<ul>
+<li>It does not re-run the paper’s Model 1. P4’s worked example uses
+Model 1, labelled as the paper’s specification.</li>
+<li>Missing data are Week 7. Slide 32 says only that complete cases are
+a domain, not a fix.</li>
+<li>Replication variance (jackknife, BRR) is named in the appendix and
+not used.</li>
+</ul>
+</blockquote>
+<h2 id="learning-objectives">Learning objectives</h2>
+<p>By the end, students can work through the deck’s five questions in
+order (Slide 7):</p>
+<ol type="1">
+<li><strong>Who?</strong> Name the population an estimate describes: the
+people sampled, or the population the survey represents.</li>
+<li><strong>Which weight?</strong> Choose the weight of the smallest
+NHANES component that measured every variable, and pool cycles by what
+each supplied weight represents: ÷ 6 for 2007–2018, the NCHS four-year
+weight whenever 1999–2000 is included, and time fractions with the
+3.2-year 2017–March 2020 file.</li>
+<li><strong>How sampled?</strong> Declare the weight, strata
+(<code>SDMVSTRA</code>) and PSUs (<code>SDMVPSU</code>) with
+<code>nest = TRUE</code> on the whole file the weight belongs to.</li>
+<li><strong>Which subgroup?</strong> Reach the analysis rows with
+<code>subset()</code>, explain a lonely PSU, and report the unweighted n
+beside every weighted estimate.</li>
+<li><strong>Which model?</strong> Fit <code>svymean()</code>,
+<code>svyglm()</code> or <code>svycoxph()</code>, test on the design’s
+degrees of freedom, and read a weighted–unweighted gap as a question,
+not a diagnosis.</li>
+</ol>
+<p>They can also say why survey weighting is neither confounding
+adjustment (Slides 13 and 41) nor inverse-probability-of-treatment
+weighting (Slide 27).</p>
 <h2 id="continuity">Continuity</h2>
 <ul>
-<li>Recap Wk5: the targeted IV-vs-III × sex test gave a ratio of HRs of
-1.00 (0.42–2.35) — underpowered rather than resolved. Today: the
-<strong>weight follows the measurement subsample</strong> (CDC’s
-least-common-denominator rule), and <strong>domain analysis</strong>
-preserves the parent design — build the design, then
-<code>subset()</code>.</li>
-<li>Today: a different threat entirely — not confounding or
-modification, but whose <em>population</em> the numbers describe. The
-paper analyzed NHANES as if it were a simple random sample.</li>
-<li>Sets up L5 (naive vs survey-weighted estimation) and P4, your first
-design-aware re-estimate of your own paper.</li>
-</ul>
-<h2 id="slide-1-where-we-are-in-the-project-5-min">Slide 1 — Where we
-are in the project (5 min)</h2>
+<li><strong>Last week (Week 5 / L4): effect modification vs
+interaction.</strong>
 <ul>
-<li>Timeline recap: Replicate → Interrogate → Improve → Defend. M1 is
-Wk8; <strong>M2 (Wk9) is your critique of another group’s M1</strong>;
-M3 (Wk11) is your individual defense.</li>
-<li>P1 eligibility, P2 Table 1, P3 effect modification are done — all
-built on an <em>unweighted</em> analytic file.</li>
-<li>Today we question a design assumption baked into every number so
-far.</li>
-<li>MASLD hook: the paper reports HRs to two decimals but does not name
-the survey design.</li>
+<li>In MASLD, waist fat’s HR looked larger among the obese: ratio
+<strong>2.74 (0.97–7.71)</strong>, likelihood-ratio p
+<strong>0.03</strong> (Wald p 0.06), resting on Group I’s 4 deaths.</li>
+<li>Sex showed no clear modification of the locked IV-vs-III contrast:
+<strong>1.13 (0.48–2.66)</strong> with L.</li>
+</ul></li>
+<li><strong>Today.</strong> Every one of those numbers was unweighted,
+so it described the sampled people. Today asks which population an
+estimate describes, and redoes Weeks 4 and 5 with the design.</li>
+<li><strong>Thursday (L5): EpiMethods <code>surveydataE</code>.</strong>
+This is <strong>not MASLD</strong>: Flegal et al. 2016, one NHANES
+cycle, obesity, a weighted Table 1 and survey-weighted logistic
+regression. See <em>Thursday</em> below. P4 transfers the workflow to
+the student’s own paper.</li>
 </ul>
-<h2 id="slide-2-the-motivating-puzzle-8-min">Slide 2 — The motivating
-puzzle (8 min)</h2>
+<h2 id="opening-18-minutes">Opening · 18 minutes</h2>
+<h2 id="slide-1-why-week-6-matters-3-min">Slide 1 — Why Week 6 matters
+(3 min)</h2>
 <ul>
-<li>Show the paper’s Group IV all-cause HR ~15.1 (unadjusted). Ask: 15.1
-<em>for whom</em> — the sample, or US adults with MASLD?</li>
-<li>The gap between “sample” and “population” is exactly what survey
-design bridges.</li>
-<li>Preview the punchline: design-aware weighting attenuates Group IV
-toward ~12.4 and widens the CI.</li>
-<li>MASLD hook: the paper’s inference target is implicitly the US
-population, but its math is the sample’s.</li>
+<li>NHANES describes the US civilian, noninstitutionalized population,
+but it is not a simple random sample of people.</li>
+<li><strong>Two questions:</strong> who does each respondent represent,
+and how should the uncertainty reflect the way the sample was
+drawn?</li>
+<li><strong>Say this.</strong> Start from the practical goal in the box,
+not from vocabulary. The lecture keeps returning to one workflow (Slide
+7).</li>
 </ul>
-<h2 id="slide-3-what-simple-random-sample-assumes-10-min">Slide 3 — What
-“simple random sample” assumes (10 min)</h2>
+<h2 id="slide-2-nhanes-stratify-first-then-sample-in-stages-3-min">Slide
+2 — NHANES: stratify first, then sample in stages (3 min)</h2>
 <ul>
-<li>SRS: every person independently, equally likely to be drawn; default
-SEs assume this.</li>
-<li>Two violations coming: unequal selection probabilities (weights) and
-non-independence (clustering).</li>
-<li>Consequence of ignoring them: point estimates biased toward the
-sample composition; SEs usually too <em>small</em>.</li>
-<li>MASLD hook: default <code>coxph</code> SEs in the replication
-silently assume SRS.</li>
+<li><strong>The figure,</strong> <code>w6_design_stages.png</code>.
+Candidate PSUs are grouped into strata <em>before</em> Stage 1. NHANES
+then samples PSUs → segments → households → people.</li>
+<li>Stratification is not a sampling stage. It organises the frame so
+that PSUs are drawn separately within each stratum.</li>
 </ul>
-<h2 id="slide-4-how-nhanes-is-actually-built-12-min">Slide 4 — How
-NHANES is actually built (12 min)</h2>
+<h2 id="slide-3-what-are-a-stratum-and-a-psu-3-min">Slide 3 — What are a
+stratum and a PSU? (3 min)</h2>
 <ul>
-<li>Multistage: (1) counties (PSUs), (2) segments, (3) households, (4)
-persons — selection at each stage.</li>
-<li>Stratified first by design domain; oversampling of targeted
-subgroups (e.g., older adults, some race/ethnicity groups, low
-income).</li>
-<li>Result: neither equal probabilities nor independent draws — the two
-SRS assumptions both fail by design.</li>
-<li>MASLD hook: MASLD adults are not spread randomly across PSUs; they
-cluster with the households sampled.</li>
+<li><strong>Stratum:</strong> a group of candidate PSUs made similar on
+geography, metropolitan status and population before PSU selection.</li>
+<li><strong>PSU:</strong> usually a county or a group of adjacent
+counties, drawn at Stage 1.</li>
+<li><strong>Segment:</strong> a block or group of blocks inside a
+PSU.</li>
+<li><strong>The question box.</strong> A PSU is not “the neighbours”.
+Counties are large; the segments are the neighbourhood-like units.</li>
 </ul>
-<h2 id="slide-5-weights-wtint-wtmec-wtsaf-12-min">Slide 5 — Weights:
-WTINT, WTMEC, WTSAF (12 min)</h2>
+<h2 id="slide-4-what-the-public-nhanes-file-gives-you-2-min">Slide 4 —
+What the public NHANES file gives you (2 min)</h2>
 <ul>
-<li>A weight ~ how many people in the target population this respondent
-represents (inverse selection probability, adjusted for nonresponse and
-post-stratification).</li>
-<li>Three tiers by how far into the exam a variable lives: WTINT
-(interview) ⊇ WTMEC (mobile exam) ⊇ WTSAF (fasting subsample).</li>
-<li>Rule: use the weight for the <em>most restrictive</em> data source
-your analysis actually requires.</li>
-<li>MASLD hook: FLI needs triglycerides (a fasting analyte) -&gt; the
-honest weight is WTSAF, the smallest, most-adjusted one.</li>
+<li>The true first-stage geography is confidential. The public file
+carries masked variance units: <code>SDMVSTRA</code> (pseudo-stratum)
+and <code>SDMVPSU</code> (pseudo-PSU).</li>
+<li>These are the variables the software uses for design-based variance.
+Our fasting-subsample frame has <strong>90</strong> strata and
+<strong>184</strong> PSUs (Slide 37 uses both).</li>
 </ul>
-<h2 id="slide-6-strata-and-psus-sdmvstra-sdmvpsu-10-min">Slide 6 —
-Strata and PSUs: SDMVSTRA, SDMVPSU (10 min)</h2>
+<h2 id="slide-5-why-sample-this-way-2-min">Slide 5 — Why sample this
+way? (2 min)</h2>
 <ul>
-<li>SDMVSTRA encodes the design strata; SDMVPSU encodes the (masked)
-primary sampling units within a stratum.</li>
-<li>These drive <em>variance</em>, not the point estimate: clustering
-means neighbors resemble each other, so effective sample size &lt;
-N.</li>
-<li>Analytic strata/PSU are pseudo-values released for disclosure
-control — use as provided, never re-derive.</li>
-<li>MASLD hook: none of SDMVSTRA / SDMVPSU appear anywhere in the
-paper’s methods.</li>
+<li><strong>Efficiency:</strong> interviewers and the mobile examination
+centre work in geographic clusters.</li>
+<li><strong>Precision for subgroups:</strong> some groups are sampled at
+higher rates. Which groups varies by cycle.</li>
+<li>The analysis has to remember who was oversampled and who was sampled
+together.</li>
 </ul>
-<h2 id="slide-7-pooling-weights-across-cycles-10-min">Slide 7 — Pooling
-weights across cycles (10 min)</h2>
+<h2 id="slide-6-one-set-of-rows-two-different-mixes-3-min">Slide 6 — One
+set of rows, two different mixes (3 min)</h2>
 <ul>
-<li>NHANES 2007–2018 = six 2-year cycles; the paper stacks them.</li>
-<li>Weights are built per cycle -&gt; you must divide by the number of
-cycles pooled (here /6) so the weighted total isn’t multiplied.</li>
-<li>Use the survey-cycle-appropriate weight variable and pool
-consistently; strata/PSU are pooled as-is.</li>
-<li>MASLD hook: with six cycles combined, the correct pooled fasting
-weight is WTSAF/6, a step easy to miss.</li>
+<li><p><strong>Our 5,911 rows, unweighted vs weighted</strong> (WTSAF2YR
+/ 6 with strata and PSUs, the design of Slides 28–30):</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: right;">Our 5,911 rows</th>
+<th style="text-align: right;">Weighted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Non-Hispanic White</td>
+<td style="text-align: right;">42.2%</td>
+<td style="text-align: right;">66.8%</td>
+</tr>
+<tr>
+<td>Non-Hispanic Black</td>
+<td style="text-align: right;">20.2%</td>
+<td style="text-align: right;">11.3%</td>
+</tr>
+<tr>
+<td>Mexican American</td>
+<td style="text-align: right;">18.6%</td>
+<td style="text-align: right;">10.4%</td>
+</tr>
+<tr>
+<td>Other Hispanic</td>
+<td style="text-align: right;">11.7%</td>
+<td style="text-align: right;">6.1%</td>
+</tr>
+<tr>
+<td>Other or multiracial</td>
+<td style="text-align: right;">7.2%</td>
+<td style="text-align: right;">5.4%</td>
+</tr>
+<tr>
+<td>Mean age, years</td>
+<td style="text-align: right;">51.4</td>
+<td style="text-align: right;">49.4</td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>Say this.</strong> The rows are the same; what changes is
+how much each row counts. Keep to representation: follow-up differs
+between people, so leave deaths for Part 3.</p></li>
 </ul>
-<h2 id="slide-8-the-design-effect-10-min">Slide 8 — The design effect
-(10 min)</h2>
+<h2 id="slide-7-the-workflow-for-today-2-min">Slide 7 — The workflow for
+today (2 min)</h2>
+<p><strong>Who? → Which weight? → How sampled? → Which subgroup? → Which
+model?</strong> Software comes last: <code>svydesign()</code> cannot
+choose the population or the weight.</p>
+<h2 id="part-1-what-a-survey-weight-does-37-minutes">Part 1 · What a
+survey weight does · 37 minutes</h2>
+<h2 id="slide-8-a-public-health-town-younger-and-older-adults-3-min">Slide 8
+— A public-health town: younger and older adults (3 min)</h2>
 <ul>
-<li>DEFF ~ variance under the real design ÷ variance under SRS;
-typically &gt; 1 because of clustering + weighting.</li>
-<li>Practical read: when DEFF &gt; 1, your <em>effective</em> N is
-smaller than your row count; honest CIs get wider.</li>
-<li>“N = 6,300” overstates the information content once design is
-respected.</li>
-<li>MASLD hook: the paper’s tight CIs partly reflect pretending each of
-~6,300 rows is an independent draw.</li>
+<li><strong>The town.</strong> 900 younger adults, 100 sampled (1 in 9,
+weight <strong>9</strong>); 100 older adults, all 100 sampled (weight
+<strong>1</strong>).</li>
+<li><strong>For this toy,</strong> weight = 1 ÷ probability of
+selection: each sampled younger adult stands for 9 townspeople.</li>
+<li>NHANES has oversampled older adults in some cycles for the same
+reason: enough of them to study.</li>
 </ul>
-<h2 id="slide-9-short-break-5-min">Slide 9 — Short break (5 min)</h2>
+<h2 id="slide-9-in-r-the-toy-weight-2-min">Slide 9 — In R: the toy
+weight (2 min)</h2>
+<p>The table as a data frame. The weights add back to the town: 100 × 9
++ 100 × 1 = 1,000.</p>
+<h2 id="slide-10-hypertension-prevalence-sample-versus-town-4-min">Slide
+10 — Hypertension prevalence: sample versus town (4 min)</h2>
 <ul>
-<li>Stretch. Coming up: what happens to the MASLD numbers when we do it
-right, and the fasting-weight puzzle.</li>
+<li><strong>The prevalences.</strong> Younger 15%, older 40%.
+<ul>
+<li>Sample: (15 + 40) ÷ 2 = <strong>27.5%</strong>.</li>
+<li>Town: [900 × 0.15 + 100 × 0.40] ÷ 1,000 =
+<strong>17.5%</strong>.</li>
+</ul></li>
+<li><strong>Neither is wrong.</strong> 27.5% correctly describes the 200
+people sampled. The town’s prevalence needs the weights.</li>
 </ul>
-<h2 id="slide-10-unweighted-is-a-choice-not-a-default-10-min">Slide 10 —
-“Unweighted” is a choice, not a default (10 min)</h2>
+<h2 id="slide-11-in-r-build-the-town-sample-2-min">Slide 11 — In R:
+build the town sample (2 min)</h2>
+<p><code>mean(s$htn)</code> gives <strong>0.275</strong>, the prevalence
+among the 200 sampled people.</p>
+<h2 id="slide-12-in-r-let-the-weights-reconstruct-the-town-2-min">Slide
+12 — In R: let the weights reconstruct the town (2 min)</h2>
 <ul>
-<li>Some analysts argue for unweighted, model-based inference when the
-outcome model is richly adjusted (conditional, not descriptive,
-target).</li>
-<li>But that must be <em>stated and defended</em> — silence reads as an
-oversight, not a decision.</li>
-<li>Weighting and covariate adjustment are separate axes, not two rival
-framings. Design decides which population the estimate speaks for;
-adjustment decides which covariates it holds fixed. Every combination is
-available, and the honest report crosses them (Slide 11).</li>
-<li>Declare the estimand — population-average, conditional on
-covariates, or both — name the weight you used and why, and say which
-cell of the 2×2 your headline number came from.</li>
-<li>MASLD hook: the paper never declares which target it’s after, so
-readers can’t tell if unweighted was reasoned or accidental.</li>
+<li><code>svymean()</code> on the weighted design gives
+<strong>0.175</strong> (SE 0.0327).</li>
+<li><code>ids = ~1</code> because the toy has no clusters, so weighting
+can be understood on its own. The NHANES code from Slide 18 on adds
+strata and PSUs.</li>
 </ul>
-<h2 id="slide-11-what-weighting-does-to-masld-12-min">Slide 11 — What
-weighting does to MASLD (12 min)</h2>
+<h2 id="slide-13-age-can-matter-for-two-different-reasons-2-min">Slide
+13 — Age can matter for two different reasons (2 min)</h2>
 <ul>
-<li>Apply WTSAF (pooled) + SDMVSTRA + SDMVPSU via a survey-aware Cox
-fit.</li>
-<li>Group IV all-cause HR moves ~15.1 -&gt; ~12.4 unadjusted; CIs widen
-from the design effect.</li>
-<li>Direction of the headline survives — Group IV still worst — but the
-magnitude and precision are honestly smaller/wider.</li>
-<li>Then cross the axes and show all four cells, fitted on the
-<em>same</em> Model-1 complete-case rows (n = 5,939): read
-<strong>down</strong> a column for adjustment, <strong>across</strong> a
-row for design. Holding the rows fixed is the only thing that makes a
-difference attributable to the axis you moved — and it is why the crude
-IV-vs-I cell reads 16.05 rather than the ~15.1 of the full analytic
-file.</li>
-<li>IV vs I, the paper’s contrast: unweighted crude 16.05 (5.91–43.58),
-unweighted Model 1 3.79 (1.38–10.39); weighted crude 11.93 (2.60–54.84),
-weighted Model 1 2.97 (0.69–12.79).</li>
-<li>IV vs III, our locked contrast: unweighted crude 2.34 (1.72–3.18),
-unweighted Model 1 1.06 (0.77–1.45); weighted crude 3.07 (2.11–4.48),
-weighted Model 1 1.29 (0.90–1.86).</li>
-<li>The familiar ledger that runs unadjusted, then fully adjusted, then
-survey-weighted mixes crude and adjusted models fitted on different row
-sets. It is not a sequence of successive corrections and you do not
-present it as one.</li>
-<li>MASLD hook: on the paper’s own IV-vs-I contrast, design decides
-whether the interval excludes 1; on the locked IV-vs-III contrast,
-adjustment dominates and design moves the estimate in the opposite
-direction and by less. “Survey design matters” is true of one contrast
-and much weaker for the other.</li>
+<li><strong>Week 4, confounding:</strong> is the exposure comparison
+fair? Tool: design and adjustment.</li>
+<li><strong>Week 6, sampling:</strong> does the sample have the
+population’s age mix? Tool: weights and design information.</li>
+<li>The same variable can matter for both reasons. Survey weighting is
+not confounding adjustment.</li>
 </ul>
-<h2 id="slide-12-the-question-settled-by-cdcs-least-common-denominator-rule-fasting-vs-non-fasting-analytes-12-min">Slide
-12 — The question settled by CDC’s least-common-denominator rule:
-fasting vs non-fasting analytes (12 min)</h2>
+<h2 id="slide-14-back-to-nhanes-the-final-weight-is-more-than-1-probability-2-min">Slide
+14 — Back to NHANES: the final weight is more than 1 / probability (2
+min)</h2>
+<p>The final weight also carries a non-response adjustment and
+calibration to population control totals. NHANES supplies it; the
+analyst’s job is to choose the right one.</p>
+<h2 id="slide-15-which-nhanes-weight-3-min">Slide 15 — Which NHANES
+weight? (3 min)</h2>
 <ul>
-<li>FLI combines triglycerides + GGT + BMI + waist. TG is a
-<em>fasting</em> analyte (WTSAF domain); GGT is <em>not</em> (available
-in the broader MEC, WTMEC).</li>
-<li>Which weight is <strong>primary</strong> is settled by CDC’s
-least-common-denominator rule, not contested: use the weight of the
-smallest applicable subsample.</li>
-<li>The rule selects WTSAF (FLI needs a fasting analyte). MEC is not a
-defensible <em>primary</em> — it would weight to a population in which
-the exposure cannot be constructed — but a MEC-weighted run,
-<strong>explicitly labelled as a sensitivity analysis</strong>, shows
-students how much the rule was worth. The point is to apply the rule,
-say so, and quantify what it bought.</li>
-<li>MASLD hook: MASLD’s own ascertainment recipe forces a weight
-decision the paper never confronts.</li>
+<li><strong>Components:</strong> interview (<code>WTINT2YR</code>),
+examination (<code>WTMEC2YR</code>), fasting morning subsample
+(<code>WTSAF2YR</code>), and other subsamples with their own
+weights.</li>
+<li><strong>The rule:</strong> use the weight of the smallest component
+that contains every variable in the analysis.</li>
 </ul>
-<h2 id="slide-13-subset-the-design-never-the-data-10-min">Slide 13 —
-Subset the design, never the data (10 min)</h2>
+<h2 id="slide-16-masld-follow-the-measurement-path-4-min-do-not-drop">Slide
+16 — MASLD: follow the measurement path (4 min) · <strong>do not
+drop</strong></h2>
 <ul>
-<li>Cardinal rule: define the full-survey design object once, then
-<em>subset within it</em> (e.g., <code>subset()</code> on the design),
-never filter rows first and re-declare a design on the survivors.</li>
-<li>Dropping rows first discards the strata/PSU information that
-non-selected units contribute to variance -&gt; wrong SEs.</li>
-<li>This is the #1 practical error students will hit in L5.</li>
-<li>MASLD hook: MASLD eligibility (FLI&gt;=60, ≥1 cardiometabolic
-criterion) is a <em>subset</em>, so it must be applied to the design,
-keeping WTSAF/strata/PSU intact.</li>
+<li><strong>The figure,</strong> <code>w6_nested_samples.png</code>
+(NHANES 2007–2018, all ages):
+<ul>
+<li>interviewed <strong>59,842</strong> (WTINT2YR);</li>
+<li>examined <strong>57,414</strong> (WTMEC2YR);</li>
+<li>valid fasting weight <strong>17,208</strong> (WTSAF2YR &gt; 0);</li>
+<li><strong>6,048</strong> of our <strong>6,371</strong> MASLD adults
+have a valid fasting weight, and <strong>5,911</strong> of those are
+complete.</li>
+</ul></li>
+<li><strong>Why the fasting weight.</strong> The FLI uses fasting
+triglycerides, so the fasting-subsample weight is primary. The paper
+says “plasma triglycerides”; fasting is our reproduction’s choice.</li>
+<li><strong>The other 323.</strong> <strong>323</strong> analytic adults
+have a fasting weight of 0, so they are not valid fasting-subsample
+members.</li>
+<li><strong>Required here, not optional.</strong> The fasting subsample
+keeps only about <strong>43%</strong> of examined adults, but our
+exposure needs it, so its weight is the primary one. The notes’ caveat
+runs the other way: when no variable needs a subsample, using its weight
+is valid but inefficient.</li>
+<li>Choose by the measurement path, not by which weight gives the nicer
+answer (Slides 44–45 test it).</li>
 </ul>
-<h2 id="slide-14-design-aware-workflow-end-to-end-8-min">Slide 14 —
-Design-aware workflow, end to end (8 min)</h2>
+<h2 id="slide-17-combining-ordinary-two-year-cycles-3-min">Slide 17 —
+Combining ordinary two-year cycles (3 min)</h2>
 <ul>
-<li>Steps: (1) pick weight tier by most-restrictive variable, (2) pool
-/cycles, (3) declare design with weight+strata+PSU, (4) subset within
-design, (5) fit survey-aware model, (6) report DEFF-widened CIs.</li>
-<li>Report a one-line “design statement” in every table caption — the
-habit that would have fixed the paper.</li>
-<li>Sensitivity analysis is part of the deliverable, not optional
-polish. For the weight that means: WTSAF primary by the rule, WTMEC
-reported alongside it and labelled as sensitivity.</li>
-<li>MASLD hook: this six-step recipe is precisely what P4 asks you to
-run on your paper.</li>
+<li>Six ordinary two-year cycles, so each two-year weight is divided by
+6.</li>
+<li>Dividing every weight by the same constant changes totals. It does
+not change weighted percentages, means, most regression coefficients, or
+the SEs that do not depend on the weights’ scale.</li>
+<li>The ÷ 6 rule works here because all six cycles are ordinary two-year
+cycles.</li>
 </ul>
-<h2 id="slide-15-common-pitfalls-checklist-6-min">Slide 15 — Common
-pitfalls checklist (6 min)</h2>
+<h2 id="slide-18-in-r-6-changes-totals-not-the-model-coefficient-2-min">Slide
+18 — In R: <code>/ 6</code> changes totals, not the model coefficient (2
+min)</h2>
 <ul>
-<li>Forgetting to divide pooled weights by the number of cycles.</li>
-<li>Filtering rows before declaring the design (the fatal one).</li>
-<li>Using WTMEC when a fasting analyte is in the model, or vice
-versa.</li>
-<li>Reading unweighted vs weighted divergence as “error” rather than as
-two different estimands.</li>
+<li><strong>The two totals.</strong> Our 5,911 rows stand for
+<strong>93.0 million</strong> US adults with the ÷ 6 and <strong>558.2
+million</strong> without it, more than the whole US population.</li>
+<li><strong>The hidden set-up.</strong> <code>nhanes</code> is every
+2007–2018 participant; <code>in_rows</code> marks our 5,911.</li>
+<li>Keeping WTSAF2YR &gt; 0 is not “deleting rows”: the people it drops
+were never in the fasting subsample (no fasting weight) or have a
+fasting weight of 0, so neither contributes to a fasting-weight
+estimate, and all 90 strata and 184 PSUs remain.</li>
+<li><strong>The title’s second half</strong> (the model coefficient does
+not change) is Slide 17’s claim; the code shows only the totals. The
+companion R script checks it: every coefficient of the same interaction
+model on the same rows agrees within 1e-10 with and without ÷ 6.</li>
 </ul>
-<h2 id="slide-16-bridge-to-todays-lab-l5-and-p4-7-min">Slide 16 — Bridge
-to today’s lab (L5) and P4 (7 min)</h2>
+<h2 id="slide-19-first-special-case-analyses-that-include-19992000-2-min">Slide
+19 — First special case: analyses that include 1999–2000 (2 min)</h2>
 <ul>
-<li>In L5 (EpiMethods Complex Survey module) you will re-fit the MASLD
-Group I–IV Cox model two ways on the fixed dataset: a <em>naive</em>
-unweighted fit, then a <em>design-aware</em> fit declaring WTSAF/6 +
-SDMVSTRA + SDMVPSU, subsetting the design (not the rows) to the
-MASLD-eligible sample. You will tabulate naive vs survey HRs and CIs
-side by side and quantify the attenuation (~15 -&gt; ~12.4) and CI
-widening.</li>
-<li>This becomes <strong>P4, your design-aware re-estimate</strong>:
-apply the same six-step workflow to <em>your</em> paper’s headline
-estimate, declare and justify your chosen weight (naming the
-fasting-vs-non-fasting tension if it applies), report the
-naive-vs-weighted contrast, and write the one-line design statement your
-paper omitted. Those six steps are the survey route. A group whose paper
-qualified at M0 criterion 5 on a time-to-event structure instead has no
-weight to declare and therefore no naive-vs-correct number to report:
-their P4 is to reproduce the paper’s survival estimand keeping follow-up
-time and censoring, then interrogate the one structural choice they
-named at M0 — the time scale, the censoring rule, the index date, or how
-competing events were handled — and report what that choice does to the
-estimate and to its interpretation. Be exact about what is comparable:
-weighted and unweighted fits of the same survival model on the same rows
-are one estimand on one scale, so the gap between them is attributable
-to the design; a survival model set beside a collapsed “ever died” model
-is two different estimands on two different scales, so the gap between
-them measures the collapse, not the design, and is never the
-design-aware correction. P4 is formative and feeds directly into your M1
-replication and M2 critique of another group’s M1.</li>
+<li>The 1999–2000 weights used a different Census base from 2001–2002
+onward, so the two-year weights should not be pooled directly.</li>
+<li>For 1999–2002 use the NCHS four-year weight. For 1999–2004 (6
+years): 2/3 × the four-year weight, 1/3 × the 2003–2004 two-year
+weight.</li>
+</ul>
+<h2 id="slide-20-in-r-pooling-19992004-1-min">Slide 20 — In R: pooling
+1999–2004 (1 min)</h2>
+<p><code>SDDSRVYR</code> 1 and 2 are 1999–2000 and 2001–2002 (four-year
+weight × 2/3); 3 is 2003–2004 (two-year weight × 1/3). This code is
+checked on a made-up file; our data start in 2007.</p>
+<h2 id="slide-21-second-special-case-2017march-2020-is-a-3.2-year-file-2-min">Slide
+21 — Second special case: 2017–March 2020 is a 3.2-year file (2
+min)</h2>
+<p>2015–2016 (2 years) + 2017–March 2020 (3.2 years) = 5.2 years, so the
+weights are scaled by 2/5.2 and 3.2/5.2. Each component gets its share
+of the combined period.</p>
+<h2 id="slide-22-covid-era-example-in-code-1-min">Slide 22 — COVID-era
+example in code (1 min)</h2>
+<ul>
+<li><code>SDDSRVYR</code> 9 is 2015–2016 (<code>WTMEC2YR</code>); 66 is
+the 2017–March 2020 pre-pandemic file (<code>WTMECPRP</code>).</li>
+<li>With 2013–2014 added the period is 7.2 years: 2/7.2 for each
+two-year cycle, 3.2/7.2 for the pre-pandemic file.</li>
+<li>Pooling is not only arithmetic: check that the variables are
+comparable across cycles.</li>
+</ul>
+<h2 id="slide-23-three-pooling-situations-to-remember-2-min">Slide 23 —
+Three pooling situations to remember (2 min)</h2>
+<p>Ordinary two-year cycles from 2001–2002 on: divide by the number of
+cycles. Anything with 1999–2000: start from the NCHS four-year weight.
+2017–March 2020: time fractions. First ask what period and population
+each supplied weight already represents.</p>
+<h2 id="part-2-weights-strata-psus-and-subpopulations-25-minutes">Part 2
+· Weights, strata, PSUs, and subpopulations · 25 minutes</h2>
+<h2 id="slide-24-three-design-ingredients-three-jobs-2-min">Slide 24 —
+Three design ingredients, three jobs (2 min)</h2>
+<p>The weight changes the estimate and its uncertainty. PSUs (who was
+sampled together) and strata (how the clusters were organised) change
+the uncertainty only.</p>
+<h2 id="slide-25-why-strata-and-psus-matter-2-min">Slide 25 — Why strata
+and PSUs matter (2 min)</h2>
+<ul>
+<li>Clustering usually widens intervals, stratification usually narrows
+them, and unequal weights can widen them. The net effect is
+empirical.</li>
+<li><strong>In the MASLD model</strong> (appendix A1, waist fat among
+the not obese, variance ÷ the ordinary model’s): strata and PSUs with
+equal weights <strong>1.05</strong>; weights without strata or PSUs
+<strong>1.56</strong>; the full design <strong>1.37</strong>.</li>
+</ul>
+<h2 id="slide-26-design-based-and-model-based-inference-the-useful-distinction-2-min">Slide
+26 — Design-based and model-based inference: the useful distinction (2
+min)</h2>
+<p>Ordinary models treat the rows as the analysis data; survey models
+also use how the rows were sampled. This is not a claim that every
+unweighted coefficient is meaningless (Slide 46).</p>
+<h2 id="slide-27-survey-weights-are-not-treatmentip-weights-1-min">Slide
+27 — Survey weights are not treatment/IP weights (1 min)</h2>
+<p>Survey weights represent the target population. IP weights balance an
+exposure comparison. Frequency weights count observations. Today is
+about survey weights.</p>
+<h2 id="slide-28-build-the-survey-design-before-defining-the-analysis-subgroup-2-min">Slide
+28 — Build the survey design before defining the analysis subgroup (2
+min)</h2>
+<ul>
+<li>The design is declared on the whole fasting subsample (17,208 people
+of all ages, 90 strata, 184 PSUs), with the ÷ 6 weight.</li>
+<li><strong><code>nest = TRUE</code></strong> because PSU codes repeat
+across strata: PSU 1 in one stratum is not PSU 1 in another.</li>
+</ul>
+<h2 id="slide-29-a-domain-is-just-the-subgroup-you-want-to-analyse-1-min">Slide
+29 — A domain is just the subgroup you want to analyse (1 min)</h2>
+<p>Adults with MASLD, women, Group I, adults aged 60+, complete cases
+for a model: NHANES sampled none of these as such. A domain analysis
+keeps the original design.</p>
+<h2 id="slide-30-wrong-and-right-ways-to-analyse-a-subgroup-3-min-do-not-drop">Slide
+30 — Wrong and right ways to analyse a subgroup (3 min) · <strong>do not
+drop</strong></h2>
+<ul>
+<li><strong>Left:</strong> delete the other rows, then declare the
+design. <strong>Right:</strong> declare the design on the whole frame,
+then <code>subset()</code>. Both use <code>nest = TRUE</code>; only the
+order differs.</li>
+<li><strong>On all 5,911 rows the order happens not to matter.</strong>
+Every one of the 184 PSUs keeps someone, so the SE of waist fat’s log HR
+among the not obese is 0.1903 either way. Slide 31 shows when it does
+matter.</li>
+</ul>
+<h2 id="slide-31-a-small-domain-shows-why-the-order-matters-3-min">Slide
+31 — A small domain shows why the order matters (3 min)</h2>
+<ul>
+<li><strong>Group I’s women</strong> are <strong>57</strong> people
+spread over <strong>44</strong> strata, and <strong>38</strong> of those
+strata keep only one PSU.</li>
+<li>Deleting first leaves those lonely PSUs, and <code>svymean()</code>
+stops with an error.</li>
+<li><code>subset()</code> works: mean age <strong>41.7</strong> (SE
+2.39).</li>
+</ul>
+<h2 id="slide-32-complete-cases-are-another-domain---but-that-does-not-fix-missing-data-bias-2-min">Slide
+32 — Complete cases are another domain - but that does not fix
+missing-data bias (2 min)</h2>
+<ul>
+<li><code>subset()</code> gives the right survey variance for the
+complete-case domain. <code>update()</code> adds the new indicator to
+the design that already exists.</li>
+<li>It does not make complete-case analysis unbiased. Survey design and
+missing data are separate problems; Week 7 takes the second.</li>
+<li><strong>Which rows.</strong> On the full data, the slide’s nine
+variables are complete for <strong>5,963</strong> of the 6,048
+fasting-weighted MASLD adults. This lecture’s models use Weeks 4–5’s
+<strong>5,911</strong> rows (<strong>534 deaths</strong>), which are
+also complete on the paper’s Model 2 covariates; switching to the 5,963
+would change the rows as well as the design. Week 7 takes up the
+difference.</li>
+</ul>
+<h2 id="slide-33-a-weighted-estimate-can-still-be-based-on-little-information-2-min">Slide
+33 — A weighted estimate can still be based on little information (2
+min)</h2>
+<p>A subgroup can represent millions and still rest on a few
+respondents. Show the unweighted n, the design effect, the design
+degrees of freedom and the interval width.</p>
+<h2 id="slide-34-design-effect-and-effective-sample-size-3-min">Slide 34
+— Design effect and effective sample size (3 min)</h2>
+<ul>
+<li><strong>The town:</strong> Kish’s design effect for unequal weights
+is <strong>1.64</strong>, so the 200 interviews carry about the
+information of <strong>122</strong> equally weighted ones.</li>
+<li><strong>The design effect is estimate-specific.</strong> For our
+5,911 rows Kish’s rule of thumb is <strong>1.83</strong> (about
+<strong>3,224</strong> equally weighted rows), but for waist fat’s HR
+among the not obese the weights’ actual cost is 1.56 (appendix A1).</li>
+</ul>
+<h2 id="slide-35-table-1-for-a-complex-survey-2-min">Slide 35 — Table 1
+for a complex survey (2 min)</h2>
+<ul>
+<li><strong>Unweighted n with weighted %</strong>, our 5,911 rows: Group
+I <strong>355</strong> (6.1%), Group II <strong>4,265</strong> (71.7%),
+Group III <strong>732</strong> (14.0%), Group IV <strong>559</strong>
+(8.3%).</li>
+<li>The n says how much data was observed; the % says how common the
+group is in the population represented.</li>
+</ul>
+<h2 id="break-10-min-after-slide-35">BREAK (10 min), after Slide 35</h2>
+<h2 id="part-3-survey-regression-in-the-masld-example-40-minutes">Part 3
+· Survey regression in the MASLD example · 40 minutes</h2>
+<h2 id="slide-36-fit-the-model-on-the-design-object-2-min">Slide 36 —
+Fit the model on the design object (2 min)</h2>
+<p>Week 5’s model (obesity × waist fat, adjusted for L) with
+<code>svycoxph()</code> on <code>des</code>: the 5,911 rows reached by
+<code>subset()</code> from the fasting-subsample design. The design
+object, not the weight column alone, carries the inference.</p>
+<h2 id="slide-37-tests-use-the-survey-design-too-3-min">Slide 37 — Tests
+use the survey design too (3 min)</h2>
+<ul>
+<li><code>regTermTest(fit_w, ~obese:central, df = degf(des))</code>: F
+<strong>0.32</strong> on 1 and <strong>94</strong> df, p
+<strong>0.57</strong>.</li>
+<li><strong>The design’s degrees of freedom:</strong> <strong>184 − 90 =
+94</strong>, from the PSUs and strata, not from the 5,911 rows.</li>
+<li><strong>Why <code>df = degf(des)</code>.</strong> Without it,
+<code>regTermTest()</code> uses the model’s residual df: the design df +
+1 − the number of coefficients, 94 + 1 − 11 = 84 here. With 94 design df
+the choice barely matters; on one cycle it can (Thursday, item 5).</li>
+</ul>
+<h2 id="slide-38-weighting-changes-the-real-masld-population-mix-only-modestly-2-min">Slide
+38 — Weighting changes the real MASLD population mix only modestly (2
+min)</h2>
+<ul>
+<li><strong>Our 5,911 rows, unweighted → weighted:</strong> women 47.2%
+→ 45.5%; Groups I–IV 6.0%, 72.2%, 12.4%, 9.5% → 6.1%, 71.7%, 14.0%,
+8.3%.</li>
+<li>The phenotype mix barely moves, but age and race/ethnicity do (Slide
+6).</li>
+</ul>
+<h2 id="slide-39-what-can-we-say-about-the-published-cox-analysis-4-min-do-not-drop">Slide
+39 — What can we say about the published Cox analysis? (4 min) ·
+<strong>do not drop</strong></h2>
+<ul>
+<li><strong>What the paper says.</strong> It describes NHANES as a
+stratified, multistage survey designed for national inference.</li>
+<li><strong>What its methods report.</strong> No weights, strata or
+PSUs. An ordinary Cox model reproduces its unadjusted Group IV vs I HR:
+<strong>15.14</strong> on our 6,371 rows vs the paper’s
+<strong>15.13</strong> (the paper reports about 6,300 rows).</li>
+<li><strong>The careful statement</strong> is in the box: the analysis
+should not be labelled design-based and nationally representative unless
+the design was used in an analysis not reported.</li>
+<li><strong>Fair to the paper.</strong> An unweighted analysis is
+defensible for prognosis within the sample, if it is described that
+way.</li>
+</ul>
+<h2 id="slide-40-start-with-one-comparison-2-min">Slide 40 — Start with
+one comparison (2 min)</h2>
+<ul>
+<li><strong>Waist fat among the not obese</strong> (Group IV vs III),
+adjusted for L, 5,911 rows: ordinary Cox <strong>1.09
+(0.79–1.50)</strong>, design-based <strong>1.43
+(0.98–2.07)</strong>.</li>
+<li>A weighted–unweighted gap is a clue, not proof that either model
+fixed a bias.</li>
+</ul>
+<h2 id="slide-41-adjustment-and-survey-design-are-different-choices-4-min-do-not-drop">Slide
+41 — Adjustment and survey design are different choices (4 min) ·
+<strong>do not drop</strong></h2>
+<ul>
+<li><p><strong>Hazard ratio (95% CI), all on 5,911 rows; “adjusted”
+means set L:</strong></p>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: right;">Unweighted, crude</th>
+<th style="text-align: right;">Unweighted, adjusted</th>
+<th style="text-align: right;">Weighted, crude</th>
+<th style="text-align: right;">Weighted, adjusted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Obese vs not</td>
+<td style="text-align: right;">0.67 (0.56–0.81)</td>
+<td style="text-align: right;">0.95 (0.78–1.14)</td>
+<td style="text-align: right;">0.76 (0.59–0.97)</td>
+<td style="text-align: right;">1.02 (0.79–1.30)</td>
+</tr>
+<tr>
+<td>Waist fat, not obese</td>
+<td style="text-align: right;">2.31 (1.69–3.14)</td>
+<td style="text-align: right;">1.09 (0.79–1.50)</td>
+<td style="text-align: right;">3.06 (2.10–4.46)</td>
+<td style="text-align: right;">1.43 (0.98–2.07)</td>
+</tr>
+<tr>
+<td>Waist fat, obese</td>
+<td style="text-align: right;">7.56 (2.82–20.25)</td>
+<td style="text-align: right;">2.99 (1.11–8.09)</td>
+<td style="text-align: right;">5.23 (1.16–23.63)</td>
+<td style="text-align: right;">2.21 (0.51–9.61)</td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>Reading the table.</strong> Left to right within
+weighting is adjustment; unweighted to weighted within adjustment is the
+design.</p></li>
+<li><p><strong>Weighting has no fixed direction here:</strong> obesity
+0.95 → 1.02, waist fat among the obese 2.99 → 2.21.</p></li>
+<li><p><strong>Intervals.</strong> They are Wald intervals on z. On t
+with 94 df they barely change, e.g. 2.21 becomes 0.50–9.80.</p></li>
+</ul>
+<h2 id="slide-42-week-5s-effect-modification-result-redone-with-the-survey-design-4-min-do-not-drop">Slide
+42 — Week 5’s effect-modification result, redone with the survey design
+(4 min) · <strong>do not drop</strong></h2>
+<ul>
+<li><strong>The figure,</strong> <code>w6_week5_redone.png</code>, waist
+fat’s HR adjusted for L on the 5,911 rows:
+<ul>
+<li>not obese <strong>1.09 → 1.43 (0.98–2.07)</strong>;</li>
+<li>obese <strong>2.99 → 2.21 (0.51–9.61)</strong>;</li>
+<li>ratio <strong>2.74 → 1.55 (0.34–7.02)</strong>.</li>
+</ul></li>
+<li><strong>The tests.</strong> Design-based Wald F p =
+<strong>0.57</strong> on 1 and 94 df, against Week 5’s Wald p 0.06
+(likelihood-ratio 0.03). Compare Wald with Wald.</li>
+<li><strong>Three things changed:</strong> the estimate, the variance
+and the test. The wide interval is not evidence of no
+heterogeneity.</li>
+</ul>
+<h2 id="slide-43-in-r-the-week-5-interaction-model-survey-aware-2-min">Slide
+43 — In R: the Week 5 interaction model, survey-aware (2 min)</h2>
+<p><code>waist_hr(fit, 0)</code> and <code>waist_hr(fit, 1)</code> read
+waist fat’s HR among the not obese and the obese from one product-term
+model, ordinary and survey-aware.</p>
+<h2 id="slide-44-the-correct-weight-is-chosen-by-the-measurement-process-3-min">Slide
+44 — The correct weight is chosen by the measurement process (3
+min)</h2>
+<ul>
+<li><strong>The exam weight as a labelled sensitivity</strong> (WTMEC2YR
+/ 6, same 5,911 rows, adjusted for L):
+<ul>
+<li>not obese <strong>1.46 (1.00–2.14)</strong>;</li>
+<li>obese <strong>2.10 (0.47–9.48)</strong>;</li>
+<li>ratio <strong>1.44 (0.31–6.78)</strong>;</li>
+<li>the rows stand for <strong>40.6 million</strong> instead of 93.0
+million.</li>
+</ul></li>
+<li><strong>The two weights move together.</strong> They correlate at
+<strong>0.99</strong>; the fasting weight is 1.7 to 3.6 times the exam
+weight (2.3 on average). Expect the choice to matter more for counts
+than for ratios.</li>
+<li>Each weight targets the US population on its own full sample. On the
+fasting-subsample rows the exam weight ignores the subsample’s selection
+and its non-response adjustment, so the total shrinks to 40.6 million
+while the ratios barely move. It is not the primary weight here.</li>
+</ul>
+<h2 id="slide-45-in-r-sensitivity-to-the-exam-weight-2-min">Slide 45 —
+In R: sensitivity to the exam weight (2 min)</h2>
+<p>The same model on a design built from the exam sample, reached with
+<code>subset()</code>. This is the sensitivity run P4 asks for.</p>
+<h2 id="slide-46-why-can-weighted-and-unweighted-regression-differ-2-min">Slide
+46 — Why can weighted and unweighted regression differ? (2 min)</h2>
+<ul>
+<li><strong>The deck’s three reasons:</strong> sampling variation,
+effect heterogeneity across the sampling groups, and sampling variables
+missing from the outcome model.</li>
+<li><strong>For hazard and odds ratios, also
+non-collapsibility:</strong> the averaged ratio can move even when the
+ratio is the same in every group.</li>
+<li>The size or direction of a gap does not say which reason is at
+work.</li>
+</ul>
+<h2 id="slide-47-why-weighting-can-change-an-overall-rr-4-min-do-not-drop">Slide
+47 — Why weighting can change an overall RR (4 min) · <strong>do not
+drop</strong></h2>
+<ul>
+<li><strong>The town again:</strong> 90% younger / 10% older; the sample
+is 50:50. Half of each age group has a high-sodium diet, so age does not
+confound this comparison.
+<ul>
+<li>Same RR (2) in both age groups: <strong>2.00</strong> for sample and
+town.</li>
+<li>RR 2 in younger, 3 in older: sample <strong>2.67</strong>, town
+<strong>2.18</strong>.</li>
+</ul></li>
+<li><strong>Why the RR is used here.</strong> It is collapsible and
+exposure is equally common at each age, so the overall RR moves only
+because the effect differs by age, the sampling variable.</li>
+</ul>
+<h2 id="slide-48-in-r-build-the-high-sodium-example-1-min">Slide 48 — In
+R: build the high-sodium example (1 min)</h2>
+<p>Half of each age group exposed; incident hypertension 10% → 20%
+(younger) and 20% → 60% (older).</p>
+<h2 id="slide-49-in-r-sample-rr-versus-town-rr-2-min">Slide 49 — In R:
+sample RR versus town RR (2 min)</h2>
+<p>A log-link Poisson <code>glm()</code> on the sample gives
+<strong>2.67</strong>; <code>svyglm()</code> with a quasi-Poisson log
+link on the weighted design gives <strong>2.18</strong>. The rows did
+not change; the population averaged over did.</p>
+<h2 id="slide-50-what-survey-design-cannot-fix-3-min">Slide 50 — What
+survey design cannot fix (3 min)</h2>
+<ul>
+<li>Confounding; the selection created by defining the MASLD cohort (FLI
+≥ 60, Week 4); bias from complete-case analysis; a poorly defined
+exposure or estimand.</li>
+<li><strong>Sparse cells:</strong> Group I has <strong>4</strong> deaths
+on these rows, before and after weighting.</li>
+<li>The design answers “for whom?” and “how uncertain?”, not “is it
+causal?”.</li>
+</ul>
+<h2 id="part-4-reporting-and-synthesis-8-minutes">Part 4 · Reporting and
+synthesis · 8 minutes</h2>
+<h2 id="slide-51-report-the-same-decisions-you-made-3-min">Slide 51 —
+Report the same decisions you made (3 min)</h2>
+<p>Population, weight (name, reason, pooling), strata and PSUs with the
+variance method, domain and complete-case restrictions with the
+unweighted n, and the survey estimator with its design degrees of
+freedom. Unweighted n + weighted % is the usual descriptive pairing.</p>
+<h2 id="slide-52-the-algorithm-to-take-into-your-own-paper-2-min">Slide
+52 — The algorithm to take into your own paper (2 min)</h2>
+<p>The seven steps and the five checks. This is P4’s workflow.</p>
+<h2 id="slide-53-key-takeaways-3-min">Slide 53 — Key takeaways (3
+min)</h2>
+<ul>
+<li><strong>The slide’s six points:</strong> NHANES is not a simple
+random sample; the weight of the smallest component; pooling by what
+each weight represents; design first, then <code>subset()</code>; a
+weighted–unweighted gap is a question, not a diagnosis; the design does
+not make a comparison causal.</li>
+<li><strong>Say this (not on the slide).</strong> Exit question: which
+population does your paper’s headline estimate describe, and which
+weight would make it describe the one the paper claims? Next: missing
+data (Week 7).</li>
+</ul>
+<h2 id="slides-5456-sources-and-references-0-min">Slides 54–56 — Sources
+and references (0 min)</h2>
+<p>Point students to the EpiMethods pages and the NCHS tutorials on
+Slide 54; do not present them.</p>
+<h2 id="appendix-uncounted-a1a18">Appendix (uncounted, A1–A18)</h2>
+<ul>
+<li><strong>A1 · Design effect in the MASLD model.</strong> Variance ÷
+the ordinary model’s: 1.00, strata and PSUs with equal weights 1.05,
+weights alone 1.56, the full design 1.37.</li>
+<li><strong>A2 · R code for the variance decomposition.</strong>
+<code>robust = TRUE</code> is essential in the weights-only fit.</li>
+<li><strong>A3–A4 · Variance estimation methods and design-adjusted
+tests.</strong> Taylor linearization (used here) and replication;
+Rao–Scott and design-based Wald tests.</li>
+<li><strong>A5–A6 · Survey-weighted survival curves</strong>
+(<code>w6_km.png</code>) and their code. Six-year deaths, sample →
+population, 5,911 rows:
+<ul>
+<li>Group I 0.7% → 1.2%;</li>
+<li>Group II 6.5% → 5.1%;</li>
+<li>Group III 7.6% → 4.5%;</li>
+<li>Group IV 13.3% → 11.3%.</li>
+</ul>
+Log-rank chi-square 77.9 → 41.6, both p &lt; 0.001. Group IV is worst in
+both. Group I, with 4 deaths, moves the other way; Groups II and III are
+too close to rank.</li>
+<li><strong>A7 · Week 5’s sex test, design-aware</strong> (1,291 rows,
+Groups III + IV within the 5,911, adjusted for L; <strong>168
+deaths</strong>). Women ÷ men: <strong>1.13 (0.48–2.66)</strong>
+unweighted (likelihood-ratio p 0.78; the Wald p is also 0.78) →
+<strong>2.60 (0.89–7.58)</strong> with the design (Wald p 0.08). M1
+found the same direction with the paper’s Model 1: P3’s unweighted
+<strong>1.00</strong> → M1’s design-weighted <strong>2.54
+(0.92–7.03)</strong>, on 1,296 rows. Pair those two with each other, not
+with today’s set-L numbers.</li>
+<li><strong>A8–A11 · Regression weights, trimming, SATE vs PATE, sample
+vs population targets.</strong></li>
+<li><strong>A12–A13 · The three-component COVID-era pooling example and
+its code.</strong></li>
+<li><strong>A14–A18 · Reliability standards, a lonely PSU that truly
+remains, other surveys, software, future extensions.</strong></li>
+</ul>
+<h2 id="thursday-l5-epimethods-surveydatae-for-the-ta-and-the-instructor-not-in-the-deck">Thursday
+— L5 (EpiMethods <code>surveydataE</code>) · for the TA and the
+instructor, not in the deck</h2>
+<p>Say this out loud, twice: <strong>L5 is not MASLD.</strong> The
+numbers below were re-run on the lab’s own files on 2026-10-07. They are
+not emitted, so re-check them if the exercise changes.</p>
+<ol type="1">
+<li><strong>What it is.</strong> Flegal et al. 2016 (<em>JAMA</em>),
+NHANES <strong>2013–14 only</strong>:
+<ul>
+<li>one cycle, so there is nothing to pool;</li>
+<li><strong>5,455</strong> adults;</li>
+<li>obesity as a binary outcome;</li>
+<li>an unweighted Table 1, a weighted Table 1, then survey-weighted
+logistic models among men.</li>
+</ul>
+It rehearses design → <code>subset()</code> → <code>svyglm()</code>. The
+exercise fits no unweighted model; to show the sample-vs-population
+contrast, add one <code>glm()</code> on the same men.</li>
+<li><strong>The weight.</strong> The exercise uses
+<code>WTINT2YR</code>, the only weight in its file, for an exam-measured
+outcome (BMI).
+<ul>
+<li><strong>Slide 15’s rule says the exam weight,</strong> and Flegal et
+al. report using “the examination sampling weights”.</li>
+<li><strong>The difference here is tiny.</strong> Weighted obesity is
+<strong>37.96%</strong> with WTINT2YR and <strong>37.92%</strong> with
+WTMEC2YR, merged from <code>DEMO_H</code>.</li>
+<li><strong>Use it as a live example of the rule,</strong> not as a
+reason students’ answers are wrong.</li>
+<li><strong>Correct Hint 3.</strong> It blames second-decimal
+differences from the paper on SAS vs R; the weight and the interval
+method are likelier causes.</li>
+</ul></li>
+<li><strong>Intervals.</strong> One OR can come with three intervals:
+<ul>
+<li><code>publish()</code> uses the normal distribution;</li>
+<li><code>confint()</code> uses the model’s residual df,
+<strong>5</strong> for the men’s model;</li>
+<li>the design has <strong>15</strong> df for one cycle.</li>
+</ul></li>
+<li><strong>2(c), AIC backward selection.</strong> <code>step()</code>
+on <code>svyglm()</code> uses a design-based AIC, so the mechanics are
+survey-correct. Choosing the adjustment set by AIC is what Week 4 warned
+against. Flegal’s Table 3 is descriptive, so present this as a
+prediction-style choice, not confounder selection.</li>
+<li><strong>2(d), the age × smoking interaction.</strong> The solution’s
+<code>anova(fit.male, fit2)$p</code> is a Rao–Scott test of a 4-df
+interaction, and it prints p = <strong>0.40</strong>.
+<ul>
+<li><strong>The denominator df of 1 is not a bug.</strong>
+<code>svyglm()</code>’s residual df is the design df + 1 − the number of
+coefficients: 15 + 1 − 15 = 1 for this model (and 15 + 1 − 11 = 5 for
+the men’s main model in item 3).</li>
+<li><strong>Tuesday’s <code>df = degf(des)</code> is not a
+contradiction.</strong> There the design has 94 df and the model 11
+coefficients, so 84 or 94 barely matters. Here it is the difference
+between p 0.44 and 0.086, so report the df used.</li>
+<li><strong>Other choices give other p-values:</strong>
+<ul>
+<li><code>regTermTest(fit2, ~age:smoking)</code> defaults to the same 1
+df: p = <strong>0.44</strong>;</li>
+<li>forcing <code>df = 15</code> gives p = <strong>0.086</strong>, the
+most liberal choice;</li>
+<li>a Korn–Graubard adjusted F gives p = <strong>0.16</strong>.</li>
+</ul></li>
+<li><strong>One cycle cannot support this many parameters.</strong>
+Report the df used and the interaction ORs, do not present 0.086 as “the
+correct answer”, and repeat Week 5’s line: not significant is not “no
+modification”.</li>
+<li><strong>Week 5’s extractor fails here.</strong>
+<code>anova(...)$`Pr(&gt;|Chi|)`</code> returns <code>NULL</code> on
+<code>svyglm()</code>.</li>
+</ul></li>
+<li><strong>Housekeeping.</strong>
+<ul>
+<li>The downloaded Rmd carries % grade weights, but L5 is
+Complete/Incomplete.</li>
+<li>The L5 page asks for names in an <code>author:</code> field. The
+downloaded Rmd has none; it has a <strong>Group name</strong> line near
+the end. Accept either.</li>
+<li><code>family = binomial</code> on a survey design prints non-integer
+warnings; <code>quasibinomial</code> gives the same estimates
+silently.</li>
+</ul></li>
+</ol>
+<h2 id="if-you-are-running-behind">If you are running behind</h2>
+<p>Cut in this order. Each idea is said elsewhere.</p>
+<ol type="1">
+<li>Slide 20, the 1999–2004 code: Slide 19’s formulas carry it (1 min).
+Keep Slide 22: it holds the three-component example and the
+comparability warning.</li>
+<li>Slide 31, the small-domain demo: one sentence on Slide 30 (3
+min).</li>
+<li>Slides 48–49, the RR code: Slide 47’s table carries the point (3
+min).</li>
+<li>Slides 44–45, the exam-weight sensitivity: one sentence, and P4 asks
+for it (5 min).</li>
+<li>Slide 26: one sentence on Slide 24 (2 min).</li>
+</ol>
+<p>Never cut Slides 16, 30, 39, 41, 42 or 47.</p>
+<h2 id="reading-map-each-segment-and-where-students-can-review-it">Reading
+map — each segment and where students can review it</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Segment</th>
+<th>EpiMethods</th>
+<th>Reading</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The NHANES design (Slides 1–7, 24–27)</td>
+<td><a href="https://ehsanx.github.io/EpiMethods/surveydata0.html#the-three-pillars-of-complex-sampling"><em>Concepts
+(D)</em>: The Three Pillars</a></td>
+<td>Lumley 2010, ch. 1–2; NCHS Sample Design tutorial</td>
+</tr>
+<tr>
+<td>What a weight does (Slides 8–14, 34)</td>
+<td><a href="https://ehsanx.github.io/EpiMethods/surveydata0.html#the-design-effect-deff-why-it-still-matters">DEFF</a></td>
+<td>Kish 1992</td>
+</tr>
+<tr>
+<td>Which weight, pooling (Slides 15–23)</td>
+<td><a href="https://ehsanx.github.io/EpiMethods/surveydata0.html#selecting-the-correct-weight">Selecting
+the Correct Weight</a>; <a href="https://ehsanx.github.io/EpiMethods/surveydata0.html#combining-survey-cycles">Combining
+Survey Cycles</a></td>
+<td>Johnson et al. 2013; NCHS 2021 (Series 2, No. 190)</td>
+</tr>
+<tr>
+<td>Domains and subsets (Slides 28–33)</td>
+<td><a href="https://ehsanx.github.io/EpiMethods/surveydata0.html#analyzing-subpopulations-the-correct-approach">Analyzing
+Subpopulations</a>; <a href="https://ehsanx.github.io/EpiMethods/surveydata8.html">Properly
+subsetting a design object</a></td>
+<td>Lumley 2010</td>
+</tr>
+<tr>
+<td>Models and tests (Slides 36–39)</td>
+<td><a href="https://ehsanx.github.io/EpiMethods/surveydata0.html#hypothesis-testing-in-the-design-based-framework">Hypothesis
+Testing in the Design-Based Framework</a></td>
+<td>Binder 1992; Lumley &amp; Scott 2017</td>
+</tr>
+<tr>
+<td>Weighted vs unweighted (Slides 40–50)</td>
+<td><a href="https://ehsanx.github.io/EpiMethods/surveydata0.html#a-word-of-caution-about-weights">A
+Word of Caution About “Weights”</a></td>
+<td>DuMouchel &amp; Duncan 1983; Solon et al. 2015</td>
+</tr>
+<tr>
+<td>Reporting (Slides 35, 51–53)</td>
+<td><a href="https://ehsanx.github.io/EpiMethods/surveydata0.html#preferred-reporting-items-for-complex-sample-survey-analysis-pricssa">PRICSSA</a>;
+<a href="https://ehsanx.github.io/EpiMethods/surveydata9.html">reliability
+standards</a></td>
+<td>Seidenberg et al. 2023</td>
+</tr>
+</tbody>
+</table>
+<h2 id="references">References</h2>
+<ul>
+<li>Binder DA. Fitting Cox’s proportional hazards models from survey
+data. <em>Biometrika</em> 1992;79:139–147.</li>
+<li>DuMouchel WH, Duncan GJ. Using sample survey weights in multiple
+regression analyses of stratified samples. <em>J Am Stat Assoc</em>
+1983;78:535–543.</li>
+<li>Flegal KM, Kruszon-Moran D, Carroll MD, Fryar CD, Ogden CL. Trends
+in obesity among adults in the United States, 2005 to 2014.
+<em>JAMA</em> 2016;315:2284–2291.</li>
+<li>Heeringa SG, West BT, Berglund PA. <em>Applied Survey Data
+Analysis</em>. Chapman &amp; Hall/CRC, 2017.</li>
+<li>Johnson CL, Paulose-Ram R, Ogden CL, et al. National Health and
+Nutrition Examination Survey: analytic guidelines, 1999–2010. <em>Vital
+Health Stat 2</em> 2013;(161):1–24.</li>
+<li>Kish L. Weighting for unequal P<sub>i</sub>. <em>J Off Stat</em>
+1992;8:183–200.</li>
+<li>Korn EL, Graubard BI. <em>Analysis of Health Surveys</em>. Wiley,
+1999.</li>
+<li>Kueh MTW, et al. Body weight categories and fat distribution in
+relation to all-cause mortality among adults with MASLD. <em>BMJ
+Open</em> 2026;16:e113719.</li>
+<li>Lumley T. <em>Complex Surveys: A Guide to Analysis Using R</em>.
+Wiley, 2010.</li>
+<li>Lumley T, Scott A. Fitting regression models to survey data.
+<em>Stat Sci</em> 2017;32:265–278.</li>
+<li>National Center for Health Statistics. <em>NHANES 2017–March 2020
+Prepandemic File: Sample Design, Estimation, and Analytic
+Guidelines</em>. <em>Vital Health Stat 2</em> 2021;(190).</li>
+<li>Seidenberg AB, Moser RP, West BT. Preferred Reporting Items for
+Complex Sample Survey Analysis (PRICSSA). <em>J Surv Stat Methodol</em>
+2023;11:743–757.</li>
+<li>Solon G, Haider SJ, Wooldridge JM. What are we weighting for? <em>J
+Hum Resour</em> 2015;50:301–316.</li>
 </ul>
 </body>
 </html>

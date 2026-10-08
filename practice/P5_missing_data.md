@@ -107,8 +107,11 @@ those losses rather than analyse them.
 - **Identified:** within the locked domain — the 6,048 rows P5 analyses — exactly **one**
   Model-1 covariate carries any missingness: cancer status,
   **109 observations, 1.8% unweighted, 1.18% weighted**.
-- **Measured:** complete-case **2.97**, both extreme assignments of the missing values
-  **2.98 / 2.99**, multiple imputation **2.98**. Everything inside a 0.02 band.
+- **Measured** (the locked Group IV vs III contrast, Model 1, survey-weighted):
+  complete case **1.29 (0.89–1.86)** on 5,939 rows; both extreme assignments of the
+  missing values, and multiple imputation, **1.28 (0.89–1.85)** on 6,048 rows. A
+  difference of 0.01, far smaller than the interval. (On the paper's IV-vs-I contrast
+  the same four approaches give 2.98 to 2.99.)
 - **Concluded:** this missing-data problem mattered little **after we measured it**. The
   analysis was necessary because we did not know that in advance.
 

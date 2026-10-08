@@ -126,3 +126,17 @@ revising — which is exactly the kind of reasoning you present at M1 and defend
 Each handout contains a *Worked example* box from the instructor's full reproduction
 of **Kueh et al., BMJ Open 2026;16:e113719** (MASLD/NHANES). Use it to see the target
 and the traps — not to copy. Your paper is different; the *moves* are the same.
+
+### Two analyses of the same cohort
+
+The worked examples in these handouts are a **paper replication**: they keep the paper's
+four phenotype groups (I–IV) and its Model 1 and Model 2 covariates, and report the
+paper's contrast (Group IV vs I) beside our locked one (IV vs III). The Week 4–7 lectures
+run a second analysis of the same cohort, an **exposure analysis** of obesity and of high
+waist fat within obesity strata, adjusted only for factors that precede the exposure
+(age, sex, race/ethnicity, current smoking and sedentary time), because Week 4 argues
+that several Model 1 covariates may lie on the causal path. The two can give different
+numbers for what looks like the same comparison; the rows differ only slightly, so most
+of the difference comes from the adjustment set. Results in these handouts are therefore
+labelled with the comparison, the rows used, the adjustment set and whether the estimate
+is survey-weighted.

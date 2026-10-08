@@ -242,12 +242,12 @@ Not measurements at all.
 
 ::: {.callout-warning}
 Apply one global missing-value rule and you either delete valid laboratory values or
-convert **9 refusals** into people drinking 777 drinks a day. There is no NHANES-wide
-rule. The codebook for *that variable*, in *that cycle*, decides.
+convert **9 non-answers** into people drinking 777 or 999 drinks a day. There is no
+NHANES-wide rule. The codebook for *that variable*, in *that cycle*, decides.
 :::
 
 ::: {.notes}
-(3 min) Nine misclassified refusals would not have changed this paper's conclusion. Say
+(3 min) Nine misclassified non-answers would not have changed this paper's conclusion. Say
 that - and then say that "it did not matter this time" is not a method. They found it by
 checking.
 :::
@@ -288,8 +288,8 @@ It excluded 2 people
 
 **Why.** The first criterion is essentially "high BMI or high waist", and FLI is *built
 from* BMI and waist — so selecting on FLI ≥ 60 heavily **enriches** the cohort for that
-criterion. It does not guarantee it: **89** people here have FLI ≥ 60 with a BMI under 25,
-and 42 fail criterion (i) outright.
+criterion. It does not guarantee it: **89** of the final 6,371 have FLI ≥ 60 with a BMI
+under 25, and 42 fail criterion (i) outright.
 
 > **Report a filter by its effect, not its definition.** "MASLD required at least one
 > cardiometabolic criterion" sounds like work; here it removed two people.
@@ -394,15 +394,17 @@ about 0.07 years, so it is defensible either way - but it should be stated.
 |---|---:|---:|
 | Analytic N | 6,371 | 6,300 |
 | Deaths | 586 | 585 |
-| Group IV HR, unadjusted | 15.14 | 15.13 |
-| Group IV HR, adjusted | 2.91 | 2.89 |
+| Group IV vs I HR, unadjusted | 15.14 | 15.13 |
+| Group IV vs I HR, Model 2 | 2.91 | 2.89 |
 
-**The interesting part is what the numbers support.** Adjusted, Group III is 3.03 and
-Group IV is 2.89, both against Group I.
+<small>Reproduced HRs: unweighted, full 6,371-row file (Model 2 on its complete cases). Published: the paper's Table 2.</small>
 
-> Both groups have higher adjusted mortality than Group I. **Whether Group IV is worse
-> than Group III is a contrast the paper never reports** — and similar point estimates are
-> not evidence of equivalence.
+**The interesting part is what the numbers support.** In the paper's Model 2, Group III is
+3.03 and Group IV is 2.89, both against Group I (ours: 3.00 and 2.91).
+
+> Under Model 2, both groups have higher mortality than Group I. **Whether Group IV is
+> worse than Group III is a contrast the paper never reports** — and similar point
+> estimates are not evidence of equivalence.
 
 ::: {.notes}
 (4 min) The reproduction succeeds and the disagreement is about interpretation, not
@@ -461,6 +463,7 @@ slide.
 | 3 | FLI computable | 14,170 | item missingness |
 | 4 | Fatty liver (FLI ≥ 60) | 6,052 | target population |
 | 5 | MASLD | 6,050 | target population |
+| 6 | Phenotype group assignable | 6,050 | missingness |
 | 7 | Mortality-eligible and linked | **6,048** | outcome ascertainment |
 
 **6,371 and 6,048 answer different questions.** The paper does not report using survey

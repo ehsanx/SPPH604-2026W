@@ -2298,28 +2298,42 @@ Women &quot;2.16 (0.54-8.73)&quot;   &quot;2.28 (0.48-10.75)&quot;  &quot;4.11 (
 </div>
 </div>
 <p>Ratio of hazard ratios is women / men for the IV-vs-III contrast.</p>
+<p>The same contrast within each sex (Model 1 without sex, unweighted, on the same rows):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>hr_sex <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">c</span>(<span class="at">men =</span> <span class="dv">0</span>, <span class="at">women =</span> <span class="dv">1</span>), <span class="cf">function</span>(sx) {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Surv(time_yr,dead) ~ IV +&quot;</span>, <span class="fu">paste</span>(COVns, <span class="at">collapse=</span><span class="st">&quot; + &quot;</span>))),</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> scc[scc<span class="sc">$</span>female <span class="sc">==</span> sx, ])</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> <span class="fu">summary</span>(f)<span class="sc">$</span>conf.int[<span class="st">&quot;IV&quot;</span>, ]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f-%.2f)&quot;</span>, s[[<span class="st">&quot;exp(coef)&quot;</span>]], s[[<span class="st">&quot;lower .95&quot;</span>]], s[[<span class="st">&quot;upper .95&quot;</span>]])</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>hr_sex</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               men              women 
+&quot;1.10 (0.75-1.62)&quot; &quot;1.08 (0.49-2.38)&quot; </code></pre>
+</div>
+</div>
 </section>
 <section id="additive-scale-six-year-standardized-risk-difference" class="level2">
 <h2 class="anchored" data-anchor-id="additive-scale-six-year-standardized-risk-difference">Additive scale — six-year standardized risk difference</h2>
 <p>Stratum-specific hazard ratios do not show the additive picture; it has to be estimated. We fit Model 1 within each sex, predict six-year risk for every person in that stratum under <code>IV = 0</code> and <code>IV = 1</code>, and average — g-computation, so the contrast is a population-average risk difference over that stratum’s covariate distribution.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>risk6 <span class="ot">&lt;-</span> <span class="cf">function</span>(dd){</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Surv(time_yr,dead) ~ IV +&quot;</span>, <span class="fu">paste</span>(COVns, <span class="at">collapse=</span><span class="st">&quot; + &quot;</span>))), <span class="at">data=</span>dd)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  r <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="cf">function</span>(v){ z <span class="ot">&lt;-</span> dd; z<span class="sc">$</span>IV <span class="ot">&lt;-</span> v</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">summary</span>(<span class="fu">survfit</span>(fit, <span class="at">newdata=</span>z), <span class="at">times=</span><span class="dv">6</span>, <span class="at">extend=</span><span class="cn">TRUE</span>)<span class="sc">$</span>surv) })</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">r3=</span>r[<span class="dv">1</span>], <span class="at">r4=</span>r[<span class="dv">2</span>], <span class="at">rd=</span>r[<span class="dv">2</span>]<span class="sc">-</span>r[<span class="dv">1</span>])</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">604</span>)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>add <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="cf">function</span>(sx){</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  dd <span class="ot">&lt;-</span> scc <span class="sc">%&gt;%</span> <span class="fu">filter</span>(female<span class="sc">==</span>sx); pt <span class="ot">&lt;-</span> <span class="fu">risk6</span>(dd)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  bs <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">300</span>, <span class="fu">tryCatch</span>(<span class="fu">risk6</span>(dd[<span class="fu">sample</span>(<span class="fu">nrow</span>(dd), <span class="at">replace=</span><span class="cn">TRUE</span>),])[[<span class="st">&quot;rd&quot;</span>]],</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>                                <span class="at">error=</span><span class="cf">function</span>(e) <span class="cn">NA_real_</span>))</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  ci <span class="ot">&lt;-</span> <span class="fu">quantile</span>(bs, <span class="fu">c</span>(.<span class="dv">025</span>,.<span class="dv">975</span>), <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Sex=</span><span class="fu">ifelse</span>(sx<span class="sc">==</span><span class="dv">1</span>,<span class="st">&quot;women&quot;</span>,<span class="st">&quot;men&quot;</span>), <span class="at">n=</span><span class="fu">nrow</span>(dd),</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">risk_III=</span><span class="fu">round</span>(pt[[<span class="st">&quot;r3&quot;</span>]],<span class="dv">3</span>), <span class="at">risk_IV=</span><span class="fu">round</span>(pt[[<span class="st">&quot;r4&quot;</span>]],<span class="dv">3</span>),</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">RD=</span><span class="fu">sprintf</span>(<span class="st">&quot;%+.3f (%.3f to %.3f)&quot;</span>, pt[[<span class="st">&quot;rd&quot;</span>]], ci[<span class="dv">1</span>], ci[<span class="dv">2</span>]))</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>}))</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>add</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>risk6 <span class="ot">&lt;-</span> <span class="cf">function</span>(dd){</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Surv(time_yr,dead) ~ IV +&quot;</span>, <span class="fu">paste</span>(COVns, <span class="at">collapse=</span><span class="st">&quot; + &quot;</span>))), <span class="at">data=</span>dd)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  r <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="cf">function</span>(v){ z <span class="ot">&lt;-</span> dd; z<span class="sc">$</span>IV <span class="ot">&lt;-</span> v</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">summary</span>(<span class="fu">survfit</span>(fit, <span class="at">newdata=</span>z), <span class="at">times=</span><span class="dv">6</span>, <span class="at">extend=</span><span class="cn">TRUE</span>)<span class="sc">$</span>surv) })</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">r3=</span>r[<span class="dv">1</span>], <span class="at">r4=</span>r[<span class="dv">2</span>], <span class="at">rd=</span>r[<span class="dv">2</span>]<span class="sc">-</span>r[<span class="dv">1</span>])</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">604</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>add <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="cf">function</span>(sx){</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  dd <span class="ot">&lt;-</span> scc <span class="sc">%&gt;%</span> <span class="fu">filter</span>(female<span class="sc">==</span>sx); pt <span class="ot">&lt;-</span> <span class="fu">risk6</span>(dd)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  bs <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">300</span>, <span class="fu">tryCatch</span>(<span class="fu">risk6</span>(dd[<span class="fu">sample</span>(<span class="fu">nrow</span>(dd), <span class="at">replace=</span><span class="cn">TRUE</span>),])[[<span class="st">&quot;rd&quot;</span>]],</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                                <span class="at">error=</span><span class="cf">function</span>(e) <span class="cn">NA_real_</span>))</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  ci <span class="ot">&lt;-</span> <span class="fu">quantile</span>(bs, <span class="fu">c</span>(.<span class="dv">025</span>,.<span class="dv">975</span>), <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Sex=</span><span class="fu">ifelse</span>(sx<span class="sc">==</span><span class="dv">1</span>,<span class="st">&quot;women&quot;</span>,<span class="st">&quot;men&quot;</span>), <span class="at">n=</span><span class="fu">nrow</span>(dd),</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">risk_III=</span><span class="fu">round</span>(pt[[<span class="st">&quot;r3&quot;</span>]],<span class="dv">3</span>), <span class="at">risk_IV=</span><span class="fu">round</span>(pt[[<span class="st">&quot;r4&quot;</span>]],<span class="dv">3</span>),</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">RD=</span><span class="fu">sprintf</span>(<span class="st">&quot;%+.3f (%.3f to %.3f)&quot;</span>, pt[[<span class="st">&quot;rd&quot;</span>]], ci[<span class="dv">1</span>], ci[<span class="dv">2</span>]))</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>}))</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>add</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="caption-top table table-sm table-striped small">
@@ -2338,14 +2352,14 @@ Women &quot;2.16 (0.54-8.73)&quot;   &quot;2.28 (0.48-10.75)&quot;  &quot;4.11 (
 <td style="text-align: right;">937</td>
 <td style="text-align: right;">0.097</td>
 <td style="text-align: right;">0.105</td>
-<td style="text-align: left;">+0.008 (-0.033 to 0.042)</td>
+<td style="text-align: left;">+0.008 (-0.032 to 0.042)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">women</td>
 <td style="text-align: right;">359</td>
-<td style="text-align: right;">0.101</td>
-<td style="text-align: right;">0.106</td>
-<td style="text-align: left;">+0.005 (-0.073 to 0.076)</td>
+<td style="text-align: right;">0.100</td>
+<td style="text-align: right;">0.107</td>
+<td style="text-align: left;">+0.007 (-0.072 to 0.076)</td>
 </tr>
 </tbody>
 </table>
@@ -2354,25 +2368,27 @@ Women &quot;2.16 (0.54-8.73)&quot;   &quot;2.28 (0.48-10.75)&quot;  &quot;4.11 (
 </div>
 <p>Some bootstrap replicates in the female stratum trigger Cox convergence warnings — 359 women with sparse events means some resamples separate — so that interval is wide and should be read as order-of-magnitude.</p>
 <p><strong>Conclusion, stated at the precision the data afford.</strong> The adjusted ratio of hazard ratios is 1.00 with an interval running from 0.42 to 2.35 — compatible with the effect in women being less than half that in men, or more than twice it. Both six-year risk differences are under one percentage point. So the data show <strong>no evidence of multiplicative interaction at the available precision</strong>; they do not show that sex is irrelevant, and they do not identify what generated the crude stratified gap.</p>
-<p><strong>What this file deliberately does not do.</strong> Everything above is <strong>unweighted</strong>, because P3 precedes the survey-design increment. P4 shows that design materially changes inference for the main estimate, so whether the design-aware interaction agrees is an open question — one M1 answers, by applying P4’s domain rule to this contrast.</p>
+<p><strong>What this file deliberately does not do.</strong> Everything above is <strong>unweighted</strong>, because P3 precedes the survey-design increment. P4 shows that the design can move estimates in either direction, even where it changes no conclusion on the locked contrast, so whether the design-aware interaction agrees is an open question — one M1 answers, by applying P4’s domain rule to this contrast.</p>
 </section>
 <section id="results-for-m1" class="level2">
 <h2 class="anchored" data-anchor-id="results-for-m1">Results for M1</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pick <span class="ot">&lt;-</span> <span class="cf">function</span>(col, model) res[[col]][res<span class="sc">$</span>Model <span class="sc">==</span> model]</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">emit_results</span>(<span class="st">&quot;P3&quot;</span>, <span class="fu">list</span>(</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">rhr_crude      =</span> <span class="fu">endash</span>(<span class="fu">pick</span>(<span class="st">&quot;rHR&quot;</span>, <span class="st">&quot;crude&quot;</span>)),</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_crude        =</span> <span class="fu">pick</span>(<span class="st">&quot;p&quot;</span>, <span class="st">&quot;crude&quot;</span>),</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rhr_unweighted =</span> <span class="fu">endash</span>(<span class="fu">pick</span>(<span class="st">&quot;rHR&quot;</span>, <span class="st">&quot;Model 1&quot;</span>)),</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_unweighted   =</span> <span class="fu">pick</span>(<span class="st">&quot;p&quot;</span>, <span class="st">&quot;Model 1&quot;</span>),</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">n        =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(scc)),</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_men    =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(scc<span class="sc">$</span>female <span class="sc">==</span> <span class="dv">0</span>)),</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_women  =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(scc<span class="sc">$</span>female <span class="sc">==</span> <span class="dv">1</span>)),</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">rd_men   =</span> add<span class="sc">$</span>RD[add<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">&quot;men&quot;</span>],</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">rd_women =</span> add<span class="sc">$</span>RD[add<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">&quot;women&quot;</span>]</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>), <span class="fu">list</span>(<span class="at">interaction =</span> res, <span class="at">additive =</span> add))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pick <span class="ot">&lt;-</span> <span class="cf">function</span>(col, model) res[[col]][res<span class="sc">$</span>Model <span class="sc">==</span> model]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">emit_results</span>(<span class="st">&quot;P3&quot;</span>, <span class="fu">list</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">rhr_crude      =</span> <span class="fu">endash</span>(<span class="fu">pick</span>(<span class="st">&quot;rHR&quot;</span>, <span class="st">&quot;crude&quot;</span>)),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_crude        =</span> <span class="fu">pick</span>(<span class="st">&quot;p&quot;</span>, <span class="st">&quot;crude&quot;</span>),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rhr_unweighted =</span> <span class="fu">endash</span>(<span class="fu">pick</span>(<span class="st">&quot;rHR&quot;</span>, <span class="st">&quot;Model 1&quot;</span>)),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_unweighted   =</span> <span class="fu">pick</span>(<span class="st">&quot;p&quot;</span>, <span class="st">&quot;Model 1&quot;</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">n        =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(scc)),</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_men    =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(scc<span class="sc">$</span>female <span class="sc">==</span> <span class="dv">0</span>)),</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_women  =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(scc<span class="sc">$</span>female <span class="sc">==</span> <span class="dv">1</span>)),</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">rd_men   =</span> add<span class="sc">$</span>RD[add<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">&quot;men&quot;</span>],</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">rd_women =</span> add<span class="sc">$</span>RD[add<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">&quot;women&quot;</span>],</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">hr_men   =</span> <span class="fu">endash</span>(hr_sex[[<span class="st">&quot;men&quot;</span>]]),</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">hr_women =</span> <span class="fu">endash</span>(hr_sex[[<span class="st">&quot;women&quot;</span>]])</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>), <span class="fu">list</span>(<span class="at">interaction =</span> res, <span class="at">additive =</span> add))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>wrote ../_results/P3.json  (9 facts, 2 tables)</code></pre>
+<pre><code>wrote ../_results/P3.json  (11 facts, 2 tables)</code></pre>
 </div>
 </div>
 <!-- -->
@@ -2831,151 +2847,166 @@ Women &quot;2.16 (0.54-8.73)&quot;   &quot;2.28 (0.48-10.75)&quot;  &quot;4.11 (
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class>
-<div class="sourceCode" id="cb12" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;P3 — Effect modification (interaction): step-by-step reproducible code&quot;</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> &quot;SPPH 604 · demonstration paper (Kueh et al., BMJ Open 2026;16:e113719)&quot;</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">    df-print: kable</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Tests whether the phenotype → mortality association is modified by **sex**.</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The crude sex-stratified HRs look dramatically different; the targeted adjusted</span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; test is centred near 1 but far too imprecise to settle the question. Reporting</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; that imprecision honestly is the lesson of this increment.</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup}</span></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;../_shared/paths.R&quot;</span>)   <span class="co"># find_repro(), emit_results(), ci(), fmtn(), endash()</span></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>repro <span class="ot">&lt;-</span> <span class="fu">find_repro</span>()</span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({<span class="fu">library</span>(dplyr); <span class="fu">library</span>(survival)})</span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="do">## The cohort is the one P1 locks: the MASLD domain of the fasting subsample.</span></span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a><span class="do">## All five increments use these rows so P4 can weight exactly what P2-P3 analysed.</span></span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>.a <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(repro, <span class="st">&quot;data/derived/masld_analytic.rds&quot;</span>))</span>
-<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>.m <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(repro, <span class="st">&quot;data/derived/merged_all.rds&quot;</span>))</span>
-<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>.m<span class="sc">$</span>in_analysis <span class="ot">&lt;-</span> .m<span class="sc">$</span>SEQN <span class="sc">%in%</span> .a<span class="sc">$</span>SEQN</span>
-<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>d  <span class="ot">&lt;-</span> .m[.m<span class="sc">$</span>in_analysis <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(.m<span class="sc">$</span>WTSAF2YR) <span class="sc">&amp;</span> .m<span class="sc">$</span>WTSAF2YR <span class="sc">&gt;</span> <span class="dv">0</span>, ]</span>
-<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>group <span class="ot">&lt;-</span> <span class="fu">factor</span>(d<span class="sc">$</span>group, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;I&quot;</span>,<span class="st">&quot;II&quot;</span>,<span class="st">&quot;III&quot;</span>,<span class="st">&quot;IV&quot;</span>))</span>
-<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;cohort n =&quot;</span>, <span class="fu">nrow</span>(d), <span class="st">&quot;(P1-locked domain)</span></span>
-<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>)</span>
-<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>hr <span class="ot">&lt;-</span> <span class="cf">function</span>(m,g){s<span class="ot">&lt;-</span><span class="fu">summary</span>(m); <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f-%.2f)&quot;</span>,</span>
-<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>        s<span class="sc">$</span>conf.int[g,<span class="dv">1</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;lower .95&quot;</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;upper .95&quot;</span>])}</span>
-<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>Rationale: sex is entangled with the exposure — Group II is 56% female, Group I only 15% —</span>
-<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>so modification by sex is worth probing.</span>
-<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sex-stratified group hazard ratios (all-cause, vs Group I)</span></span>
-<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a><span class="in">```{r stratified}</span></span>
-<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>strat <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="cf">function</span>(s) {</span>
-<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>  ms <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time_yr,dead) <span class="sc">~</span> group, <span class="at">data =</span> <span class="fu">filter</span>(d, female <span class="sc">==</span> s))</span>
-<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">II =</span> <span class="fu">hr</span>(ms,<span class="st">&quot;groupII&quot;</span>), <span class="at">III =</span> <span class="fu">hr</span>(ms,<span class="st">&quot;groupIII&quot;</span>), <span class="at">IV =</span> <span class="fu">hr</span>(ms,<span class="st">&quot;groupIV&quot;</span>))</span>
-<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(strat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Men&quot;</span>, <span class="st">&quot;Women&quot;</span>)</span>
-<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>pt <span class="ot">&lt;-</span> <span class="cf">function</span>(sex) <span class="fu">sub</span>(<span class="st">&quot; .*&quot;</span>, <span class="st">&quot;&quot;</span>, strat[<span class="st">&quot;IV&quot;</span>, sex])   <span class="co"># point estimate only</span></span>
-<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(strat)</span>
-<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>Men look far higher (IV <span class="in">`r pt(&quot;Men&quot;)`</span>) than women (IV <span class="in">`r pt(&quot;Women&quot;)`</span>). But the</span>
-<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>reference group has very few events, and men in this cohort are older and sicker — so</span>
-<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>is this real modification, or confounding / baseline-risk difference?</span>
-<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>*Those two figures are inline references to the table above, not typed. An earlier</span>
-<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>draft typed &quot;IV ≈ 28&quot; beside a chunk that printed something else; the fix is to make</span>
-<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>the prose read from the object rather than to correct the digits.*</span>
-<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a><span class="fu">## Formal interaction test — targeted at the locked contrast</span></span>
-<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>Our locked estimand is **IV vs III**. A <span class="in">`group * sex`</span> term across all four groups is a</span>
-<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>**multi-df test of whether *any* contrast varies by sex** — a broader question. We</span>
-<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>restrict to Groups III and IV so the interaction is **1 df for exactly our contrast**,</span>
-<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>and fit crude and adjusted on the **same** complete-case rows.</span>
-<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{r interaction}</span></span>
-<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a>COVns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;age&quot;</span>,<span class="st">&quot;dyslip&quot;</span>,<span class="st">&quot;htn&quot;</span>,<span class="st">&quot;t2dm&quot;</span>,<span class="st">&quot;ckd&quot;</span>,<span class="st">&quot;mi&quot;</span>,<span class="st">&quot;cancer&quot;</span>,</span>
-<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;on_htn_med&quot;</span>,<span class="st">&quot;on_dm_med&quot;</span>,<span class="st">&quot;on_lipid_med&quot;</span>)</span>
-<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a>s   <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span> <span class="fu">filter</span>(group <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;III&quot;</span>,<span class="st">&quot;IV&quot;</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">IV =</span> <span class="fu">as.integer</span>(group<span class="sc">==</span><span class="st">&quot;IV&quot;</span>))</span>
-<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a>scc <span class="ot">&lt;-</span> s[<span class="fu">complete.cases</span>(s[,<span class="fu">c</span>(COVns,<span class="st">&quot;female&quot;</span>)]),]</span>
-<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>tst <span class="ot">&lt;-</span> <span class="cf">function</span>(f){</span>
-<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>  full <span class="ot">&lt;-</span> <span class="fu">coxph</span>(f, <span class="at">data=</span>scc); red <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">update.formula</span>(f, .<span class="sc">~</span>.<span class="sc">-</span>IV<span class="sc">:</span>female), <span class="at">data=</span>scc)</span>
-<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">coef</span>(full)[[<span class="st">&quot;IV:female&quot;</span>]]; se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">vcov</span>(full)[<span class="st">&quot;IV:female&quot;</span>,<span class="st">&quot;IV:female&quot;</span>])</span>
-<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">rHR=</span><span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f-%.2f)&quot;</span>, <span class="fu">exp</span>(b), <span class="fu">exp</span>(b<span class="fl">-1.96</span><span class="sc">*</span>se), <span class="fu">exp</span>(b<span class="fl">+1.96</span><span class="sc">*</span>se)),</span>
-<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>             <span class="at">p=</span><span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, <span class="fu">anova</span>(red, full)<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;|Chi|)</span><span class="st">`</span>[<span class="dv">2</span>]))</span>
-<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">cbind</span>(<span class="at">Model=</span><span class="st">&quot;crude&quot;</span>,   <span class="fu">tst</span>(<span class="fu">Surv</span>(time_yr,dead) <span class="sc">~</span> IV<span class="sc">*</span>female)),</span>
-<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>             <span class="fu">cbind</span>(<span class="at">Model=</span><span class="st">&quot;Model 1&quot;</span>, <span class="fu">tst</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(</span>
-<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>                   <span class="st">&quot;Surv(time_yr,dead) ~ IV*female +&quot;</span>, <span class="fu">paste</span>(COVns, <span class="at">collapse=</span><span class="st">&quot; + &quot;</span>))))))</span>
-<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;rows used:&quot;</span>, <span class="fu">nrow</span>(scc), <span class="st">&quot; women:&quot;</span>, <span class="fu">sum</span>(scc<span class="sc">$</span>female<span class="sc">==</span><span class="dv">1</span>), <span class="st">&quot; men:&quot;</span>, <span class="fu">sum</span>(scc<span class="sc">$</span>female<span class="sc">==</span><span class="dv">0</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a>res</span>
-<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a>Ratio of hazard ratios is women / men for the IV-vs-III contrast.</span>
-<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a><span class="fu">## Additive scale — six-year standardized risk difference</span></span>
-<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a>Stratum-specific hazard ratios do not show the additive picture; it has to be estimated.</span>
-<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a>We fit Model 1 within each sex, predict six-year risk for every person in that stratum</span>
-<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a>under <span class="in">`IV = 0`</span> and <span class="in">`IV = 1`</span>, and average — g-computation, so the contrast is a</span>
-<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a>population-average risk difference over that stratum&#39;s covariate distribution.</span>
-<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a><span class="in">```{r additive}</span></span>
-<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a>risk6 <span class="ot">&lt;-</span> <span class="cf">function</span>(dd){</span>
-<span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Surv(time_yr,dead) ~ IV +&quot;</span>, <span class="fu">paste</span>(COVns, <span class="at">collapse=</span><span class="st">&quot; + &quot;</span>))), <span class="at">data=</span>dd)</span>
-<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a>  r <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="cf">function</span>(v){ z <span class="ot">&lt;-</span> dd; z<span class="sc">$</span>IV <span class="ot">&lt;-</span> v</span>
-<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">summary</span>(<span class="fu">survfit</span>(fit, <span class="at">newdata=</span>z), <span class="at">times=</span><span class="dv">6</span>, <span class="at">extend=</span><span class="cn">TRUE</span>)<span class="sc">$</span>surv) })</span>
-<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">r3=</span>r[<span class="dv">1</span>], <span class="at">r4=</span>r[<span class="dv">2</span>], <span class="at">rd=</span>r[<span class="dv">2</span>]<span class="sc">-</span>r[<span class="dv">1</span>])</span>
-<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">604</span>)</span>
-<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a>add <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="cf">function</span>(sx){</span>
-<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a>  dd <span class="ot">&lt;-</span> scc <span class="sc">%&gt;%</span> <span class="fu">filter</span>(female<span class="sc">==</span>sx); pt <span class="ot">&lt;-</span> <span class="fu">risk6</span>(dd)</span>
-<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a>  bs <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">300</span>, <span class="fu">tryCatch</span>(<span class="fu">risk6</span>(dd[<span class="fu">sample</span>(<span class="fu">nrow</span>(dd), <span class="at">replace=</span><span class="cn">TRUE</span>),])[[<span class="st">&quot;rd&quot;</span>]],</span>
-<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a>                                <span class="at">error=</span><span class="cf">function</span>(e) <span class="cn">NA_real_</span>))</span>
-<span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a>  ci <span class="ot">&lt;-</span> <span class="fu">quantile</span>(bs, <span class="fu">c</span>(.<span class="dv">025</span>,.<span class="dv">975</span>), <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
-<span id="cb12-107"><a href="#cb12-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Sex=</span><span class="fu">ifelse</span>(sx<span class="sc">==</span><span class="dv">1</span>,<span class="st">&quot;women&quot;</span>,<span class="st">&quot;men&quot;</span>), <span class="at">n=</span><span class="fu">nrow</span>(dd),</span>
-<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a>             <span class="at">risk_III=</span><span class="fu">round</span>(pt[[<span class="st">&quot;r3&quot;</span>]],<span class="dv">3</span>), <span class="at">risk_IV=</span><span class="fu">round</span>(pt[[<span class="st">&quot;r4&quot;</span>]],<span class="dv">3</span>),</span>
-<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a>             <span class="at">RD=</span><span class="fu">sprintf</span>(<span class="st">&quot;%+.3f (%.3f to %.3f)&quot;</span>, pt[[<span class="st">&quot;rd&quot;</span>]], ci[<span class="dv">1</span>], ci[<span class="dv">2</span>]))</span>
-<span id="cb12-110"><a href="#cb12-110" aria-hidden="true" tabindex="-1"></a>}))</span>
-<span id="cb12-111"><a href="#cb12-111" aria-hidden="true" tabindex="-1"></a>add</span>
-<span id="cb12-112"><a href="#cb12-112" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-113"><a href="#cb12-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-114"><a href="#cb12-114" aria-hidden="true" tabindex="-1"></a>Some bootstrap replicates in the female stratum trigger Cox convergence warnings — 359</span>
-<span id="cb12-115"><a href="#cb12-115" aria-hidden="true" tabindex="-1"></a>women with sparse events means some resamples separate — so that interval is wide and</span>
-<span id="cb12-116"><a href="#cb12-116" aria-hidden="true" tabindex="-1"></a>should be read as order-of-magnitude.</span>
-<span id="cb12-117"><a href="#cb12-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-118"><a href="#cb12-118" aria-hidden="true" tabindex="-1"></a>**Conclusion, stated at the precision the data afford.** The adjusted ratio of hazard</span>
-<span id="cb12-119"><a href="#cb12-119" aria-hidden="true" tabindex="-1"></a>ratios is 1.00 with an interval running from 0.42 to 2.35 — compatible with the effect in</span>
-<span id="cb12-120"><a href="#cb12-120" aria-hidden="true" tabindex="-1"></a>women being less than half that in men, or more than twice it. Both six-year risk</span>
-<span id="cb12-121"><a href="#cb12-121" aria-hidden="true" tabindex="-1"></a>differences are under one percentage point. So the data show **no evidence of</span>
-<span id="cb12-122"><a href="#cb12-122" aria-hidden="true" tabindex="-1"></a>multiplicative interaction at the available precision**; they do not show that sex is</span>
-<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a>irrelevant, and they do not identify what generated the crude stratified gap.</span>
-<span id="cb12-124"><a href="#cb12-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-125"><a href="#cb12-125" aria-hidden="true" tabindex="-1"></a>**What this file deliberately does not do.** Everything above is **unweighted**, because</span>
-<span id="cb12-126"><a href="#cb12-126" aria-hidden="true" tabindex="-1"></a>P3 precedes the survey-design increment. P4 shows that design materially changes</span>
-<span id="cb12-127"><a href="#cb12-127" aria-hidden="true" tabindex="-1"></a>inference for the main estimate, so whether the design-aware interaction agrees is an</span>
-<span id="cb12-128"><a href="#cb12-128" aria-hidden="true" tabindex="-1"></a>open question — one M1 answers, by applying P4&#39;s domain rule to this contrast.</span>
-<span id="cb12-129"><a href="#cb12-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-130"><a href="#cb12-130" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results for M1</span></span>
-<span id="cb12-131"><a href="#cb12-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-132"><a href="#cb12-132" aria-hidden="true" tabindex="-1"></a><span class="in">```{r emit}</span></span>
-<span id="cb12-133"><a href="#cb12-133" aria-hidden="true" tabindex="-1"></a>pick <span class="ot">&lt;-</span> <span class="cf">function</span>(col, model) res[[col]][res<span class="sc">$</span>Model <span class="sc">==</span> model]</span>
-<span id="cb12-134"><a href="#cb12-134" aria-hidden="true" tabindex="-1"></a><span class="fu">emit_results</span>(<span class="st">&quot;P3&quot;</span>, <span class="fu">list</span>(</span>
-<span id="cb12-135"><a href="#cb12-135" aria-hidden="true" tabindex="-1"></a>  <span class="at">rhr_crude      =</span> <span class="fu">endash</span>(<span class="fu">pick</span>(<span class="st">&quot;rHR&quot;</span>, <span class="st">&quot;crude&quot;</span>)),</span>
-<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_crude        =</span> <span class="fu">pick</span>(<span class="st">&quot;p&quot;</span>, <span class="st">&quot;crude&quot;</span>),</span>
-<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a>  <span class="at">rhr_unweighted =</span> <span class="fu">endash</span>(<span class="fu">pick</span>(<span class="st">&quot;rHR&quot;</span>, <span class="st">&quot;Model 1&quot;</span>)),</span>
-<span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_unweighted   =</span> <span class="fu">pick</span>(<span class="st">&quot;p&quot;</span>, <span class="st">&quot;Model 1&quot;</span>),</span>
-<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a>  <span class="at">n        =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(scc)),</span>
-<span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_men    =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(scc<span class="sc">$</span>female <span class="sc">==</span> <span class="dv">0</span>)),</span>
-<span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_women  =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(scc<span class="sc">$</span>female <span class="sc">==</span> <span class="dv">1</span>)),</span>
-<span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a>  <span class="at">rd_men   =</span> add<span class="sc">$</span>RD[add<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">&quot;men&quot;</span>],</span>
-<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a>  <span class="at">rd_women =</span> add<span class="sc">$</span>RD[add<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">&quot;women&quot;</span>]</span>
-<span id="cb12-144"><a href="#cb12-144" aria-hidden="true" tabindex="-1"></a>), <span class="fu">list</span>(<span class="at">interaction =</span> res, <span class="at">additive =</span> add))</span>
-<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;P3 — Effect modification (interaction): step-by-step reproducible code&quot;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> &quot;SPPH 604 · demonstration paper (Kueh et al., BMJ Open 2026;16:e113719)&quot;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">    df-print: kable</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Tests whether the phenotype → mortality association is modified by **sex**.</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The crude sex-stratified HRs look dramatically different; the targeted adjusted</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; test is centred near 1 but far too imprecise to settle the question. Reporting</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; that imprecision honestly is the lesson of this increment.</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup}</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;../_shared/paths.R&quot;</span>)   <span class="co"># find_repro(), emit_results(), ci(), fmtn(), endash()</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>repro <span class="ot">&lt;-</span> <span class="fu">find_repro</span>()</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({<span class="fu">library</span>(dplyr); <span class="fu">library</span>(survival)})</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="do">## The cohort is the one P1 locks: the MASLD domain of the fasting subsample.</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="do">## All five increments use these rows so P4 can weight exactly what P2-P3 analysed.</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>.a <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(repro, <span class="st">&quot;data/derived/masld_analytic.rds&quot;</span>))</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>.m <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(repro, <span class="st">&quot;data/derived/merged_all.rds&quot;</span>))</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>.m<span class="sc">$</span>in_analysis <span class="ot">&lt;-</span> .m<span class="sc">$</span>SEQN <span class="sc">%in%</span> .a<span class="sc">$</span>SEQN</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>d  <span class="ot">&lt;-</span> .m[.m<span class="sc">$</span>in_analysis <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(.m<span class="sc">$</span>WTSAF2YR) <span class="sc">&amp;</span> .m<span class="sc">$</span>WTSAF2YR <span class="sc">&gt;</span> <span class="dv">0</span>, ]</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>group <span class="ot">&lt;-</span> <span class="fu">factor</span>(d<span class="sc">$</span>group, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;I&quot;</span>,<span class="st">&quot;II&quot;</span>,<span class="st">&quot;III&quot;</span>,<span class="st">&quot;IV&quot;</span>))</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;cohort n =&quot;</span>, <span class="fu">nrow</span>(d), <span class="st">&quot;(P1-locked domain)</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>)</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>hr <span class="ot">&lt;-</span> <span class="cf">function</span>(m,g){s<span class="ot">&lt;-</span><span class="fu">summary</span>(m); <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f-%.2f)&quot;</span>,</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>        s<span class="sc">$</span>conf.int[g,<span class="dv">1</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;lower .95&quot;</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;upper .95&quot;</span>])}</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>Rationale: sex is entangled with the exposure — Group II is 56% female, Group I only 15% —</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>so modification by sex is worth probing.</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sex-stratified group hazard ratios (all-cause, vs Group I)</span></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a><span class="in">```{r stratified}</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>strat <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="cf">function</span>(s) {</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>  ms <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time_yr,dead) <span class="sc">~</span> group, <span class="at">data =</span> <span class="fu">filter</span>(d, female <span class="sc">==</span> s))</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">II =</span> <span class="fu">hr</span>(ms,<span class="st">&quot;groupII&quot;</span>), <span class="at">III =</span> <span class="fu">hr</span>(ms,<span class="st">&quot;groupIII&quot;</span>), <span class="at">IV =</span> <span class="fu">hr</span>(ms,<span class="st">&quot;groupIV&quot;</span>))</span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(strat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Men&quot;</span>, <span class="st">&quot;Women&quot;</span>)</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>pt <span class="ot">&lt;-</span> <span class="cf">function</span>(sex) <span class="fu">sub</span>(<span class="st">&quot; .*&quot;</span>, <span class="st">&quot;&quot;</span>, strat[<span class="st">&quot;IV&quot;</span>, sex])   <span class="co"># point estimate only</span></span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(strat)</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>Men look far higher (IV <span class="in">`r pt(&quot;Men&quot;)`</span>) than women (IV <span class="in">`r pt(&quot;Women&quot;)`</span>). But the</span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>reference group has very few events, and men in this cohort are older and sicker — so</span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>is this real modification, or confounding / baseline-risk difference?</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>*Those two figures are inline references to the table above, not typed. An earlier</span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>draft typed &quot;IV ≈ 28&quot; beside a chunk that printed something else; the fix is to make</span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>the prose read from the object rather than to correct the digits.*</span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a><span class="fu">## Formal interaction test — targeted at the locked contrast</span></span>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>Our locked estimand is **IV vs III**. A <span class="in">`group * sex`</span> term across all four groups is a</span>
+<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a>**multi-df test of whether *any* contrast varies by sex** — a broader question. We</span>
+<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a>restrict to Groups III and IV so the interaction is **1 df for exactly our contrast**,</span>
+<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a>and fit crude and adjusted on the **same** complete-case rows.</span>
+<span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-67"><a href="#cb14-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{r interaction}</span></span>
+<span id="cb14-68"><a href="#cb14-68" aria-hidden="true" tabindex="-1"></a>COVns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;age&quot;</span>,<span class="st">&quot;dyslip&quot;</span>,<span class="st">&quot;htn&quot;</span>,<span class="st">&quot;t2dm&quot;</span>,<span class="st">&quot;ckd&quot;</span>,<span class="st">&quot;mi&quot;</span>,<span class="st">&quot;cancer&quot;</span>,</span>
+<span id="cb14-69"><a href="#cb14-69" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;on_htn_med&quot;</span>,<span class="st">&quot;on_dm_med&quot;</span>,<span class="st">&quot;on_lipid_med&quot;</span>)</span>
+<span id="cb14-70"><a href="#cb14-70" aria-hidden="true" tabindex="-1"></a>s   <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span> <span class="fu">filter</span>(group <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;III&quot;</span>,<span class="st">&quot;IV&quot;</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">IV =</span> <span class="fu">as.integer</span>(group<span class="sc">==</span><span class="st">&quot;IV&quot;</span>))</span>
+<span id="cb14-71"><a href="#cb14-71" aria-hidden="true" tabindex="-1"></a>scc <span class="ot">&lt;-</span> s[<span class="fu">complete.cases</span>(s[,<span class="fu">c</span>(COVns,<span class="st">&quot;female&quot;</span>)]),]</span>
+<span id="cb14-72"><a href="#cb14-72" aria-hidden="true" tabindex="-1"></a>tst <span class="ot">&lt;-</span> <span class="cf">function</span>(f){</span>
+<span id="cb14-73"><a href="#cb14-73" aria-hidden="true" tabindex="-1"></a>  full <span class="ot">&lt;-</span> <span class="fu">coxph</span>(f, <span class="at">data=</span>scc); red <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">update.formula</span>(f, .<span class="sc">~</span>.<span class="sc">-</span>IV<span class="sc">:</span>female), <span class="at">data=</span>scc)</span>
+<span id="cb14-74"><a href="#cb14-74" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">coef</span>(full)[[<span class="st">&quot;IV:female&quot;</span>]]; se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">vcov</span>(full)[<span class="st">&quot;IV:female&quot;</span>,<span class="st">&quot;IV:female&quot;</span>])</span>
+<span id="cb14-75"><a href="#cb14-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">rHR=</span><span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f-%.2f)&quot;</span>, <span class="fu">exp</span>(b), <span class="fu">exp</span>(b<span class="fl">-1.96</span><span class="sc">*</span>se), <span class="fu">exp</span>(b<span class="fl">+1.96</span><span class="sc">*</span>se)),</span>
+<span id="cb14-76"><a href="#cb14-76" aria-hidden="true" tabindex="-1"></a>             <span class="at">p=</span><span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, <span class="fu">anova</span>(red, full)<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;|Chi|)</span><span class="st">`</span>[<span class="dv">2</span>]))</span>
+<span id="cb14-77"><a href="#cb14-77" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-78"><a href="#cb14-78" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">cbind</span>(<span class="at">Model=</span><span class="st">&quot;crude&quot;</span>,   <span class="fu">tst</span>(<span class="fu">Surv</span>(time_yr,dead) <span class="sc">~</span> IV<span class="sc">*</span>female)),</span>
+<span id="cb14-79"><a href="#cb14-79" aria-hidden="true" tabindex="-1"></a>             <span class="fu">cbind</span>(<span class="at">Model=</span><span class="st">&quot;Model 1&quot;</span>, <span class="fu">tst</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(</span>
+<span id="cb14-80"><a href="#cb14-80" aria-hidden="true" tabindex="-1"></a>                   <span class="st">&quot;Surv(time_yr,dead) ~ IV*female +&quot;</span>, <span class="fu">paste</span>(COVns, <span class="at">collapse=</span><span class="st">&quot; + &quot;</span>))))))</span>
+<span id="cb14-81"><a href="#cb14-81" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;rows used:&quot;</span>, <span class="fu">nrow</span>(scc), <span class="st">&quot; women:&quot;</span>, <span class="fu">sum</span>(scc<span class="sc">$</span>female<span class="sc">==</span><span class="dv">1</span>), <span class="st">&quot; men:&quot;</span>, <span class="fu">sum</span>(scc<span class="sc">$</span>female<span class="sc">==</span><span class="dv">0</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb14-82"><a href="#cb14-82" aria-hidden="true" tabindex="-1"></a>res</span>
+<span id="cb14-83"><a href="#cb14-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-84"><a href="#cb14-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-85"><a href="#cb14-85" aria-hidden="true" tabindex="-1"></a>Ratio of hazard ratios is women / men for the IV-vs-III contrast.</span>
+<span id="cb14-86"><a href="#cb14-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-87"><a href="#cb14-87" aria-hidden="true" tabindex="-1"></a>The same contrast within each sex (Model 1 without sex, unweighted, on the same rows):</span>
+<span id="cb14-88"><a href="#cb14-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-89"><a href="#cb14-89" aria-hidden="true" tabindex="-1"></a><span class="in">```{r by-sex}</span></span>
+<span id="cb14-90"><a href="#cb14-90" aria-hidden="true" tabindex="-1"></a>hr_sex <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">c</span>(<span class="at">men =</span> <span class="dv">0</span>, <span class="at">women =</span> <span class="dv">1</span>), <span class="cf">function</span>(sx) {</span>
+<span id="cb14-91"><a href="#cb14-91" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Surv(time_yr,dead) ~ IV +&quot;</span>, <span class="fu">paste</span>(COVns, <span class="at">collapse=</span><span class="st">&quot; + &quot;</span>))),</span>
+<span id="cb14-92"><a href="#cb14-92" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> scc[scc<span class="sc">$</span>female <span class="sc">==</span> sx, ])</span>
+<span id="cb14-93"><a href="#cb14-93" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> <span class="fu">summary</span>(f)<span class="sc">$</span>conf.int[<span class="st">&quot;IV&quot;</span>, ]</span>
+<span id="cb14-94"><a href="#cb14-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f-%.2f)&quot;</span>, s[[<span class="st">&quot;exp(coef)&quot;</span>]], s[[<span class="st">&quot;lower .95&quot;</span>]], s[[<span class="st">&quot;upper .95&quot;</span>]])</span>
+<span id="cb14-95"><a href="#cb14-95" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb14-96"><a href="#cb14-96" aria-hidden="true" tabindex="-1"></a>hr_sex</span>
+<span id="cb14-97"><a href="#cb14-97" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-98"><a href="#cb14-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-99"><a href="#cb14-99" aria-hidden="true" tabindex="-1"></a><span class="fu">## Additive scale — six-year standardized risk difference</span></span>
+<span id="cb14-100"><a href="#cb14-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-101"><a href="#cb14-101" aria-hidden="true" tabindex="-1"></a>Stratum-specific hazard ratios do not show the additive picture; it has to be estimated.</span>
+<span id="cb14-102"><a href="#cb14-102" aria-hidden="true" tabindex="-1"></a>We fit Model 1 within each sex, predict six-year risk for every person in that stratum</span>
+<span id="cb14-103"><a href="#cb14-103" aria-hidden="true" tabindex="-1"></a>under <span class="in">`IV = 0`</span> and <span class="in">`IV = 1`</span>, and average — g-computation, so the contrast is a</span>
+<span id="cb14-104"><a href="#cb14-104" aria-hidden="true" tabindex="-1"></a>population-average risk difference over that stratum&#39;s covariate distribution.</span>
+<span id="cb14-105"><a href="#cb14-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-106"><a href="#cb14-106" aria-hidden="true" tabindex="-1"></a><span class="in">```{r additive}</span></span>
+<span id="cb14-107"><a href="#cb14-107" aria-hidden="true" tabindex="-1"></a>risk6 <span class="ot">&lt;-</span> <span class="cf">function</span>(dd){</span>
+<span id="cb14-108"><a href="#cb14-108" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Surv(time_yr,dead) ~ IV +&quot;</span>, <span class="fu">paste</span>(COVns, <span class="at">collapse=</span><span class="st">&quot; + &quot;</span>))), <span class="at">data=</span>dd)</span>
+<span id="cb14-109"><a href="#cb14-109" aria-hidden="true" tabindex="-1"></a>  r <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="cf">function</span>(v){ z <span class="ot">&lt;-</span> dd; z<span class="sc">$</span>IV <span class="ot">&lt;-</span> v</span>
+<span id="cb14-110"><a href="#cb14-110" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">summary</span>(<span class="fu">survfit</span>(fit, <span class="at">newdata=</span>z), <span class="at">times=</span><span class="dv">6</span>, <span class="at">extend=</span><span class="cn">TRUE</span>)<span class="sc">$</span>surv) })</span>
+<span id="cb14-111"><a href="#cb14-111" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">r3=</span>r[<span class="dv">1</span>], <span class="at">r4=</span>r[<span class="dv">2</span>], <span class="at">rd=</span>r[<span class="dv">2</span>]<span class="sc">-</span>r[<span class="dv">1</span>])</span>
+<span id="cb14-112"><a href="#cb14-112" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-113"><a href="#cb14-113" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">604</span>)</span>
+<span id="cb14-114"><a href="#cb14-114" aria-hidden="true" tabindex="-1"></a>add <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="cf">function</span>(sx){</span>
+<span id="cb14-115"><a href="#cb14-115" aria-hidden="true" tabindex="-1"></a>  dd <span class="ot">&lt;-</span> scc <span class="sc">%&gt;%</span> <span class="fu">filter</span>(female<span class="sc">==</span>sx); pt <span class="ot">&lt;-</span> <span class="fu">risk6</span>(dd)</span>
+<span id="cb14-116"><a href="#cb14-116" aria-hidden="true" tabindex="-1"></a>  bs <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">300</span>, <span class="fu">tryCatch</span>(<span class="fu">risk6</span>(dd[<span class="fu">sample</span>(<span class="fu">nrow</span>(dd), <span class="at">replace=</span><span class="cn">TRUE</span>),])[[<span class="st">&quot;rd&quot;</span>]],</span>
+<span id="cb14-117"><a href="#cb14-117" aria-hidden="true" tabindex="-1"></a>                                <span class="at">error=</span><span class="cf">function</span>(e) <span class="cn">NA_real_</span>))</span>
+<span id="cb14-118"><a href="#cb14-118" aria-hidden="true" tabindex="-1"></a>  ci <span class="ot">&lt;-</span> <span class="fu">quantile</span>(bs, <span class="fu">c</span>(.<span class="dv">025</span>,.<span class="dv">975</span>), <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-119"><a href="#cb14-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Sex=</span><span class="fu">ifelse</span>(sx<span class="sc">==</span><span class="dv">1</span>,<span class="st">&quot;women&quot;</span>,<span class="st">&quot;men&quot;</span>), <span class="at">n=</span><span class="fu">nrow</span>(dd),</span>
+<span id="cb14-120"><a href="#cb14-120" aria-hidden="true" tabindex="-1"></a>             <span class="at">risk_III=</span><span class="fu">round</span>(pt[[<span class="st">&quot;r3&quot;</span>]],<span class="dv">3</span>), <span class="at">risk_IV=</span><span class="fu">round</span>(pt[[<span class="st">&quot;r4&quot;</span>]],<span class="dv">3</span>),</span>
+<span id="cb14-121"><a href="#cb14-121" aria-hidden="true" tabindex="-1"></a>             <span class="at">RD=</span><span class="fu">sprintf</span>(<span class="st">&quot;%+.3f (%.3f to %.3f)&quot;</span>, pt[[<span class="st">&quot;rd&quot;</span>]], ci[<span class="dv">1</span>], ci[<span class="dv">2</span>]))</span>
+<span id="cb14-122"><a href="#cb14-122" aria-hidden="true" tabindex="-1"></a>}))</span>
+<span id="cb14-123"><a href="#cb14-123" aria-hidden="true" tabindex="-1"></a>add</span>
+<span id="cb14-124"><a href="#cb14-124" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-125"><a href="#cb14-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-126"><a href="#cb14-126" aria-hidden="true" tabindex="-1"></a>Some bootstrap replicates in the female stratum trigger Cox convergence warnings — 359</span>
+<span id="cb14-127"><a href="#cb14-127" aria-hidden="true" tabindex="-1"></a>women with sparse events means some resamples separate — so that interval is wide and</span>
+<span id="cb14-128"><a href="#cb14-128" aria-hidden="true" tabindex="-1"></a>should be read as order-of-magnitude.</span>
+<span id="cb14-129"><a href="#cb14-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-130"><a href="#cb14-130" aria-hidden="true" tabindex="-1"></a>**Conclusion, stated at the precision the data afford.** The adjusted ratio of hazard</span>
+<span id="cb14-131"><a href="#cb14-131" aria-hidden="true" tabindex="-1"></a>ratios is 1.00 with an interval running from 0.42 to 2.35 — compatible with the effect in</span>
+<span id="cb14-132"><a href="#cb14-132" aria-hidden="true" tabindex="-1"></a>women being less than half that in men, or more than twice it. Both six-year risk</span>
+<span id="cb14-133"><a href="#cb14-133" aria-hidden="true" tabindex="-1"></a>differences are under one percentage point. So the data show **no evidence of</span>
+<span id="cb14-134"><a href="#cb14-134" aria-hidden="true" tabindex="-1"></a>multiplicative interaction at the available precision**; they do not show that sex is</span>
+<span id="cb14-135"><a href="#cb14-135" aria-hidden="true" tabindex="-1"></a>irrelevant, and they do not identify what generated the crude stratified gap.</span>
+<span id="cb14-136"><a href="#cb14-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-137"><a href="#cb14-137" aria-hidden="true" tabindex="-1"></a>**What this file deliberately does not do.** Everything above is **unweighted**, because</span>
+<span id="cb14-138"><a href="#cb14-138" aria-hidden="true" tabindex="-1"></a>P3 precedes the survey-design increment. P4 shows that the design can move estimates in</span>
+<span id="cb14-139"><a href="#cb14-139" aria-hidden="true" tabindex="-1"></a>either direction, even where it changes no conclusion on the locked contrast, so whether</span>
+<span id="cb14-140"><a href="#cb14-140" aria-hidden="true" tabindex="-1"></a>the design-aware interaction agrees is an open question — one M1 answers, by applying</span>
+<span id="cb14-141"><a href="#cb14-141" aria-hidden="true" tabindex="-1"></a>P4&#39;s domain rule to this contrast.</span>
+<span id="cb14-142"><a href="#cb14-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-143"><a href="#cb14-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results for M1</span></span>
+<span id="cb14-144"><a href="#cb14-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-145"><a href="#cb14-145" aria-hidden="true" tabindex="-1"></a><span class="in">```{r emit}</span></span>
+<span id="cb14-146"><a href="#cb14-146" aria-hidden="true" tabindex="-1"></a>pick <span class="ot">&lt;-</span> <span class="cf">function</span>(col, model) res[[col]][res<span class="sc">$</span>Model <span class="sc">==</span> model]</span>
+<span id="cb14-147"><a href="#cb14-147" aria-hidden="true" tabindex="-1"></a><span class="fu">emit_results</span>(<span class="st">&quot;P3&quot;</span>, <span class="fu">list</span>(</span>
+<span id="cb14-148"><a href="#cb14-148" aria-hidden="true" tabindex="-1"></a>  <span class="at">rhr_crude      =</span> <span class="fu">endash</span>(<span class="fu">pick</span>(<span class="st">&quot;rHR&quot;</span>, <span class="st">&quot;crude&quot;</span>)),</span>
+<span id="cb14-149"><a href="#cb14-149" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_crude        =</span> <span class="fu">pick</span>(<span class="st">&quot;p&quot;</span>, <span class="st">&quot;crude&quot;</span>),</span>
+<span id="cb14-150"><a href="#cb14-150" aria-hidden="true" tabindex="-1"></a>  <span class="at">rhr_unweighted =</span> <span class="fu">endash</span>(<span class="fu">pick</span>(<span class="st">&quot;rHR&quot;</span>, <span class="st">&quot;Model 1&quot;</span>)),</span>
+<span id="cb14-151"><a href="#cb14-151" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_unweighted   =</span> <span class="fu">pick</span>(<span class="st">&quot;p&quot;</span>, <span class="st">&quot;Model 1&quot;</span>),</span>
+<span id="cb14-152"><a href="#cb14-152" aria-hidden="true" tabindex="-1"></a>  <span class="at">n        =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(scc)),</span>
+<span id="cb14-153"><a href="#cb14-153" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_men    =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(scc<span class="sc">$</span>female <span class="sc">==</span> <span class="dv">0</span>)),</span>
+<span id="cb14-154"><a href="#cb14-154" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_women  =</span> <span class="fu">fmtn</span>(<span class="fu">sum</span>(scc<span class="sc">$</span>female <span class="sc">==</span> <span class="dv">1</span>)),</span>
+<span id="cb14-155"><a href="#cb14-155" aria-hidden="true" tabindex="-1"></a>  <span class="at">rd_men   =</span> add<span class="sc">$</span>RD[add<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">&quot;men&quot;</span>],</span>
+<span id="cb14-156"><a href="#cb14-156" aria-hidden="true" tabindex="-1"></a>  <span class="at">rd_women =</span> add<span class="sc">$</span>RD[add<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">&quot;women&quot;</span>],</span>
+<span id="cb14-157"><a href="#cb14-157" aria-hidden="true" tabindex="-1"></a>  <span class="at">hr_men   =</span> <span class="fu">endash</span>(hr_sex[[<span class="st">&quot;men&quot;</span>]]),</span>
+<span id="cb14-158"><a href="#cb14-158" aria-hidden="true" tabindex="-1"></a>  <span class="at">hr_women =</span> <span class="fu">endash</span>(hr_sex[[<span class="st">&quot;women&quot;</span>]])</span>
+<span id="cb14-159"><a href="#cb14-159" aria-hidden="true" tabindex="-1"></a>), <span class="fu">list</span>(<span class="at">interaction =</span> res, <span class="at">additive =</span> add))</span>
+<span id="cb14-160"><a href="#cb14-160" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

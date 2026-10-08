@@ -2277,17 +2277,17 @@ vertical-align: -.125em;
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SBP</td>
-<td style="text-align: left;">124.0 (114.7-136.0)</td>
+<td style="text-align: left;">124.0 (114.0-136.0)</td>
 <td style="text-align: left;">124.0 (114.0-135.0)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">DBP</td>
-<td style="text-align: left;">72.0 (64.0-79.3)</td>
+<td style="text-align: left;">72.0 (64.0-79.0)</td>
 <td style="text-align: left;">72.0 (64.7-79.3)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Hypertension</td>
-<td style="text-align: left;">3255 (53.8)</td>
+<td style="text-align: left;">3261 (53.9)</td>
 <td style="text-align: left;">3238 (52.6)</td>
 </tr>
 <tr class="even">
@@ -2371,7 +2371,7 @@ vertical-align: -.125em;
 </div>
 </div>
 </div>
-<p>The counts imply High <strong>22.1</strong> / Low <strong>23.0</strong>, but the paper prints 23.0 / 22.1 — the high and low percentages are transposed.</p>
+<p>On the full analytic file (6,371 rows; <code>reproduction/output/tables/table1_reproduced.csv</code>) the counts imply High <strong>22.1</strong> / Low <strong>23.0</strong>; on the 6,048 rows above they give the percentages this chunk prints. Either way the paper prints 23.0 / 22.1 — the high and low percentages are transposed.</p>
 </section>
 <section id="two-estimands-and-why-the-rows-must-match" class="level2">
 <h2 class="anchored" data-anchor-id="two-estimands-and-why-the-rows-must-match">Two estimands, and why the rows must match</h2>
@@ -2429,7 +2429,7 @@ vertical-align: -.125em;
 <td style="text-align: left;">replication IV vs I</td>
 <td style="text-align: left;">Model 1</td>
 <td style="text-align: right;">5939</td>
-<td style="text-align: left;">3.79 (1.38-10.39)</td>
+<td style="text-align: left;">3.81 (1.39-10.43)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">locked IV vs III</td>
@@ -2447,7 +2447,7 @@ vertical-align: -.125em;
 <td style="text-align: left;">locked IV vs III</td>
 <td style="text-align: left;">Model 1</td>
 <td style="text-align: right;">5939</td>
-<td style="text-align: left;">1.06 (0.77-1.45)</td>
+<td style="text-align: left;">1.05 (0.77-1.45)</td>
 </tr>
 </tbody>
 </table>
@@ -2991,63 +2991,65 @@ vertical-align: -.125em;
 <span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>  <span class="at">paper_printed =</span> <span class="fu">c</span>(<span class="fl">23.0</span>,<span class="fl">54.9</span>,<span class="fl">22.1</span>))</span>
 <span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a>The counts imply High **22.1** / Low **23.0**, but the paper prints 23.0 / 22.1 —</span>
-<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>the high and low percentages are transposed.</span>
-<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a><span class="fu">## Two estimands, and why the rows must match</span></span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a>On the full analytic file (6,371 rows; <span class="in">`reproduction/output/tables/table1_reproduced.csv`</span>)</span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>the counts imply High **22.1** / Low **23.0**; on the 6,048 rows above they give the</span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>percentages this chunk prints. Either way the paper prints 23.0 / 22.1 — the high and</span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a>low percentages are transposed.</span>
 <span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>The paper references contrasts to **Group I** (obese, low central). Our locked term</span>
-<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>question references **Group III** (non-obese, low central), isolating central adiposity</span>
-<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>with body-mass category held fixed. Both come from the *same* fitted model; re-levelling</span>
-<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>is reparameterization, not reanalysis.</span>
-<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>Model 1 loses 109 observations to missing cancer status, so a crude estimate on all rows</span>
-<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>and an adjusted estimate on complete cases differ for **two** reasons at once. We fit</span>
-<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>both on the same complete-case set and show the all-rows crude separately.</span>
-<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a><span class="in">```{r cox}</span></span>
-<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>COV <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;age&quot;</span>,<span class="st">&quot;female&quot;</span>,<span class="st">&quot;dyslip&quot;</span>,<span class="st">&quot;htn&quot;</span>,<span class="st">&quot;t2dm&quot;</span>,<span class="st">&quot;ckd&quot;</span>,<span class="st">&quot;mi&quot;</span>,<span class="st">&quot;cancer&quot;</span>,</span>
-<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;on_htn_med&quot;</span>,<span class="st">&quot;on_dm_med&quot;</span>,<span class="st">&quot;on_lipid_med&quot;</span>)</span>
-<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>f0 <span class="ot">&lt;-</span> <span class="fu">Surv</span>(time_yr,dead) <span class="sc">~</span> group</span>
-<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a>f1 <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Surv(time_yr,dead) ~ group +&quot;</span>, <span class="fu">paste</span>(COV, <span class="at">collapse=</span><span class="st">&quot; + &quot;</span>)))</span>
-<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>hr <span class="ot">&lt;-</span> <span class="cf">function</span>(m,g){s<span class="ot">&lt;-</span><span class="fu">summary</span>(m); <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f-%.2f)&quot;</span>,</span>
-<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>        s<span class="sc">$</span>conf.int[g,<span class="dv">1</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;lower .95&quot;</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;upper .95&quot;</span>])}</span>
-<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>cc  <span class="ot">&lt;-</span> <span class="fu">complete.cases</span>(d[,COV]); dcc <span class="ot">&lt;-</span> d[cc,]</span>
-<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>rel <span class="ot">&lt;-</span> <span class="cf">function</span>(x,ref){x<span class="sc">$</span>group <span class="ot">&lt;-</span> <span class="fu">relevel</span>(x<span class="sc">$</span>group, ref); x}</span>
-<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Estimand=</span><span class="st">&quot;replication  IV vs I&quot;</span>,  <span class="at">Model=</span><span class="st">&quot;crude&quot;</span>,   <span class="at">rows=</span><span class="fu">nrow</span>(d),</span>
-<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a>             <span class="at">HR=</span><span class="fu">hr</span>(<span class="fu">coxph</span>(f0, <span class="at">data=</span>d),   <span class="st">&quot;groupIV&quot;</span>)),</span>
-<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Estimand=</span><span class="st">&quot;replication  IV vs I&quot;</span>,  <span class="at">Model=</span><span class="st">&quot;crude&quot;</span>,   <span class="at">rows=</span><span class="fu">nrow</span>(dcc),</span>
-<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a>             <span class="at">HR=</span><span class="fu">hr</span>(<span class="fu">coxph</span>(f0, <span class="at">data=</span>dcc), <span class="st">&quot;groupIV&quot;</span>)),</span>
-<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Estimand=</span><span class="st">&quot;replication  IV vs I&quot;</span>,  <span class="at">Model=</span><span class="st">&quot;Model 1&quot;</span>, <span class="at">rows=</span><span class="fu">nrow</span>(dcc),</span>
-<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a>             <span class="at">HR=</span><span class="fu">hr</span>(<span class="fu">coxph</span>(f1, <span class="at">data=</span>dcc), <span class="st">&quot;groupIV&quot;</span>)),</span>
-<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Estimand=</span><span class="st">&quot;locked       IV vs III&quot;</span>, <span class="at">Model=</span><span class="st">&quot;crude&quot;</span>,   <span class="at">rows=</span><span class="fu">nrow</span>(d),</span>
-<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a>             <span class="at">HR=</span><span class="fu">hr</span>(<span class="fu">coxph</span>(f0, <span class="at">data=</span><span class="fu">rel</span>(d,<span class="st">&quot;III&quot;</span>)),   <span class="st">&quot;groupIV&quot;</span>)),</span>
-<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Estimand=</span><span class="st">&quot;locked       IV vs III&quot;</span>, <span class="at">Model=</span><span class="st">&quot;crude&quot;</span>,   <span class="at">rows=</span><span class="fu">nrow</span>(dcc),</span>
-<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a>             <span class="at">HR=</span><span class="fu">hr</span>(<span class="fu">coxph</span>(f0, <span class="at">data=</span><span class="fu">rel</span>(dcc,<span class="st">&quot;III&quot;</span>)), <span class="st">&quot;groupIV&quot;</span>)),</span>
-<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Estimand=</span><span class="st">&quot;locked       IV vs III&quot;</span>, <span class="at">Model=</span><span class="st">&quot;Model 1&quot;</span>, <span class="at">rows=</span><span class="fu">nrow</span>(dcc),</span>
-<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a>             <span class="at">HR=</span><span class="fu">hr</span>(<span class="fu">coxph</span>(f1, <span class="at">data=</span><span class="fu">rel</span>(dcc,<span class="st">&quot;III&quot;</span>)), <span class="st">&quot;groupIV&quot;</span>)))</span>
-<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a>out</span>
-<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a>The two crude rows within each estimand differ only by the 109 dropped observations, and</span>
-<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a>they barely move. **The row restriction accounts for essentially none of the change**, so</span>
-<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a>what remains is attributable to adjustment — which is the only reason we are entitled to</span>
-<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a>say so.</span>
-<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a>On the locked contrast the crude excess does not survive adjustment. On the paper&#39;s own</span>
-<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a>reference it does. Both are properties of one model, answering two different questions.</span>
-<span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results for M1</span></span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a><span class="fu">## Two estimands, and why the rows must match</span></span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>The paper references contrasts to **Group I** (obese, low central). Our locked term</span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>question references **Group III** (non-obese, low central), isolating central adiposity</span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>with body-mass category held fixed. Both come from the *same* fitted model; re-levelling</span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>is reparameterization, not reanalysis.</span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>Model 1 loses 109 observations to missing cancer status, so a crude estimate on all rows</span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>and an adjusted estimate on complete cases differ for **two** reasons at once. We fit</span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>both on the same complete-case set and show the all-rows crude separately.</span>
+<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a><span class="in">```{r cox}</span></span>
+<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>COV <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;age&quot;</span>,<span class="st">&quot;female&quot;</span>,<span class="st">&quot;dyslip&quot;</span>,<span class="st">&quot;htn&quot;</span>,<span class="st">&quot;t2dm&quot;</span>,<span class="st">&quot;ckd&quot;</span>,<span class="st">&quot;mi&quot;</span>,<span class="st">&quot;cancer&quot;</span>,</span>
+<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;on_htn_med&quot;</span>,<span class="st">&quot;on_dm_med&quot;</span>,<span class="st">&quot;on_lipid_med&quot;</span>)</span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>f0 <span class="ot">&lt;-</span> <span class="fu">Surv</span>(time_yr,dead) <span class="sc">~</span> group</span>
+<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>f1 <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Surv(time_yr,dead) ~ group +&quot;</span>, <span class="fu">paste</span>(COV, <span class="at">collapse=</span><span class="st">&quot; + &quot;</span>)))</span>
+<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>hr <span class="ot">&lt;-</span> <span class="cf">function</span>(m,g){s<span class="ot">&lt;-</span><span class="fu">summary</span>(m); <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f-%.2f)&quot;</span>,</span>
+<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>        s<span class="sc">$</span>conf.int[g,<span class="dv">1</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;lower .95&quot;</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;upper .95&quot;</span>])}</span>
+<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a>cc  <span class="ot">&lt;-</span> <span class="fu">complete.cases</span>(d[,COV]); dcc <span class="ot">&lt;-</span> d[cc,]</span>
+<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a>rel <span class="ot">&lt;-</span> <span class="cf">function</span>(x,ref){x<span class="sc">$</span>group <span class="ot">&lt;-</span> <span class="fu">relevel</span>(x<span class="sc">$</span>group, ref); x}</span>
+<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Estimand=</span><span class="st">&quot;replication  IV vs I&quot;</span>,  <span class="at">Model=</span><span class="st">&quot;crude&quot;</span>,   <span class="at">rows=</span><span class="fu">nrow</span>(d),</span>
+<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a>             <span class="at">HR=</span><span class="fu">hr</span>(<span class="fu">coxph</span>(f0, <span class="at">data=</span>d),   <span class="st">&quot;groupIV&quot;</span>)),</span>
+<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Estimand=</span><span class="st">&quot;replication  IV vs I&quot;</span>,  <span class="at">Model=</span><span class="st">&quot;crude&quot;</span>,   <span class="at">rows=</span><span class="fu">nrow</span>(dcc),</span>
+<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a>             <span class="at">HR=</span><span class="fu">hr</span>(<span class="fu">coxph</span>(f0, <span class="at">data=</span>dcc), <span class="st">&quot;groupIV&quot;</span>)),</span>
+<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Estimand=</span><span class="st">&quot;replication  IV vs I&quot;</span>,  <span class="at">Model=</span><span class="st">&quot;Model 1&quot;</span>, <span class="at">rows=</span><span class="fu">nrow</span>(dcc),</span>
+<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a>             <span class="at">HR=</span><span class="fu">hr</span>(<span class="fu">coxph</span>(f1, <span class="at">data=</span>dcc), <span class="st">&quot;groupIV&quot;</span>)),</span>
+<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Estimand=</span><span class="st">&quot;locked       IV vs III&quot;</span>, <span class="at">Model=</span><span class="st">&quot;crude&quot;</span>,   <span class="at">rows=</span><span class="fu">nrow</span>(d),</span>
+<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a>             <span class="at">HR=</span><span class="fu">hr</span>(<span class="fu">coxph</span>(f0, <span class="at">data=</span><span class="fu">rel</span>(d,<span class="st">&quot;III&quot;</span>)),   <span class="st">&quot;groupIV&quot;</span>)),</span>
+<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Estimand=</span><span class="st">&quot;locked       IV vs III&quot;</span>, <span class="at">Model=</span><span class="st">&quot;crude&quot;</span>,   <span class="at">rows=</span><span class="fu">nrow</span>(dcc),</span>
+<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a>             <span class="at">HR=</span><span class="fu">hr</span>(<span class="fu">coxph</span>(f0, <span class="at">data=</span><span class="fu">rel</span>(dcc,<span class="st">&quot;III&quot;</span>)), <span class="st">&quot;groupIV&quot;</span>)),</span>
+<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Estimand=</span><span class="st">&quot;locked       IV vs III&quot;</span>, <span class="at">Model=</span><span class="st">&quot;Model 1&quot;</span>, <span class="at">rows=</span><span class="fu">nrow</span>(dcc),</span>
+<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a>             <span class="at">HR=</span><span class="fu">hr</span>(<span class="fu">coxph</span>(f1, <span class="at">data=</span><span class="fu">rel</span>(dcc,<span class="st">&quot;III&quot;</span>)), <span class="st">&quot;groupIV&quot;</span>)))</span>
+<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a>out</span>
+<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a>The two crude rows within each estimand differ only by the 109 dropped observations, and</span>
+<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a>they barely move. **The row restriction accounts for essentially none of the change**, so</span>
+<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a>what remains is attributable to adjustment — which is the only reason we are entitled to</span>
+<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a>say so.</span>
+<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a>On the locked contrast the crude excess does not survive adjustment. On the paper&#39;s own</span>
+<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a>reference it does. Both are properties of one model, answering two different questions.</span>
 <span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a><span class="in">```{r emit}</span></span>
-<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a><span class="fu">emit_results</span>(<span class="st">&quot;P2&quot;</span>, <span class="fu">list</span>(</span>
-<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_domain   =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(d)),</span>
-<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_complete =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(dcc)),</span>
-<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_dropped  =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(d) <span class="sc">-</span> <span class="fu">nrow</span>(dcc))</span>
-<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a>), <span class="fu">list</span>(<span class="at">estimands =</span> out))</span>
-<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
+<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results for M1</span></span>
+<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a><span class="in">```{r emit}</span></span>
+<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a><span class="fu">emit_results</span>(<span class="st">&quot;P2&quot;</span>, <span class="fu">list</span>(</span>
+<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_domain   =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(d)),</span>
+<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_complete =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(dcc)),</span>
+<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_dropped  =</span> <span class="fu">fmtn</span>(<span class="fu">nrow</span>(d) <span class="sc">-</span> <span class="fu">nrow</span>(dcc))</span>
+<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a>), <span class="fu">list</span>(<span class="at">estimands =</span> out))</span>
+<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

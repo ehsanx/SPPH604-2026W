@@ -206,7 +206,12 @@ blocks <- lapply(S, function(pieces) {
 ## ------------------------------------------------------------------ agreement with the main script
 fx <- fromJSON("Week5_joint_exposure.json")$facts
 num <- function(s) as.numeric(gsub("−", "-", regmatches(s, regexpr("[+−-]?[0-9.]+", s))))
+count <- function(s) as.integer(gsub(",", "", s, fixed = TRUE))
 stopifnot(
+  identical(rownames(fit_main$y), rownames(fit$y)),
+  identical(rownames(f0$y), rownames(f1$y)),
+  fit$n == count(fx$n_model), fit$nevent == count(fx$events_model),
+  f1$n == count(fx$n_sex34), f1$nevent == count(fx$events_sex34),
   isTRUE(all.equal(fit_joint$loglik, fit$loglik)),
   abs(round(exp(b[["central"]]), 2) - num(fx$hr_whtr_nonobese)) < 1e-9,
   abs(round(exp(b[["central"]] + b[["obese:central"]]), 2) - num(fx$hr_whtr_obese)) < 1e-9,
@@ -214,8 +219,14 @@ stopifnot(
   abs(round(exp(coef(fit_main))[["central"]], 2) - num(fx$hr_waist_nomod)) < 1e-9,
   abs(round(100 * r[["obese_low"]], 1) - num(fx$risk6_em_I)) < 1e-9,
   abs(round(rd[["obese"]] - rd[["not_obese"]], 1) - num(fx$rd_whtr_diff)) < 1e-9,
-  abs(round(IC, 1) - abs(num(fx$ic6))) < 1e-9)   # same IC, the other exposure coding
+  # JSON's legacy M = not obese; the slide's M = obese reverses the IC sign.
+  abs(round(IC, 1) + num(fx$ic6)) < 1e-9)
 
-writeLines(toJSON(list(emitted_by = "Week5_code_outputs", blocks = blocks),
+writeLines(toJSON(list(emitted_by = "Week5_code_outputs", blocks = blocks,
+                      model_diagnostics = list(
+                        product = list(n = fit$n, events = fit$nevent),
+                        no_product = list(n = fit_main$n, events = fit_main$nevent),
+                        sex = list(n = f1$n, events = f1$nevent),
+                        sex_no_product = list(n = f0$n, events = f0$nevent))),
                   auto_unbox = TRUE, pretty = TRUE), "Week5_code_outputs.json", useBytes = TRUE)
 for (k in names(blocks)) cat("==== ", k, "\n", blocks[[k]], "\n\n", sep = "")

@@ -2178,8 +2178,8 @@ vertical-align: -.125em;
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#claim-1-the-cohort-and-headline-results-reproduce" id="toc-claim-1-the-cohort-and-headline-results-reproduce" class="nav-link active" data-scroll-target="#claim-1-the-cohort-and-headline-results-reproduce">Claim 1 — the cohort and headline results reproduce</a></li>
-  <li><a href="#claim-24-improved-estimates-attenuate-but-do-not-overturn" id="toc-claim-24-improved-estimates-attenuate-but-do-not-overturn" class="nav-link" data-scroll-target="#claim-24-improved-estimates-attenuate-but-do-not-overturn">Claim 2/4 — improved estimates attenuate but do not overturn</a></li>
+  <li><a href="#claim-1-the-cohort-and-headline-results-against-the-papers" id="toc-claim-1-the-cohort-and-headline-results-against-the-papers" class="nav-link active" data-scroll-target="#claim-1-the-cohort-and-headline-results-against-the-papers">Claim 1 — the cohort and headline results, against the paper’s</a></li>
+  <li><a href="#claim-24-the-locked-contrast-and-its-missing-data-sensitivity" id="toc-claim-24-the-locked-contrast-and-its-missing-data-sensitivity" class="nav-link" data-scroll-target="#claim-24-the-locked-contrast-and-its-missing-data-sensitivity">Claim 2/4 — the locked contrast, and its missing-data sensitivity</a></li>
   <li><a href="#claim-3-published-vs-reproduced-discrepancies-we-flag" id="toc-claim-3-published-vs-reproduced-discrepancies-we-flag" class="nav-link" data-scroll-target="#claim-3-published-vs-reproduced-discrepancies-we-flag">Claim 3 — published-vs-reproduced discrepancies we flag</a></li>
   </ul>
 </nav>
@@ -2207,7 +2207,7 @@ vertical-align: -.125em;
 
 
 <blockquote class="blockquote">
-<p>Reproduces every number stated in the letter. The replication figures are derived live here; the two improvement estimates (survey-weighted, imputed) are reproduced in full by <code>../P4_design_aware/P4_code.qmd</code> and <code>../M3_defense/M3_defense_evidence.qmd</code> (the PIR + SBP sensitivity model, whose adjustment set is wider than the paper’s Model 1) and summarised below.</p>
+<p>Reproduces every number stated in the letter. The replication figures are derived live here, except the Model 1 hazard ratio, which comes from the reproduction’s <code>../../reproduction/output/tables/table2_reproduced.csv</code>. The locked-contrast estimates (Group IV vs III, the paper’s Model 1, design-weighted) and the funnel counts are emitted by <code>../P5_missing_data/P5_code.qmd</code> and <code>../M3_defense/M3_defense_evidence.qmd</code>, and are read below rather than retyped.</p>
 </blockquote>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;../_shared/paths.R&quot;</span>)   <span class="co"># find_repro(), emit_results(), ci(), fmtn(), endash()</span></span>
@@ -2217,8 +2217,8 @@ vertical-align: -.125em;
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>hr <span class="ot">&lt;-</span> <span class="cf">function</span>(m,g){s<span class="ot">&lt;-</span><span class="fu">summary</span>(m); <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f-%.2f)&quot;</span>,</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        s<span class="sc">$</span>conf.int[g,<span class="dv">1</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;lower .95&quot;</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;upper .95&quot;</span>])}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="claim-1-the-cohort-and-headline-results-reproduce" class="level2">
-<h2 class="anchored" data-anchor-id="claim-1-the-cohort-and-headline-results-reproduce">Claim 1 — the cohort and headline results reproduce</h2>
+<section id="claim-1-the-cohort-and-headline-results-against-the-papers" class="level2">
+<h2 class="anchored" data-anchor-id="claim-1-the-cohort-and-headline-results-against-the-papers">Claim 1 — the cohort and headline results, against the paper’s</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;N =&quot;</span>, <span class="fu">nrow</span>(d), <span class="st">&quot;(paper 6300);  groups&quot;</span>,</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(<span class="fu">as.integer</span>(<span class="fu">table</span>(d<span class="sc">$</span>group)), <span class="at">collapse=</span><span class="st">&quot;/&quot;</span>), <span class="st">&quot;(386/4541/769/604)</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2238,63 +2238,74 @@ vertical-align: -.125em;
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Group IV all-cause: unadjusted&quot;</span>, <span class="fu">hr</span>(u,<span class="st">&quot;groupIV&quot;</span>), <span class="st">&quot;(paper 15.13);  Model 2&quot;</span>,</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">hr</span>(m2,<span class="st">&quot;groupIV&quot;</span>), <span class="st">&quot;(paper 2.89)</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Group IV all-cause: unadjusted 15.14 (6.19-37.04) (paper 15.13);  Model 2 2.91 (1.18-7.20) (paper 2.89)</code></pre>
+<pre><code>Group IV all-cause: unadjusted 15.14 (6.19-37.04) (paper 15.13);  Model 2 2.91 (1.18-7.21) (paper 2.89)</code></pre>
 </div>
 </div>
 </section>
-<section id="claim-24-improved-estimates-attenuate-but-do-not-overturn" class="level2">
-<h2 class="anchored" data-anchor-id="claim-24-improved-estimates-attenuate-but-do-not-overturn">Claim 2/4 — improved estimates attenuate but do not overturn</h2>
+<section id="claim-24-the-locked-contrast-and-its-missing-data-sensitivity" class="level2">
+<h2 class="anchored" data-anchor-id="claim-24-the-locked-contrast-and-its-missing-data-sensitivity">Claim 2/4 — the locked contrast, and its missing-data sensitivity</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Analysis =</span> <span class="fu">c</span>(<span class="st">&quot;Survey-weighted (fasting design)&quot;</span>,<span class="st">&quot;Multiple imputation&quot;</span>,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;Weighted direct IV vs III&quot;</span>,<span class="st">&quot;Weighted direct IV vs II&quot;</span>),</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Group IV HR</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;12.40 (2.69-57.15)&quot;</span>,<span class="st">&quot;2.79 (1.12-6.92)&quot;</span>,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;3.07 (2.11-4.46)&quot;</span>,<span class="st">&quot;2.30 (1.76-3.02)&quot;</span>),</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Source =</span> <span class="fu">c</span>(<span class="st">&quot;P4_code.qmd&quot;</span>,<span class="st">&quot;M3_defense_evidence.qmd&quot;</span>,<span class="st">&quot;P4_code.qmd&quot;</span>,<span class="st">&quot;P4_code.qmd&quot;</span>),</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">check.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read, not retyped: P5.json is emitted by ../P5_missing_data/P5_code.qmd and chain.json</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># by ../M3_defense/M3_defense_evidence.qmd. All rows: Group IV vs III, the paper&#39;s</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 1, design-weighted (WTSAF2YR/6, strata, PSU).</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>p5 <span class="ot">&lt;-</span> <span class="fu">read_results</span>(<span class="st">&quot;P5&quot;</span>)<span class="sc">$</span>facts; ch <span class="ot">&lt;-</span> <span class="fu">read_results</span>(<span class="st">&quot;chain&quot;</span>)<span class="sc">$</span>facts</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Analysis =</span> <span class="fu">c</span>(<span class="st">&quot;complete case (the defended estimate)&quot;</span>, <span class="st">&quot;all missing assigned no cancer&quot;</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;all missing assigned cancer&quot;</span>, <span class="st">&quot;MI (m = 10), outcome in the imputation model&quot;</span>),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Rows =</span> <span class="fu">c</span>(p5<span class="sc">$</span>n_cc, p5<span class="sc">$</span>n_full, p5<span class="sc">$</span>n_full, p5<span class="sc">$</span>n_full),</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">HR (95% CI)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(ch<span class="sc">$</span>locked_full, p5<span class="sc">$</span>locked_no, p5<span class="sc">$</span>locked_yes, ch<span class="sc">$</span>locked_mi_full),</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Source =</span> <span class="fu">c</span>(<span class="st">&quot;M3_defense_evidence.qmd&quot;</span>, <span class="st">&quot;P5_code.qmd&quot;</span>, <span class="st">&quot;P5_code.qmd&quot;</span>, <span class="st">&quot;M3_defense_evidence.qmd&quot;</span>),</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">check.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 43%">
-<col style="width: 25%">
-<col style="width: 31%">
+<col style="width: 48%">
+<col style="width: 6%">
+<col style="width: 18%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Analysis</th>
-<th style="text-align: left;">Group IV HR</th>
+<th style="text-align: left;">Rows</th>
+<th style="text-align: left;">HR (95% CI)</th>
 <th style="text-align: left;">Source</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Survey-weighted (fasting design)</td>
-<td style="text-align: left;">12.40 (2.69-57.15)</td>
-<td style="text-align: left;">P4_code.qmd</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Multiple imputation</td>
-<td style="text-align: left;">2.79 (1.12-6.92)</td>
+<td style="text-align: left;">complete case (the defended estimate)</td>
+<td style="text-align: left;">5,939</td>
+<td style="text-align: left;">1.29 (0.89–1.86)</td>
 <td style="text-align: left;">M3_defense_evidence.qmd</td>
 </tr>
+<tr class="even">
+<td style="text-align: left;">all missing assigned no cancer</td>
+<td style="text-align: left;">6,048</td>
+<td style="text-align: left;">1.28 (0.89–1.85)</td>
+<td style="text-align: left;">P5_code.qmd</td>
+</tr>
 <tr class="odd">
-<td style="text-align: left;">Weighted direct IV vs III</td>
-<td style="text-align: left;">3.07 (2.11-4.46)</td>
-<td style="text-align: left;">P4_code.qmd</td>
+<td style="text-align: left;">all missing assigned cancer</td>
+<td style="text-align: left;">6,048</td>
+<td style="text-align: left;">1.28 (0.89–1.85)</td>
+<td style="text-align: left;">P5_code.qmd</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Weighted direct IV vs II</td>
-<td style="text-align: left;">2.30 (1.76-3.02)</td>
-<td style="text-align: left;">P4_code.qmd</td>
+<td style="text-align: left;">MI (m = 10), outcome in the imputation model</td>
+<td style="text-align: left;">6,048</td>
+<td style="text-align: left;">1.28 (0.89–1.85)</td>
+<td style="text-align: left;">M3_defense_evidence.qmd</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Direction is stable across every specification: Group IV remains worst.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Funnel: adults 18+&quot;</span>, ch<span class="sc">$</span>n_adults, <span class="st">&quot;; sampled into the fasting subsample&quot;</span>, ch<span class="sc">$</span>n_fasting,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;; of those, FLI computable&quot;</span>, ch<span class="sc">$</span>n_fli, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Direction is stable across every specification: Group IV remains worst.</code></pre>
+<pre><code>Funnel: adults 18+ 36,580 ; sampled into the fasting subsample 14,962 ; of those, FLI computable 14,170 </code></pre>
 </div>
 </div>
 </section>
@@ -2785,61 +2796,67 @@ vertical-align: -.125em;
 <span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Reproduces every number stated in the letter. The replication figures are</span></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; derived live here; the two improvement estimates (survey-weighted, imputed) are</span></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; reproduced in full by </span><span class="in">`../P4_design_aware/P4_code.qmd`</span><span class="at"> and</span></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`../M3_defense/M3_defense_evidence.qmd`</span><span class="at"> (the PIR + SBP sensitivity model, whose</span></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; adjustment set is wider than the paper&#39;s Model 1) and summarised below.</span></span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup}</span></span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;../_shared/paths.R&quot;</span>)   <span class="co"># find_repro(), emit_results(), ci(), fmtn(), endash()</span></span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>repro <span class="ot">&lt;-</span> <span class="fu">find_repro</span>()</span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({<span class="fu">library</span>(dplyr); <span class="fu">library</span>(survival)})</span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(repro, <span class="st">&quot;data/derived/masld_analytic.rds&quot;</span>))</span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>hr <span class="ot">&lt;-</span> <span class="cf">function</span>(m,g){s<span class="ot">&lt;-</span><span class="fu">summary</span>(m); <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f-%.2f)&quot;</span>,</span>
-<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>        s<span class="sc">$</span>conf.int[g,<span class="dv">1</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;lower .95&quot;</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;upper .95&quot;</span>])}</span>
-<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Claim 1 — the cohort and headline results reproduce</span></span>
-<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="in">```{r reproduce}</span></span>
-<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;N =&quot;</span>, <span class="fu">nrow</span>(d), <span class="st">&quot;(paper 6300);  groups&quot;</span>,</span>
-<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(<span class="fu">as.integer</span>(<span class="fu">table</span>(d<span class="sc">$</span>group)), <span class="at">collapse=</span><span class="st">&quot;/&quot;</span>), <span class="st">&quot;(386/4541/769/604)</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Deaths =&quot;</span>, <span class="fu">sum</span>(d<span class="sc">$</span>dead,<span class="at">na.rm=</span><span class="cn">TRUE</span>), <span class="st">&quot;(585);  by group&quot;</span>,</span>
-<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(<span class="fu">as.integer</span>(<span class="fu">tapply</span>(d<span class="sc">$</span>dead,d<span class="sc">$</span>group,sum,<span class="at">na.rm=</span><span class="cn">TRUE</span>)), <span class="at">collapse=</span><span class="st">&quot;/&quot;</span>), <span class="st">&quot;(5/388/74/118)</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>cov1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;age&quot;</span>,<span class="st">&quot;female&quot;</span>,<span class="st">&quot;dyslip&quot;</span>,<span class="st">&quot;htn&quot;</span>,<span class="st">&quot;t2dm&quot;</span>,<span class="st">&quot;ckd&quot;</span>,<span class="st">&quot;mi&quot;</span>,<span class="st">&quot;cancer&quot;</span>,<span class="st">&quot;on_htn_med&quot;</span>,<span class="st">&quot;on_dm_med&quot;</span>,<span class="st">&quot;on_lipid_med&quot;</span>)</span>
-<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>smk <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(d<span class="sc">$</span>SMQ020<span class="sc">==</span><span class="dv">1</span> <span class="sc">&amp;</span> d<span class="sc">$</span>SMQ040<span class="sc">%in%</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),<span class="dv">1</span>L,<span class="fu">ifelse</span>(<span class="fu">is.na</span>(d<span class="sc">$</span>SMQ020),<span class="cn">NA</span>,<span class="dv">0</span>L))</span>
-<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>u  <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time_yr,dead)<span class="sc">~</span>group, d)</span>
-<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time_yr,dead)<span class="sc">~</span>group<span class="sc">+</span>age<span class="sc">+</span>female<span class="sc">+</span>dyslip<span class="sc">+</span>htn<span class="sc">+</span>t2dm<span class="sc">+</span>ckd<span class="sc">+</span>mi<span class="sc">+</span>cancer<span class="sc">+</span></span>
-<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>            on_htn_med<span class="sc">+</span>on_dm_med<span class="sc">+</span>on_lipid_med<span class="sc">+</span>smk<span class="sc">+</span>sedentary_min, d)</span>
-<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Group IV all-cause: unadjusted&quot;</span>, <span class="fu">hr</span>(u,<span class="st">&quot;groupIV&quot;</span>), <span class="st">&quot;(paper 15.13);  Model 2&quot;</span>,</span>
-<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">hr</span>(m2,<span class="st">&quot;groupIV&quot;</span>), <span class="st">&quot;(paper 2.89)</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## Claim 2/4 — improved estimates attenuate but do not overturn</span></span>
-<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a><span class="in">```{r improved}</span></span>
-<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
-<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">Analysis =</span> <span class="fu">c</span>(<span class="st">&quot;Survey-weighted (fasting design)&quot;</span>,<span class="st">&quot;Multiple imputation&quot;</span>,</span>
-<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;Weighted direct IV vs III&quot;</span>,<span class="st">&quot;Weighted direct IV vs II&quot;</span>),</span>
-<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Group IV HR</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;12.40 (2.69-57.15)&quot;</span>,<span class="st">&quot;2.79 (1.12-6.92)&quot;</span>,</span>
-<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;3.07 (2.11-4.46)&quot;</span>,<span class="st">&quot;2.30 (1.76-3.02)&quot;</span>),</span>
-<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">Source =</span> <span class="fu">c</span>(<span class="st">&quot;P4_code.qmd&quot;</span>,<span class="st">&quot;M3_defense_evidence.qmd&quot;</span>,<span class="st">&quot;P4_code.qmd&quot;</span>,<span class="st">&quot;P4_code.qmd&quot;</span>),</span>
-<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">check.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Direction is stable across every specification: Group IV remains worst.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a><span class="fu">## Claim 3 — published-vs-reproduced discrepancies we flag</span></span>
-<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a><span class="in">```{r errors}</span></span>
-<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>pir <span class="ot">&lt;-</span> <span class="fu">table</span>(d<span class="sc">$</span>pir_cat); den <span class="ot">&lt;-</span> <span class="fu">sum</span>(pir)</span>
-<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;PIR counts imply High&quot;</span>, <span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>pir[<span class="st">&#39;High&#39;</span>]<span class="sc">/</span>den,<span class="dv">1</span>), <span class="st">&quot;/ Low&quot;</span>, <span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>pir[<span class="st">&#39;Low&#39;</span>]<span class="sc">/</span>den,<span class="dv">1</span>),</span>
-<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;; paper prints 23.0 / 22.1 -&gt; printed percentages disagree with the counts.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;BMI: non-obese group medians&quot;</span>, <span class="fu">round</span>(<span class="fu">median</span>(d<span class="sc">$</span>bmi[d<span class="sc">$</span>group<span class="sc">==</span><span class="st">&#39;III&#39;</span>]),<span class="dv">1</span>), <span class="st">&quot;/&quot;</span>,</span>
-<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(<span class="fu">median</span>(d<span class="sc">$</span>bmi[d<span class="sc">$</span>group<span class="sc">==</span><span class="st">&#39;IV&#39;</span>]),<span class="dv">1</span>), <span class="st">&quot;-&gt; incompatible with the &#39;&lt;25&#39; header (Methods cut = 30).</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a>*Data availability:* all inputs are public (NHANES 2007–2018; NCHS linked mortality).</span>
-<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a>The full pipeline is in <span class="in">`../../reproduction/`</span>.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; derived live here, except the Model 1 hazard ratio, which comes from the</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; reproduction&#39;s </span><span class="in">`../../reproduction/output/tables/table2_reproduced.csv`</span><span class="at">. The locked-contrast estimates</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; (Group IV vs III, the paper&#39;s Model 1, design-weighted) and the funnel counts are</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; emitted by </span><span class="in">`../P5_missing_data/P5_code.qmd`</span><span class="at"> and </span><span class="in">`../M3_defense/M3_defense_evidence.qmd`</span><span class="at">,</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; and are read below rather than retyped.</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup}</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;../_shared/paths.R&quot;</span>)   <span class="co"># find_repro(), emit_results(), ci(), fmtn(), endash()</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>repro <span class="ot">&lt;-</span> <span class="fu">find_repro</span>()</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({<span class="fu">library</span>(dplyr); <span class="fu">library</span>(survival)})</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(repro, <span class="st">&quot;data/derived/masld_analytic.rds&quot;</span>))</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>hr <span class="ot">&lt;-</span> <span class="cf">function</span>(m,g){s<span class="ot">&lt;-</span><span class="fu">summary</span>(m); <span class="fu">sprintf</span>(<span class="st">&quot;%.2f (%.2f-%.2f)&quot;</span>,</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>        s<span class="sc">$</span>conf.int[g,<span class="dv">1</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;lower .95&quot;</span>], s<span class="sc">$</span>conf.int[g,<span class="st">&quot;upper .95&quot;</span>])}</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="fu">## Claim 1 — the cohort and headline results, against the paper&#39;s</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="in">```{r reproduce}</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;N =&quot;</span>, <span class="fu">nrow</span>(d), <span class="st">&quot;(paper 6300);  groups&quot;</span>,</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(<span class="fu">as.integer</span>(<span class="fu">table</span>(d<span class="sc">$</span>group)), <span class="at">collapse=</span><span class="st">&quot;/&quot;</span>), <span class="st">&quot;(386/4541/769/604)</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Deaths =&quot;</span>, <span class="fu">sum</span>(d<span class="sc">$</span>dead,<span class="at">na.rm=</span><span class="cn">TRUE</span>), <span class="st">&quot;(585);  by group&quot;</span>,</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(<span class="fu">as.integer</span>(<span class="fu">tapply</span>(d<span class="sc">$</span>dead,d<span class="sc">$</span>group,sum,<span class="at">na.rm=</span><span class="cn">TRUE</span>)), <span class="at">collapse=</span><span class="st">&quot;/&quot;</span>), <span class="st">&quot;(5/388/74/118)</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>cov1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;age&quot;</span>,<span class="st">&quot;female&quot;</span>,<span class="st">&quot;dyslip&quot;</span>,<span class="st">&quot;htn&quot;</span>,<span class="st">&quot;t2dm&quot;</span>,<span class="st">&quot;ckd&quot;</span>,<span class="st">&quot;mi&quot;</span>,<span class="st">&quot;cancer&quot;</span>,<span class="st">&quot;on_htn_med&quot;</span>,<span class="st">&quot;on_dm_med&quot;</span>,<span class="st">&quot;on_lipid_med&quot;</span>)</span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>smk <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(d<span class="sc">$</span>SMQ020<span class="sc">==</span><span class="dv">1</span> <span class="sc">&amp;</span> d<span class="sc">$</span>SMQ040<span class="sc">%in%</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),<span class="dv">1</span>L,<span class="fu">ifelse</span>(<span class="fu">is.na</span>(d<span class="sc">$</span>SMQ020),<span class="cn">NA</span>,<span class="dv">0</span>L))</span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>u  <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time_yr,dead)<span class="sc">~</span>group, d)</span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time_yr,dead)<span class="sc">~</span>group<span class="sc">+</span>age<span class="sc">+</span>female<span class="sc">+</span>dyslip<span class="sc">+</span>htn<span class="sc">+</span>t2dm<span class="sc">+</span>ckd<span class="sc">+</span>mi<span class="sc">+</span>cancer<span class="sc">+</span></span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>            on_htn_med<span class="sc">+</span>on_dm_med<span class="sc">+</span>on_lipid_med<span class="sc">+</span>smk<span class="sc">+</span>sedentary_min, d)</span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Group IV all-cause: unadjusted&quot;</span>, <span class="fu">hr</span>(u,<span class="st">&quot;groupIV&quot;</span>), <span class="st">&quot;(paper 15.13);  Model 2&quot;</span>,</span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">hr</span>(m2,<span class="st">&quot;groupIV&quot;</span>), <span class="st">&quot;(paper 2.89)</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a><span class="fu">## Claim 2/4 — the locked contrast, and its missing-data sensitivity</span></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a><span class="in">```{r improved}</span></span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Read, not retyped: P5.json is emitted by ../P5_missing_data/P5_code.qmd and chain.json</span></span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a><span class="co"># by ../M3_defense/M3_defense_evidence.qmd. All rows: Group IV vs III, the paper&#39;s</span></span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 1, design-weighted (WTSAF2YR/6, strata, PSU).</span></span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>p5 <span class="ot">&lt;-</span> <span class="fu">read_results</span>(<span class="st">&quot;P5&quot;</span>)<span class="sc">$</span>facts; ch <span class="ot">&lt;-</span> <span class="fu">read_results</span>(<span class="st">&quot;chain&quot;</span>)<span class="sc">$</span>facts</span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">Analysis =</span> <span class="fu">c</span>(<span class="st">&quot;complete case (the defended estimate)&quot;</span>, <span class="st">&quot;all missing assigned no cancer&quot;</span>,</span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;all missing assigned cancer&quot;</span>, <span class="st">&quot;MI (m = 10), outcome in the imputation model&quot;</span>),</span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">Rows =</span> <span class="fu">c</span>(p5<span class="sc">$</span>n_cc, p5<span class="sc">$</span>n_full, p5<span class="sc">$</span>n_full, p5<span class="sc">$</span>n_full),</span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">HR (95% CI)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(ch<span class="sc">$</span>locked_full, p5<span class="sc">$</span>locked_no, p5<span class="sc">$</span>locked_yes, ch<span class="sc">$</span>locked_mi_full),</span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>  <span class="at">Source =</span> <span class="fu">c</span>(<span class="st">&quot;M3_defense_evidence.qmd&quot;</span>, <span class="st">&quot;P5_code.qmd&quot;</span>, <span class="st">&quot;P5_code.qmd&quot;</span>, <span class="st">&quot;M3_defense_evidence.qmd&quot;</span>),</span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a>  <span class="at">check.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Funnel: adults 18+&quot;</span>, ch<span class="sc">$</span>n_adults, <span class="st">&quot;; sampled into the fasting subsample&quot;</span>, ch<span class="sc">$</span>n_fasting,</span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;; of those, FLI computable&quot;</span>, ch<span class="sc">$</span>n_fli, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a><span class="fu">## Claim 3 — published-vs-reproduced discrepancies we flag</span></span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{r errors}</span></span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a>pir <span class="ot">&lt;-</span> <span class="fu">table</span>(d<span class="sc">$</span>pir_cat); den <span class="ot">&lt;-</span> <span class="fu">sum</span>(pir)</span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;PIR counts imply High&quot;</span>, <span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>pir[<span class="st">&#39;High&#39;</span>]<span class="sc">/</span>den,<span class="dv">1</span>), <span class="st">&quot;/ Low&quot;</span>, <span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>pir[<span class="st">&#39;Low&#39;</span>]<span class="sc">/</span>den,<span class="dv">1</span>),</span>
+<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;; paper prints 23.0 / 22.1 -&gt; printed percentages disagree with the counts.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;BMI: non-obese group medians&quot;</span>, <span class="fu">round</span>(<span class="fu">median</span>(d<span class="sc">$</span>bmi[d<span class="sc">$</span>group<span class="sc">==</span><span class="st">&#39;III&#39;</span>]),<span class="dv">1</span>), <span class="st">&quot;/&quot;</span>,</span>
+<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(<span class="fu">median</span>(d<span class="sc">$</span>bmi[d<span class="sc">$</span>group<span class="sc">==</span><span class="st">&#39;IV&#39;</span>]),<span class="dv">1</span>), <span class="st">&quot;-&gt; incompatible with the &#39;&lt;25&#39; header (Methods cut = 30).</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb15-74"><a href="#cb15-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-75"><a href="#cb15-75" aria-hidden="true" tabindex="-1"></a>*Data availability:* all inputs are public (NHANES 2007–2018; NCHS linked mortality).</span>
+<span id="cb15-76"><a href="#cb15-76" aria-hidden="true" tabindex="-1"></a>The full pipeline is in <span class="in">`../../reproduction/`</span>.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
