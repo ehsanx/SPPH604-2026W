@@ -528,7 +528,7 @@ Remember: more iterations do not replace more imputations. They serve different 
 ![](../img/w7_chained.png){fig-align="center" width="80%"}
 
 ::: {.remember}
-**MICE** = multiple imputation by chained equations. Each incomplete variable gets its **own** model, using everything else, including the values just filled in. The previous slide was one pass of this loop for one person.
+**MICE** = multiple imputation by chained equations. Each incomplete variable gets its **own** model, using everything else, including the values just filled in. The one-person example two slides back was one pass of this loop.
 :::
 
 
@@ -1398,7 +1398,7 @@ Next week: M1 presentations.
 | Thursday's lab | [Exercise](https://ehsanx.github.io/EpiMethods/missingdataE.html) · [solution](https://ehsanx.github.io/EpiMethods/missingdataEsolution.html) | Williams et al. 2021 |
 :::
 
-## References {visibility="uncounted" .shrink}
+## References {visibility="uncounted" .shrink .scrollable}
 
 ::: {.tiny}
 - Austin PC, White IR, Lee DS, van Buuren S. Missing data in clinical research: a tutorial on multiple imputation. *Can J Cardiol* 2021;37:1322-1331.
@@ -1420,7 +1420,7 @@ Next week: M1 presentations.
 - White IR, Carlin JB. Bias and efficiency of multiple imputation compared with complete-case analysis for missing covariate values. *Stat Med* 2010;29:2920-2931.
 - White IR, Royston P. Imputing missing covariate values for the Cox model. *Stat Med* 2009;28:1982-1998.
 - White IR, Royston P, Wood AM. Multiple imputation using chained equations: issues and guidance for practice. *Stat Med* 2011;30:377-399.
-- Williams AR, Wilson-Genderson M, Thomson MD. Lifestyle advice and behavior changes in patients with hypertension or diabetes: NHANES 2015-2018. *Prev Med* 2021;145:106426.
+- Williams AR, Wilson-Genderson M, Thomson MD. A cross-sectional analysis of associations between lifestyle advice and behavior changes in patients with hypertension or diabetes: NHANES 2015-2018. *Prev Med* 2021;145:106426.
 :::
 
 # Appendix - more detail and code
